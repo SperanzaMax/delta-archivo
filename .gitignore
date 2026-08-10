@@ -1,0 +1,16 @@
+# Datos binarios: todos REGENERABLES desde los scripts de este repo, y dos de ellos INVÁLIDOS.
+# Se excluyen del control de versiones para no anclar ~195 MB de arrays, no para ocultarlos.
+#
+#   hechos.npz          9000 embeddings de `gemma:2b`. La compuerta de identificabilidad NO PASÓ
+#                       (AUC 0,8937): datos inservibles, conservados sólo como registro local.
+#   hechos_nomic.npz    9000 embeddings de `nomic-embed-text` SIN pasar el texto a minúscula →
+#                       afectados por el colapso de tokens capitalizados
+#                       (HALLAZGO_TOKENIZADOR_20260810.md): 75 vectores únicos entre 3000. INVÁLIDOS.
+#                       Hay que regenerarlos con `NORMALIZAR = str.lower`.
+#   embeddings_10k.npy  generado por colab_10k.py / colab_bootstrap.py.
+#   claves_multi.npz    generado por desempate.py.
+#   albert_embeddings.npy  generado por embeddings_albert.py.
+*.npz
+*.npy
+__pycache__/
+*.pyc

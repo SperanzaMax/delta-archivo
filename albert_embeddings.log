@@ -1,0 +1,22 @@
+[19:27:29] inicio — objetivo 800, ya hay 0, temp 28.0 C, pausa>=68.0 aborta>=78.0
+[19:27:54] 40/800 — 24s el lote, temp 43.0 C
+[19:28:27] 80/800 — 22s el lote, temp 34.0 C
+[19:29:00] 120/800 — 20s el lote, temp 36.0 C
+[19:29:33] 160/800 — 21s el lote, temp 36.0 C
+[19:30:05] 200/800 — 20s el lote, temp 36.0 C
+[19:31:01] 240/800 — 44s el lote, temp 40.0 C
+[19:32:02] 280/800 — 50s el lote, temp 47.0 C
+[19:32:53] 320/800 — 38s el lote, temp 43.0 C
+[19:33:47] 360/800 — 42s el lote, temp 50.0 C
+[19:34:48] 400/800 — 49s el lote, temp 41.0 C
+[19:35:48] 440/800 — 49s el lote, temp 41.0 C
+[19:36:48] 480/800 — 48s el lote, temp 48.0 C
+[19:37:44] 520/800 — 44s el lote, temp 42.0 C
+[19:38:44] 560/800 — 49s el lote, temp 49.0 C
+[19:39:45] 600/800 — 49s el lote, temp 51.0 C
+[19:40:53] 640/800 — 56s el lote, temp 50.0 C
+[19:42:18] 680/800 — 73s el lote, temp 51.0 C
+[19:44:11] 720/800 — 101s el lote, temp 49.0 C
+[19:45:15] 760/800 — 52s el lote, temp 51.0 C
+[19:46:27] 800/800 — 59s el lote, temp 49.0 C
+[19:46:39] fin — 800 vectores, dim 2048, temp final 40.0 C
