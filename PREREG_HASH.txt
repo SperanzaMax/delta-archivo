@@ -1,3 +1,8 @@
 0db7532f7f7b898268054704e7b6158dd47554e98a71baab0cf58f5541ff573d  PREREG_HECHOS.md
 fda32d3b1b567a0aaee92029e926bf981d871950da330edc4f6fc194c30d543b  tarea_hechos.py
 congelado 2026-08-09T06:07:42Z
+
+ENMIENDA_E2_INDEXACION.md
+SHA-256: 7873d1780b0c9d0a8e13f7ee96cefa083bf46a0e011230d4e60cad2b65b95d2b
+congelada: 2026-08-10T21:24:12Z
+(antes de generar los embeddings definitivos y sin ninguna condicion analizada)
