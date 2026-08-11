@@ -6,3 +6,9 @@ ENMIENDA_E2_INDEXACION.md
 SHA-256: 7873d1780b0c9d0a8e13f7ee96cefa083bf46a0e011230d4e60cad2b65b95d2b
 congelada: 2026-08-10T21:24:12Z
 (antes de generar los embeddings definitivos y sin ninguna condicion analizada)
+
+PREREG_GEMACION_ACOTADA.md
+SHA-256: ab3115e266418bb4f8a6cf75921fcc142bc1aeed52470fb607d8d1214fcf504e
+congelado: 2026-08-11T02:37:05Z
+(antes de construir ningun indice de las condiciones nuevas)
+principal: g_orbita · P-A1 en COBERTURA a K=8 · eps=0.30 sin re-ajustar
