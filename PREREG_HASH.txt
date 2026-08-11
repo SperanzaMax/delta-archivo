@@ -12,3 +12,10 @@ SHA-256: ab3115e266418bb4f8a6cf75921fcc142bc1aeed52470fb607d8d1214fcf504e
 congelado: 2026-08-11T02:37:05Z
 (antes de construir ningun indice de las condiciones nuevas)
 principal: g_orbita · P-A1 en COBERTURA a K=8 · eps=0.30 sin re-ajustar
+PREREG_ELIPTICA.md
+SHA-256: 299edbd8a53360b6843d94641f30fcbe029da52ae483c68ba34d0de2662dec47
+congelado: 2026-08-11T00:00:00Z (ver git log para el timestamp exacto del commit)
+(antes de generar los textos elipticos/hidratados y sus embeddings; lo unico medido
+ previamente es el smoke de rango de smoke_eliptica.py, declarado en §2 del prereg)
+principal: P-E1 · existe tau* <= 0.25 · VIGENTE a K=8 · prediccion puntual tau* ~ 0.075
+bloqueante: P-E0 · a tau=0 hidratada >= g_orbita (reproduce el regimen del 10-ago)
