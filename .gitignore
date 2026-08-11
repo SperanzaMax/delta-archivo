@@ -14,3 +14,8 @@
 *.npy
 __pycache__/
 *.pyc
+preprint/*.aux
+preprint/*.log
+preprint/*.out
+preprint/*.fls
+preprint/*.fdb_latexmk
