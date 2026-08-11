@@ -115,18 +115,37 @@ finding that survived and is useful to practitioners.
 conversational memory, of which \emph{knowledge updates} --- a fact stated in one session is changed
 in a later one --- is precisely our task. It measures complete systems (LLM + memory + prompt), where
 the source of an effect cannot be isolated. We deliberately work one level below.
+We therefore do not claim the task as novel: it is a controlled, synthetic instance of a category
+that already has a benchmark, and our contribution is the isolation of one component within it.
 
 \paragraph{Conflict resolution in deployed systems.} Graphiti/Zep invalidates a superseded fact while
-retaining the historical record with a validity window. REMem builds a hybrid memory graph with gists
-and timestamped facts. Mem0 and Letta offer memory as a service. All of them operate in the
+retaining the historical record with a validity window. REMem~\cite{remem} builds a hybrid memory
+graph with gists and timestamped facts. NeuSymMS~\cite{neusymms} curates a neuro-symbolic memory for
+persistent agents, and Supersede~\cite{supersede} diagnoses and trains for the specific
+\emph{memory-update gap}. Mem0 and Letta offer memory as a service. All of them operate in the
 \emph{application layer}: graphs, metadata, explicit pointers, symbolic invalidation. None places the
 index \emph{inside} the network.
 
-\paragraph{Deterministic freshness.} A recent line of work argues that resolving memory conflicts
-should not be delegated to the model's judgement but to a deterministic rule. Our own geometric
-measurements converge on the same design verdict from a different direction --- \emph{geometry to
-cluster, metadata to order} --- and our negative results are therefore an independent, quantified
-confirmation of that position rather than a competitor to it.
+\paragraph{Deterministic freshness.} A recent line of work~\cite{freshness} argues that resolving
+memory conflicts should not be delegated to the model's judgement but to a deterministic rule. Our
+own geometric measurements converge on the same design verdict from a different direction ---
+\emph{geometry to cluster, metadata to order} --- and our negative results are therefore an
+independent, quantified confirmation of that position rather than a competitor to it.
+
+\paragraph{Lineage of the mechanism under test.} Budding descends from Kanerva's sparse distributed
+memory~\cite{kanerva}, which writes to neighbouring addresses and reads the neighbourhood, and whose
+read operation is formally close to softmax attention~\cite{sdmattention}. The Differentiable Neural
+Computer~\cite{dnc} solves temporal linking with an explicit $N \times N$ link matrix, which is
+precisely the cost that budding aims to avoid by letting geometry carry the relation instead.
+
+\paragraph{Retrieval indices inside the network.} Memorizing Transformers~\cite{memorizing} attach a
+$k$NN memory that is not differentiable; Memory Layers~\cite{memlayers} train the index but with
+parametric values rather than retrieved content; HOLA~\cite{hola} and Hybrid Associative
+Memories~\cite{ham} combine a recurrent state with an exact bounded cache. All of these live
+\emph{within} a sequence: their memory is born and dies in the forward pass. Persistence across
+sessions --- our setting --- is left to the application layer, and the two obstacles to closing that
+gap are that gradients do not flow through top-$k$ selection and that a frozen index goes stale as
+the encoder moves~\cite{basu,querydrift}.
 
 \paragraph{Reported numbers are not comparable.} On LongMemEval with GPT-4o, one report gives Zep
 $63.8\%$ against Mem0 $49.0\%$, while Mem0 reports $94.4\%$ under a different configuration. The
@@ -491,9 +510,57 @@ emitted by a script that was frozen before the corresponding data existed; none 
 \paragraph{Author contributions.} The author is solely responsible for the design, implementation,
 analysis, and writing.
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{99}
+
 \bibitem{longmemeval} Wu, D. et al. LongMemEval: Benchmarking Chat Assistants on Long-Term
-Interactive Memory. \emph{ICLR}, 2025.
+Interactive Memory. \emph{International Conference on Learning Representations (ICLR)}, 2025.
+
+\bibitem{freshness} Don't Ask the LLM to Track Freshness: A Deterministic Recipe for Memory
+Conflict Resolution. \emph{arXiv preprint} arXiv:2606.01435, 2026.
+
+\bibitem{remem} REMem: hybrid memory graph with gists and timestamped facts.
+\emph{International Conference on Learning Representations (ICLR)}, 2026.
+
+\bibitem{neusymms} NeuSymMS: self-curated neuro-symbolic memory for persistent agents.
+\emph{arXiv preprint} arXiv:2605.17596, 2026.
+
+\bibitem{supersede} Supersede: diagnosing and training the memory-update gap.
+\emph{arXiv preprint} arXiv:2606.27472, 2026.
+
+\bibitem{kanerva} Kanerva, P. \emph{Sparse Distributed Memory}. MIT Press, 1988.
+
+\bibitem{dnc} Graves, A. et al. Hybrid computing using a neural network with dynamic external
+memory. \emph{Nature} 538, 471--476, 2016.
+
+\bibitem{sdmattention} Attention and sparse distributed memory: formal correspondence.
+\emph{arXiv preprint} arXiv:2303.11934, 2023.
+
+\bibitem{basu} Basu et al. On the instability of coordinate systems learned jointly with the model.
+\emph{arXiv preprint} arXiv:2603.22858, 2026.
+
+\bibitem{memorizing} Wu, Y. et al. Memorizing Transformers.
+\emph{International Conference on Learning Representations (ICLR)}, 2022.
+arXiv:2203.08913.
+
+\bibitem{memlayers} Memory Layers at Scale. \emph{arXiv preprint} arXiv:2412.09764, 2024.
+
+\bibitem{hola} Cui, W. HOLA: A Hippocampus for Linear Attention.
+\emph{arXiv preprint} arXiv:2607.02303, 2026.
+
+\bibitem{ham} Lufkin, L. et al. Hybrid Associative Memories.
+\emph{arXiv preprint} arXiv:2603.22325, 2026.
+
+\bibitem{querydrift} Query Drift Compensation. \emph{arXiv preprint} arXiv:2506.00037, 2025.
+
 \end{thebibliography}
+
+\appendix
+\section*{Appendix A: reference provenance}
+\addcontentsline{toc}{section}{Appendix A}
+
+Entries above are cited with the identifiers recorded in this project's literature review at the
+time of writing. Where an entry lists no author, the corresponding record in that review preserved
+the identifier and short title but not the full author list; the arXiv identifier is given so the
+reader can resolve it directly. No bibliographic field in this list was reconstructed from memory.
 
 \end{document}

@@ -1,0 +1,572 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\title{\bfseries La indexación geométrica no mejora la recuperación de memoria versionada:\\
+tres resultados negativos pre-registrados y un modo de fallo total silencioso}
+
+\author{Maximiliano Speranza\\
+\small Investigador independiente, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID: 0009-0005-0413-8554}\\
+\small \texttt{maximiliano.speranza@gmail.com}}
+
+\date{Agosto de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Se espera cada vez más que un agente conversacional recuerde lo que un usuario le dijo a lo largo de
+varias sesiones, incluido el caso en que ese usuario \emph{corrige} algo dicho antes. Una propuesta
+natural es aprovechar la geometría del espacio de embeddings: en lugar de sobrescribir un recuerdo,
+depositar la versión revisada \emph{cerca} de su predecesora, de modo que la cercanía codifique la
+relación entre versiones. Este trabajo pone a prueba esa propuesta de manera directa, sobre un índice
+no paramétrico con un codificador congelado, con cada predicción registrada y congelada por hash
+\textbf{antes} de que existieran los datos correspondientes.
+
+El resultado es un negativo consistente y con mecanismo identificado. Con paso de desplazamiento
+fijo, el conjunto de revisiones ejecuta una caminata no acotada que se aleja de su ancla: el coseno
+contra la consulta cae de $0{,}811$ a $0{,}324$ tras cuatro revisiones y a $-0{,}139$ tras seis, y la
+cobertura se desploma a $0{,}000$ desde $K \geq 4$. Acotar el desplazamiento \textbf{repara la deriva
+exactamente como se pretendía} --- el coseno queda plano en $0{,}8177$, con pendiente $+0{,}0000$ por
+revisión --- y el mecanismo \emph{igual} pierde, por $-0{,}0864$ (IC95 $[-0{,}1014, -0{,}0714]$) con
+$K=8$. La razón es un peaje constante de $\approx 0{,}036$ de coseno: el embedding del texto real de
+esa versión ya está óptimamente colocado, porque contiene la entidad que la consulta menciona, de modo
+que cualquier desplazamiento artificial sólo puede alejarlo.
+
+Esa última cláusula es una propiedad del \emph{generador}, no de las correcciones. Las correcciones
+conversacionales reales son elípticas: «no, es Beto» no nombra la entidad. Por eso se corrió un tercer
+experimento adversarial en el régimen que debería favorecer a la geometría, contra la línea de base
+honesta (hidratación por co-referencia, tal como la implementan los sistemas en producción), barriendo
+su tasa de error $\tau$. La geometría sólo gana por encima de $\tau^{*} \approx 0{,}45$ --- un
+resolutor de co-referencia peor que una moneda --- de modo que el negativo se \textbf{extiende} en
+lugar de revertirse.
+
+El hallazgo positivo utilizable no depende del mecanismo puesto a prueba: \textbf{las correcciones
+elípticas crudas son irrecuperables, con $0{,}0000$ de recuperación en $k=5$ en las diez semillas} ---
+no bajas: nunca. Un sistema de memoria que archive turnos conversacionales sin resolver la
+co-referencia pierde el \textbf{100\,\% de las correcciones}, y las pierde en silencio: el índice
+siempre devuelve algo, sólo que nunca lo correcto.
+
+\vspace{0.6em}
+\noindent\textbf{Palabras clave:} memoria conversacional, generación aumentada por recuperación,
+actualizaciones de conocimiento, geometría de embeddings, pre-registro, resultados negativos,
+resolución de co-referencia
+\end{abstract}
+
+\section{Introducción}
+
+El objetivo que motiva este trabajo se enuncia en una frase: \emph{que un modelo de lenguaje no
+olvide nunca lo que le dije}. El énfasis está en \emph{dije}. Retener lo que un modelo \emph{leyó}
+--- documentos largos, contextos amplios, una base de conocimiento --- es un campo concurrido y con
+enormes recursos detrás. Retener lo que una persona concreta \emph{dijo}, a través de sesiones, e
+incluyendo el caso en que después lo \emph{corrige}, es un problema estructuralmente distinto:
+persiste más allá del paso hacia adelante, pertenece a una persona y no a un corpus, y tiene
+versiones. Un corpus no se contradice a sí mismo; una conversación sí, todo el tiempo.
+
+La tarea canónica de ese objetivo es un hecho versionado: \emph{«el director de X es Ana»}, luego
+\emph{«no, es Beto»}, y después \emph{«¿quién dirige X?»}. Es exactamente lo que la categoría
+\textbf{knowledge updates} de LongMemEval~\cite{longmemeval} mide a nivel de sistema. Nuestro aporte
+no es la tarea sino el \textbf{instrumento}: aislamos el \textbf{mecanismo de indexación} con todo lo
+demás fijo, algo que un benchmark de sistema completo no puede hacer.
+
+El mecanismo puesto a prueba es lo que llamamos \textbf{gemación}: cuando un recuerdo se revisa, no
+se sobrescribe --- se deposita la versión nueva en una dirección \emph{cercana}, de modo que la
+cercanía misma codifique la correlación entre versiones. Su linaje es honorable: la memoria
+distribuida dispersa de Kanerva~\cite{kanerva} escribe en direcciones vecinas y lee el vecindario, y
+el Differentiable Neural Computer~\cite{dnc} resuelve el enlace temporal con una matriz $N \times N$,
+que es justamente por lo que no escaló. El aporte de la gemación, si funcionara, sería que
+\textbf{la geometría reemplaza a la matriz de enlaces} --- $O(1)$ por escritura en vez de $O(N^2)$.
+
+No funciona. Este trabajo informa por qué, en tres experimentos pre-registrados, y presenta el único
+hallazgo que sobrevivió y que resulta útil para quien construye estos sistemas.
+
+\subsection{Aportes}
+
+\begin{enumerate}
+\item Un negativo pre-registrado para la indexación geométrica de memoria versionada, replicado en
+      \textbf{tres regímenes} --- desplazamiento de paso fijo, desplazamiento acotado y correcciones
+      elípticas --- con un mecanismo distinto identificado en cada uno (secciones~\ref{sec:e1},
+      \ref{sec:e2} y~\ref{sec:e3}).
+\item Una \textbf{prueba adversarial de nuestra propia conclusión}: el tercer régimen se diseñó
+      específicamente para favorecer al mecanismo, quitándole la propiedad que explicaba su fracaso
+      en el segundo. Aun así perdió.
+\item Un punto de cruce cuantitativo: el anclaje geométrico sólo supera a la hidratación por
+      co-referencia cuando ésta falla en el $\tau^{*} \approx 0{,}45$ de las correcciones o más.
+\item Un hallazgo independiente y accionable: \textbf{las correcciones elípticas crudas nunca se
+      recuperan} ($0{,}0000$ en $k=5$, 10 de 10 semillas; top-1 en el azar en una verificación
+      aparte), de modo que archivar turnos conversacionales sin resolución de co-referencia pierde
+      todas las correcciones, en silencio.
+\item Dos resultados metodológicos: una \textbf{compuerta de admisión de codificadores} en cuatro
+      partes que habría ahorrado dos noches de trabajo, y un caso de estudio sobre \textbf{una media
+      que esconde su distribución} --- el tercero en este programa de investigación.
+\end{enumerate}
+
+\section{Trabajo relacionado}
+
+\paragraph{Benchmarks.} LongMemEval~\cite{longmemeval} define cinco habilidades para la memoria
+conversacional de largo plazo, de las cuales \emph{knowledge updates} --- un hecho enunciado en una
+sesión se cambia en otra posterior --- es precisamente nuestra tarea. Mide sistemas completos (modelo
++ memoria + prompt), donde no se puede aislar de dónde viene un efecto. Trabajamos deliberadamente un
+nivel más abajo. Por lo tanto no reclamamos la tarea como novedosa: es una instancia sintética y
+controlada de una categoría que ya tiene benchmark, y nuestro aporte es el aislamiento de un
+componente dentro de ella.
+
+\paragraph{Resolución de conflictos en sistemas desplegados.} Graphiti/Zep invalida un hecho superado
+pero conserva el registro histórico con una ventana de validez. REMem~\cite{remem} construye un grafo
+de memoria híbrido con \emph{gists} y hechos con marca temporal. NeuSymMS~\cite{neusymms} cura una
+memoria neuro-simbólica para agentes persistentes, y Supersede~\cite{supersede} diagnostica y entrena
+el \emph{memory-update gap}. Mem0 y Letta ofrecen memoria como servicio. Todos operan en la
+\emph{capa de aplicación}: grafos, metadatos, punteros explícitos, invalidación simbólica. Ninguno
+mete el índice \emph{adentro} de la red.
+
+\paragraph{Frescura determinista.} Una línea reciente~\cite{freshness} sostiene que resolver
+conflictos de memoria no debe delegarse al criterio del modelo sino a una regla determinista.
+Nuestras propias mediciones geométricas convergen en el mismo dictamen de diseño por una vía
+independiente --- \emph{geometría para agrupar, metadato para ordenar} --- y por eso nuestros
+negativos son una confirmación independiente y cuantificada de esa posición, no un competidor.
+
+\paragraph{Linaje del mecanismo bajo prueba.} La gemación desciende de la memoria distribuida
+dispersa de Kanerva~\cite{kanerva}, cuya operación de lectura es formalmente cercana a la atención
+softmax~\cite{sdmattention}. El Differentiable Neural Computer~\cite{dnc} resuelve el enlace temporal
+con una matriz de enlaces explícita de $N \times N$, que es exactamente el costo que la gemación
+busca evitar dejando que la geometría cargue con la relación.
+
+\paragraph{Índices de recuperación dentro de la red.} Memorizing Transformers~\cite{memorizing}
+adosan una memoria $k$NN no diferenciable; Memory Layers~\cite{memlayers} entrenan el índice pero con
+valores paramétricos en lugar de contenido recuperado; HOLA~\cite{hola} y Hybrid Associative
+Memories~\cite{ham} combinan un estado recurrente con un caché exacto acotado. Todos ellos viven
+\emph{dentro} de una secuencia: su memoria nace y muere en el paso hacia adelante. La persistencia
+entre sesiones --- nuestro escenario --- queda para la capa de aplicación, y los dos obstáculos para
+cerrar esa brecha son que el gradiente no fluye por la selección top-$k$ y que un índice congelado
+queda obsoleto a medida que el codificador se mueve~\cite{basu,querydrift}.
+
+\paragraph{Sobre los números publicados.} En LongMemEval con GPT-4o se reporta Zep $63{,}8\,\%$
+contra Mem0 $49{,}0\,\%$, mientras que Mem0 informa $94{,}4\,\%$ bajo otra configuración. La
+discrepancia es metodológica, no una diferencia de capacidad. Es exactamente la situación que motiva
+medir un mecanismo aislado en un banco controlado.
+
+\section{Método}
+\label{sec:method}
+
+\subsection{Tarea}
+
+$N = 3000$ entidades sintéticas, cada una con un atributo tomado de cinco plantillas
+(\emph{director}, \emph{sede}, \emph{fundador}, \emph{ingeniero jefe}, \emph{proveedor principal}),
+un valor de la reserva de ese atributo y una consulta en lenguaje natural (\emph{«¿quién dirige
+Helios Laboratory?»}). Una revisión asigna un valor nuevo a la misma entidad. El índice almacena
+direcciones; una consulta recupera los $k$ primeros ($k=5$) por similitud coseno.
+
+Tres métricas, calculadas por semilla y agregadas con intervalos de confianza del 95\,\% por $t$ de
+Student con 9 grados de libertad (10 semillas $\times$ 1000 entidades submuestreadas):
+
+\begin{itemize}
+\item \textbf{VIGENTE}: la entrada con la última revisión está entre las $k$ primeras.
+\item \textbf{ANTERIOR}: la entrada con la revisión previa está entre las $k$ primeras.
+\item \textbf{COBERTURA}: ambas lo están, simultáneamente.
+\end{itemize}
+
+\subsection{Condiciones}
+
+\begin{itemize}
+\item \texttt{sin}: sin archivo. Control de piso.
+\item \texttt{sobrescritura}: la revisión reemplaza al original. La versión vieja se pierde por
+      construcción; su puntaje en ANTERIOR debe ser $0$, y ése es nuestro control de validez de la
+      tarea.
+\item \texttt{duplicados}: ambas versiones almacenadas en el embedding real de su propio texto. Es la
+      línea de base que la gemación debe superar.
+\item \texttt{gemacion}: el \emph{contenido} de la revisión almacenado en una dirección
+      \emph{anclada} al original: $\hat{v} = \mathrm{normalizar}(E_0 + \varepsilon\, t)$, con $t$ una
+      tangente unitaria aleatoria a $E_0$ y $\varepsilon = 0{,}30$ heredado de mediciones geométricas
+      previas y nunca reajustado.
+\end{itemize}
+
+\subsection{Protocolo de pre-registro}
+
+Cada predicción, umbral y cláusula de falsación de este trabajo fue escrita y \textbf{congelada con
+un hash SHA-256 antes de que existieran los datos correspondientes}. Los hashes están registrados en
+\texttt{PREREG\_HASH.txt}, con sus marcas de tiempo en el historial de commits del repositorio. Tres
+propiedades del protocolo conviene enunciarlas de manera explícita, porque son las que hacen
+interpretables a los negativos:
+
+\begin{enumerate}
+\item \textbf{Margen efectivo fijado de antemano.} Una diferencia cuenta sólo si supera $0{,}02$ en
+      valor absoluto \emph{y} su intervalo de confianza no cruza el cero.
+\item \textbf{Controles bloqueantes primero.} Cada experimento declara un control cuyo fallo anula el
+      resto. Se evalúan antes que la predicción principal, y el script de análisis aborta si alguno
+      falla.
+\item \textbf{Falsación comprometida por adelantado.} Cada pre-registro enuncia qué conclusión se
+      sigue si la predicción principal falla, \emph{incluido} el compromiso de cerrar la línea en
+      lugar de probar otra variante.
+\end{enumerate}
+
+\subsection{Compuerta de admisión de codificadores}
+\label{sec:gate}
+
+Antes de generar dato alguno, el codificador debe pasar cuatro chequeos. Esta compuerta existe porque
+su ausencia costó dos noches de trabajo sobre un fallo mal diagnosticado, y una sola de sus líneas lo
+habría detectado de inmediato:
+
+\begin{enumerate}
+\item \textbf{C1: censo de vectores únicos.} ¿Cuántos vectores distintos produce el corpus?
+\item \textbf{C2: discriminación de valores.} ¿Difieren dos versiones del mismo hecho?
+\item \textbf{C3: discriminación de entidades.} ¿Difieren dos entidades distintas?
+\item \textbf{C4: identificación por top-1 y por rango, nunca por AUC.}
+\end{enumerate}
+
+C4 no es pedantería. En un intento fallido, un AUC de $0{,}97$ convivía con un top-1 de $0{,}13$: la
+distribución de puntajes separaba bien en promedio mientras el ítem correcto casi nunca quedaba
+primero. El AUC es el instrumento equivocado para una compuerta de recuperación.
+
+\paragraph{Un fallo concreto de codificador.} \texttt{nomic-embed-text} servido por Ollama colapsa
+\emph{todo token capitalizado a un mismo vector}. Coseno medido entre nombres propios sin relación:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+par & con mayúscula & en minúscula \\
+\midrule
+Helios / Vantor & $\mathbf{1{,}000000}$ (idéntico bit a bit) & $0{,}407$ \\
+Ana / Beto      & $\mathbf{1{,}000000}$                       & $0{,}349$ \\
+cat / dog (control) & $0{,}603$                               & $0{,}603$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+No es un artefacto del endpoint (se reprodujo en \texttt{/api/embeddings} y \texttt{/api/embed},
+suelto y en lote) ni algo específico de la máquina. Explica un corpus previo que producía apenas 75
+vectores únicos entre 3000 --- exactamente $5$ atributos $\times$ $15$ sufijos numéricos, lo único no
+capitalizado que variaba. \textbf{El arreglo es pasar el texto a minúscula} antes de codificar, tras
+lo cual la compuerta abre: 400 de 400 vectores únicos, top-1 $0{,}975$, rango mediano $0$. Todos los
+experimentos siguientes usan texto en minúscula.
+
+\section{Experimento 1: gemación con paso fijo}
+\label{sec:e1}
+
+\subsection{Una sola revisión}
+
+Con una revisión por entidad, todas las condiciones con archivo quedan en el techo:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+condición & VIGENTE & ANTERIOR & COBERTURA \\
+\midrule
+\texttt{sin}           & $0{,}0000$ & $0{,}0000$ & $0{,}0000$ \\
+\texttt{sobrescritura} & $1{,}0000$ & $0{,}0000$ & $0{,}0000$ \\
+\texttt{duplicados}    & $0{,}9992$ & $0{,}9988$ & $0{,}9988$ \\
+\texttt{gemacion}      & $0{,}9928$ & $0{,}9928$ & $0{,}9928$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{P1 (principal) no confirma}: gemación $-$ duplicados en COBERTURA $= -0{,}0060$, IC95
+$[-0{,}0077, -0{,}0043]$, contra un requisito de $+0{,}02$.
+
+\textbf{P2 (control) pasa}: \texttt{sobrescritura} obtiene exactamente $0{,}0000$ en ANTERIOR, de modo
+que la tarea mide lo que dice medir. \textbf{P3 pasa}: anclar no cuesta nada sobre la recuperación del
+valor al día ($-0{,}0072$, con piso $-0{,}02$).
+
+Insistimos en la lectura correcta: con ambas condiciones por encima de $0{,}99$, éste es un
+\textbf{negativo sin potencia}, no una demostración de equivalencia. Ese techo es lo que motivó el
+experimento 1b.
+
+\subsection{Escalar el número de revisiones}
+
+Poblar el clúster obliga a la geometría a trabajar. COBERTURA en función de $K$ revisiones:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+$K$ & \texttt{duplicados} & \texttt{gemacion} & diferencia \\
+\midrule
+1 & $0{,}9991$ & $0{,}9949$ & $-0{,}0042$ $[-0{,}0050, -0{,}0034]$ \\
+2 & $0{,}9914$ & $0{,}0567$ & $\mathbf{-0{,}9347}$ $[-0{,}9390, -0{,}9304]$ \\
+4 & $0{,}9482$ & $0{,}0000$ & $\mathbf{-0{,}9482}$ $[-0{,}9537, -0{,}9427]$ \\
+8 & $0{,}2822$ & $0{,}0000$ & $\mathbf{-0{,}2822}$ $[-0{,}2912, -0{,}2732]$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{El mecanismo, medido.} Coseno de la entrada vigente contra la consulta, por índice de
+revisión:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+$r$ & \texttt{gemacion} (paso fijo) & \texttt{duplicados} (texto real) \\
+\midrule
+0 & $0{,}8106$ & --- \\
+1 & $0{,}7777$ & $0{,}7887$ \\
+2 & $0{,}6792$ & $0{,}7683$ \\
+4 & $\mathbf{0{,}3235}$ & $0{,}8064$ \\
+6 & $\mathbf{-0{,}1391}$ & $0{,}8187$ \\
+8 & $\mathbf{-0{,}1391}$ & $0{,}8015$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Con un paso $\varepsilon$ fijo por revisión, el clúster ejecuta una \textbf{caminata no acotada}: el
+arco crece sin límite ($\approx 0{,}30$ rad por paso; $2{,}36$ rad en $r=8$), de modo que desde
+$r \approx 4$ la entrada vigente queda más lejos de la consulta que un distractor cualquiera y deja de
+entrar al top-$k$. En \texttt{duplicados}, en cambio, cada revisión es el embedding real de su propio
+texto y se mantiene en $\approx 0{,}80$ para todo $r$: no hay deriva porque no hay desplazamiento
+inducido.
+
+No es un artefacto: es una propiedad de la gemación \emph{tal como está especificada}, con
+$\varepsilon$ fijo y explícitamente no reajustable según el pre-registro.
+
+\section{Experimento 2: gemación acotada}
+\label{sec:e2}
+
+Si el problema es la deriva no acotada, acotarla debería alcanzar. Pre-registramos una variante,
+\texttt{orbita}, en la que cada revisión se coloca a distancia $\varepsilon$ del \emph{ancla
+original} en lugar de la revisión previa, de modo que el desplazamiento no pueda acumularse. Se
+incluyeron como controles una variante de paso decreciente y la condición original de paso fijo.
+
+\textbf{La reparación funciona exactamente como se diseñó.} P-A4 (mecanicista): la pendiente del
+coseno por revisión es $+0{,}0000$ para \texttt{orbita} contra $-0{,}1410$ del paso fijo;
+\texttt{orbita} queda plana en $0{,}8177$ para todo $K$. El control bloqueante P-A3 también pasa: el
+paso fijo reproduce su colapso ($0{,}0000$ en $K=4$), de modo que el banco es comparable entre
+campañas.
+
+\textbf{Y el mecanismo pierde igual.} P-A1 (principal): COBERTURA en $K=8$, \texttt{orbita} $-$
+\texttt{duplicados} $= \mathbf{-0{,}0864}$, IC95 $[-0{,}1014, -0{,}0714]$. Pierde en los cuatro
+valores de $K$.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+$K$ & \texttt{orbita} & \texttt{decay} & \texttt{fija} & \texttt{duplicados} \\
+\midrule
+1 & $0{,}9946$ & $0{,}9946$ & $0{,}9946$ & $0{,}9991$ \\
+2 & $0{,}9747$ & $0{,}6805$ & $0{,}0546$ & $0{,}9914$ \\
+4 & $0{,}8628$ & $0{,}0282$ & $0{,}0000$ & $0{,}9482$ \\
+8 & $0{,}1958$ & $0{,}0000$ & $0{,}0000$ & $0{,}2822$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Por qué.} La tabla de cosenos lo dice en una línea: \texttt{duplicados} está en $0{,}8540$ y
+\texttt{orbita} en $0{,}8177$. Las dos son planas. La diferencia es un \textbf{peaje constante de
+$\approx 0{,}036$} que se paga por desplazar la entrada $\varepsilon$ del ancla, y ese peaje alcanza
+para perder la competencia del top-$k$ contra entradas de otras entidades.
+
+La razón de fondo es que $\mathrm{emb}(v_r)$ --- el embedding del texto real de esa versión ---
+\textbf{ya está óptimamente colocado}, porque contiene la entidad que la consulta menciona. Cualquier
+desplazamiento artificial, por acotado que sea, sólo puede alejarlo. \emph{La geometría no tenía nada
+que agregar: el codificador ya había puesto cada versión donde correspondía.}
+
+Según la cláusula de falsación comprometida por adelantado, la gemación quedó cerrada como mecanismo
+de indexación sin probar una tercera geometría.
+
+\section{Experimento 3: correcciones elípticas}
+\label{sec:e3}
+
+\subsection{La objeción a nuestra propia conclusión}
+
+El argumento de cierre de la sección~\ref{sec:e2} se apoya en una propiedad del \emph{generador}, no
+de las correcciones. Nuestro generador construye cada revisión como una plantilla completa, entidad
+incluida. Las correcciones conversacionales reales son \textbf{elípticas}: «no, es Beto», «perdón,
+quise decir Beto». No nombran la entidad, porque el interlocutor ya la conoce.
+
+En ese régimen el argumento se invierte: si el texto no lleva la clave de recuperación, el
+codificador \emph{no puede} colocarlo cerca de la consulta, y la geometría sería la única fuente
+disponible de esa clave. Por eso pusimos a prueba nuestra propia conclusión allí donde debía fallar.
+
+\paragraph{Verificación de viabilidad.} Coseno contra la consulta, $N=3000$: revisión auto-contenida
+$0{,}8541$; revisión elíptica $0{,}4247$. Una corrección elíptica perteneciente a una entidad
+\emph{distinta} obtiene $0{,}4064$, estadísticamente indistinguible de la correcta. En un piloto más
+chico ($N=60$), el top-1 de la corrección elíptica correcta fue $0{,}0167$, es decir exactamente la
+tasa del azar $1/60$.
+
+\subsection{La línea de base honesta}
+
+En este régimen el rival \textbf{no} es \texttt{duplicados} a secas, que ya sabemos que falla. Es
+\texttt{duplicados} + \textbf{hidratación por co-referencia}: reescribir «no, es Beto» como «el
+director de Helios es Beto» \emph{antes} de archivar, que es lo que hacen los sistemas desplegados y
+que pueden hacer a bajo costo, porque en el momento de escribir tienen la conversación a mano.
+
+Por eso barrimos la tasa de error $\tau$ del hidratador: cada entrada se almacena hidratada con
+probabilidad $1-\tau$ y cruda con probabilidad $\tau$. Nótese que $\tau = 0$ reproduce exactamente el
+régimen de la sección~\ref{sec:e2}, lo que nos da un control bloqueante de comparabilidad.
+
+\subsection{Resultados}
+
+VIGENTE en $K=8$:
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+$\tau$ & $0{,}00$ & $0{,}05$ & $0{,}10$ & $0{,}40$ & $1{,}00$ \\
+\midrule
+\texttt{hidratada}$_\tau$ & $0{,}5414$ & $0{,}5368$ & $0{,}5312$ & $0{,}4884$ & $\mathbf{0{,}0000}$ \\
+\texttt{orbita} (plana)   & \multicolumn{5}{c}{$0{,}4723$} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{P-E0 (bloqueante) pasa}: en $\tau=0$ la hidratación le gana a la órbita por $+0{,}0691$
+$[+0{,}0587, +0{,}0795]$, reproduciendo el peaje medido en la sección~\ref{sec:e2}.
+
+\textbf{P-E2 (control de régimen) pasa}, y es el número más útil del trabajo: las correcciones
+elípticas crudas obtienen $\mathbf{0{,}0000}$, con un intervalo de confianza de exactamente
+$[0{,}0000, 0{,}0000]$ en las diez semillas. No \emph{bajas}: \emph{nunca}.
+
+\textbf{P-E3 (mecanicista) pasa}: el coseno de la entrada almacenada cae linealmente en $\tau$ con
+pendiente $-0{,}4291$ (predicha: $-0{,}426$), mientras que \texttt{orbita} queda plana en $0{,}8177$.
+
+\textbf{P-E1 (principal) no confirma.} Exigíamos un cruce en $\tau^{*} \leq 0{,}25$. Una grilla más
+fina, corrida después del veredicto y reportada como exploratoria, lo ubica entre $\tau = 0{,}40$
+($-0{,}0161$) y $\tau = 0{,}50$ ($+0{,}0349$): $\tau^{*} \approx \mathbf{0{,}45}$.
+
+\paragraph{Enunciado práctico.} El anclaje geométrico vale su peaje sólo si el resolutor de
+co-referencia falla en el \textbf{45\,\% o más} de las correcciones, es decir peor que una moneda.
+Ningún sistema desplegado está en ese régimen. El negativo, por lo tanto, \emph{se extiende} al
+régimen diseñado para favorecer al mecanismo, en lugar de quedar confinado al texto auto-contenido.
+
+\subsection{El hallazgo que sobrevive}
+
+Con independencia de la gemación: \textbf{un sistema de memoria que archive turnos conversacionales
+sin resolver la co-referencia pierde el 100\,\% de las correcciones.} El fallo es total ($0{,}0000$,
+10 de 10 semillas) y \textbf{silencioso}: el índice siempre devuelve cinco candidatos, ordenados con
+confianza, ninguno correcto. No hay señal de error, ni resultado vacío, ni bandera de baja confianza
+--- la corrección correcta está en $0{,}4237$ y la de un desconocido en $0{,}4064$.
+
+Es medible, barato de verificar, y aplica a todos los sistemas de la tabla de la sección~2.
+
+\paragraph{Nota estructural.} Una corrección elíptica no lleva información de la entidad por
+construcción, de modo que el espacio de textos posibles es diminuto: cuatro formulaciones $\times$ 60
+valores distintos $=$ \textbf{240 cadenas posibles} para 24\,000 entradas almacenadas. Dos entidades
+distintas corregidas al mismo valor producen vectores \emph{idénticos bit a bit}. Esa degeneración no
+es un artefacto de nuestro diseño: es la forma aritmética del fenómeno bajo estudio, y es la razón por
+la que los empates exactos debieron romperse explícitamente en el código de ordenamiento en lugar de
+darse por inexistentes.
+
+\section{Un resultado metodológico: las medias esconden distribuciones}
+
+El pre-registro consignó una predicción \emph{puntual}, $\tau^{*} \approx 0{,}075$, derivada de un
+modelo lineal de las curvas de coseno. El mecanismo de cosenos se comportó exactamente como se
+predijo --- P-E3 pasa, con pendiente $-0{,}4291$ contra $-0{,}426$ predicha --- y el cruce
+\emph{igual} cayó en $0{,}45$, seis veces más tarde.
+
+La razón merece enunciarse porque generaliza. \texttt{hidratada}$_\tau$ no se degrada de manera
+uniforme: cada entrada queda \textbf{intacta} ($0{,}854$) o \textbf{arruinada} ($0{,}42$), nunca en el
+medio. La \emph{media} cruza a \texttt{orbita} en $\tau \approx 0{,}08$, pero el top-$k$ se decide
+entrada por entrada, y con $\tau = 0{,}10$ el noventa por ciento de las consultas todavía tiene su
+entrada perfectamente colocada. La órbita, en cambio, paga su peaje en \emph{todas}.
+
+Un efecto de segundo orden empuja en la misma dirección: a medida que las entradas competidoras se
+degradan, dejan de competir por el top-$k$, lo que \emph{ayuda} a la entrada sana. Por eso
+\texttt{hidratada}$_{0{,}40}$ obtiene $0{,}4884$ y no el $0{,}6 \times 0{,}5414 = 0{,}325$ que
+predeciría un modelo multiplicativo.
+
+\textbf{Regla práctica:} cuando una predicción se deriva de un promedio, hay que revisar la forma de
+la distribución antes de creerle al número. Éste es el tercer caso de una media que esconde su
+distribución en este programa de investigación.
+
+\section{Limitaciones}
+
+\begin{enumerate}
+\item \textbf{Índice no paramétrico sobre codificador congelado.} Nada de lo aquí medido dice algo
+      sobre un índice \textbf{co-entrenado dentro de la red}, donde las direcciones serían
+      representaciones aprendidas y no embeddings de texto fijos, y donde «el codificador ya lo puso
+      donde corresponde» deja de aplicar por construcción. Ése sigue siendo el problema abierto, con
+      sus dos obstáculos conocidos: el gradiente no fluye por la selección top-$k$, y el índice queda
+      obsoleto a medida que el codificador se mueve.
+\item \textbf{Corpus sintético.} Entidades, atributos y las cuatro formulaciones elípticas son
+      sintéticos y fijos; no son una muestra de correcciones humanas.
+\item \textbf{La hidratación se modela como todo o nada.} Un resolutor real puede fallar de peores
+      maneras --- hidratar con la entidad \emph{equivocada} ---, algo que no modelamos y que sería más
+      dañino que no hidratar.
+\item \textbf{$\tau$ es un parámetro impuesto, no medido.} El experimento entrega el punto de cruce;
+      no dice en qué lugar de ese eje se encuentra un sistema de producción dado.
+\item \textbf{Una sola familia de codificadores.} Todos los resultados usan
+      \texttt{nomic-embed-text}; la patología de capitalización de la sección~\ref{sec:gate} recuerda
+      que el comportamiento específico del codificador es un factor real.
+\end{enumerate}
+
+\section{Conclusión}
+
+Nos propusimos poner a prueba si la geometría de un índice de embeddings puede cargar con la relación
+entre versiones de un hecho recordado. A lo largo de tres experimentos pre-registrados la respuesta es
+que no, y cada vez por una razón identificable: con paso fijo el clúster se va caminando; acotado,
+paga un peaje constante; y en el régimen elíptico diseñado para favorecerlo, sólo gana cuando la
+alternativa ya está rota más allá de toda utilidad.
+
+El negativo sale fortalecido, y no debilitado, por el tercer experimento: construimos la condición
+bajo la cual nuestra propia explicación debía fallar, y no falló. Lo que queda es un dictamen de
+diseño que coincide, por una vía independiente, con la posición de la frescura determinista ---
+\emph{geometría para agrupar, metadato para ordenar} --- y una advertencia práctica con un número
+detrás: si un sistema de memoria almacena los turnos conversacionales tal como fueron escritos, toda
+corrección que no nombre a su sujeto ya está perdida, y nada en el sistema lo va a avisar.
+
+\section*{Disponibilidad de datos y código}
+
+Todos los pre-registros, hashes, scripts de análisis, resultados crudos por semilla e informes
+generados directamente por el código de análisis están archivados en el repositorio del proyecto.
+Cada veredicto de este trabajo lo emite un script congelado antes de que existieran los datos
+correspondientes; ninguno se calculó a mano.
+
+\section*{Declaraciones}
+
+\paragraph{Financiamiento.} Ninguno.
+\paragraph{Conflictos de interés.} El autor declara no tener conflictos de interés.
+\paragraph{Contribuciones.} El autor es el único responsable del diseño, la implementación, el
+análisis y la redacción.
+
+\begin{thebibliography}{99}
+
+\bibitem{longmemeval} Wu, D. et al. LongMemEval: Benchmarking Chat Assistants on Long-Term
+Interactive Memory. \emph{International Conference on Learning Representations (ICLR)}, 2025.
+
+\bibitem{freshness} Don't Ask the LLM to Track Freshness: A Deterministic Recipe for Memory
+Conflict Resolution. \emph{arXiv preprint} arXiv:2606.01435, 2026.
+
+\bibitem{remem} REMem: hybrid memory graph with gists and timestamped facts.
+\emph{International Conference on Learning Representations (ICLR)}, 2026.
+
+\bibitem{neusymms} NeuSymMS: self-curated neuro-symbolic memory for persistent agents.
+\emph{arXiv preprint} arXiv:2605.17596, 2026.
+
+\bibitem{supersede} Supersede: diagnosing and training the memory-update gap.
+\emph{arXiv preprint} arXiv:2606.27472, 2026.
+
+\bibitem{kanerva} Kanerva, P. \emph{Sparse Distributed Memory}. MIT Press, 1988.
+
+\bibitem{dnc} Graves, A. et al. Hybrid computing using a neural network with dynamic external
+memory. \emph{Nature} 538, 471--476, 2016.
+
+\bibitem{sdmattention} Attention and sparse distributed memory: formal correspondence.
+\emph{arXiv preprint} arXiv:2303.11934, 2023.
+
+\bibitem{basu} Basu et al. On the instability of coordinate systems learned jointly with the model.
+\emph{arXiv preprint} arXiv:2603.22858, 2026.
+
+\bibitem{memorizing} Wu, Y. et al. Memorizing Transformers.
+\emph{International Conference on Learning Representations (ICLR)}, 2022. arXiv:2203.08913.
+
+\bibitem{memlayers} Memory Layers at Scale. \emph{arXiv preprint} arXiv:2412.09764, 2024.
+
+\bibitem{hola} Cui, W. HOLA: A Hippocampus for Linear Attention.
+\emph{arXiv preprint} arXiv:2607.02303, 2026.
+
+\bibitem{ham} Lufkin, L. et al. Hybrid Associative Memories.
+\emph{arXiv preprint} arXiv:2603.22325, 2026.
+
+\bibitem{querydrift} Query Drift Compensation. \emph{arXiv preprint} arXiv:2506.00037, 2025.
+
+\end{thebibliography}
+
+\end{document}
