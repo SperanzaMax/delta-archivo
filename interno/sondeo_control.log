@@ -1,0 +1,4 @@
+    [delta/intra/s0] paso  200 loss 2.5648 acc 0.4115 (19s)
+    [delta/intra/s0] paso  400 loss 0.0904 acc 0.9792 (33s)
+  intra/delta   500 pasos → acc 0.9844
+  ►► con 500 pasos alcanza

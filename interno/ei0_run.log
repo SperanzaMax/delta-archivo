@@ -1,0 +1,54 @@
+E-I0 · L=6 r=3 B=32 · 600 pasos · azar = 0.0156
+
+    [delta/intra/s0] paso  200 loss 2.5648 acc 0.4115 (18s)
+    [delta/intra/s0] paso  400 loss 0.0904 acc 0.9792 (33s)
+    [delta/intra/s0] paso  600 loss 0.0216 acc 1.0000 (47s)
+    [delta/intra/s1] paso  200 loss 2.9924 acc 0.2292 (18s)
+    [delta/intra/s1] paso  400 loss 0.1964 acc 0.9583 (32s)
+    [delta/intra/s1] paso  600 loss 0.0192 acc 1.0000 (46s)
+    [delta/intra/s2] paso  200 loss 2.4744 acc 0.4479 (17s)
+    [delta/intra/s2] paso  400 loss 0.0824 acc 0.9792 (31s)
+    [delta/intra/s2] paso  600 loss 0.0912 acc 0.9583 (44s)
+  intra delta    → acc 0.9852 (sd 0.0051) · por semilla [0.9909, 0.9837, 0.9811]
+
+    [softmax/intra/s0] paso  200 loss 0.4837 acc 0.8906 (10s)
+    [softmax/intra/s0] paso  400 loss 0.1385 acc 0.9635 (18s)
+    [softmax/intra/s0] paso  600 loss 0.2123 acc 0.9427 (25s)
+    [softmax/intra/s1] paso  200 loss 0.5871 acc 0.8542 (10s)
+    [softmax/intra/s1] paso  400 loss 0.1115 acc 0.9688 (18s)
+    [softmax/intra/s1] paso  600 loss 0.0467 acc 0.9792 (25s)
+    [softmax/intra/s2] paso  200 loss 0.5070 acc 0.8542 (10s)
+    [softmax/intra/s2] paso  400 loss 0.1560 acc 0.9583 (18s)
+    [softmax/intra/s2] paso  600 loss 0.0978 acc 0.9792 (25s)
+  intra softmax  → acc 0.9757 (sd 0.0059) · por semilla [0.9701, 0.9818, 0.9753]
+
+    [delta/cross/s0] paso  200 loss 4.1949 acc 0.0052 (7s)
+    [delta/cross/s0] paso  400 loss 4.1861 acc 0.0260 (11s)
+    [delta/cross/s0] paso  600 loss 4.1614 acc 0.0260 (14s)
+    [delta/cross/s1] paso  200 loss 4.1729 acc 0.0156 (7s)
+    [delta/cross/s1] paso  400 loss 4.1982 acc 0.0208 (10s)
+    [delta/cross/s1] paso  600 loss 4.1623 acc 0.0156 (14s)
+    [delta/cross/s2] paso  200 loss 4.1786 acc 0.0156 (7s)
+    [delta/cross/s2] paso  400 loss 4.1670 acc 0.0260 (11s)
+    [delta/cross/s2] paso  600 loss 4.1804 acc 0.0208 (14s)
+  cross delta    → acc 0.0215 (sd 0.0046) · por semilla [0.0163, 0.0247, 0.0234]
+
+    [softmax/cross/s0] paso  200 loss 4.1987 acc 0.0052 (5s)
+    [softmax/cross/s0] paso  400 loss 4.1840 acc 0.0156 (8s)
+    [softmax/cross/s0] paso  600 loss 4.1666 acc 0.0260 (10s)
+    [softmax/cross/s1] paso  200 loss 4.1762 acc 0.0156 (5s)
+    [softmax/cross/s1] paso  400 loss 4.2066 acc 0.0260 (8s)
+    [softmax/cross/s1] paso  600 loss 4.1681 acc 0.0052 (10s)
+    [softmax/cross/s2] paso  200 loss 4.1827 acc 0.0156 (5s)
+    [softmax/cross/s2] paso  400 loss 4.1698 acc 0.0260 (8s)
+    [softmax/cross/s2] paso  600 loss 4.1916 acc 0.0156 (10s)
+  cross softmax  → acc 0.0215 (sd 0.0046) · por semilla [0.0163, 0.0247, 0.0234]
+
+======================================================================
+  piso (cross, el mejor de los dos):    0.0215   · azar 0.0156
+  control (intra, el mejor de los dos): 0.9852
+  piso en el azar          OK (exigido < 0,10)
+  control resuelve         OK (exigido > 0,60)
+
+  ►► E-I0 PASA. La tarea mide memoria persistente y nada mas. Sigue E-I1.
+======================================================================
