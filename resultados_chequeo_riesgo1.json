@@ -1,0 +1,29 @@
+{
+ "m1_d0": {
+  "acc": 1.0,
+  "ilegible": 0
+ },
+ "m1_d5": {
+  "acc": 1.0,
+  "ilegible": 0
+ },
+ "m4_d0": {
+  "acc": 0.15,
+  "ilegible": 0
+ },
+ "m4_d5": {
+  "acc": 0.4,
+  "ilegible": 0
+ },
+ "m8_d0": {
+  "acc": 0.15,
+  "ilegible": 0
+ },
+ "m8_d5": {
+  "acc": 0.25,
+  "ilegible": 0
+ },
+ "veredicto": "SIGUE",
+ "modelo": "albert:v4.0",
+ "n_por_celda": 20
+}

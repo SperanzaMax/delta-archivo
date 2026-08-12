@@ -157,3 +157,46 @@ contraste tenga rango antes de invertir en el instrumento.
 Sigue siendo indexación sobre un codificador congelado. No dice nada del índice co-entrenado, que es
 el hueco grande. Su valor es distinto: **da una vara comparable** para el problema que sí está
 ocupado por sistemas desplegados, y ubica a cada uno en un eje que hoy nadie mide.
+
+---
+
+## 10. Resultado del chequeo bloqueante (§7, riesgo 1) — 2026-08-11
+
+Corrido con `albert:v4.0` (2,5B), 20 casos por celda, opciones **barajadas**, verdad de base por
+recencia. Umbral de archivo: >0,95 en todas las celdas.
+
+| celda | exactitud | azar |
+|---|---|---|
+| m=1 d=0 | 1,000 | 1,000 |
+| m=1 d=5 | 1,000 | 1,000 |
+| m=4 d=0 | **0,150** | 0,250 |
+| m=4 d=5 | 0,400 | 0,250 |
+| m=8 d=0 | **0,150** | 0,125 |
+| m=8 d=5 | 0,250 | 0,125 |
+
+**Veredicto: el banco DISCRIMINA.** Muy lejos del 0,95 que lo habría archivado — el modelo apenas
+se despega del azar en cuanto hay más de una entidad activa. Con `m=1` acierta siempre, lo que
+confirma que entiende la consigna y que la tarea es resoluble cuando no hay ambigüedad: el control
+de sanidad pasa.
+
+### Dos cosas que hay que arreglar antes de construir el banco
+
+**(1) Un error de diseño propio, detectado y corregido.** La primera corrida daba **0,000 en todas
+las celdas con m>1**. Era un artefacto: la respuesta correcta caía **siempre en la última posición**
+de la lista (la verdad de base es por recencia y las candidatas se listaban en orden de aparición),
+y el modelo tiene sesgo hacia las primeras opciones — respondía 1, 2 o 3 mientras la correcta era la
+8 de 8. Barajando las opciones el resultado pasó de 0,000 a 0,150-0,400. **Un cero perfecto es
+motivo de sospecha, no de celebración**; es la segunda vez en este proyecto que un cero limpio
+resulta ser un bug.
+
+**(2) La verdad de base es una convención, no una señal recuperable.** Dos celdas quedan **por
+debajo del azar** (m=4 d=0 y m=8 d=0 dan 0,150). Eso sugiere que el modelo no está fallando al
+recuperar una pista: está siguiendo *otra* regla —probablemente atender al primer hecho enunciado, o
+al más saliente— mientras nosotros premiamos la recencia. Si la tarea es genuinamente ambigua, el
+banco mediría *adhesión a nuestra convención* en vez de capacidad de resolución.
+
+**Consecuencia para el diseño:** antes de construir, la corrección tiene que llevar una pista que
+haga a la referencia **objetivamente recuperable** — por ejemplo un marcador de recencia explícito
+(«no, *ese* director es Beto») o un tipo de valor que sólo encaje con una de las entidades activas.
+Y hay que validar con anotadores humanos que la respuesta correcta sea la que una persona daría. Sin
+eso, el eje de ambigüedad referencial no es un eje de dificultad: es un eje de arbitrariedad.

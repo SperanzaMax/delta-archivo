@@ -1,0 +1,16 @@
+modelo: albert:v4.0 · 20 por celda · verdad de base = recencia
+
+  m=1 d=0 → acc 1.000 (azar 1.000) · ilegibles 0/20 · 73s
+  m=1 d=5 → acc 1.000 (azar 1.000) · ilegibles 0/20 · 199s
+  m=4 d=0 → acc 0.150 (azar 0.250) · ilegibles 0/20 · 315s
+  m=4 d=5 → acc 0.400 (azar 0.250) · ilegibles 0/20 · 493s
+  m=8 d=0 → acc 0.150 (azar 0.125) · ilegibles 0/20 · 677s
+  m=8 d=5 → acc 0.250 (azar 0.125) · ilegibles 0/20 · 922s
+
+==============================================================
+  peor celda: 0.150 · mejor: 1.000
+  peor celda con distancia (d>0): 0.250
+
+  ►► EL BANCO DISCRIMINA: cae a 0.250 en la peor celda con
+     distancia. Hay rango para medir. Sigue en pie.
+==============================================================
