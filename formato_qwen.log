@@ -1,0 +1,6 @@
+
+=== qwen2.5-coder:latest · tipada d=5 · 20 casos ===
+  extraccion  numero  → 0.950 (azar 0.250) · ilegibles 0 · 497s
+  extraccion  nombre  → 1.000 (azar 0.250) · ilegibles 0 · 477s
+  resolucion  numero  → 0.300 (azar 0.250) · ilegibles 4 · 522s
+  resolucion  nombre  → 0.550 (azar 0.250) · ilegibles 4 · 516s

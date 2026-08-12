@@ -160,7 +160,14 @@ ocupado por sistemas desplegados, y ubica a cada uno en un eje que hoy nadie mid
 
 ---
 
-## 10. Resultado del chequeo bloqueante (§7, riesgo 1) — 2026-08-11
+## 10. Resultado del chequeo bloqueante (§7, riesgo 1) — 2026-08-11 · **ANULADO, ver §11**
+
+> **ANULADO el 2026-08-12.** El veredicto de esta sección se apoya en un sujeto que no lee: el mismo
+> `albert:v4.0` da **el azar exacto** cuando la respuesta es objetivamente única, y falla la
+> extracción más simple. Su control de sanidad (`m=1 → 1,000`) estaba **vacío**: con una sola opción
+> en la lista, acertar no requiere leer nada. Lo que sigue se conserva como registro, no como
+> resultado. El chequeo rehecho está en §11 y en `INFORME_PISTA_20260812.md`.
+
 
 Corrido con `albert:v4.0` (2,5B), 20 casos por celda, opciones **barajadas**, verdad de base por
 recencia. Umbral de archivo: >0,95 en todas las celdas.
@@ -200,3 +207,35 @@ haga a la referencia **objetivamente recuperable** — por ejemplo un marcador d
 («no, *ese* director es Beto») o un tipo de valor que sólo encaje con una de las entidades activas.
 Y hay que validar con anotadores humanos que la respuesta correcta sea la que una persona daría. Sin
 eso, el eje de ambigüedad referencial no es un eje de dificultad: es un eje de arbitrariedad.
+
+---
+
+## 11. Chequeo del riesgo 1, rehecho — 2026-08-12
+
+Detalle completo en `INFORME_PISTA_20260812.md`. Pre-registro `PREREG_PISTA.md` (SHA-256
+`fef8aa5a…`), congelado antes del dato.
+
+**El banco discrimina, y ahora está probado sobre un sujeto que lee.** Con `qwen2.5-coder` (7B),
+20 casos, `m=4`, `d=5`, respondiendo por nombre, sobre **material idéntico**:
+
+| pregunta | acc |
+|---|---|
+| ¿cuál de estas entidades tiene un **director** mencionado? | **1,000** |
+| ¿a cuál se refiere la corrección «no, it's X»? | **0,550** |
+
+La primera fila es el control de sanidad que faltaba: prueba que el sujeto lee el texto y localiza
+el hecho. Por eso la caída de la segunda **sí** es atribuible a la elipsis, y no a incapacidad.
+
+### Cambios que esto impone al diseño
+
+1. **Compuerta de sujeto (nueva, obligatoria).** Ningún modelo entra al banco sin **extracción
+   ≥ 0,90** sobre el mismo material. Separa incapacidad de dificultad, que es justo lo que el
+   chequeo del 11-ago no podía hacer.
+2. **`m = 1` deja de ser control.** Con una sola candidata acertar no requiere leer: es el extremo
+   fácil de la curva, nunca la prueba de que la tarea es resoluble.
+3. **Respuesta por nombre, no por número.** Medido en qwen: la indexación posicional cuesta 0,050
+   en la tarea fácil y **0,250 en la difícil**. Con opciones numeradas el banco subestimaría a todos
+   los sistemas, y desparejo.
+4. **Las abstenciones se registran como categoría.** 4/20 respuestas ilegibles en resolución contra
+   0/20 en extracción: hay señal espontánea de «no puedo resolver esto», y es la materia prima de
+   `SER` (§4.3).

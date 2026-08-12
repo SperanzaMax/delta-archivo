@@ -1,0 +1,17 @@
+modelo: albert:v4.0 · m=4 · 20 por celda · 3 condiciones
+
+  desnuda   d=0 → acc 0.250 · elecciones por posicion ['0.40', '0.20', '0.15', '0.25'] · ilegibles 0 · 117s
+  desnuda   d=5 → acc 0.250 · elecciones por posicion ['0.35', '0.20', '0.20', '0.25'] · ilegibles 0 · 279s
+  recencia  d=0 → acc 0.350 · elecciones por posicion ['0.30', '0.30', '0.05', '0.35'] · ilegibles 0 · 390s
+  recencia  d=5 → acc 0.350 · elecciones por posicion ['0.25', '0.25', '0.15', '0.35'] · ilegibles 0 · 557s
+  tipada    d=0 → acc 0.250 · elecciones por posicion ['0.30', '0.25', '0.20', '0.25'] · ilegibles 0 · 666s
+  tipada    d=5 → acc 0.250 · elecciones por posicion ['0.50', '0.05', '0.30', '0.15'] · ilegibles 0 · 831s
+
+==================================================================
+  desnuda 0.250 · recencia 0.350 · tipada 0.250
+  desnuda, fraccion por posicion de aparicion: ['0.375', '0.200', '0.175', '0.250'] (uniforme = 0.250)
+  P1 replicacion      CUMPLE
+  P2 marcador ++0.100  NO CUMPLE (exigido +0.25)
+  P3 pista objetiva   NO CUMPLE (exigido 0.80)
+  P4 primera mencion  NO CUMPLE (modo en posicion 1, fraccion 0.375, exigido pos 1 y >=0.40)
+==================================================================

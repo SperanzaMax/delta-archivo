@@ -1,0 +1,18 @@
+{
+ "qwen2.5-coder:latest|extraccion|numero": {
+  "acc": 0.95,
+  "ilegible": 0
+ },
+ "qwen2.5-coder:latest|extraccion|nombre": {
+  "acc": 1.0,
+  "ilegible": 0
+ },
+ "qwen2.5-coder:latest|resolucion|numero": {
+  "acc": 0.3,
+  "ilegible": 4
+ },
+ "qwen2.5-coder:latest|resolucion|nombre": {
+  "acc": 0.55,
+  "ilegible": 4
+ }
+}

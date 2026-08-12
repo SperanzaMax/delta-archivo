@@ -1,0 +1,6 @@
+
+=== albert:v4.0 · tipada d=5 · 20 casos ===
+  extraccion  numero  → 0.200 (azar 0.250) · ilegibles 0 · 154s
+  extraccion  nombre  → 0.250 (azar 0.250) · ilegibles 1 · 147s
+  resolucion  numero  → 0.200 (azar 0.250) · ilegibles 0 · 166s
+  resolucion  nombre  → 0.200 (azar 0.250) · ilegibles 0 · 188s
