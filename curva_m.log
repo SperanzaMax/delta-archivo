@@ -1,0 +1,18 @@
+modelo: qwen2.5-coder:latest · d=5 · 20 casos · respuesta por NOMBRE
+
+  m= 1 extraccion  → 1.000 (azar 1.000) · abstenciones 0/20 · 310s
+  m= 1 resolucion  → 0.650 (azar 1.000) · abstenciones 7/20 · 338s
+     compuerta PASA · brecha extraccion−resolucion +0.350
+
+  m= 2 extraccion  → 1.000 (azar 0.500) · abstenciones 0/20 · 373s
+  m= 2 resolucion  → 0.700 (azar 0.500) · abstenciones 1/20 · 407s
+     compuerta PASA · brecha extraccion−resolucion +0.300
+
+  m= 4 extraccion  → 1.000 (azar 0.250) · abstenciones 0/20 · 471s
+  m= 4 resolucion  → 0.350 (azar 0.250) · abstenciones 5/20 · 506s
+     compuerta PASA · brecha extraccion−resolucion +0.650
+
+  m= 8 extraccion  → 1.000 (azar 0.125) · abstenciones 0/20 · 713s
+  m= 8 resolucion  → 0.350 (azar 0.125) · abstenciones 8/20 · 808s
+     compuerta PASA · brecha extraccion−resolucion +0.650
+

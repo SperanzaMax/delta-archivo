@@ -1,0 +1,212 @@
+[
+ {
+  "m": 1,
+  "i": 0,
+  "estado": "abstencion",
+  "correcta": "Orinoco Registry",
+  "respuesta_cruda": "Rosa Belmonte"
+ },
+ {
+  "m": 1,
+  "i": 1,
+  "estado": "acierto",
+  "correcta": "Malbec Shipyard",
+  "respuesta_cruda": "Malbec Shipyard"
+ },
+ {
+  "m": 1,
+  "i": 2,
+  "estado": "acierto",
+  "correcta": "Sarto Consortium",
+  "respuesta_cruda": "Sarto Consortium"
+ },
+ {
+  "m": 1,
+  "i": 3,
+  "estado": "acierto",
+  "correcta": "Falkirk Shipyard",
+  "respuesta_cruda": "Falkirk Shipyard"
+ },
+ {
+  "m": 1,
+  "i": 4,
+  "estado": "acierto",
+  "correcta": "Thalos Registry",
+  "respuesta_cruda": "Thalos Registry"
+ },
+ {
+  "m": 1,
+  "i": 5,
+  "estado": "acierto",
+  "correcta": "Helios Laboratory",
+  "respuesta_cruda": "Helios Laboratory"
+ },
+ {
+  "m": 1,
+  "i": 6,
+  "estado": "abstencion",
+  "correcta": "Solano Shipyard",
+  "respuesta_cruda": "Franco Vidal"
+ },
+ {
+  "m": 1,
+  "i": 7,
+  "estado": "acierto",
+  "correcta": "Vireo Laboratory",
+  "respuesta_cruda": "Vireo Laboratory"
+ },
+ {
+  "m": 1,
+  "i": 8,
+  "estado": "abstencion",
+  "correcta": "Solano Laboratory",
+  "respuesta_cruda": "Rosa Belmonte"
+ },
+ {
+  "m": 1,
+  "i": 9,
+  "estado": "abstencion",
+  "correcta": "Perrin Shipyard",
+  "respuesta_cruda": "Carla Nunez"
+ },
+ {
+  "m": 1,
+  "i": 10,
+  "estado": "acierto",
+  "correcta": "Quillon Observatory",
+  "respuesta_cruda": "Quillon Observatory"
+ },
+ {
+  "m": 1,
+  "i": 11,
+  "estado": "abstencion",
+  "correcta": "Dunmore Collective",
+  "respuesta_cruda": "Lucas Brand"
+ },
+ {
+  "m": 1,
+  "i": 12,
+  "estado": "acierto",
+  "correcta": "Corven Collective",
+  "respuesta_cruda": "Corven Collective"
+ },
+ {
+  "m": 1,
+  "i": 13,
+  "estado": "acierto",
+  "correcta": "Quillon Works",
+  "respuesta_cruda": "Quillon Works"
+ },
+ {
+  "m": 1,
+  "i": 14,
+  "estado": "acierto",
+  "correcta": "Perrin Archive",
+  "respuesta_cruda": "Perrin Archive"
+ },
+ {
+  "m": 8,
+  "i": 0,
+  "estado": "acierto",
+  "correcta": "Orinoco Archive",
+  "respuesta_cruda": "Orinoco Archive"
+ },
+ {
+  "m": 8,
+  "i": 1,
+  "estado": "abstencion",
+  "correcta": "Ridgeway Laboratory",
+  "respuesta_cruda": "Nadir Haq"
+ },
+ {
+  "m": 8,
+  "i": 2,
+  "estado": "error",
+  "correcta": "Castell Laboratory",
+  "respuesta_cruda": "Solano Consortium"
+ },
+ {
+  "m": 8,
+  "i": 3,
+  "estado": "acierto",
+  "correcta": "Ashgrove Laboratory",
+  "respuesta_cruda": "Ashgrove Laboratory"
+ },
+ {
+  "m": 8,
+  "i": 4,
+  "estado": "acierto",
+  "correcta": "Vantor Collective",
+  "respuesta_cruda": "Vantor Collective"
+ },
+ {
+  "m": 8,
+  "i": 5,
+  "estado": "acierto",
+  "correcta": "Ridgeway Laboratory",
+  "respuesta_cruda": "Ridgeway Laboratory"
+ },
+ {
+  "m": 8,
+  "i": 6,
+  "estado": "error",
+  "correcta": "Helios Foundry",
+  "respuesta_cruda": "Ridgeway Observatory"
+ },
+ {
+  "m": 8,
+  "i": 7,
+  "estado": "error",
+  "correcta": "Castell Collective",
+  "respuesta_cruda": "Nimbus Works"
+ },
+ {
+  "m": 8,
+  "i": 8,
+  "estado": "error",
+  "correcta": "Falkirk Collective",
+  "respuesta_cruda": "Kestrel Foundry"
+ },
+ {
+  "m": 8,
+  "i": 9,
+  "estado": "abstencion",
+  "correcta": "Kestrel Consortium",
+  "respuesta_cruda": "Franco Vidal"
+ },
+ {
+  "m": 8,
+  "i": 10,
+  "estado": "abstencion",
+  "correcta": "Corven Archive",
+  "respuesta_cruda": "Simon Okafor"
+ },
+ {
+  "m": 8,
+  "i": 11,
+  "estado": "abstencion",
+  "correcta": "Dunmore Observatory",
+  "respuesta_cruda": "No correction needed for any of the entities listed. The last line \"No, it's Greta Halden.\" does not refer to any of the entities mentioned in the conversation."
+ },
+ {
+  "m": 8,
+  "i": 12,
+  "estado": "acierto",
+  "correcta": "Orinoco Institute",
+  "respuesta_cruda": "Orinoco Institute"
+ },
+ {
+  "m": 8,
+  "i": 13,
+  "estado": "abstencion",
+  "correcta": "Falkirk Foundry",
+  "respuesta_cruda": "Elsa Moray"
+ },
+ {
+  "m": 8,
+  "i": 14,
+  "estado": "abstencion",
+  "correcta": "Orinoco Shipyard",
+  "respuesta_cruda": "Olga Petrova"
+ }
+]

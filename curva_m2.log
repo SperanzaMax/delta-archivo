@@ -1,0 +1,17 @@
+modelo: qwen2.5-coder:latest · d=5 · 20 casos x 3 semillas · pregunta reparada + NONE explicito
+
+  m= 1 s=0 → acc 0.600 · err  0 · abst  7 · fuera  1 · 444s
+  m= 1 s=1 → acc 0.650 · err  0 · abst  7 · fuera  0 · 433s
+  m= 1 s=2 → acc 0.750 · err  0 · abst  5 · fuera  0 · 428s
+     m=1: media 0.667 · sd entre semillas 0.076
+
+  m= 4 s=0 → acc 0.550 · err  1 · abst  7 · fuera  1 · 612s
+  m= 4 s=1 → acc 0.350 · err  3 · abst  8 · fuera  2 · 616s
+  m= 4 s=2 → acc 0.450 · err  7 · abst  4 · fuera  0 · 616s
+     m=4: media 0.450 · sd entre semillas 0.100
+
+  m= 8 s=0 → acc 0.350 · err  4 · abst  9 · fuera  0 · 827s
+  m= 8 s=1 → acc 0.200 · err  4 · abst 10 · fuera  2 · 773s
+  m= 8 s=2 → acc 0.200 · err  9 · abst  6 · fuera  1 · 772s
+     m=8: media 0.250 · sd entre semillas 0.087
+

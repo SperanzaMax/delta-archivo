@@ -1,0 +1,48 @@
+{
+ "qwen2.5-coder:1.5b": {
+  "extraccion": {
+   "acc": 0.25,
+   "abstencion": 0.05,
+   "s_por_consulta": 6.148894464969635
+  },
+  "admisible": false
+ },
+ "llama3.2:1b": {
+  "extraccion": {
+   "acc": 0.3,
+   "abstencion": 0.0,
+   "s_por_consulta": 3.8355231165885924
+  },
+  "admisible": false
+ },
+ "gemma:2b": {
+  "extraccion": {
+   "acc": 0.35,
+   "abstencion": 0.0,
+   "s_por_consulta": 8.46433789730072
+  },
+  "admisible": false
+ },
+ "j-deepseek:latest": {
+  "extraccion": {
+   "acc": 0.15,
+   "abstencion": 0.15,
+   "s_por_consulta": 6.76262583732605
+  },
+  "admisible": false
+ },
+ "qwen2.5-coder:latest": {
+  "extraccion": {
+   "acc": 1.0,
+   "abstencion": 0.0,
+   "s_por_consulta": 26.612224888801574
+  },
+  "resolucion": {
+   "acc": 0.6,
+   "abstencion": 0.15,
+   "s_por_consulta": 27.18020581007004
+  },
+  "admisible": true,
+  "brecha": 0.4
+ }
+}

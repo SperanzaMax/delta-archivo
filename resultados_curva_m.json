@@ -1,0 +1,50 @@
+{
+ "m1": {
+  "extraccion": {
+   "acc": 1.0,
+   "abstencion": 0.0
+  },
+  "resolucion": {
+   "acc": 0.65,
+   "abstencion": 0.35
+  },
+  "compuerta": "PASA",
+  "brecha": 0.35
+ },
+ "m2": {
+  "extraccion": {
+   "acc": 1.0,
+   "abstencion": 0.0
+  },
+  "resolucion": {
+   "acc": 0.7,
+   "abstencion": 0.05
+  },
+  "compuerta": "PASA",
+  "brecha": 0.30000000000000004
+ },
+ "m4": {
+  "extraccion": {
+   "acc": 1.0,
+   "abstencion": 0.0
+  },
+  "resolucion": {
+   "acc": 0.35,
+   "abstencion": 0.25
+  },
+  "compuerta": "PASA",
+  "brecha": 0.65
+ },
+ "m8": {
+  "extraccion": {
+   "acc": 1.0,
+   "abstencion": 0.0
+  },
+  "resolucion": {
+   "acc": 0.35,
+   "abstencion": 0.4
+  },
+  "compuerta": "PASA",
+  "brecha": 0.65
+ }
+}

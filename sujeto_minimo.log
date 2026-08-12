@@ -1,0 +1,12 @@
+compuerta: extraccion >= 0.9 · m=4 d=5 · 20 casos
+
+  qwen2.5-coder:1.5b         extraccion 0.250 ·   6.1 s/consulta  ►► NO ADMISIBLE
+  llama3.2:1b                extraccion 0.300 ·   3.8 s/consulta  ►► NO ADMISIBLE
+  gemma:2b                   extraccion 0.350 ·   8.5 s/consulta  ►► NO ADMISIBLE
+  j-deepseek:latest          extraccion 0.150 ·   6.8 s/consulta  ►► NO ADMISIBLE
+  qwen2.5-coder:latest       extraccion 1.000 ·  26.6 s/consulta  ►► ADMISIBLE · resolucion 0.600 (abstenciones 0.15) · brecha +0.400
+
+======================================================================
+  sujeto minimo admisible: qwen2.5-coder:latest (26.6 s/consulta, resolucion 0.600)
+  admisibles: 1/5
+======================================================================

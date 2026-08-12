@@ -1,0 +1,22 @@
+
+=== m=1 · resolucion · 15 casos ===
+  [ 0] ABSTENCION · respuesta cruda: 'Rosa Belmonte'
+  [ 6] ABSTENCION · respuesta cruda: 'Franco Vidal'
+  [ 8] ABSTENCION · respuesta cruda: 'Rosa Belmonte'
+  [ 9] ABSTENCION · respuesta cruda: 'Carla Nunez'
+  [11] ABSTENCION · respuesta cruda: 'Lucas Brand'
+
+=== m=8 · resolucion · 15 casos ===
+  [ 1] ABSTENCION · respuesta cruda: 'Nadir Haq'
+  [ 9] ABSTENCION · respuesta cruda: 'Franco Vidal'
+  [10] ABSTENCION · respuesta cruda: 'Simon Okafor'
+  [11] ABSTENCION · respuesta cruda: 'No correction needed for any of the entities listed. The last line "No, it\'s Greta Halden." does not refer to any of the entities mentioned in the conversation.'
+  [13] ABSTENCION · respuesta cruda: 'Elsa Moray'
+  [14] ABSTENCION · respuesta cruda: 'Olga Petrova'
+
+==================================================================
+  m=1: aciertos 10 · errores 0 · abstenciones 5 (de 15)
+  m=8: aciertos 5 · errores 4 · abstenciones 6 (de 15)
+==================================================================
+
+  Las respuestas crudas de las abstenciones estan arriba y en el JSON.

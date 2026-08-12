@@ -1,0 +1,83 @@
+{
+ "m1_s0": {
+  "acierto": 12,
+  "error": 0,
+  "abstencion_explicita": 7,
+  "fuera_de_dominio": 1
+ },
+ "m1_s1": {
+  "acierto": 13,
+  "error": 0,
+  "abstencion_explicita": 7,
+  "fuera_de_dominio": 0
+ },
+ "m1_s2": {
+  "acierto": 15,
+  "error": 0,
+  "abstencion_explicita": 5,
+  "fuera_de_dominio": 0
+ },
+ "m1_resumen": {
+  "media": 0.6666666666666666,
+  "sd": 0.07637626158259735,
+  "por_semilla": [
+   0.6,
+   0.65,
+   0.75
+  ]
+ },
+ "m4_s0": {
+  "acierto": 11,
+  "error": 1,
+  "abstencion_explicita": 7,
+  "fuera_de_dominio": 1
+ },
+ "m4_s1": {
+  "acierto": 7,
+  "error": 3,
+  "abstencion_explicita": 8,
+  "fuera_de_dominio": 2
+ },
+ "m4_s2": {
+  "acierto": 9,
+  "error": 7,
+  "abstencion_explicita": 4,
+  "fuera_de_dominio": 0
+ },
+ "m4_resumen": {
+  "media": 0.45,
+  "sd": 0.10000000000000003,
+  "por_semilla": [
+   0.55,
+   0.35,
+   0.45
+  ]
+ },
+ "m8_s0": {
+  "acierto": 7,
+  "error": 4,
+  "abstencion_explicita": 9,
+  "fuera_de_dominio": 0
+ },
+ "m8_s1": {
+  "acierto": 4,
+  "error": 4,
+  "abstencion_explicita": 10,
+  "fuera_de_dominio": 2
+ },
+ "m8_s2": {
+  "acierto": 4,
+  "error": 9,
+  "abstencion_explicita": 6,
+  "fuera_de_dominio": 1
+ },
+ "m8_resumen": {
+  "media": 0.25,
+  "sd": 0.08660254037844384,
+  "por_semilla": [
+   0.35,
+   0.2,
+   0.2
+  ]
+ }
+}
