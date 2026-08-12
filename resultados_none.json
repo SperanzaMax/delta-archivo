@@ -1,0 +1,26 @@
+{
+ "m4_con_none": {
+  "acierto": 0.45,
+  "error": 0.1,
+  "abstencion_explicita": 0.375,
+  "fuera_de_dominio": 0.075
+ },
+ "m4_sin_none": {
+  "acierto": 0.7,
+  "error": 0.175,
+  "abstencion_explicita": 0.0,
+  "fuera_de_dominio": 0.125
+ },
+ "m8_con_none": {
+  "acierto": 0.275,
+  "error": 0.2,
+  "abstencion_explicita": 0.475,
+  "fuera_de_dominio": 0.05
+ },
+ "m8_sin_none": {
+  "acierto": 0.525,
+  "error": 0.45,
+  "abstencion_explicita": 0.0,
+  "fuera_de_dominio": 0.025
+ }
+}

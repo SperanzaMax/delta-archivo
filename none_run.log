@@ -1,0 +1,14 @@
+modelo: qwen2.5-coder:latest · d=5 · 20 casos x 2 semillas · contraste con_none / sin_none
+
+  m=4 con_none  → acc 0.450 · err 0.100 · abst 0.375 · fuera 0.075 · 1156s
+  m=4 sin_none  → acc 0.700 · err 0.175 · abst 0.000 · fuera 0.125 · 1080s
+  m=8 con_none  → acc 0.275 · err 0.200 · abst 0.475 · fuera 0.050 · 1542s
+  m=8 sin_none  → acc 0.525 · err 0.450 · abst 0.000 · fuera 0.025 · 1632s
+
+======================================================================
+  m=4: Δerror +0.075 · Δacierto +0.250
+  m=8: Δerror +0.250 · Δacierto +0.250
+    P-N1 CUMPLE (exigido >= +0,10)
+    P-N2 NO CUMPLE (exigido < +0,10)
+    P-N3 CUMPLE (fuera < 0,15 en ambas)
+======================================================================
