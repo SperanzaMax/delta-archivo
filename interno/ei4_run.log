@@ -3,3 +3,52 @@ referencia externa: R5.1 umbral cos ~0,7 · R5.2 0,727 a 25 pasos desde cero · 
 
     [s0] paso 1000 loss 3.2204 acc 0.3750 (rev 0.2292 · no-rev 0.5208) (94s)
     [s0] paso 2000 loss 0.4147 acc 0.9688 (rev 0.9479 · no-rev 0.9896) (177s)
+    [s0] paso 3000 loss 0.0249 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (259s)
+    [s0] paso 4000 loss 0.0069 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (342s)
+  s0 edad   0 → acc 0.9941 (rev 0.9909 · no-rev 0.9974) · cos 1.0000
+  s0 edad  25 → acc 0.9974 (rev 0.9961 · no-rev 0.9987) · cos 0.9829
+  s0 edad 100 → acc 0.9941 (rev 0.9948 · no-rev 0.9935) · cos 0.9526
+  s0 edad 400 → acc 0.9941 (rev 0.9883 · no-rev 1.0000) · cos 0.9317
+    [s1] paso 1000 loss 0.7533 acc 0.9375 (rev 0.9271 · no-rev 0.9479) (89s)
+    [s1] paso 2000 loss 0.1389 acc 0.9844 (rev 0.9896 · no-rev 0.9792) (166s)
+    [s1] paso 3000 loss 0.0686 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (243s)
+    [s1] paso 4000 loss 0.0035 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (320s)
+  s1 edad   0 → acc 0.9974 (rev 0.9961 · no-rev 0.9987) · cos 1.0000
+  s1 edad  25 → acc 0.9948 (rev 0.9922 · no-rev 0.9974) · cos 0.9892
+  s1 edad 100 → acc 0.9928 (rev 0.9896 · no-rev 0.9961) · cos 0.9730
+  s1 edad 400 → acc 0.9889 (rev 0.9883 · no-rev 0.9896) · cos 0.9538
+    [s2] paso 1000 loss 1.0837 acc 0.8958 (rev 0.8854 · no-rev 0.9062) (94s)
+    [s2] paso 2000 loss 0.0302 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (177s)
+    [s2] paso 3000 loss 0.1044 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (256s)
+    [s2] paso 4000 loss 0.0181 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (339s)
+  s2 edad   0 → acc 0.9993 (rev 0.9987 · no-rev 1.0000) · cos 1.0000
+  s2 edad  25 → acc 0.9987 (rev 0.9974 · no-rev 1.0000) · cos 0.9739
+  s2 edad 100 → acc 0.9987 (rev 0.9987 · no-rev 0.9987) · cos 0.9454
+  s2 edad 400 → acc 0.9967 (rev 0.9961 · no-rev 0.9974) · cos 0.9210
+    [s3] paso 1000 loss 2.1541 acc 0.6094 (rev 0.4792 · no-rev 0.7396) (90s)
+    [s3] paso 2000 loss 0.0922 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (169s)
+    [s3] paso 3000 loss 0.0494 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (248s)
+    [s3] paso 4000 loss 0.0466 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (327s)
+  s3 edad   0 → acc 0.9980 (rev 0.9961 · no-rev 1.0000) · cos 1.0000
+  s3 edad  25 → acc 0.9961 (rev 0.9974 · no-rev 0.9948) · cos 0.9919
+  s3 edad 100 → acc 0.9980 (rev 0.9961 · no-rev 1.0000) · cos 0.9661
+  s3 edad 400 → acc 0.9909 (rev 0.9896 · no-rev 0.9922) · cos 0.9448
+    [s4] paso 1000 loss 1.2831 acc 0.8177 (rev 0.7083 · no-rev 0.9271) (89s)
+    [s4] paso 2000 loss 0.0818 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (173s)
+    [s4] paso 3000 loss 0.0067 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (253s)
+    [s4] paso 4000 loss 0.1591 acc 0.9896 (rev 0.9896 · no-rev 0.9896) (336s)
+  s4 edad   0 → acc 0.9961 (rev 0.9961 · no-rev 0.9961) · cos 1.0000
+  s4 edad  25 → acc 0.9987 (rev 0.9974 · no-rev 1.0000) · cos 0.9944
+  s4 edad 100 → acc 0.9954 (rev 0.9948 · no-rev 0.9961) · cos 0.9669
+  s4 edad 400 → acc 0.9896 (rev 0.9935 · no-rev 0.9857) · cos 0.9354
+
+==========================================================================
+  edad   0 → cos 1.0000 · revisadas 0.9956 (sd 0.0029) · una version 0.9984
+  edad  25 → cos 0.9865 · revisadas 0.9961 (sd 0.0023) · una version 0.9982
+  edad 100 → cos 0.9608 · revisadas 0.9948 (sd 0.0033) · una version 0.9969
+  edad 400 → cos 0.9374 · revisadas 0.9911 (sd 0.0035) · una version 0.9930
+--------------------------------------------------------------------------
+  P-1 el instrumento mide: coseno monotono decreciente  CUMPLE
+  P-2 caida en revisadas (edad 0 → 400) = +0.0044  NO CUMPLE — el indice co-entrenado TOLERA envejecer
+  P-3 pega primero en lo fino: caida rev +0.0044 vs una version +0.0055  NO CUMPLE
+==========================================================================
