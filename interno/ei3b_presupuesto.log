@@ -1,0 +1,65 @@
+E-I3b · chequeo de presupuesto · 12000 pasos · tasas (0.001, 0.0003) · semillas (0, 1)
+referencia: la corrida principal dio ANTERIOR ~0,12 con lr 1e-3 y 4000 pasos
+
+    [lr 0.001/s0] paso  1000 vig 0.0625 · ANT 0.0000 (91s)
+    [lr 0.001/s0] paso  2000 vig 0.2083 · ANT 0.0208 (173s)
+    [lr 0.001/s0] paso  3000 vig 0.9583 · ANT 0.0000 (254s)
+    [lr 0.001/s0] paso  4000 vig 0.9792 · ANT 0.2500 (336s)
+    [lr 0.001/s0] paso  5000 vig 1.0000 · ANT 0.6250 (417s)
+    [lr 0.001/s0] paso  6000 vig 1.0000 · ANT 0.9583 (498s)
+    [lr 0.001/s0] paso  7000 vig 0.9792 · ANT 1.0000 (580s)
+    [lr 0.001/s0] paso  8000 vig 1.0000 · ANT 0.9792 (661s)
+    [lr 0.001/s0] paso  9000 vig 0.9792 · ANT 0.9583 (743s)
+    [lr 0.001/s0] paso 10000 vig 1.0000 · ANT 1.0000 (824s)
+    [lr 0.001/s0] paso 11000 vig 1.0000 · ANT 1.0000 (907s)
+    [lr 0.001/s0] paso 12000 vig 1.0000 · ANT 0.9792 (988s)
+  lr 0.001 s0 → vigente 0.9974 · ANTERIOR 0.9896
+
+    [lr 0.001/s1] paso  1000 vig 0.0417 · ANT 0.0000 (91s)
+    [lr 0.001/s1] paso  2000 vig 0.5208 · ANT 0.0417 (172s)
+    [lr 0.001/s1] paso  3000 vig 0.9583 · ANT 0.0000 (254s)
+    [lr 0.001/s1] paso  4000 vig 0.9375 · ANT 0.0208 (336s)
+    [lr 0.001/s1] paso  5000 vig 0.9375 · ANT 0.3542 (417s)
+    [lr 0.001/s1] paso  6000 vig 1.0000 · ANT 0.3333 (499s)
+    [lr 0.001/s1] paso  7000 vig 0.9792 · ANT 0.8125 (581s)
+    [lr 0.001/s1] paso  8000 vig 1.0000 · ANT 0.9375 (662s)
+    [lr 0.001/s1] paso  9000 vig 1.0000 · ANT 0.9583 (744s)
+    [lr 0.001/s1] paso 10000 vig 1.0000 · ANT 0.9583 (826s)
+    [lr 0.001/s1] paso 11000 vig 0.9792 · ANT 1.0000 (908s)
+    [lr 0.001/s1] paso 12000 vig 1.0000 · ANT 0.9375 (989s)
+  lr 0.001 s1 → vigente 0.9974 · ANTERIOR 0.9844
+
+    [lr 0.0003/s0] paso  1000 vig 0.0000 · ANT 0.0208 (91s)
+    [lr 0.0003/s0] paso  2000 vig 0.1042 · ANT 0.0625 (173s)
+    [lr 0.0003/s0] paso  3000 vig 0.9375 · ANT 0.1667 (255s)
+    [lr 0.0003/s0] paso  4000 vig 0.9375 · ANT 0.4583 (337s)
+    [lr 0.0003/s0] paso  5000 vig 0.9792 · ANT 0.8333 (418s)
+    [lr 0.0003/s0] paso  6000 vig 0.7708 · ANT 0.8125 (500s)
+    [lr 0.0003/s0] paso  7000 vig 0.9583 · ANT 0.8750 (582s)
+    [lr 0.0003/s0] paso  8000 vig 0.8958 · ANT 0.9375 (664s)
+    [lr 0.0003/s0] paso  9000 vig 0.9583 · ANT 0.9375 (746s)
+    [lr 0.0003/s0] paso 10000 vig 0.9792 · ANT 1.0000 (827s)
+    [lr 0.0003/s0] paso 11000 vig 0.9792 · ANT 0.9583 (909s)
+    [lr 0.0003/s0] paso 12000 vig 1.0000 · ANT 0.9583 (991s)
+  lr 0.0003 s0 → vigente 0.9740 · ANTERIOR 0.9635
+
+    [lr 0.0003/s1] paso  1000 vig 0.0000 · ANT 0.0000 (91s)
+    [lr 0.0003/s1] paso  2000 vig 0.2292 · ANT 0.0833 (173s)
+    [lr 0.0003/s1] paso  3000 vig 0.9792 · ANT 0.2083 (255s)
+    [lr 0.0003/s1] paso  4000 vig 0.9167 · ANT 0.6458 (337s)
+    [lr 0.0003/s1] paso  5000 vig 0.8750 · ANT 0.8125 (419s)
+    [lr 0.0003/s1] paso  6000 vig 0.9375 · ANT 0.8542 (501s)
+    [lr 0.0003/s1] paso  7000 vig 0.9167 · ANT 0.8125 (583s)
+    [lr 0.0003/s1] paso  8000 vig 0.9583 · ANT 0.9375 (665s)
+    [lr 0.0003/s1] paso  9000 vig 0.9792 · ANT 0.9375 (747s)
+    [lr 0.0003/s1] paso 10000 vig 0.9583 · ANT 0.9375 (829s)
+    [lr 0.0003/s1] paso 11000 vig 0.9792 · ANT 0.9167 (911s)
+    [lr 0.0003/s1] paso 12000 vig 1.0000 · ANT 0.9792 (993s)
+  lr 0.0003 s1 → vigente 0.9609 · ANTERIOR 0.9688
+
+==========================================================================
+  lr 0.001 → vigente 0.9974 · ANTERIOR 0.9870
+  lr 0.0003 → vigente 0.9674 · ANTERIOR 0.9661
+--------------------------------------------------------------------------
+  P-1 CUMPLE con presupuesto: ANTERIOR 0.9870 con lr 0.001. El negativo se cae y E-I3b se re-corre entero con esa tasa.
+==========================================================================
