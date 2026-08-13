@@ -1,0 +1,5 @@
+E-I4 · el archivo se escribe con pesos viejos y se lee con los de hoy · edades (0, 25, 100, 400) · 5 semillas
+referencia externa: R5.1 umbral cos ~0,7 · R5.2 0,727 a 25 pasos desde cero · R6 0,882 a 400 pasos afinando
+
+    [s0] paso 1000 loss 3.2204 acc 0.3750 (rev 0.2292 · no-rev 0.5208) (94s)
+    [s0] paso 2000 loss 0.4147 acc 0.9688 (rev 0.9479 · no-rev 0.9896) (177s)
