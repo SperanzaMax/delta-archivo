@@ -1,0 +1,41 @@
+E-I3c · semillas extra de `sello`
+
+    [sello/s3] paso  2000 vig 0.0208 · ANT 0.0833 · una 0.0833 (188s)
+    [sello/s3] paso  4000 vig 0.1458 · ANT 0.0417 · una 0.4167 (358s)
+    [sello/s3] paso  6000 vig 0.3542 · ANT 0.3125 · una 0.9167 (529s)
+    [sello/s3] paso  8000 vig 0.4375 · ANT 0.4167 · una 0.9375 (700s)
+    [sello/s3] paso 10000 vig 0.5833 · ANT 0.4375 · una 1.0000 (870s)
+    [sello/s3] paso 12000 vig 0.9167 · ANT 0.8750 · una 1.0000 (1041s)
+  sello s3 (12000) → vig 0.8906 · ANT 0.8594 · una 0.9974
+    [sello/s4] paso  2000 vig 0.0000 · ANT 0.0625 · una 0.0625 (183s)
+    [sello/s4] paso  4000 vig 0.1458 · ANT 0.1250 · una 0.4167 (354s)
+    [sello/s4] paso  6000 vig 0.1458 · ANT 0.3333 · una 0.7708 (525s)
+    [sello/s4] paso  8000 vig 0.3125 · ANT 0.3750 · una 0.8125 (696s)
+    [sello/s4] paso 10000 vig 0.4167 · ANT 0.3542 · una 0.8958 (867s)
+    [sello/s4] paso 12000 vig 0.6042 · ANT 0.4792 · una 0.9375 (1037s)
+  sello s4 (12000) → vig 0.4349 · ANT 0.4792 · una 0.9609
+
+  ahora la semilla 2 con el doble de presupuesto
+
+    [sello/s2] paso  2000 vig 0.1042 · ANT 0.0625 · una 0.0417 (182s)
+    [sello/s2] paso  4000 vig 0.0625 · ANT 0.2292 · una 0.3125 (353s)
+    [sello/s2] paso  6000 vig 0.2708 · ANT 0.3542 · una 0.6875 (524s)
+    [sello/s2] paso  8000 vig 0.7292 · ANT 0.3125 · una 0.9583 (696s)
+    [sello/s2] paso 10000 vig 0.9375 · ANT 0.2500 · una 0.9792 (867s)
+    [sello/s2] paso 12000 vig 1.0000 · ANT 0.5625 · una 1.0000 (1038s)
+    [sello/s2] paso 14000 vig 1.0000 · ANT 0.7500 · una 1.0000 (1209s)
+    [sello/s2] paso 16000 vig 1.0000 · ANT 0.8958 · una 1.0000 (1380s)
+    [sello/s2] paso 18000 vig 1.0000 · ANT 0.9167 · una 0.9792 (1551s)
+    [sello/s2] paso 20000 vig 0.9792 · ANT 0.8750 · una 1.0000 (1722s)
+    [sello/s2] paso 22000 vig 0.9792 · ANT 0.8750 · una 1.0000 (1893s)
+    [sello/s2] paso 24000 vig 1.0000 · ANT 1.0000 · una 1.0000 (2064s)
+  sello s2 (24000) → vig 0.9974 · ANT 0.9531 · una 1.0000
+
+==========================================================================
+  ANTERIOR(sello), 5 semillas a 12000 pasos: 0.7667 (sd 0.2340)
+  por semilla: [0.9766, 0.9635, 0.5547, 0.8594, 0.4792]
+  semilla 2 con 24000 pasos: 0.9531 (era 0.5547)
+--------------------------------------------------------------------------
+  → el 0,5547 era CORTE PREMATURO. Se reporta la media de 5 semillas y se declara que
+    una semilla necesito el doble de presupuesto para converger.
+==========================================================================

@@ -1,0 +1,80 @@
+E-I3c · CADA VERSION EN SU PROPIA SECUENCIA · archivo 12 entradas barajado · 12000 pasos · 3 semillas
+el unico dato de orden en todo el sistema es el sello
+
+    [ninguno/s0] paso  2000 vig 0.1875 · ANT 0.1042 · una 0.2083 (179s)
+    [ninguno/s0] paso  4000 vig 0.2708 · ANT 0.2500 · una 0.7292 (346s)
+    [ninguno/s0] paso  6000 vig 0.1667 · ANT 0.3958 · una 0.8750 (513s)
+    [ninguno/s0] paso  8000 vig 0.2708 · ANT 0.2500 · una 0.8958 (680s)
+    [ninguno/s0] paso 10000 vig 0.3125 · ANT 0.3125 · una 0.8333 (847s)
+    [ninguno/s0] paso 12000 vig 0.4583 · ANT 0.3333 · una 0.9792 (1014s)
+  ninguno   s0 → vig 0.3073 · ANT 0.2682 · una 0.9036
+    [ninguno/s1] paso  2000 vig 0.1667 · ANT 0.2708 · una 0.3542 (179s)
+    [ninguno/s1] paso  4000 vig 0.2500 · ANT 0.3125 · una 0.8750 (346s)
+    [ninguno/s1] paso  6000 vig 0.3333 · ANT 0.2500 · una 0.9792 (514s)
+    [ninguno/s1] paso  8000 vig 0.2917 · ANT 0.4375 · una 0.9792 (682s)
+    [ninguno/s1] paso 10000 vig 0.2708 · ANT 0.3333 · una 0.9583 (850s)
+    [ninguno/s1] paso 12000 vig 0.3333 · ANT 0.2292 · una 1.0000 (1018s)
+  ninguno   s1 → vig 0.3125 · ANT 0.2995 · una 0.9948
+    [ninguno/s2] paso  2000 vig 0.0417 · ANT 0.0833 · una 0.4167 (179s)
+    [ninguno/s2] paso  4000 vig 0.2083 · ANT 0.2500 · una 0.8542 (347s)
+    [ninguno/s2] paso  6000 vig 0.4792 · ANT 0.2708 · una 0.8750 (515s)
+    [ninguno/s2] paso  8000 vig 0.2708 · ANT 0.3542 · una 0.8750 (683s)
+    [ninguno/s2] paso 10000 vig 0.2917 · ANT 0.4583 · una 0.8750 (850s)
+    [ninguno/s2] paso 12000 vig 0.3125 · ANT 0.1250 · una 0.9167 (1018s)
+  ninguno   s2 → vig 0.3073 · ANT 0.3073 · una 0.9323
+
+  ►► ninguno: vigente 0.3090 · ANTERIOR 0.2917 (sd 0.0207) · una version 0.9436
+
+    [sello/s0] paso  2000 vig 0.0833 · ANT 0.0417 · una 0.0833 (180s)
+    [sello/s0] paso  4000 vig 0.4375 · ANT 0.3333 · una 0.6875 (348s)
+    [sello/s0] paso  6000 vig 0.6875 · ANT 0.7083 · una 0.9792 (516s)
+    [sello/s0] paso  8000 vig 0.9792 · ANT 0.9583 · una 1.0000 (686s)
+    [sello/s0] paso 10000 vig 0.8750 · ANT 0.9583 · una 1.0000 (854s)
+    [sello/s0] paso 12000 vig 0.9583 · ANT 1.0000 · una 1.0000 (1022s)
+  sello     s0 → vig 0.9661 · ANT 0.9766 · una 1.0000
+    [sello/s1] paso  2000 vig 0.1042 · ANT 0.1042 · una 0.1458 (180s)
+    [sello/s1] paso  4000 vig 0.3750 · ANT 0.3333 · una 0.8333 (348s)
+    [sello/s1] paso  6000 vig 0.4583 · ANT 0.3750 · una 1.0000 (516s)
+    [sello/s1] paso  8000 vig 0.9375 · ANT 0.9167 · una 1.0000 (685s)
+    [sello/s1] paso 10000 vig 0.9792 · ANT 0.9583 · una 1.0000 (853s)
+    [sello/s1] paso 12000 vig 0.9167 · ANT 1.0000 · una 1.0000 (1021s)
+  sello     s1 → vig 0.9766 · ANT 0.9635 · una 0.9974
+    [sello/s2] paso  2000 vig 0.1042 · ANT 0.0625 · una 0.0417 (181s)
+    [sello/s2] paso  4000 vig 0.0625 · ANT 0.2292 · una 0.3125 (349s)
+    [sello/s2] paso  6000 vig 0.2708 · ANT 0.3542 · una 0.6875 (517s)
+    [sello/s2] paso  8000 vig 0.7292 · ANT 0.3125 · una 0.9583 (685s)
+    [sello/s2] paso 10000 vig 0.9375 · ANT 0.2500 · una 0.9792 (853s)
+    [sello/s2] paso 12000 vig 1.0000 · ANT 0.5625 · una 1.0000 (1022s)
+  sello     s2 → vig 0.9896 · ANT 0.5547 · una 0.9948
+
+  ►► sello: vigente 0.9774 · ANTERIOR 0.8316 (sd 0.2399) · una version 0.9974
+
+    [barajado/s0] paso  2000 vig 0.0208 · ANT 0.0625 · una 0.0208 (180s)
+    [barajado/s0] paso  4000 vig 0.0833 · ANT 0.1667 · una 0.7292 (348s)
+    [barajado/s0] paso  6000 vig 0.2917 · ANT 0.2083 · una 0.8125 (518s)
+    [barajado/s0] paso  8000 vig 0.3750 · ANT 0.2500 · una 0.9375 (688s)
+    [barajado/s0] paso 10000 vig 0.2708 · ANT 0.3125 · una 0.8750 (857s)
+    [barajado/s0] paso 12000 vig 0.2917 · ANT 0.2708 · una 1.0000 (1025s)
+  barajado  s0 → vig 0.2448 · ANT 0.2630 · una 0.9583
+    [barajado/s1] paso  2000 vig 0.0417 · ANT 0.1042 · una 0.2500 (180s)
+    [barajado/s1] paso  4000 vig 0.2500 · ANT 0.2500 · una 0.6875 (348s)
+    [barajado/s1] paso  6000 vig 0.2917 · ANT 0.2917 · una 0.9167 (518s)
+    [barajado/s1] paso  8000 vig 0.2708 · ANT 0.3542 · una 0.8542 (689s)
+    [barajado/s1] paso 10000 vig 0.1875 · ANT 0.3333 · una 0.8542 (865s)
+    [barajado/s1] paso 12000 vig 0.3750 · ANT 0.2292 · una 0.9583 (1084s)
+  barajado  s1 → vig 0.2943 · ANT 0.2943 · una 0.9115
+    [barajado/s2] paso  2000 vig 0.0208 · ANT 0.0208 · una 0.0625 (184s)
+    [barajado/s2] paso  4000 vig 0.1667 · ANT 0.0833 · una 0.2708 (355s)
+    [barajado/s2] paso  6000 vig 0.1875 · ANT 0.1458 · una 0.6458 (526s)
+    [barajado/s2] paso  8000 vig 0.1667 · ANT 0.2083 · una 0.5417 (698s)
+    [barajado/s2] paso 10000 vig 0.2292 · ANT 0.1667 · una 0.8125 (869s)
+    [barajado/s2] paso 12000 vig 0.5000 · ANT 0.2292 · una 0.6458 (1040s)
+  barajado  s2 → vig 0.2656 · ANT 0.2839 · una 0.7708
+
+  ►► barajado: vigente 0.2682 · ANTERIOR 0.2804 (sd 0.0159) · una version 0.8802
+
+==========================================================================
+  P-1 la fuga esta tapada: ANTERIOR(ninguno) = 0.2917  CUMPLE
+  P-2 el orden se usa: ANTERIOR(sello) = 0.8316  CUMPLE
+  P-3 viene del sello: sello − barajado = +0.5512  CUMPLE
+==========================================================================

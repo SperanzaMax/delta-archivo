@@ -1,0 +1,38 @@
+E-I3d · TURNOS MOVILES · 12 entradas sorteadas de 32 turnos posibles · 12000 pasos · 3 semillas
+ninguna tabla fija slot->rol resuelve la tarea: hay que comparar
+
+    [sello/s0] paso  2000 vig 0.0000 · ANT 0.0000 · una 0.1875 (188s)
+    [sello/s0] paso  4000 vig 0.3125 · ANT 0.2708 · una 0.7292 (364s)
+    [sello/s0] paso  6000 vig 0.3125 · ANT 0.2708 · una 0.8750 (552s)
+    [sello/s0] paso  8000 vig 0.5417 · ANT 0.3958 · una 0.9792 (736s)
+    [sello/s0] paso 10000 vig 0.6250 · ANT 0.3958 · una 0.9792 (918s)
+    [sello/s0] paso 12000 vig 1.0000 · ANT 0.0208 · una 0.9792 (1097s)
+  sello     s0 → vig 0.9583 · ANT 0.0052 · una 0.9922
+    [sello/s1] paso  2000 vig 0.0833 · ANT 0.1667 · una 0.3542 (191s)
+    [sello/s1] paso  4000 vig 0.4792 · ANT 0.3958 · una 0.8958 (376s)
+    [sello/s1] paso  6000 vig 0.6042 · ANT 0.3333 · una 1.0000 (559s)
+    [sello/s1] paso  8000 vig 0.5417 · ANT 0.4375 · una 1.0000 (743s)
+    [sello/s1] paso 10000 vig 0.9375 · ANT 0.8542 · una 1.0000 (928s)
+    [sello/s1] paso 12000 vig 0.8542 · ANT 0.9167 · una 0.9792 (1111s)
+  sello     s1 → vig 0.9401 · ANT 0.9297 · una 0.9948
+    [sello/s2] paso  2000 vig 0.0625 · ANT 0.0833 · una 0.3542 (191s)
+    [sello/s2] paso  4000 vig 0.4167 · ANT 0.2292 · una 0.9167 (369s)
+    [sello/s2] paso  6000 vig 0.5000 · ANT 0.3750 · una 1.0000 (546s)
+    [sello/s2] paso  8000 vig 0.7917 · ANT 0.0625 · una 1.0000 (723s)
+    [sello/s2] paso 10000 vig 0.9583 · ANT 0.0000 · una 1.0000 (900s)
+    [sello/s2] paso 12000 vig 0.9583 · ANT 0.0000 · una 1.0000 (1078s)
+  sello     s2 → vig 0.9948 · ANT 0.0078 · una 1.0000
+
+  ►► sello: vigente 0.9644 · ANTERIOR 0.3142 (sd 0.5330) · una version 0.9957
+
+    [barajado/s0] paso  2000 vig 0.0208 · ANT 0.0833 · una 0.0625 (189s)
+    [barajado/s0] paso  4000 vig 0.1875 · ANT 0.1458 · una 0.3333 (366s)
+    [barajado/s0] paso  6000 vig 0.2917 · ANT 0.2292 · una 0.8958 (545s)
+    [barajado/s0] paso  8000 vig 0.1667 · ANT 0.2708 · una 0.9583 (722s)
+    [barajado/s0] paso 10000 vig 0.2917 · ANT 0.1667 · una 0.9167 (900s)
+    [barajado/s0] paso 12000 vig 0.3333 · ANT 0.2500 · una 0.9583 (1078s)
+  barajado  s0 → vig 0.2474 · ANT 0.2734 · una 0.9271
+    [barajado/s1] paso  2000 vig 0.0625 · ANT 0.0417 · una 0.3125 (189s)
+    [barajado/s1] paso  4000 vig 0.3125 · ANT 0.2292 · una 0.7083 (367s)
+    [barajado/s1] paso  6000 vig 0.2500 · ANT 0.1875 · una 0.8333 (544s)
+    [barajado/s1] paso  8000 vig 0.1667 · ANT 0.2917 · una 0.9167 (722s)
