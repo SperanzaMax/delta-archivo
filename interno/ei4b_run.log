@@ -1,0 +1,27 @@
+E-I4b · estres del envejecimiento · edades (0, 400, 2000, 8000) · 12000 pasos · 3 semillas
+referencia: E-I4 llegó a cos 0,9374 a 400 pasos sin daño · umbral R5.1 = 0,7
+
+    [s0] paso 1000 loss 3.2204 acc 0.3750 (rev 0.2292 · no-rev 0.5208) (95s)
+    [s0] paso 2000 loss 0.4147 acc 0.9688 (rev 0.9479 · no-rev 0.9896) (178s)
+    [s0] paso 3000 loss 0.0249 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (266s)
+    [s0] paso 4000 loss 0.0069 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (347s)
+    [s0] paso 5000 loss 0.0450 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (420s)
+    [s0] paso 6000 loss 0.0187 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (494s)
+    [s0] paso 7000 loss 0.0014 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (567s)
+    [s0] paso 8000 loss 0.0021 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (639s)
+    [s0] paso 9000 loss 0.0048 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (709s)
+    [s0] paso 10000 loss 0.0008 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (780s)
+    [s0] paso 11000 loss 0.0012 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (850s)
+    [s0] paso 12000 loss 0.0008 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (921s)
+  s0 edad     0 → acc 1.0000 (rev 1.0000 · no-rev 1.0000) · cos 1.0000
+  s0 edad   400 → acc 0.9993 (rev 1.0000 · no-rev 0.9987) · cos 0.9588
+  s0 edad  2000 → acc 0.9941 (rev 0.9935 · no-rev 0.9948) · cos 0.9057
+  s0 edad  8000 → acc 0.9336 (rev 0.9310 · no-rev 0.9362) · cos 0.7514
+    [s1] paso 1000 loss 0.7533 acc 0.9375 (rev 0.9271 · no-rev 0.9479) (80s)
+    [s1] paso 2000 loss 0.1389 acc 0.9844 (rev 0.9896 · no-rev 0.9792) (150s)
+    [s1] paso 3000 loss 0.0686 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (220s)
+    [s1] paso 4000 loss 0.0035 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (291s)
+    [s1] paso 5000 loss 0.0203 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (361s)
+    [s1] paso 6000 loss 0.1058 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (432s)
+    [s1] paso 7000 loss 0.0033 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (503s)
+    [s1] paso 8000 loss 0.0016 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (576s)

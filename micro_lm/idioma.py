@@ -44,7 +44,7 @@ RELACIONES = {                      # relacion -> (sustantivo, verbo, articulo)
 }
 PERSONALES = ("director", "duenio", "guardia")   # su valor es un nombre; el resto, un numero
 
-FUNCIONALES = """el la de del es esta en un una y o no si ahora antes ayer hoy cual quien que a
+FUNCIONALES = """el la de del es era esta en un una y o no si ahora antes ayer hoy cual quien que a
 tiene como con por para se lo su mas menos tambien pero entonces""".split()
 
 CONTROL = ["BOS", "SEP", "EOS", "USUARIO", "MODELO", "NOSE", "?", ",", "."]
@@ -122,8 +122,17 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
 
         if rng.random() < p_revision:
             v2 = rng.choice([x for x in pool if x != v1])
-            s2 = s if nivel < 4 else int(rng.integers(s + 1, n_sesiones)) if s + 1 < n_sesiones else s
-            sesiones[s2].append(correccion(rel, ent, v2, nivel))
+            # REGLA DE RESOLUBILIDAD: una correccion ELIPTICA solo puede ir pegada a su hecho, en la
+            # misma sesion. Si va en otra sesion, tiene que nombrar la entidad -- si no, no hay
+            # ninguna regla objetiva que diga a que hecho se refiere, y la etiqueta seria una
+            # convencion nuestra en vez de una señal recuperable (lo medido el 12-ago: sin pista
+            # recuperable, el eje mide arbitrariedad y no dificultad).
+            lejos = nivel >= 4 and s + 1 < n_sesiones and rng.random() < 0.5
+            if lejos:
+                s2 = int(rng.integers(s + 1, n_sesiones))
+                sesiones[s2].append(correccion(rel, ent, v2, nivel=2))   # nombra la entidad
+            else:
+                sesiones[s].append(correccion(rel, ent, v2, nivel))      # adyacente: puede elidir
             versiones.append(v2)
         vals_por_hecho.append((rel, ent, versiones))
 
