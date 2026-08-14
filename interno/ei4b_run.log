@@ -25,3 +25,38 @@ referencia: E-I4 llegó a cos 0,9374 a 400 pasos sin daño · umbral R5.1 = 0,7
     [s1] paso 6000 loss 0.1058 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (432s)
     [s1] paso 7000 loss 0.0033 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (503s)
     [s1] paso 8000 loss 0.0016 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (576s)
+    [s1] paso 9000 loss 0.0013 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (647s)
+    [s1] paso 10000 loss 0.0008 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (717s)
+    [s1] paso 11000 loss 0.0018 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (788s)
+    [s1] paso 12000 loss 0.0011 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (860s)
+  s1 edad     0 → acc 0.9987 (rev 0.9974 · no-rev 1.0000) · cos 1.0000
+  s1 edad   400 → acc 0.9974 (rev 0.9974 · no-rev 0.9974) · cos 0.9550
+  s1 edad  2000 → acc 0.9876 (rev 0.9870 · no-rev 0.9883) · cos 0.9173
+  s1 edad  8000 → acc 0.8971 (rev 0.8945 · no-rev 0.8997) · cos 0.8375
+    [s2] paso 1000 loss 1.0837 acc 0.8958 (rev 0.8854 · no-rev 0.9062) (80s)
+    [s2] paso 2000 loss 0.0302 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (153s)
+    [s2] paso 3000 loss 0.1044 acc 0.9948 (rev 0.9896 · no-rev 1.0000) (232s)
+    [s2] paso 4000 loss 0.0181 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (303s)
+    [s2] paso 5000 loss 0.0106 acc 0.9948 (rev 1.0000 · no-rev 0.9896) (374s)
+    [s2] paso 6000 loss 0.0478 acc 0.9896 (rev 0.9792 · no-rev 1.0000) (444s)
+    [s2] paso 7000 loss 0.0013 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (514s)
+    [s2] paso 8000 loss 0.0013 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (585s)
+    [s2] paso 9000 loss 0.0008 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (656s)
+    [s2] paso 10000 loss 0.0027 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (726s)
+    [s2] paso 11000 loss 0.0019 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (797s)
+    [s2] paso 12000 loss 0.0009 acc 1.0000 (rev 1.0000 · no-rev 1.0000) (867s)
+  s2 edad     0 → acc 0.9980 (rev 0.9987 · no-rev 0.9974) · cos 1.0000
+  s2 edad   400 → acc 0.9980 (rev 0.9974 · no-rev 0.9987) · cos 0.9506
+  s2 edad  2000 → acc 0.9902 (rev 0.9805 · no-rev 1.0000) · cos 0.8971
+  s2 edad  8000 → acc 0.9232 (rev 0.9089 · no-rev 0.9375) · cos 0.7524
+
+==========================================================================
+  edad     0 → cos 1.0000 · revisadas 0.9987 (sd 0.0013) · una version 0.9991
+  edad   400 → cos 0.9548 · revisadas 0.9983 (sd 0.0015) · una version 0.9983
+  edad  2000 → cos 0.9067 · revisadas 0.9870 (sd 0.0065) · una version 0.9944
+  edad  8000 → cos 0.7804 · revisadas 0.9115 (sd 0.0184) · una version 0.9245
+--------------------------------------------------------------------------
+  P-1 (bloqueante) cos(8000) = 0.7804  CUMPLE — hay deriva que interpretar
+  P-2 no evaluable: el coseno no bajo de 0,70 (quedo en 0.7804)
+  P-3 rev +0.0872 vs una version +0.0747
+==========================================================================
