@@ -1,0 +1,64 @@
+{
+ "config": {
+  "nivel": 3,
+  "pasos": 20000,
+  "batch": 64,
+  "lr": 0.001,
+  "d": 128,
+  "capas": 4,
+  "semilla": 0,
+  "p_vieja": 0.35,
+  "salida": "/content/n3.json"
+ },
+ "params": 863730,
+ "historia": [
+  {
+   "paso": 2000,
+   "vigente": 0.32041495684516846,
+   "anterior": 0.19904678654678654,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 4000,
+   "vigente": 0.4918958252714807,
+   "anterior": 0.50757992007992,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 6000,
+   "vigente": 0.6196618238851963,
+   "anterior": 0.7217615717615717,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 8000,
+   "vigente": 0.6724960665246363,
+   "anterior": 0.7217615717615717,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 10000,
+   "vigente": 0.6841158823104171,
+   "anterior": 0.7103979353979354,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 12000,
+   "vigente": 0.688585869539025,
+   "anterior": 0.7217615717615717,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 14000,
+   "vigente": 0.688585869539025,
+   "anterior": 0.7217615717615717,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 16000,
+   "vigente": 0.6912891876912697,
+   "anterior": 0.7217615717615717,
+   "abstencion": 0.0
+  }
+ ]
+}

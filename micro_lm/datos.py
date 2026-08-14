@@ -10,9 +10,15 @@ import numpy as np
 import idioma as I
 
 PAD = I.STOI["."]          # relleno inerte
-T_SES = 40                 # tokens por sesion
+T_SES = 96                 # tokens por sesion
 T_Q = 12                   # tokens de la pregunta
-E_MAX = 4                  # enunciados por sesion
+E_MAX = 10                 # enunciados por sesion
+
+# OJO — 2026-08-14: con E_MAX=4 y T_SES=40 se truncaba el 34 % de los enunciados en los niveles 1-3,
+# donde TODOS los hechos caen en la misma sesion. La accuracy tenia un techo de 1-0,34 = 0,66 y
+# medimos 0,6707: no era una meseta de aprendizaje, era el padding. El nivel 4 reparte los hechos
+# entre sesiones, truncaba el 1,5 % y por eso daba 0,988. Cualquier cambio de n_hechos o n_sesiones
+# obliga a revisar estos dos numeros: mirar `truncados` antes de leer la accuracy.
 
 
 def _tok(texto, largo):

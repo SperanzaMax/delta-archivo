@@ -1,0 +1,6 @@
+MICRO-LM · nivel 1 · vocabulario 242 tokens · d=128 capas=4
+dispositivos: [CpuDevice(id=0)]
+parametros: 863,730 (3.5 MB en fp32)
+
+  paso    500  loss 5.1784  acc 0.0000  (955s)
+  paso   1000  loss 5.2709  acc 0.0000  (1898s)

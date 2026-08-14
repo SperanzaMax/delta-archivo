@@ -1,0 +1,47 @@
+MICRO-LM · nivel 3 · vocabulario 242 tokens · d=128 capas=4
+dispositivos: [CudaDevice(id=0)]
+parametros: 863,730 (3.5 MB en fp32)
+
+  paso    500  loss 4.7660  acc 0.1094  (110s)
+  paso   1000  loss 3.7386  acc 0.2031  (206s)
+  paso   1500  loss 3.2518  acc 0.2656  (301s)
+  paso   2000  loss 3.5782  acc 0.2656  (396s)
+    ── eval: vigente 0.3204 · anterior 0.1990 · abstencion 0.0000
+  paso   2500  loss 3.2229  acc 0.2656  (495s)
+  paso   3000  loss 2.9011  acc 0.2969  (590s)
+  paso   3500  loss 2.8267  acc 0.3906  (686s)
+  paso   4000  loss 2.8188  acc 0.4531  (781s)
+    ── eval: vigente 0.4919 · anterior 0.5076 · abstencion 0.0000
+  paso   4500  loss 2.0187  acc 0.6406  (877s)
+  paso   5000  loss 2.7493  acc 0.4844  (972s)
+  paso   5500  loss 2.6150  acc 0.5312  (1067s)
+  paso   6000  loss 1.7487  acc 0.6406  (1162s)
+    ── eval: vigente 0.6197 · anterior 0.7218 · abstencion 0.0000
+  paso   6500  loss 1.7975  acc 0.6562  (1258s)
+  paso   7000  loss 2.0239  acc 0.6094  (1353s)
+  paso   7500  loss 1.8559  acc 0.6406  (1448s)
+  paso   8000  loss 1.5552  acc 0.6875  (1543s)
+    ── eval: vigente 0.6725 · anterior 0.7218 · abstencion 0.0000
+  paso   8500  loss 0.9988  acc 0.8125  (1639s)
+  paso   9000  loss 1.2051  acc 0.7500  (1735s)
+  paso   9500  loss 1.5383  acc 0.6562  (1830s)
+  paso  10000  loss 1.1077  acc 0.7656  (1925s)
+    ── eval: vigente 0.6841 · anterior 0.7104 · abstencion 0.0000
+  paso  10500  loss 1.3817  acc 0.7344  (2021s)
+  paso  11000  loss 1.2759  acc 0.7344  (2116s)
+  paso  11500  loss 1.2977  acc 0.7188  (2211s)
+  paso  12000  loss 1.3280  acc 0.7344  (2306s)
+    ── eval: vigente 0.6886 · anterior 0.7218 · abstencion 0.0000
+  paso  12500  loss 2.0134  acc 0.5938  (2402s)
+  paso  13000  loss 1.4435  acc 0.6719  (2497s)
+  paso  13500  loss 1.6163  acc 0.6406  (2593s)
+  paso  14000  loss 1.0995  acc 0.7812  (2688s)
+    ── eval: vigente 0.6886 · anterior 0.7218 · abstencion 0.0000
+  paso  14500  loss 1.5948  acc 0.6719  (2784s)
+  paso  15000  loss 1.4992  acc 0.6562  (2879s)
+  paso  15500  loss 1.1111  acc 0.7656  (2974s)
+  paso  16000  loss 1.4702  acc 0.6875  (3069s)
+    ── eval: vigente 0.6913 · anterior 0.7218 · abstencion 0.0000
+  paso  16500  loss 1.6785  acc 0.6250  (3165s)
+  paso  17000  loss 1.9514  acc 0.5781  (3260s)
+  paso  17500  loss 2.0499  acc 0.5469  (3356s)
