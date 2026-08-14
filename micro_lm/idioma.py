@@ -102,11 +102,22 @@ def pregunta(rel, ent, cual="vigente"):
 
 # --- episodios -------------------------------------------------------------------------------
 
-def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35):
+def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
+             p_nose=0.0):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
 
     `sesiones` es una lista de listas de enunciados (una lista por sesion).
     `consultas` es una lista de (pregunta, respuesta_esperada, tipo).
+
+    `p_nose` agrega preguntas SIN respuesta en el archivo, cuya respuesta correcta es el token NOSE.
+    El dia 1 la abstencion dio 0,0000 en los cuatro niveles: `NOSE` existia en el vocabulario pero
+    ninguna pregunta lo tenia como respuesta, asi que no habia nada que aprender y **todos los
+    errores eran silenciosos** — justo el modo de falla que mide el preprint de gemacion.
+    Dos tipos, a proposito, porque miden cosas distintas:
+      `nose_ent`  la entidad no aparece en el episodio  -> basta con no encontrarla en el archivo;
+      `nose_rel`  la entidad SI aparece, pero con otra relacion -> hay que encontrar la entidad y
+                  ademas notar que lo que se pregunta de ella no se dijo. Es el caso dificil, y el
+                  que se parece a una alucinacion real.
     """
     ents = rng.choice(ENTIDADES, size=n_hechos, replace=False)
     rels = rng.choice(list(RELACIONES), size=n_hechos)
@@ -142,6 +153,23 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             consultas.append((pregunta(rel, ent, "anterior"), versiones[-2], "anterior"))
         else:
             consultas.append((pregunta(rel, ent, "vigente"), versiones[-1], "vigente"))
+
+    if p_nose > 0 and rng.random() < p_nose:
+        dichos = {(r, e) for r, e, _ in vals_por_hecho}
+        ents_dichas = {e for _, e, _ in vals_por_hecho}
+        if rng.random() < 0.5:                       # nose_ent: la entidad nunca se nombro
+            libres = [e for e in ENTIDADES if e not in ents_dichas]
+            ent_q = str(rng.choice(libres))
+            rel_q = str(rng.choice(list(RELACIONES)))
+            tipo = "nose_ent"
+        else:                                        # nose_rel: la entidad si, la relacion no
+            ent_q = str(rng.choice(sorted(ents_dichas)))
+            libres = [r for r in RELACIONES if (r, ent_q) not in dichos]
+            if not libres:
+                return sesiones, consultas
+            rel_q = str(rng.choice(libres))
+            tipo = "nose_rel"
+        consultas.append((pregunta(rel_q, ent_q, "vigente"), "NOSE", tipo))
     return sesiones, consultas
 
 

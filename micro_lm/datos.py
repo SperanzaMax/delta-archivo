@@ -21,12 +21,28 @@ E_MAX = 10                 # enunciados por sesion
 # obliga a revisar estos dos numeros: mirar `truncados` antes de leer la accuracy.
 
 
+# Contador de diagnostico: lo que la nota de arriba manda mirar ANTES de leer una accuracy.
+# Se acumula sobre todas las llamadas a `lote`; `reset_truncados()` lo pone en cero.
+TRUNC = {"enunciados": 0, "truncados": 0}
+
+
+def reset_truncados():
+    TRUNC["enunciados"] = TRUNC["truncados"] = 0
+
+
+def tasa_truncados():
+    return TRUNC["truncados"] / max(1, TRUNC["enunciados"])
+
+
 def _tok(texto, largo):
     ids = I.a_ids(texto)[:largo]
     return ids + [PAD] * (largo - len(ids))
 
 
-def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4):
+TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3}
+
+
+def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo."""
     S, N = n_sesiones, n_sesiones * E_MAX
     ses = np.full((B, S, T_SES), PAD, np.int32)
@@ -41,29 +57,43 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4):
     b = 0
     while b < B:
         sesiones, consultas = I.episodio(rng, nivel=nivel, n_hechos=n_hechos,
-                                         n_sesiones=n_sesiones)
+                                         n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
+                                         p_nose=1.0 if p_nose > 0 else 0.0)
         if not consultas:
             continue
-        q, r, t = consultas[int(rng.integers(len(consultas)))]
+        # La consulta sin respuesta se elige con probabilidad `p_nose` EXACTA, en vez de dejarla
+        # competir en el sorteo uniforme con las otras n_hechos: asi `--p-nose 0,2` significa
+        # «el 20 % de los ejemplos no tiene respuesta» y no «0,2 dividido cinco».
+        sin_resp = [c for c in consultas if c[1] == "NOSE"]
+        con_resp = [c for c in consultas if c[1] != "NOSE"]
+        if sin_resp and rng.random() < p_nose:
+            q, r, t = sin_resp[0]
+        else:
+            if not con_resp:
+                continue
+            q, r, t = con_resp[int(rng.integers(len(con_resp)))]
         turno = 0
         for s, enunciados in enumerate(sesiones):
-            pos = 0
             toks = [I.STOI["BOS"]]
+            puestos = 0
             for e, enunciado in enumerate(enunciados[:E_MAX]):
                 ids = I.a_ids(enunciado)
                 if len(toks) + len(ids) >= T_SES:
                     break
                 toks += ids
+                puestos += 1
                 cortes[b, s, e] = len(toks) - 1        # ultimo token del enunciado
                 mask[b, s * E_MAX + e] = True
                 turnos[b, s * E_MAX + e] = turno
                 turno += 1
             ses[b, s, :len(toks)] = toks
+            TRUNC["enunciados"] += len(enunciados)
+            TRUNC["truncados"] += len(enunciados) - puestos
         ids_q = I.a_ids("BOS " + q)[:T_Q]
         consulta[b, :len(ids_q)] = ids_q
         pos_q[b] = len(ids_q) - 1
         target[b] = I.STOI[r]
-        tipo[b] = 1 if t == "anterior" else 0
+        tipo[b] = TIPOS[t]
         b += 1
     return ses, cortes, turnos, mask, consulta, pos_q, target, tipo
 

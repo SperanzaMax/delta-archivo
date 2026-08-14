@@ -14,6 +14,11 @@
 *.npy
 __pycache__/
 *.pyc
+# Pesos del micro-LM: 3,5 MB por corrida y regenerables con `entrenar.py --pesos`. Sirven para
+# mirar dialogos concretos (`dialogos.py`), no para anclar el resultado — eso lo hacen los JSON.
+micro_lm/**/*.pkl
+# Ruido de operacion: el stdout de cada cuenta de Colab durante una campania.
+micro_lm/logs_campania_*/
 preprint/*.aux
 preprint/*.log
 preprint/*.out
