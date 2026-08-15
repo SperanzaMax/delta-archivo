@@ -83,7 +83,7 @@ pendientes() {
 crear_sesion() {
   local s="$1"
   for i in 1 2 3 4; do
-    if "${CL[@]}" new -s "$s" --gpu T4 2>&1 | tee "$TMP/new.log" | tail -2; then
+    if timeout 420 "${CL[@]}" new -s "$s" --gpu T4 2>&1 | tee "$TMP/new.log" | tail -2; then
       grep -q "READY" "$TMP/new.log" && return 0
     fi
     # 503 = Colab sin T4 disponible para esta cuenta en este momento; no es un error nuestro.
@@ -100,8 +100,8 @@ intento() {
   echo "== cuenta $CUENTA · intento $n_intento · unidades $faltan · $PASOS pasos"
 
   crear_sesion "$SESION" || { echo "!! no se pudo asignar T4"; return 1; }
-  "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || return 1
-  "${CL[@]}" install -s "$SESION" optax || return 1
+  timeout 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || return 1
+  timeout 420 "${CL[@]}" install -s "$SESION" optax || return 1
 
   cat > "$TMP/lanzar.py" <<PY
 import os, subprocess, sys
@@ -141,7 +141,7 @@ p = subprocess.Popen(['bash', '/content/correr.sh'], stdout=log, stderr=subproce
 open('/content/micro.pid', 'w').write(str(p.pid))
 print('runner lanzado, pid', p.pid, flush=True)
 PY
-  "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || return 1
+  timeout 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || return 1
 
   cat > "$TMP/ver.py" <<'PY'
 import json, os
@@ -171,7 +171,7 @@ PY
   local perdidas=0 term=1
   for _ in $(seq 1 $(( MIN / 2 ))); do
     sleep 120
-    OUT="$("${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
+    OUT="$(timeout 240 "${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
     { printf '%s\n' "$OUT" | grep '^@@JSON@@ ' || true; } | while read -r _ nombre resto; do
       printf '%s' "$resto" > "$SALIDA/$nombre"
     done
@@ -198,12 +198,12 @@ import subprocess
 subprocess.run('cd /content/salidas && tar czf /content/micro_out.tgz .', shell=True)
 print('empaquetado')
 PY
-    "${CL[@]}" exec -s "$SESION" -f "$TMP/pack.py" >/dev/null 2>&1 \
-      && "${CL[@]}" download -s "$SESION" /content/micro_out.tgz "$TMP/micro_out.tgz" >/dev/null 2>&1 \
+    timeout 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/pack.py" >/dev/null 2>&1 \
+      && timeout 420 "${CL[@]}" download -s "$SESION" /content/micro_out.tgz "$TMP/micro_out.tgz" >/dev/null 2>&1 \
       && tar xzf "$TMP/micro_out.tgz" -C "$SALIDA" && echo "   bajado OK"
   fi
 
-  "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
+  timeout 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
   [ "$term" = "1" ]
 }
 

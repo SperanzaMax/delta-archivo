@@ -26,3 +26,6 @@ preprint/*.fls
 preprint/*.fdb_latexmk
 MAIL_UTN_AVAL.txt
 CONSULTA_FABLE5_20260811.md
+# Checkpoints de reanudacion: 10 MB cada uno (pesos + estado de Adam). Son estado de OPERACION,
+# no resultado: lo que ancla el resultado son los JSON.
+micro_lm/ckpts/

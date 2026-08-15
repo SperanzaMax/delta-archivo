@@ -34,11 +34,19 @@ ENTIDADES = """norte sur este oeste centro taller tienda equipo club museo teatr
 banco hotel bosque puente barrio plaza mercado escuela fabrica estudio parque templo faro molino
 laguna cabaña""".split()
 
+# El verbo de cada relacion PERSONAL tiene que tomar a la persona como sujeto, porque las
+# parafrasis lo usan asi: `{val} {verbo} {ent}` y `quien {verbo} {ent} es {val}`.
+# `duenio` llevaba «pertenece_a», cuyo sujeto es la ENTIDAD y no la persona, y generaba
+# «julia pertenece_a teatro» — al reves: el teatro pertenece a julia, no julia al teatro.
+# Con «posee» las cuatro formas quedan derechas y no hace falta un caso especial.
+# Se corrige el 2026-08-14; la campania de esa mañana ya habia salido con V1 (ver `fijar_version`).
+VERBO_DUENIO = {1: "pertenece_a", 2: "posee"}
+
 RELACIONES = {                      # relacion -> (sustantivo, verbo, articulo)
     "director": ("director", "dirige", "el"),
     "precio":   ("precio", "cuesta", "el"),
     "altura":   ("altura", "mide", "la"),
-    "duenio":   ("dueño", "pertenece_a", "el"),
+    "duenio":   ("dueño", VERBO_DUENIO[2], "el"),
     "guardia":  ("guardia", "cuida", "el"),
     "clave":    ("clave", "vale", "la"),
 }
@@ -70,6 +78,29 @@ ITOS, STOI = construir_vocab()
 V = len(ITOS)
 
 
+def fijar_version(v):
+    """Elige la version del idioma: 1 = «pertenece_a» (campania del 14-ago), 2 = «posee».
+
+    Existe para poder MEDIR el efecto del arreglo contra las corridas que ya estaban hechas, en vez
+    de cambiar el generador en silencio a mitad de camino y comparar contra numeros de otro idioma.
+
+    Prediccion, escrita ANTES de correr: el cambio es un REEMPLAZO DE UN TOKEN por otro en la misma
+    posicion de la misma plantilla — las secuencias tienen el mismo largo y la misma estructura, y
+    el modelo no sabe castellano. Asi que no deberia mover la accuracy mas alla del ruido entre
+    semillas. Si moviera mucho, lo que estaria mal es mi entendimiento de la tarea, no el arreglo.
+    (Lo unico que cambia de verdad es que un humano que lee `dialogos.py` no tropieza.)
+
+    El vocabulario mantiene su tamaño (242) y los bloques CONTROL/NUMEROS/NOMBRES/ENTIDADES sus
+    indices: la permutacion queda contenida en el bloque de palabras de relaciones.
+    """
+    global ITOS, STOI, V
+    sust, _, art = RELACIONES["duenio"]
+    RELACIONES["duenio"] = (sust, VERBO_DUENIO[v], art)
+    ITOS, STOI = construir_vocab()
+    V = len(ITOS)
+    return V
+
+
 # --- como se dice un hecho -------------------------------------------------------------------
 
 def formas(rel, ent, val, nivel):
@@ -85,12 +116,20 @@ def formas(rel, ent, val, nivel):
             f"{ent} tiene {art} {sust} en {val}"]
 
 
-def correccion(rel, ent, val, nivel):
-    """Como se corrige un hecho ya dicho. En N3 la correccion NO nombra la entidad."""
+def correccion(rng, rel, ent, val, nivel):
+    """Como se corrige un hecho ya dicho. En N3 la correccion NO nombra la entidad.
+
+    OJO — 2026-08-14: esto usaba `np.random.choice`, o sea el generador GLOBAL de numpy, mientras
+    todo el resto del generador de episodios usa el `rng` sembrado que se pasa por parametro. La
+    consecuencia no era cosmetica: **la corrida no era reproducible a partir de su semilla** en los
+    niveles 3 y 4 (los unicos que entran por esta rama), porque la forma de cada correccion eliptica
+    dependia de un estado global que nadie controlaba ni guardaba. Lo delato el test de reanudacion:
+    dos corridas con la misma semilla diferian ya en el paso 20, ANTES de reanudar nada.
+    """
     sust, _, art = RELACIONES[rel]
     if nivel < 3:
         return f"no , {art} {sust} de {ent} es {val}"
-    return np.random.choice([f"no , es {val}", f"no , ahora es {val}", f"no , {val}"])
+    return str(rng.choice([f"no , es {val}", f"no , ahora es {val}", f"no , {val}"]))
 
 
 def pregunta(rel, ent, cual="vigente"):
@@ -141,9 +180,9 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             lejos = nivel >= 4 and s + 1 < n_sesiones and rng.random() < 0.5
             if lejos:
                 s2 = int(rng.integers(s + 1, n_sesiones))
-                sesiones[s2].append(correccion(rel, ent, v2, nivel=2))   # nombra la entidad
+                sesiones[s2].append(correccion(rng, rel, ent, v2, nivel=2))   # nombra la entidad
             else:
-                sesiones[s].append(correccion(rel, ent, v2, nivel))      # adyacente: puede elidir
+                sesiones[s].append(correccion(rng, rel, ent, v2, nivel))      # adyacente: puede elidir
             versiones.append(v2)
         vals_por_hecho.append((rel, ent, versiones))
 

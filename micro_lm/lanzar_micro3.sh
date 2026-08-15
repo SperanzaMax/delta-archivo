@@ -80,15 +80,32 @@ pendientes() {
   (IFS=,; echo "${out[*]}")
 }
 
+# CASCADA DE ACELERADORES (2026-08-14, a pedido de Maxi: «si no te dan T4, fijate si te dan otra
+# GPU»). Cuando Colab raciona las T4, una cuenta puede seguir teniendo otro acelerador libre.
+# El orden va de menor a mayor: T4 es la de referencia y la que mas quota tiene; L4 y A100 se
+# aceptan si estan disponibles. CPU queda AFUERA a proposito — medido en esta misma maquina, el
+# entrenamiento en CPU va a ~1,9 s/paso, o sea 10,5 h para las 20000 unidades: no es una alternativa
+# mas lenta, es no terminar nunca.
+# El acelerador que toque queda registrado en el JSON (campo `hw` de `entrenar.py`), asi que si una
+# celda queda rara se puede chequear si corrio en otro hardware antes de buscarle una explicacion.
+ACELERADORES="${ACELERADORES:-T4 L4 A100}"
+
 crear_sesion() {
   local s="$1"
-  for i in 1 2 3 4; do
-    if "${CL[@]}" new -s "$s" --gpu T4 2>&1 | tee "$TMP/new.log" | tail -2; then
-      grep -q "READY" "$TMP/new.log" && return 0
-    fi
-    # 503 = Colab sin T4 disponible para esta cuenta en este momento; no es un error nuestro.
-    echo "   (no asigno T4, reintento $i en 90 s)"
-    sleep 90
+  for i in 1 2; do
+    for acc in $ACELERADORES; do
+      if timeout 420 "${CL[@]}" new -s "$s" --gpu "$acc" 2>&1 | tee "$TMP/new.log" | tail -2; then
+        if grep -q "READY" "$TMP/new.log"; then
+          echo "   >> asigno $acc en la cuenta $CUENTA"
+          return 0
+        fi
+      fi
+      # 503 = sin ese acelerador ahora; «rejected/quota» = la cuenta no tiene derecho a ese.
+      # Los dos casos se tratan igual: probar el siguiente de la lista.
+      echo "   (sin $acc)"
+    done
+    echo "   (ningun acelerador en la vuelta $i; espera 60 s)"
+    sleep 60
   done
   return 1
 }
@@ -100,8 +117,8 @@ intento() {
   echo "== cuenta $CUENTA · intento $n_intento · unidades $faltan · $PASOS pasos"
 
   crear_sesion "$SESION" || { echo "!! no se pudo asignar T4"; return 1; }
-  "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || return 1
-  "${CL[@]}" install -s "$SESION" optax || return 1
+  timeout 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || return 1
+  timeout 420 "${CL[@]}" install -s "$SESION" optax || return 1
 
   cat > "$TMP/lanzar.py" <<PY
 import os, subprocess, sys
@@ -112,7 +129,7 @@ subprocess.run('tar xzf /content/micro.tgz -C /content/micro', shell=True, check
 import jax
 devs = jax.devices()
 print('jax', jax.__version__, '| devices', devs, flush=True)
-assert any(d.platform == 'gpu' for d in devs), 'NO hay GPU: la campania exige T4 homogenea'
+assert any(d.platform == 'gpu' for d in devs), 'NO hay GPU: en CPU son 10,5 h por unidad'
 
 # La compuerta de padding, ANTES de gastar una hora de GPU. Es lo que fallo el 13-ago.
 chk = subprocess.run([sys.executable, 'chequeo_padding.py'], cwd='/content/micro',
@@ -141,7 +158,7 @@ p = subprocess.Popen(['bash', '/content/correr.sh'], stdout=log, stderr=subproce
 open('/content/micro.pid', 'w').write(str(p.pid))
 print('runner lanzado, pid', p.pid, flush=True)
 PY
-  "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || return 1
+  timeout 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || return 1
 
   cat > "$TMP/ver.py" <<'PY'
 import json, os
@@ -171,7 +188,7 @@ PY
   local perdidas=0 term=1
   for _ in $(seq 1 $(( MIN / 2 ))); do
     sleep 120
-    OUT="$("${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
+    OUT="$(timeout 240 "${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
     { printf '%s\n' "$OUT" | grep '^@@JSON@@ ' || true; } | while read -r _ nombre resto; do
       printf '%s' "$resto" > "$SALIDA/$nombre"
     done
@@ -198,12 +215,12 @@ import subprocess
 subprocess.run('cd /content/salidas && tar czf /content/micro_out.tgz .', shell=True)
 print('empaquetado')
 PY
-    "${CL[@]}" exec -s "$SESION" -f "$TMP/pack.py" >/dev/null 2>&1 \
-      && "${CL[@]}" download -s "$SESION" /content/micro_out.tgz "$TMP/micro_out.tgz" >/dev/null 2>&1 \
+    timeout 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/pack.py" >/dev/null 2>&1 \
+      && timeout 420 "${CL[@]}" download -s "$SESION" /content/micro_out.tgz "$TMP/micro_out.tgz" >/dev/null 2>&1 \
       && tar xzf "$TMP/micro_out.tgz" -C "$SALIDA" && echo "   bajado OK"
   fi
 
-  "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
+  timeout 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
   [ "$term" = "1" ]
 }
 
