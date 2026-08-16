@@ -214,7 +214,12 @@ def main():
             trunc = DAT.tasa_truncados()            # la compuerta, en el registro permanente
             ev = np.random.default_rng(90000 + a.semilla)
             m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose)
-            hist.append({"paso": s, "truncados": float(trunc), **m})
+            # `p_nose` va en CADA evaluacion y no solo en la config, porque la guarda de identidad
+            # del checkpoint no lo compara: una corrida puede reanudarse con otro valor. Eso es
+            # deliberado —el curriculum de dos fases entrena primero sin preguntas sin respuesta y
+            # las introduce despues— pero deja una curva cuya segunda mitad es OTRA tarea. Sin este
+            # registro, mañana leeriamos un salto de metrica como si fuera aprendizaje.
+            hist.append({"paso": s, "truncados": float(trunc), "p_nose": float(a.p_nose), **m})
             extra = ("" if a.p_nose == 0 else
                      f" · nose {m['nose']:.4f} (ent {m['nose_ent']:.4f}/rel {m['nose_rel']:.4f})"
                      f" · falsa_abst {m['falsa_abst']:.4f}")

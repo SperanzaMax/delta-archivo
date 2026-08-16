@@ -42,8 +42,14 @@ def _tok(texto, largo):
 TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3}
 
 
-def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0):
-    """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo."""
+def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False):
+    """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
+
+    Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
+    preguntó y los demas hechos del episodio. Sirve para CLASIFICAR el error —version contra
+    identidad, la desagregacion que pide la §6— y no cambia nada del muestreo: `episodio` ya se
+    llamaba igual, sólo se le pide que devuelva lo que ya tenia calculado.
+    """
     S, N = n_sesiones, n_sesiones * E_MAX
     ses = np.full((B, S, T_SES), PAD, np.int32)
     cortes = np.zeros((B, S, E_MAX), np.int32)
@@ -54,11 +60,12 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0):
     target = np.zeros(B, np.int32)
     tipo = np.zeros(B, np.int32)          # 0 = vigente, 1 = anterior
 
+    meta = []
     b = 0
     while b < B:
-        sesiones, consultas = I.episodio(rng, nivel=nivel, n_hechos=n_hechos,
-                                         n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
-                                         p_nose=1.0 if p_nose > 0 else 0.0)
+        sesiones, consultas, vals = I.episodio(rng, nivel=nivel, n_hechos=n_hechos,
+                                               n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
+                                               p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True)
         if not consultas:
             continue
         # La consulta sin respuesta se elige con probabilidad `p_nose` EXACTA, en vez de dejarla
@@ -94,7 +101,26 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0):
         pos_q[b] = len(ids_q) - 1
         target[b] = I.STOI[r]
         tipo[b] = TIPOS[t]
+        if con_meta:
+            # `consultas` viene alineada con `vals` por indice para los hechos dichos; la consulta
+            # sin respuesta, cuando existe, va al final y no tiene hecho asociado.
+            try:
+                idx = consultas.index((q, r, t))
+            except ValueError:
+                idx = -1
+            propio = vals[idx] if 0 <= idx < len(vals) else None
+            meta.append({
+                "tipo": t,
+                "hecho": None if propio is None else {
+                    "ent": str(propio[1]), "rel": str(propio[0]),
+                    "versiones": [str(v) for v in propio[2]],
+                },
+                "otros": [{"ent": str(e), "rel": str(rl), "versiones": [str(v) for v in vs]}
+                          for k, (rl, e, vs) in enumerate(vals) if k != idx],
+            })
         b += 1
+    if con_meta:
+        return ses, cortes, turnos, mask, consulta, pos_q, target, tipo, meta
     return ses, cortes, turnos, mask, consulta, pos_q, target, tipo
 
 

@@ -42,9 +42,17 @@ else
   CL=( "$COLAB" --auth adc --config "$HOME/.colab-cuenta$CUENTA.json" )
 fi
 
-CK="$CKPTS/n${NIVEL}_s${SEM}.pkl"
-JS="$SALIDA/n${NIVEL}_s${SEM}.json"
-echo "== tramo · cuenta $CUENTA · sesion $SESION · n$NIVEL s$SEM · +$TRAMO de $PASOS pasos"
+# PREFIJO separa familias de corridas que comparten nivel y semilla pero NO son comparables:
+# "n" = la campaña base (p_nose 0, todas las preguntas tienen respuesta en el archivo);
+# "x" = la campaña de ABSTENCION (p_nose > 0, hay preguntas cuya respuesta no está).
+# Sin esto las dos escribirían el mismo n4_s0.pkl y se pisarían el checkpoint.
+PREFIJO="${PREFIJO:-n}"
+P_NOSE="${P_NOSE:-0.0}"
+UNI="${PREFIJO}${NIVEL}_s${SEM}"
+
+CK="$CKPTS/${UNI}.pkl"
+JS="$SALIDA/${UNI}.json"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -58,9 +66,17 @@ cat > "$TMP/lanzar.py" <<PY
 import os, subprocess, sys
 os.makedirs('/content/micro', exist_ok=True); os.makedirs('/content/salidas', exist_ok=True)
 subprocess.run('tar xzf /content/micro.tgz -C /content/micro', shell=True, check=True)
-import jax
-print('jax', jax.__version__, '|', jax.devices(), flush=True)
-assert any(d.platform in ('gpu', 'tpu') for d in jax.devices()), 'NO hay acelerador'
+# La deteccion del acelerador va en un SUBPROCESO que muere enseguida, no con un import acá
+# (2026-08-15). En TPU, el proceso que hace `import jax` se queda con el chip TOMADO, y este
+# proceso es el kernel de Colab: sobrevive todo el tramo. El entrenamiento arrancaba después y
+# moría con "The TPU is already in use by process with pid N". Costó las 5 únicas TPU que Colab
+# nos asignó en todo el día —el 13 % de las asignaciones conseguidas— y ninguna llegó a entrenar.
+# En GPU nunca se notó porque CUDA admite varios procesos sobre el mismo dispositivo.
+det = subprocess.run([sys.executable, '-c',
+                      'import jax; print(jax.__version__); print(jax.devices())'],
+                     capture_output=True, text=True)
+print('jax', det.stdout.strip().replace('\n', ' | '), flush=True)
+assert ('CudaDevice' in det.stdout or 'TpuDevice' in det.stdout), 'NO hay acelerador'
 chk = subprocess.run([sys.executable, 'chequeo_padding.py'], cwd='/content/micro',
                      capture_output=True, text=True)
 assert 'compuerta ABRE' in chk.stdout, 'la compuerta de padding NO abre'
@@ -68,7 +84,8 @@ print('compuerta de padding OK', flush=True)
 cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$SEM',
        '--pasos', '$PASOS', '--tramo', '$TRAMO', '--cada', '$CADA', '--d', '128', '--capas', '4',
        '--lr', '1e-3', '--p-vieja', '0.35', '--idioma', '2', '--horizonte', '$HORIZONTE',
-       '--salida', '/content/salidas/n${NIVEL}_s${SEM}.json', '--ckpt', '/content/ck.pkl']
+       '--p-nose', '$P_NOSE',
+       '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 log = open('/content/micro.log', 'w')
 p = subprocess.Popen(cmd, cwd='/content/micro', stdout=log, stderr=subprocess.STDOUT,
                      start_new_session=True)

@@ -27,6 +27,17 @@ PY=/home/maxi/.venv-ligamento/bin/python
 COLAB=/home/maxi/.venv-colab-cli/bin/colab
 ACELERADORES="${ACELERADORES:-T4 L4 A100}"
 
+# Familia de corridas. Se hereda a tramo_colab.sh por entorno.
+#   PREFIJO=n · P_NOSE=0.0  -> campaña base: toda pregunta tiene respuesta en el archivo.
+#   PREFIJO=x · P_NOSE=0.2  -> campaña de ABSTENCION: parte de las preguntas NO la tienen, que es
+#                              la única forma de que `NOSE` pueda usarse. Con p_nose=0 la métrica
+#                              sale NaN y la abstención no existe como opción medible.
+# UNIDADES es la lista "nivel:semilla" que atiende esta cola, de mayor a menor prioridad al empatar.
+PREFIJO="${PREFIJO:-n}"
+P_NOSE="${P_NOSE:-0.0}"
+UNIDADES="${UNIDADES:-1:0 1:1 1:2 2:0 2:1 2:2 3:0 3:1 3:2 4:0 4:1 4:2}"
+export PREFIJO P_NOSE
+
 if [ "$CUENTA" = "A" ]; then
   CL=( "$COLAB" --auth adc )
 else
@@ -40,11 +51,13 @@ paso_de() {
   "$PY" -c "import pickle;print(pickle.load(open('$f','rb'))['paso'])" 2>/dev/null || echo 0
 }
 
-# Elige la unidad incompleta, no reclamada, con MAS pasos hechos. Empata a favor del nivel mas bajo.
-elegir() {
-  local mejor="" mejorp=-1
-  for n in 1 2 3 4; do for s in 0 1 2; do
-    local u="n${n}_s${s}" cl="$CLAIMS/n${n}_s${s}"
+# Lista TODAS las unidades incompletas y no reclamadas, de mas avanzada a menos. Empata a favor del
+# nivel mas bajo. Devuelve la lista entera —no solo la mejor— porque quien llama tiene que poder
+# bajar a la siguiente cuando pierde la carrera por la primera.
+candidatas() {
+  for ns in $UNIDADES; do
+    local n="${ns%%:*}" s="${ns##*:}"
+    local u="${PREFIJO}${n}_s${s}" cl="$CLAIMS/${PREFIJO}${n}_s${s}"
     local p; p="$(paso_de "$u")"
     [ "$p" -ge "$PASOS" ] && continue
     # reclamo vigente de otra cuenta -> saltear (90 min = 5400 s)
@@ -52,15 +65,44 @@ elegir() {
       local edad=$(( $(date +%s) - $(stat -c %Y "$cl") ))
       if [ "$edad" -lt 5400 ] && [ "$(cat "$cl")" != "$CUENTA" ]; then continue; fi
     fi
-    if [ "$p" -gt "$mejorp" ]; then mejorp="$p"; mejor="$n:$s"; fi
-  done; done
-  echo "$mejor"
+    printf '%s %s:%s\n' "$p" "$n" "$s"
+  done | sort -k1,1nr -k2,2 | awk '{print $2}'
+}
+
+# Reclamo ATOMICO (2026-08-15, costo cuatro VMs en la primera tanda del dia).
+#
+# Antes el reclamo se escribia DESPUES de conseguir la VM, con el argumento de que reclamar primero
+# bloquearia una unidad que quiza no se pueda trabajar. El razonamiento estaba al reves: entre elegir
+# y tener la VM pasan minutos, asi que nueve workers que arrancan juntos eligen TODOS la misma unidad
+# —la mas avanzada— y recien al final descubren que se pisaron. Pasó exacto: F, G, H y D tomaron
+# n4_s0 a la vez, cuatro tramos apuntando al mismo checkpoint. El riesgo que se evitaba (una unidad
+# reservada de mas) es barato y se resuelve liberando; el que se corria (perder el checkpoint) no.
+#
+# `set -o noclobber` hace el `>` atomico: si el archivo ya existe, falla en vez de sobrescribir. Es
+# lo que convierte al reclamo en un candado real y no en un aviso.
+reclamar() {
+  local cl="$CLAIMS/$1"
+  if [ -f "$cl" ]; then
+    local edad=$(( $(date +%s) - $(stat -c %Y "$cl" 2>/dev/null || date +%s) ))
+    # vencido o propio -> se puede retomar
+    if [ "$edad" -ge 5400 ] || [ "$(cat "$cl" 2>/dev/null)" = "$CUENTA" ]; then rm -f "$cl"; else return 1; fi
+  fi
+  ( set -o noclobber; echo "$CUENTA" > "$cl" ) 2>/dev/null
 }
 
 echo "== worker de cola · cuenta $CUENTA · objetivo $PASOS pasos por unidad"
 for vuelta in $(seq 1 "${VUELTAS:-200}"); do
-  U="$(elegir)"
-  if [ -z "$U" ]; then echo "== no queda nada por hacer"; break; fi
+  # Se reclama ANTES de pedir la VM, bajando por la lista hasta ganar una unidad para uno solo.
+  U=""
+  for cand in $(candidatas); do
+    if reclamar "${PREFIJO}${cand%%:*}_s${cand##*:}"; then U="$cand"; break; fi
+  done
+  if [ -z "$U" ]; then
+    if [ -z "$(candidatas)" ] && [ -z "$(ls -A "$CLAIMS" 2>/dev/null)" ]; then
+      echo "== no queda nada por hacer"; break
+    fi
+    echo "-- v$vuelta: todo lo pendiente esta tomado por otra cuenta; espera 3 min"; sleep 180; continue
+  fi
   N="${U%%:*}"; S="${U##*:}"
 
   SES="q_${CUENTA,,}_${vuelta}"
@@ -76,18 +118,31 @@ for vuelta in $(seq 1 "${VUELTAS:-200}"); do
     done
   fi
   if [ "$ASIGNO" = "0" ]; then
-    echo "-- v$vuelta: sin acelerador; espera 5 min"; sleep 300; continue
+    # Sin VM no se trabaja: se devuelve la unidad a la cola para que otra cuenta la agarre.
+    rm -f "$CLAIMS/${PREFIJO}${N}_s${S}"
+    echo "-- v$vuelta: sin acelerador (${PREFIJO}${N}_s${S} liberada); espera 5 min"; sleep 300; continue
   fi
 
-  # Se reclama DESPUES de tener la VM: reclamar antes bloquearia la unidad sin poder trabajarla.
-  echo "$CUENTA" > "$CLAIMS/n${N}_s${S}"
-  echo "-- v$vuelta: acelerador OK · toma n${N}_s${S} (paso $(paso_de "n${N}_s${S}") de $PASOS)"
-  "$AQUI/tramo_colab.sh" "$CUENTA" "$SES" "$U" "$PASOS" "$TRAMO" "$CADA"
-  timeout 180 "${CL[@]}" stop -s "$SES" >/dev/null 2>&1 || true
-  rm -f "$CLAIMS/n${N}_s${S}"
+  touch "$CLAIMS/${PREFIJO}${N}_s${S}"   # el TTL de 90 min cuenta desde que empieza el trabajo, no desde el pedido
 
-  P="$(paso_de "n${N}_s${S}")"
-  echo "-- v$vuelta cerrada: n${N}_s${S} en el paso $P de $PASOS"
-  [ "$P" -ge "$PASOS" ] && echo "   ✅ n${N}_s${S} COMPLETA"
+  # El tramo se estira hasta CERRAR la unidad (2026-08-15). El recurso escaso no es el tiempo de VM
+  # sino la ASIGNACION: una cuenta aguanta unas pocas antes de que Colab le empiece a contestar 503,
+  # y hoy se estaba gastando una entera por cada 4000 pasos. Con el tramo pegado a lo que falta, una
+  # sola asignación puede cerrar una unidad de punta a punta.
+  # No agrega riesgo: el checkpoint se baja cada ~8 min, así que una VM que se cae cuesta 8 minutos
+  # tanto en un tramo de 4000 como en uno de 12000. Y el presupuesto de polling de tramo_colab.sh
+  # escala con el tramo, con lo que no corta antes de tiempo.
+  P_ACT="$(paso_de "${PREFIJO}${N}_s${S}")"
+  FALTA=$(( PASOS - P_ACT ))
+  ESTE=$TRAMO
+  [ "$FALTA" -lt "$ESTE" ] && ESTE=$FALTA
+  echo "-- v$vuelta: acelerador OK · toma ${PREFIJO}${N}_s${S} (paso $P_ACT de $PASOS · este tramo +$ESTE)"
+  "$AQUI/tramo_colab.sh" "$CUENTA" "$SES" "$U" "$PASOS" "$ESTE" "$CADA"
+  timeout 180 "${CL[@]}" stop -s "$SES" >/dev/null 2>&1 || true
+  rm -f "$CLAIMS/${PREFIJO}${N}_s${S}"
+
+  P="$(paso_de "${PREFIJO}${N}_s${S}")"
+  echo "-- v$vuelta cerrada: ${PREFIJO}${N}_s${S} en el paso $P de $PASOS"
+  [ "$P" -ge "$PASOS" ] && echo "   ✅ ${PREFIJO}${N}_s${S} COMPLETA"
 done
 echo "== worker de cola $CUENTA fin"

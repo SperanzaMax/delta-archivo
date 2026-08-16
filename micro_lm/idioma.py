@@ -142,7 +142,7 @@ def pregunta(rel, ent, cual="vigente"):
 # --- episodios -------------------------------------------------------------------------------
 
 def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
-             p_nose=0.0):
+             p_nose=0.0, con_meta=False):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
 
     `sesiones` es una lista de listas de enunciados (una lista por sesion).
@@ -205,11 +205,18 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             ent_q = str(rng.choice(sorted(ents_dichas)))
             libres = [r for r in RELACIONES if (r, ent_q) not in dichos]
             if not libres:
-                return sesiones, consultas
+                return (sesiones, consultas, vals_por_hecho) if con_meta else (sesiones, consultas)
             rel_q = str(rng.choice(libres))
             tipo = "nose_rel"
         consultas.append((pregunta(rel_q, ent_q, "vigente"), "NOSE", tipo))
-    return sesiones, consultas
+    # `con_meta` devuelve ademas vals_por_hecho = [(rel, ent, [v1, v2...]), ...], que es lo que hace
+    # falta para CLASIFICAR un error en vez de sólo contarlo: si el modelo contesta una version vieja
+    # del hecho preguntado es un error de VERSION, y si contesta el valor de OTRA entidad es un error
+    # de IDENTIDAD. La §6 del diseño pide esa desagregacion —es el corte propio frente a FAMA, que
+    # penaliza el reuso de memoria invalidada sin separar los dos— y hasta ahora no se medía.
+    # Es estrictamente aditivo: no toca ni una llamada al rng, así que las corridas siguen siendo
+    # reproducibles bit a bit desde su semilla (verificado contra un hash de referencia).
+    return (sesiones, consultas, vals_por_hecho) if con_meta else (sesiones, consultas)
 
 
 def render(sesiones, consultas):
