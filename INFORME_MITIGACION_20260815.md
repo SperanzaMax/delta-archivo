@@ -84,3 +84,27 @@ confiable en los dos casos.
   provisorios. El contraste entre regímenes —0,86 contra 0,74— es la parte robusta.
 - No se probó sobre un modelo entrenado con `p_nose > 0`, que es justamente el que puede tener una
   representación de la ausencia. Esa medición es la que sigue.
+
+---
+
+## ⚠ CORRECCIÓN 2026-08-16 · «la ausencia no tiene representación propia» está SOBRE-AFIRMADA
+
+Revisión externa (Fable 5) marcó esta frase como refutada por nuestros propios datos, argumentando
+que el AUC 0,7397 está lejos de 0,5. **Verificado: la crítica es sana pero su evidencia no lo es, y
+la frase queda igualmente sin sostén.**
+
+`mitigar.py:42` computa `auc(v[ok], v[err])`: separa **aciertos de errores**, no «preguntas con
+respuesta» de «preguntas sin respuesta». Con checkpoints entrenados a `p_nose = 0`, en las preguntas
+sin respuesta el modelo **nunca acierta** — todas son `invento` y entran al AUC **sólo como
+negativos**. Ese 0,7397 puede estar sostenido enteramente por los errores de identidad (35,9 %
+apagado) mientras el invento se apaga apenas 28,8 %; de hecho **la caída 0,8631 → 0,7397 al
+incorporar los inventos indica que los inventos son MENOS separables**, no que la ausencia tenga
+señal propia. El número no decide la cuestión en ninguna dirección.
+
+Es la advertencia que este mismo archivo tiene escrita en `mitigar.py:21` (el 12-ago un AUC de 0,97
+convivía con un top-1 de 0,13): **se mide lo que decide.**
+
+**Lo que queda:** la afirmación no se midió, se dedujo del mecanismo. Es una **hipótesis sin probar**.
+La medición que la decide es barata y está en la Fase 0 del plan: **AUC del score de matcheo del
+archivo separando con-respuesta vs. sin-respuesta, desagregado por `nose_ent` / `nose_rel`.** Ver
+`DICTAMEN_FABLE5_20260816.md`.

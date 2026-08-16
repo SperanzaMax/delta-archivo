@@ -29,3 +29,10 @@ CONSULTA_FABLE5_20260811.md
 # Checkpoints de reanudacion: 10 MB cada uno (pesos + estado de Adam). Son estado de OPERACION,
 # no resultado: lo que ancla el resultado son los JSON.
 micro_lm/ckpts/
+# Estado de operacion de la campania, local por maquina y sin valor de registro:
+#   claims/  reclamo atomico de unidad por cuenta (TTL 90 min)
+#   gasto/   presupuesto de asignaciones de Colab por dia y cuenta, y marcas de apagado
+micro_lm/claims/
+micro_lm/gasto/
+# Basura de ImageMagick que quedo en el arbol el 16-ago; no es del pipeline.
+micro_lm/jax
