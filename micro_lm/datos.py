@@ -42,7 +42,8 @@ def _tok(texto, largo):
 TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3}
 
 
-def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False):
+def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False,
+         con_origen=False):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
 
     Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
@@ -61,11 +62,17 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
     tipo = np.zeros(B, np.int32)          # 0 = vigente, 1 = anterior
 
     meta = []
+    # `origen_arch[b, k]` = de que hecho salio la entrada k del archivo (-1 = slot vacio), y
+    # `hecho_q[b]` = que hecho se pregunto. Con eso se puede mirar EN QUE POSICION del ranking de
+    # lectura quedo la entrada del hecho preguntado — lo unico que separa «no se escribio» de
+    # «se escribio y la lectura no lo alcanza».
+    origen_arch = np.full((B, N), -1, np.int32)
+    hecho_q = np.full(B, -1, np.int32)
     b = 0
     while b < B:
-        sesiones, consultas, vals = I.episodio(rng, nivel=nivel, n_hechos=n_hechos,
-                                               n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
-                                               p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True)
+        sesiones, consultas, vals, origen = I.episodio(
+            rng, nivel=nivel, n_hechos=n_hechos, n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
+            p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True, con_origen=True)
         if not consultas:
             continue
         # La consulta sin respuesta se elige con probabilidad `p_nose` EXACTA, en vez de dejarla
@@ -91,6 +98,8 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                 puestos += 1
                 cortes[b, s, e] = len(toks) - 1        # ultimo token del enunciado
                 mask[b, s * E_MAX + e] = True
+                if e < len(origen[s]):
+                    origen_arch[b, s * E_MAX + e] = origen[s][e]
                 turnos[b, s * E_MAX + e] = turno
                 turno += 1
             ses[b, s, :len(toks)] = toks
@@ -108,6 +117,7 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                 idx = consultas.index((q, r, t))
             except ValueError:
                 idx = -1
+            hecho_q[b] = idx      # -1 cuando la consulta no tiene respuesta (NOSE)
             propio = vals[idx] if 0 <= idx < len(vals) else None
             meta.append({
                 "tipo": t,
@@ -119,6 +129,9 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                           for k, (rl, e, vs) in enumerate(vals) if k != idx],
             })
         b += 1
+    if con_meta and con_origen:
+        return (ses, cortes, turnos, mask, consulta, pos_q, target, tipo, meta,
+                origen_arch, hecho_q)
     if con_meta:
         return ses, cortes, turnos, mask, consulta, pos_q, target, tipo, meta
     return ses, cortes, turnos, mask, consulta, pos_q, target, tipo

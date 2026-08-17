@@ -126,6 +126,32 @@ Es la consecuencia exacta del mecanismo candidato: con un softmax que suma 1, la
 con masa comparable **haya o no haya un buen candidato**. Un recuperador externo, en cambio, tiene el
 conjunto vacío como estado posible — y de ahí sale la asimetría que reporta arXiv 2606.11712.
 
+**4.6 · El hecho siempre está escrito; lo que pierde es el ranking.** Con un mapeo enunciado → hecho
+(aditivo, sin consumir llamadas al RNG y con reproducibilidad verificada), se localiza la entrada del
+hecho preguntado dentro del archivo y se mira su puesto en la lectura, en la posición de máximo foco:
+
+| | `n4_s0` err / acierto | `n3_s2` err / acierto |
+|---|---|---|
+| **entrada ausente del archivo** | **0,0000 / 0,0000** | **0,0000 / 0,0000** |
+| gana la lectura (rank 0) | 0,1368 / 0,5047 | 0,1771 / 0,4652 |
+| **rank mediano** | **2,0 / 0,0** | **2,0 / 1,0** |
+
+Ni un caso en 8000 muestras sin su entrada: **la hipótesis de escritura queda cerrada**, y con ella
+las tres candidatas (corromper al vecino, perder la revisión, omitir el hecho). El error es
+**enteramente de lectura** y por lo tanto convertible.
+
+**Y el modelo acierta sin que la entrada correcta gane:** incluso entre los aciertos encabeza sólo la
+mitad de las veces. **Acertar no requiere que la clave correcta gane la selección** — el modelo
+integra varias entradas y resuelve aguas abajo. Eso subsume §4.1 y §4.5: si la respuesta se arma
+**integrando** y no **seleccionando**, ni el score máximo ni el margen tienen por qué codificar
+presencia o ausencia. *El archivo funciona como un banco de evidencia parcialmente ordenado, no como
+un índice que devuelve un registro.*
+
+**Consecuencia sobre el remedio:** si se puede acertar con la entrada correcta en el puesto 2,
+entonces «que gane el slot nulo» **no puede ser la única condición de abstención** — haría abstenerse
+en casos que hoy se responden bien. El nulo tiene que competir por **masa relativa**, y ese umbral hay
+que medirlo, no suponerlo.
+
 **4.4 · El error es determinista.** Reformular la consulta acierta 0,958-0,978 donde el modelo ya
 acertaba y sólo 0,052-0,105 donde fallaba: **cuando se equivoca en un episodio, se equivoca siempre**.
 No duda entre dos candidatos — está comprometido con una asociación. Eso predice que el error llegue

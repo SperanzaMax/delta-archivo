@@ -142,7 +142,7 @@ def pregunta(rel, ent, cual="vigente"):
 # --- episodios -------------------------------------------------------------------------------
 
 def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
-             p_nose=0.0, con_meta=False):
+             p_nose=0.0, con_meta=False, con_origen=False):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
 
     `sesiones` es una lista de listas de enunciados (una lista por sesion).
@@ -163,11 +163,18 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
     vals_por_hecho = []
 
     sesiones = [[] for _ in range(n_sesiones)]
+    # `origen` es paralelo a `sesiones`: por cada enunciado, DE QUE HECHO salio. Sirve para saber
+    # que entrada del archivo corresponde al hecho preguntado, y asi distinguir «el hecho no se
+    # escribio» de «se escribio y la lectura no lo alcanza» — que quedo sin resolver el 16-ago.
+    # Es puramente contable: no consume una sola llamada al rng, asi que la reproducibilidad desde
+    # la semilla no cambia.
+    origen = [[] for _ in range(n_sesiones)]
     for i, (ent, rel) in enumerate(zip(ents, rels)):
         pool = NOMBRES if rel in PERSONALES else NUMEROS
         v1 = rng.choice(pool)
         s = 0 if nivel < 4 else int(rng.integers(0, max(1, n_sesiones - 1)))
         sesiones[s].append(rng.choice(formas(rel, ent, v1, nivel)))
+        origen[s].append(i)
         versiones = [v1]
 
         if rng.random() < p_revision:
@@ -181,8 +188,10 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             if lejos:
                 s2 = int(rng.integers(s + 1, n_sesiones))
                 sesiones[s2].append(correccion(rng, rel, ent, v2, nivel=2))   # nombra la entidad
+                origen[s2].append(i)
             else:
                 sesiones[s].append(correccion(rng, rel, ent, v2, nivel))      # adyacente: puede elidir
+                origen[s].append(i)
             versiones.append(v2)
         vals_por_hecho.append((rel, ent, versiones))
 
@@ -205,6 +214,8 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             ent_q = str(rng.choice(sorted(ents_dichas)))
             libres = [r for r in RELACIONES if (r, ent_q) not in dichos]
             if not libres:
+                if con_meta and con_origen:
+                    return sesiones, consultas, vals_por_hecho, origen
                 return (sesiones, consultas, vals_por_hecho) if con_meta else (sesiones, consultas)
             rel_q = str(rng.choice(libres))
             tipo = "nose_rel"
@@ -216,6 +227,8 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
     # penaliza el reuso de memoria invalidada sin separar los dos— y hasta ahora no se medía.
     # Es estrictamente aditivo: no toca ni una llamada al rng, así que las corridas siguen siendo
     # reproducibles bit a bit desde su semilla (verificado contra un hash de referencia).
+    if con_meta and con_origen:
+        return sesiones, consultas, vals_por_hecho, origen
     return (sesiones, consultas, vals_por_hecho) if con_meta else (sesiones, consultas)
 
 
