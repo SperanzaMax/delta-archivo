@@ -37,6 +37,7 @@ set -uo pipefail
 # paralelizar —nunca hay dos cuentas trabajando a la vez— es pasar el testigo cuando la actual no
 # sirve. Correr varias en paralelo es lo que el 15-ago hizo que cuatro cuentas tomaran n4_s0 juntas.
 IFS=',' read -r -a CUENTAS <<< "${1:?falta la cuenta}"
+TODAS=("${CUENTAS[@]}")        # lista original: las pausadas vuelven a ella cuando vence el TTL
 CUENTA="${CUENTAS[0]}"
 IDX=0
 FALLOS=0
@@ -106,15 +107,36 @@ anotar_gasto() { echo $(( $(gasto_de "$1") + 1 )) > "$GASTO/${HOY}_$1"; }
 #
 # Se apaga por cualquiera de los dos motivos, porque los dos significan «esta cuenta ya no rinde
 # hoy»: gasto el tope de asignaciones, o acumulo MAX_FALLOS seguidos sin producir un paso.
-apagada()      { [ -f "$GASTO/${HOY}_$1.off" ]; }
-apagar()       { echo "$2" > "$GASTO/${HOY}_$1.off"; echo "   🔌 cuenta $1 APAGADA hasta mañana ($2)"; }
+# DOS clases de retiro, porque los dos fallos NO cuestan lo mismo (2026-08-16, 2ª pasada):
+#
+#   · sin acelerador  -> NO se creo VM, NO se gasto credito. La cuenta puede tener T4 en 20 minutos.
+#                        Apagarla hasta mañana es tirar una cuenta INTACTA: a 3 fallos por cuenta y
+#                        ~20 min cada una, las 11 se «agotan» en 3 h sin haber gastado nada.
+#                        -> PAUSA con TTL: vuelve a la rueda cuando pasa el rato.
+#   · gasto del tope, o VM conseguida que no avanzo -> ahi SI se consumio la asignacion
+#                        -> APAGADO hasta mañana.
+#
+# Pausar recicla, apagar descarta. La distincion importa justo el dia que hay que cerrar algo.
+PAUSA_MIN="${PAUSA_MIN:-45}"
+
+apagada() {
+  [ -f "$GASTO/${HOY}_$1.off" ] && return 0
+  local p="$GASTO/${HOY}_$1.pausa"
+  [ -f "$p" ] || return 1
+  local edad=$(( ($(date +%s) - $(stat -c %Y "$p")) / 60 ))
+  if [ "$edad" -ge "$PAUSA_MIN" ]; then rm -f "$p"; return 1; fi
+  return 0
+}
+apagar() { echo "$2" > "$GASTO/${HOY}_$1.off"; echo "   🔌 cuenta $1 APAGADA hasta mañana ($2)"; }
+pausar() { echo "$2" > "$GASTO/${HOY}_$1.pausa"; echo "   ⏸ cuenta $1 EN PAUSA $PAUSA_MIN min ($2) — no gasto credito"; }
 cuentas_vivas() { local c n=0; for c in "${CUENTAS[@]}"; do apagada "$c" || n=$(( n + 1 )); done; echo "$n"; }
 
 # Retira la cuenta actual y toma la siguiente CON PRESUPUESTO. Devuelve 1 si no queda ninguna.
 # El trabajo hecho no se toca: vive en el checkpoint local, que la cuenta nueva vuelve a subir.
+#   rotar <motivo> [pausa]   — con «pausa» la cuenta se recicla en vez de descartarse.
 rotar() {
-  local previa="$CUENTA" motivo="${1:-$MAX_FALLOS fallos seguidos}"
-  apagar "$previa" "$motivo"
+  local previa="$CUENTA" motivo="${1:-$MAX_FALLOS fallos seguidos}" modo="${2:-off}"
+  if [ "$modo" = "pausa" ]; then pausar "$previa" "$motivo"; else apagar "$previa" "$motivo"; fi
   unset 'CUENTAS[IDX]'; CUENTAS=("${CUENTAS[@]}")      # retirada: no se vuelve a esta cuenta hoy
   IDX=0
   while [ "${#CUENTAS[@]}" -gt 0 ]; do
@@ -131,6 +153,16 @@ rotar() {
     echo "   (se retoma en el paso que dejo $previa: la continuidad la da el checkpoint local)"
     return 0
   done
+  # Si lo unico que queda son PAUSAS, no se termina: se espera a que venzan. Solo se para de
+  # verdad cuando todas estan apagadas por gasto real.
+  local pausadas=0 c
+  for c in "${TODAS[@]}"; do [ -f "$GASTO/${HOY}_$c.pausa" ] && pausadas=$(( pausadas + 1 )); done
+  if [ "$pausadas" -gt 0 ]; then
+    echo "== todas las cuentas en pausa ($pausadas); espera $PAUSA_MIN min y reintenta"
+    sleep $(( PAUSA_MIN * 60 ))
+    CUENTAS=("${TODAS[@]}"); IDX=0
+    for c in "${CUENTAS[@]}"; do if ! apagada "$c"; then usar_cuenta "$c"; FALLOS=0; return 0; fi; done
+  fi
   echo "== NO QUEDAN CUENTAS vivas hoy. El worker PARA; mañana revive todo solo."
   return 1
 }
@@ -246,7 +278,7 @@ for vuelta in $(seq 1 "${VUELTAS:-200}"); do
     rm -f "$CLAIMS/${PREFIJO}${N}_s${S}"
     FALLOS=$(( FALLOS + 1 ))
     echo "-- v$vuelta: sin acelerador en $CUENTA (${PREFIJO}${N}_s${S} liberada) · fallo $FALLOS/$MAX_FALLOS"
-    if [ "$FALLOS" -ge "$MAX_FALLOS" ]; then rotar "sin acelerador $MAX_FALLOS veces" || break; continue; fi
+    if [ "$FALLOS" -ge "$MAX_FALLOS" ]; then rotar "sin acelerador $MAX_FALLOS veces" pausa || break; continue; fi
     sleep 300; continue
   fi
 
