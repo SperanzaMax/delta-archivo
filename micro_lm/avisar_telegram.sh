@@ -38,7 +38,7 @@ if grep -q "sesion perdida" "$LOG" 2>/dev/null; then
   mandar "⚠️ micro-LM · n${NIVEL}_s${SEM}: se cayo la VM a mitad del tramo.
 Lo rescatado llega hasta el paso ${PASO:-0}. El checkpoint de la PC conserva el ultimo tramo bajado, asi que se continua desde ahi en otra cuenta."
 elif [ -f "$CK" ]; then
-  mandar "✅ micro-LM · n${NIVEL}_s${SEM}: tramo cerrado en el paso ${PASO:-?} de 20000.
+  mandar "✅ micro-LM · n${NIVEL}_s${SEM}: tramo cerrado en el paso ${PASO:-?} de ${TOPE:-12000}.
 vigente ${VIG:-?} · anterior ${ANT:-?}
 Checkpoint bajado a la PC ($(du -h "$CK" | cut -f1)): el proximo tramo puede correr en cualquier otra cuenta."
 else

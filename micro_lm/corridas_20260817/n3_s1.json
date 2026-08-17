@@ -1,0 +1,80 @@
+{
+ "config": {
+  "nivel": 3,
+  "pasos": 12000,
+  "batch": 64,
+  "lr": 0.001,
+  "d": 128,
+  "capas": 4,
+  "semilla": 1,
+  "p_vieja": 0.35,
+  "p_nose": 0.0,
+  "salida": "corridas_20260817/n3_s1.json",
+  "pesos": null,
+  "idioma": 2,
+  "horizonte": 20000,
+  "tramo": 8000,
+  "cada": 500,
+  "ckpt": "ckpts/n3_s1.pkl"
+ },
+ "params": 863730,
+ "hw": "cpu:cpu",
+ "historia": [
+  {
+   "paso": 1000,
+   "truncados": 0.0,
+   "vigente": 0.24538948947957887,
+   "anterior": 0.13699922153869523,
+   "nose": NaN,
+   "nose_ent": NaN,
+   "nose_rel": NaN,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 2000,
+   "truncados": 0.0,
+   "vigente": 0.5162251778078063,
+   "anterior": 0.5573930090377459,
+   "nose": NaN,
+   "nose_ent": NaN,
+   "nose_rel": NaN,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 3000,
+   "truncados": 0.0,
+   "vigente": 0.6725593815936733,
+   "anterior": 0.7306922609554188,
+   "nose": NaN,
+   "nose_ent": NaN,
+   "nose_rel": NaN,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 4000,
+   "truncados": 0.0,
+   "vigente": 0.7161686366742448,
+   "anterior": 0.8676952798663324,
+   "nose": NaN,
+   "nose_ent": NaN,
+   "nose_rel": NaN,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0
+  },
+  {
+   "paso": 4500,
+   "truncados": 0.0,
+   "p_nose": 0.0,
+   "vigente": 0.7213846695020495,
+   "anterior": 0.7978677754993544,
+   "nose": NaN,
+   "nose_ent": NaN,
+   "nose_rel": NaN,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0
+  }
+ ]
+}
