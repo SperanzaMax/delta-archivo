@@ -140,6 +140,10 @@ def main():
                          "porque el arbol de params cambia de forma; este flag existe para que "
                          "`token` y `escala` puedan hacer lo MISMO y el contraste sea pareado. Sin "
                          "el flag, reanudar es continuar la misma corrida (lo que hace la campania)")
+    ap.add_argument("--cortes-vigente", default="",
+                    help="lista de valores de `vigente` (ej. 0.85,0.90,0.95). Cada vez que la "
+                         "metrica cruza uno por primera vez se guarda un checkpoint aparte, para "
+                         "muestrear la frontera del margen (PREREG_FRONTERA.md)")
     ap.add_argument("--salida", default="resultados_micro.json")
     ap.add_argument("--pesos", default=None, help="ruta .pkl donde dejar los pesos finales")
     ap.add_argument("--idioma", type=int, default=2, choices=(1, 2),
@@ -188,6 +192,9 @@ def main():
     # las dos con `token`: lo unico que cambia es el init del vector de NOSE al entrar en la fase.
     fn_perd = perdida_cabeza if a.abst == "cabeza" else perdida
     fn_pred = predecir_cabeza if a.abst == "cabeza" else predecir
+
+    cortes_vigente = sorted(float(x) for x in a.cortes_vigente.split(",") if x.strip())
+    cortes_hechos = set()
 
     @jax.jit
     def paso(params, state, ses, cortes, turnos, mask, cons, pos, tgt):
@@ -315,6 +322,22 @@ def main():
             json.dump({"config": vars(a), "params": n, "hw": hw, "historia": hist},
                       open(a.salida, "w"), indent=1)
             guardar_ckpt(s)
+            # --- cortes por VALOR de vigente (PREREG_FRONTERA.md) --------------------------------
+            # Para muestrear la frontera del margen hace falta detener la base cuando `vigente` llega
+            # a un valor dado, no en un paso dado: lo que se controla es el MARGEN, y a paso fijo
+            # cada semilla cae en un margen distinto. Se guarda al PRIMER cruce y una sola vez por
+            # umbral; el nombre lleva el valor pedido, no el alcanzado, para que la unidad sea
+            # identificable antes de correrla.
+            for corte in cortes_vigente:
+                if corte not in cortes_hechos and m["vigente"] >= corte:
+                    cortes_hechos.add(corte)
+                    destino = f"{a.ckpt}.v{int(corte * 100)}"
+                    with open(destino, "wb") as f:
+                        pickle.dump({"params": jax.device_get(params),
+                                     "opt_state": jax.device_get(state), "rng": rng.bit_generator.state,
+                                     "historia": hist, "paso": s, "config": vars(a)}, f)
+                    print(f"    [corte por vigente {corte:.2f}: alcanzado {m['vigente']:.4f} en el "
+                          f"paso {s} -> {os.path.basename(destino)}]", flush=True)
             # Lo del 13-ago no se repite: si se esta truncando, se corta ACA y no despues de 73 min.
             if trunc > 0.01:
                 sys.exit(f"ABORTA: truncamiento {trunc:.4f} > 0,01 — se estaria midiendo el padding")
