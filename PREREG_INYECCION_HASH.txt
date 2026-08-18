@@ -1,0 +1,7 @@
+c45be719bf071e13c7d7364974b6e7acb99ec72b5b8988af676ba5763c354995  PREREG_INYECCION.md
+e10f233e083ebd04a4aae06836558ce4880352868f09f9ee10f6d738f94dbc5d  micro_lm/sonda_inyeccion.py
+congelado 2026-08-18T11:17:18Z
+5d7a36e7c3b4b680f9472cfbce27548d89512e17036185c32cf4d5a2783cdf74  PREREG_INYECCION.md
+enmienda E-1 congelada 2026-08-18T11:21:05Z
+49b51aa1420d23ec8be972d0e4231066efd9621302decf52d3c09f020222e0ef  micro_lm/sonda_inyeccion.py
+script con E-1 congelado 2026-08-18T11:22:08Z
