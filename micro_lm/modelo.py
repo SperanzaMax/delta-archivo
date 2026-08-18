@@ -33,7 +33,14 @@ def init_params(seed, V, D=192, NB=6, N_TURNOS=64):
          "head": {"w": glorot(ks[1], (D, V)), "b": jnp.zeros(V)},
          "arch": {"kw": glorot(ks[2], (D, D)), "vw": glorot(ks[3], (D, D)),
                   "qr": glorot(ks[4], (D, D)), "wo": glorot(ks[5], (D, D)),
-                  "ord": glorot(ks[6], (N_TURNOS, D))}}
+                  "ord": glorot(ks[6], (N_TURNOS, D))},
+         # Cabeza de abstencion SEPARADA (2026-08-18): un escalar por posicion, con proyeccion
+         # propia. Existe siempre en los params —asi el arbol no cambia de forma entre condiciones y
+         # los checkpoints son intercambiables— pero sólo la usa `--abst cabeza`; en las otras dos
+         # condiciones no entra en la perdida y queda en su valor inicial.
+         # Arranca en cero (no glorot): con una sola unidad de salida no hay simetria que romper, y
+         # asi el logit inicial es 0 -> sigma = 0,5, sin sesgo a favor ni en contra de abstenerse.
+         "abst": {"w": jnp.zeros((D, 1)), "b": jnp.zeros(1)}}
     for i in range(NB):
         b = 7 + i * 8
         p["blocks"].append({
@@ -127,6 +134,32 @@ def responder(params, archivo, turnos, consulta, mask_arch, bloque=0):
 
     h = tronco(params, consulta, lectura, bloque)
     return ln(params["ln_f"], h) @ params["head"]["w"] + params["head"]["b"]
+
+
+def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0):
+    """Igual que `responder`, mas el logit de la cabeza de abstencion. Devuelve (logits, a).
+
+    `a` es (B, T): un escalar por posicion, con proyeccion propia desde el MISMO estado final que
+    alimenta el softmax de vocabulario. La idea que prueba —ver `PREREG_CABEZA_ABSTENCION.md`— es que
+    «¿esta?» y «¿que valor?» son dos decisiones de naturaleza distinta (binaria y balanceada una,
+    1-entre-100 la otra) y hoy compiten por la misma masa de probabilidad, con el vector de `NOSE`
+    tres veces mas corto que el de un valor (norma 0,367 contra 1,011, medido el 17-ago).
+    """
+    a_p = params["arch"]
+    ak = archivo @ a_p["kw"] + a_p["ord"][turnos]
+    av = archivo @ a_p["vw"]
+    penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]
+
+    def lectura(h):
+        q = h @ a_p["qr"]
+        sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
+        return jnp.einsum("btn,bnd->btd", jax.nn.softmax(sim, -1), av) @ a_p["wo"]
+
+    h = tronco(params, consulta, lectura, bloque)
+    hn = ln(params["ln_f"], h)
+    logits = hn @ params["head"]["w"] + params["head"]["b"]
+    a = (hn @ params["abst"]["w"] + params["abst"]["b"])[..., 0]
+    return logits, a
 
 
 def contar(params):

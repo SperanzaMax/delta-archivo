@@ -35,7 +35,7 @@ import modelo as M
 NOSE = I.STOI["NOSE"]
 
 
-def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0):
+def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None):
     """Devuelve un dict de metricas. Las dos caras de la abstencion van SEPARADAS:
 
       `nose`         acierta NOSE cuando la respuesta no esta en el archivo (lo que se quiere);
@@ -48,8 +48,9 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0):
     for _ in range(n):
         ses, cortes, turnos, mask, cons, pos, tgt, tipo = DAT.lote(
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose)
-        pred = np.array(predecir(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
-                                 jnp.array(mask), jnp.array(cons), jnp.array(pos)))
+        fn = pred_fn or predecir
+        pred = np.array(fn(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
+                           jnp.array(mask), jnp.array(cons), jnp.array(pos)))
         ok = pred == tgt
         sub = lambda m: ok[m].mean() if m.any() else np.nan
         col["vigente"].append(sub(tipo == 0))
@@ -80,6 +81,42 @@ def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
     return ce, (lg.argmax(-1) == tgt).mean()
 
 
+# --- cabeza de abstencion separada (2026-08-18, `PREREG_CABEZA_ABSTENCION.md`) -------------------
+# `NOSE` deja de ser una entrada del softmax de vocabulario y pasa a tener su propia salida binaria.
+# Las dos decisiones —«¿esta?» y «¿que valor?»— dejan de competir por la misma masa de probabilidad.
+
+def _partes(params, ses, cortes, turnos, mask, cons, pos):
+    archivo = M.escribir(params, ses, cortes)
+    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask)
+    lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
+    a = jnp.take_along_axis(a, pos[:, None], axis=1)[:, 0]
+    return lg, a
+
+
+@jax.jit
+def predecir_cabeza(params, ses, cortes, turnos, mask, cons, pos):
+    lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos)
+    # `NOSE` se excluye del argmax de valores: con la cabeza aparte, dejarlo seria darle dos rutas a
+    # la misma decision y el contraste con `token` dejaria de ser limpio.
+    lg = lg.at[:, NOSE].set(-jnp.inf)
+    return jnp.where(a > 0.0, NOSE, lg.argmax(-1))
+
+
+def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt):
+    lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos)
+    es_nose = (tgt == NOSE).astype(jnp.float32)
+    bce = optax.sigmoid_binary_cross_entropy(a, es_nose).mean()
+    lg_v = lg.at[:, NOSE].set(-1e9)
+    ce = optax.softmax_cross_entropy_with_integer_labels(lg_v, tgt)
+    # la CE del valor sólo cuenta donde HAY respuesta, y se normaliza por esa fraccion para que la
+    # escala de la perdida no dependa de `p_nose` (si no, subir p_nose baja el peso del valor y el
+    # contraste entre condiciones mediria eso).
+    hay = 1.0 - es_nose
+    ce = (ce * hay).sum() / jnp.maximum(hay.sum(), 1.0)
+    pred = jnp.where(a > 0.0, NOSE, lg_v.argmax(-1))
+    return bce + ce, (pred == tgt).mean()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--nivel", type=int, default=1)
@@ -92,6 +129,17 @@ def main():
     ap.add_argument("--p-vieja", type=float, default=0.35)
     ap.add_argument("--p-nose", type=float, default=0.0,
                     help="fraccion de preguntas SIN respuesta en el archivo (respuesta = NOSE)")
+    ap.add_argument("--abst", default="token", choices=("token", "escala", "cabeza"),
+                    help="como se decide la abstencion (PREREG_CABEZA_ABSTENCION.md). "
+                         "token = NOSE es una entrada mas del softmax de vocabulario (lo de hoy); "
+                         "escala = idem pero renormalizando el vector de NOSE a la norma media de "
+                         "los tokens de valor al arrancar la fase; "
+                         "cabeza = salida binaria separada, con NOSE excluido del softmax de valores")
+    ap.add_argument("--reinit-adam", action="store_true",
+                    help="reinicia el estado de Adam al reanudar. La condicion `cabeza` lo hace sola "
+                         "porque el arbol de params cambia de forma; este flag existe para que "
+                         "`token` y `escala` puedan hacer lo MISMO y el contraste sea pareado. Sin "
+                         "el flag, reanudar es continuar la misma corrida (lo que hace la campania)")
     ap.add_argument("--salida", default="resultados_micro.json")
     ap.add_argument("--pesos", default=None, help="ruta .pkl donde dejar los pesos finales")
     ap.add_argument("--idioma", type=int, default=2, choices=(1, 2),
@@ -136,9 +184,14 @@ def main():
     opt = optax.chain(optax.clip_by_global_norm(1.0), optax.adamw(sched, weight_decay=0.01))
     state = opt.init(params)
 
+    # El eje `--abst` elige QUE funcion de perdida y que regla de decision se usan. `escala` comparte
+    # las dos con `token`: lo unico que cambia es el init del vector de NOSE al entrar en la fase.
+    fn_perd = perdida_cabeza if a.abst == "cabeza" else perdida
+    fn_pred = predecir_cabeza if a.abst == "cabeza" else predecir
+
     @jax.jit
     def paso(params, state, ses, cortes, turnos, mask, cons, pos, tgt):
-        (l, acc), g = jax.value_and_grad(perdida, has_aux=True)(
+        (l, acc), g = jax.value_and_grad(fn_perd, has_aux=True)(
             params, ses, cortes, turnos, mask, cons, pos, tgt)
         up, state = opt.update(g, state, params)
         return optax.apply_updates(params, up), state, l, acc
@@ -174,7 +227,40 @@ def main():
             sys.exit(f"ABORTA: el checkpoint se entreno con horizonte de lr {hor_ck} y se pidio "
                      f"{HOR}. Continuar cambiaria la curva de aprendizaje a mitad de camino.")
         params = jax.tree_util.tree_map(jnp.asarray, ck["params"])
-        state = jax.tree_util.tree_map(jnp.asarray, ck["opt_state"])
+        # --- entrada a la fase de abstencion desde un checkpoint base (PREREG_CABEZA_ABSTENCION) ---
+        # Un ckpt de la campania base no tiene la cabeza `abst`, asi que el arbol de params cambia de
+        # forma y el estado de Adam deja de corresponderle. Se reinicializa el optimizador, y se hace
+        # IGUAL en las tres condiciones —tambien en `token`— para que el contraste sea pareado: por
+        # eso la campania `token` del 17-ago no se reusa como linea de base.
+        # OJO: sólo se toca el arbol cuando la condicion lo NECESITA. Si `--abst token` reanudara
+        # agregando la cabeza, cualquier corrida en curso de la campania `x` se reanudaria con Adam
+        # reiniciado a mitad de camino — dejaria de ser la misma corrida partida en dos.
+        if "abst" not in params and (a.abst != "token" or a.reinit_adam):
+            params["abst"] = M.init_params(a.semilla, I.V, D=a.d, NB=a.capas)["abst"]
+            state = opt.init(params)
+            print("el checkpoint no traia cabeza de abstencion: se agrega y se reinicia Adam\n",
+                  flush=True)
+        elif a.reinit_adam:
+            state = opt.init(params)
+            print("Adam reiniciado por pedido explicito (--reinit-adam)\n", flush=True)
+        else:
+            state = jax.tree_util.tree_map(jnp.asarray, ck["opt_state"])
+        if a.abst == "escala" and ck["config"].get("abst", "token") != "escala":
+            # La explicacion barata de la pista del 17-ago: el vector de NOSE mide 0,367 contra ~1,01
+            # de un valor. Se lo lleva a la norma media de los tokens de VALOR (nombres y numeros),
+            # en la salida y en la entrada, que es la version mas generosa de esa hipotesis.
+            vals = [I.STOI[t] for t in list(I.NOMBRES) + list(I.NUMEROS) if t in I.STOI]
+            for clave, mat, eje in (("head", params["head"]["w"], 0), ("emb", params["emb"], 1)):
+                v = mat[:, vals] if eje == 0 else mat[vals, :]
+                objetivo = float(jnp.linalg.norm(v, axis=eje).mean())
+                col = mat[:, NOSE] if eje == 0 else mat[NOSE, :]
+                escala = objetivo / float(jnp.maximum(jnp.linalg.norm(col), 1e-6))
+                if eje == 0:
+                    params["head"]["w"] = mat.at[:, NOSE].set(col * escala)
+                else:
+                    params["emb"] = mat.at[NOSE, :].set(col * escala)
+                print(f"escala: {clave}[NOSE] x{escala:.3f} -> norma {objetivo:.4f}", flush=True)
+            state = opt.init(params)
         rng.bit_generator.state = ck["rng"]
         hist, paso0 = ck["historia"], ck["paso"]
         print(f"REANUDA desde {a.ckpt}: paso {paso0} de {a.pasos} "
@@ -213,7 +299,8 @@ def main():
         if s % a.cada == 0 or s == fin:
             trunc = DAT.tasa_truncados()            # la compuerta, en el registro permanente
             ev = np.random.default_rng(90000 + a.semilla)
-            m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose)
+            m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
+                        pred_fn=fn_pred)
             # `p_nose` va en CADA evaluacion y no solo en la config, porque la guarda de identidad
             # del checkpoint no lo compara: una corrida puede reanudarse con otro valor. Eso es
             # deliberado —el curriculum de dos fases entrena primero sin preguntas sin respuesta y

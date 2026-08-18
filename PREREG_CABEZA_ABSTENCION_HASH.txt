@@ -1,0 +1,6 @@
+3c3faa13f311e3ddbedbbb4f5b9601a0c9f9f3d62327ee77c5953ff73ffa3168  PREREG_CABEZA_ABSTENCION.md
+e9cdc1e19f827c8dda08dc1559f1daf5227ff4514d4fcf1d85ddfa9bd2ee555b  micro_lm/modelo.py
+a5abbbb63e28b1068a6609107966a6c928c93b3882369267e9cc1a2dcf986f16  micro_lm/entrenar.py
+congelado 2026-08-18T12:12:42Z
+7d7eebfba8d038ab4e5a367425f318622eae708cf3274fe7d3cfe6a8ea621459  PREREG_CABEZA_ABSTENCION.md
+corregido el conteo de params (193->129) 2026-08-18T12:15:01Z
