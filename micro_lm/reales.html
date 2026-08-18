@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><style>
+  body { font-family:"DejaVu Sans",Arial,sans-serif; width:1240px; margin:0; padding:26px 30px;
+         background:#fff; color:#1a1a1a; }
+  h1 { font-size:25px; margin:0 0 3px; color:#12395f; }
+  .sub { color:#666; font-size:13px; margin-bottom:20px; }
+  h2 { font-size:16.5px; color:#12395f; border-bottom:2.5px solid #12395f; padding-bottom:4px;
+       margin:24px 0 10px; }
+  .mono { font-family:"DejaVu Sans Mono",monospace; }
+  .nota { font-size:12.5px; color:#555; margin:6px 0 0; line-height:1.5; }
+  b { color:#0d2d4d; }
+</style></head><body>
+
+<h1>Micro-LM · los números de verdad</h1>
+<div class="sub">Todo lo de esta hoja está leído del checkpoint entrenado <span class="mono">n4_s1.pkl</span> —
+nivel 4, 12.000 pasos — el 17-08-2026. No hay ningún valor de ejemplo.</div>
+
+<h2>1 · Dónde están los 863.730 pesos</h2>
+<svg viewBox="0 0 1180 300" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <!-- barra apilada -->
+  <g>
+    <rect x="20" y="24" width="41" height="46" fill="#4a7fb5"/>
+    <rect x="61" y="24" width="98" height="46" fill="#b5651d"/>
+    <rect x="159" y="24" width="960" height="46" fill="#12395f"/>
+    <rect x="1119" y="24" width="41" height="46" fill="#2e7d44"/>
+    <rect x="20" y="24" width="1140" height="46" fill="none" stroke="#333" stroke-width="1.2"/>
+  </g>
+  <g font-size="12.5" text-anchor="middle" fill="#fff" font-weight="bold">
+    <text x="639" y="52">EL TRONCO · 4 bloques · 727.552 pesos (84,2 %)</text>
+  </g>
+  <g font-size="11.5" text-anchor="middle">
+    <text x="40" y="88" fill="#4a7fb5" font-weight="bold">embeddings</text>
+    <text x="40" y="102" fill="#666">30.976</text>
+    <text x="110" y="88" fill="#b5651d" font-weight="bold">archivo</text>
+    <text x="110" y="102" fill="#666">73.728</text>
+    <text x="1139" y="88" fill="#2e7d44" font-weight="bold">cabeza</text>
+    <text x="1139" y="102" fill="#666">31.218</text>
+  </g>
+
+  <!-- desglose de un bloque -->
+  <text x="20" y="140" font-size="13" font-weight="bold" fill="#12395f">Un bloque por dentro — 181.888 pesos, y el 72 % se lo lleva el MLP</text>
+  <g>
+    <rect x="20" y="152" width="480" height="34" fill="#12395f"/>
+    <text x="260" y="174" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">MLP  m1: 128×512 + m2: 512×128  =  131.072</text>
+    <rect x="500" y="152" width="360" height="34" fill="#3f6d99"/>
+    <text x="680" y="174" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">regla delta  wq · wk · wv  =  49.152</text>
+    <rect x="860" y="152" width="20" height="34" fill="#7fa8cc"/>
+    <rect x="880" y="152" width="14" height="34" fill="#a9c6de"/>
+    <text x="905" y="174" font-size="11.5" fill="#555">conv 384 · normalización 512 · β 128</text>
+  </g>
+
+  <!-- matriz real -->
+  <text x="20" y="222" font-size="13" font-weight="bold" fill="#12395f">Pesos reales, esquina de la matriz m1 del bloque 0:</text>
+  <g font-family="DejaVu Sans Mono, monospace" font-size="12.5">
+    <text x="26" y="246">+0.1350   +0.0414   +0.1683   +0.0763</text>
+    <text x="26" y="264">+0.0046   +0.0149   +0.0702   +0.1882</text>
+    <text x="26" y="282">+0.0043   +0.0907   −0.0528   +0.0995</text>
+  </g>
+  <text x="330" y="252" font-size="12" fill="#c0392b">← cada uno de estos números es una línea</text>
+  <text x="330" y="268" font-size="12" fill="#c0392b">del dibujo de nodos. Hay 863.730.</text>
+
+  <!-- histograma -->
+  <text x="640" y="204" font-size="13" font-weight="bold" fill="#12395f">Cómo se reparten los 863.730 valores</text>
+  <g>
+    <rect x="648" y="284" width="26" height="2" fill="#4a7fb5"/>
+    <rect x="676" y="284" width="26" height="2" fill="#4a7fb5"/>
+    <rect x="704" y="277" width="26" height="9" fill="#4a7fb5"/>
+    <rect x="732" y="243" width="26" height="43" fill="#4a7fb5"/>
+    <rect x="760" y="210" width="26" height="76" fill="#12395f"/>
+    <rect x="788" y="243" width="26" height="43" fill="#12395f"/>
+    <rect x="816" y="277" width="26" height="9" fill="#4a7fb5"/>
+    <rect x="844" y="284" width="26" height="2" fill="#4a7fb5"/>
+    <line x1="640" y1="286" x2="965" y2="286" stroke="#333"/>
+    <text x="661" y="299" font-size="10.5" fill="#666">−0,2</text>
+    <text x="773" y="299" font-size="10.5" fill="#666">0</text>
+    <text x="885" y="299" font-size="10.5" fill="#666">+0,2</text>
+  </g>
+  <text x="985" y="248" font-size="12" fill="#555">media <tspan font-weight="bold">+0,0014</tspan></text>
+  <text x="985" y="264" font-size="12" fill="#555">desvío <tspan font-weight="bold">0,1043</tspan></text>
+  <text x="985" y="280" font-size="12" fill="#555">rango −1,51 a +1,70</text>
+</svg>
+<p class="nota"><b>Casi todos los pesos son minúsculos</b> —el 64 % está entre −0,1 y +0,1—. No hay
+un peso «importante»: el modelo funciona por la suma de cientos de miles de contribuciones chicas.</p>
+
+<h2>2 · Un token real, visto por dentro</h2>
+<svg viewBox="0 0 1180 168" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <g font-family="DejaVu Sans Mono, monospace" font-size="12.5">
+    <text x="20" y="26" font-family="DejaVu Sans" font-weight="bold" font-size="13" fill="#12395f">Los primeros 5 de los 128 números con que el modelo representa cada palabra:</text>
+    <text x="26" y="52">ana &nbsp;&nbsp;→ −0.028  +0.058  +0.088  +0.005  +0.066</text>
+    <text x="26" y="74">beto &nbsp;→ −0.064  +0.072  +0.120  +0.065  −0.002</text>
+    <text x="26" y="96">norte→ +0.009  +0.080  +0.007  +0.053  −0.096</text>
+    <text x="26" y="118">NOSE →  −0.039  −0.033  −0.000  −0.057  −0.020</text>
+  </g>
+  <g font-size="12.5" fill="#555">
+    <text x="560" y="52">longitud del vector: <tspan font-weight="bold" fill="#12395f">1,011</tspan></text>
+    <text x="560" y="74">longitud del vector: <tspan font-weight="bold" fill="#12395f">1,028</tspan></text>
+    <text x="560" y="96">longitud del vector: <tspan font-weight="bold" fill="#12395f">0,570</tspan></text>
+    <text x="560" y="118">longitud del vector: <tspan font-weight="bold" fill="#c0392b">0,367</tspan></text>
+  </g>
+  <rect x="770" y="34" width="392" height="96" rx="5" fill="#fdf2f0" stroke="#c0392b"/>
+  <text x="784" y="54" font-size="12.5" fill="#c0392b" font-weight="bold">Un hallazgo que no buscábamos</text>
+  <text x="784" y="74" font-size="12">«ana» y «beto» —los valores que el modelo tiene</text>
+  <text x="784" y="91" font-size="12">que recordar— aprendieron vectores <tspan font-weight="bold">3 veces</tspan></text>
+  <text x="784" y="108" font-size="12"><tspan font-weight="bold">más largos</tspan> que «NOSE». El token de abstención</text>
+  <text x="784" y="125" font-size="12">arranca en desventaja: pesa menos en la competencia.</text>
+</svg>
+
+<h2>3 · Qué mira el modelo cuando contesta — medido, no ilustrado</h2>
+<svg viewBox="0 0 1180 316" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="560" height="126" rx="5" fill="#f7f9fb" stroke="#c3d3e2"/>
+  <text x="34" y="30" font-size="12.5" font-weight="bold" fill="#12395f">Lo que se le dijo (episodio real, nivel 3):</text>
+  <g font-family="DejaVu Sans Mono, monospace" font-size="12">
+    <text x="34" y="52">el dueño de oeste es celia</text>
+    <text x="34" y="70">el guardia de parque es franco</text>
+    <text x="34" y="88">no , vale</text>
+    <text x="34" y="106">quien dirige laguna es ian</text>
+    <text x="34" y="124" fill="#c0392b">no , ahora es irma</text>
+  </g>
+  <text x="440" y="124" font-size="11.5" fill="#c0392b">← la corrección</text>
+
+  <rect x="20" y="146" width="560" height="58" rx="5" fill="#eef4fa" stroke="#12395f"/>
+  <text x="34" y="167" font-size="12.5" font-weight="bold" fill="#12395f">Se le pregunta:</text>
+  <text x="34" y="188" font-family="DejaVu Sans Mono, monospace" font-size="12.5">cual es el director de laguna ?</text>
+
+  <rect x="20" y="216" width="270" height="54" rx="5" fill="#eaf6ec" stroke="#2e7d44" stroke-width="1.6"/>
+  <text x="155" y="238" font-size="12" text-anchor="middle">contesta:</text>
+  <text x="155" y="260" font-size="19" text-anchor="middle" font-weight="bold" fill="#2e7d44">irma</text>
+  <text x="310" y="240" font-size="12.5" fill="#2e7d44" font-weight="bold">✓ correcto</text>
+  <text x="310" y="258" font-size="11.5" fill="#666">no «ian», que era la versión vieja</text>
+
+  <!-- pesos reales -->
+  <text x="620" y="30" font-size="13" font-weight="bold" fill="#12395f">Cuánta atención le da a cada cosa archivada (softmax real):</text>
+  <g font-size="12">
+    <rect x="620" y="42" width="290" height="22" fill="#f0e4d8"/><rect x="620" y="42" width="140" height="22" fill="#b5651d"/>
+    <text x="920" y="58" font-family="DejaVu Sans Mono, monospace">24,2 %  «no , vale»</text>
+    <rect x="620" y="70" width="290" height="22" fill="#f0e4d8"/><rect x="620" y="70" width="127" height="22" fill="#b5651d"/>
+    <text x="920" y="86" font-family="DejaVu Sans Mono, monospace">21,9 %  «el guardia de parque…»</text>
+    <rect x="620" y="98" width="290" height="22" fill="#f0e4d8"/><rect x="620" y="98" width="126" height="22" fill="#2e7d44"/>
+    <text x="920" y="114" font-family="DejaVu Sans Mono, monospace">21,7 %  «no , ahora es irma»</text>
+    <rect x="620" y="126" width="290" height="22" fill="#f0e4d8"/><rect x="620" y="126" width="110" height="22" fill="#b5651d"/>
+    <text x="920" y="142" font-family="DejaVu Sans Mono, monospace">19,0 %  «quien dirige laguna es ian»</text>
+    <rect x="620" y="154" width="290" height="22" fill="#f0e4d8"/><rect x="620" y="154" width="77" height="22" fill="#b5651d"/>
+    <text x="920" y="170" font-family="DejaVu Sans Mono, monospace">13,2 %  «el dueño de oeste es celia»</text>
+  </g>
+
+  <rect x="620" y="192" width="540" height="112" rx="5" fill="#fdf2f0" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="636" y="213" font-size="13" font-weight="bold" fill="#c0392b">Esto NO es lo que esperábamos, y es lo interesante</text>
+  <text x="636" y="234" font-size="12">El modelo <tspan font-weight="bold">no</tspan> busca la entrada correcta y la copia: reparte la atención</text>
+  <text x="636" y="252" font-size="12">casi pareja entre las cinco (24 % a 13 %) y aun así <tspan font-weight="bold">acierta</tspan>.</text>
+  <text x="636" y="273" font-size="12">La respuesta no sale de «encontrar» el dato: sale de que los tres</text>
+  <text x="636" y="291" font-size="12">bloques siguientes <tspan font-weight="bold">computan</tspan> sobre todo lo leído a la vez.</text>
+</svg>
+
+</body></html>

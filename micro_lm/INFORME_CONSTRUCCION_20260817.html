@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Micro-LM · Informe de construcción</title>
+<style>
+  @page { size: A4; margin: 14mm 13mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; font-size: 9.6pt;
+         line-height: 1.5; color: #1a1a1a; margin: 0; }
+  h1 { font-size: 21pt; margin: 0 0 2mm; letter-spacing: -.4pt; }
+  h2 { font-size: 13pt; margin: 9mm 0 2.5mm; padding-bottom: 1.5mm;
+       border-bottom: 2.2px solid #1a4a7a; color: #1a4a7a; page-break-after: avoid; }
+  h3 { font-size: 10.6pt; margin: 5mm 0 1.5mm; color: #333; page-break-after: avoid; }
+  p { margin: 0 0 2.5mm; text-align: justify; }
+  .sub { color: #555; font-size: 10pt; margin-bottom: 1mm; }
+  .meta { color: #777; font-size: 8.4pt; }
+  code, .mono { font-family: "DejaVu Sans Mono", monospace; font-size: 8.6pt; }
+  table { border-collapse: collapse; width: 100%; margin: 2.5mm 0 3mm; font-size: 8.8pt; }
+  th { background: #eef3f8; text-align: left; padding: 1.6mm 2mm; border-bottom: 1.6px solid #1a4a7a;
+       font-size: 8.4pt; }
+  td { padding: 1.4mm 2mm; border-bottom: .6px solid #dde3ea; vertical-align: top; }
+  td.n, th.n { text-align: right; font-family: "DejaVu Sans Mono", monospace; }
+  .fig { margin: 3mm 0 4mm; page-break-inside: avoid; }
+  .cap { font-size: 8.2pt; color: #666; margin-top: 1mm; font-style: italic; }
+  .box { background: #f6f8fa; border-left: 3.5px solid #1a4a7a; padding: 2.5mm 3mm; margin: 3mm 0;
+         page-break-inside: avoid; }
+  .box.warn { border-left-color: #b5651d; background: #fdf7f1; }
+  .box.ok { border-left-color: #2e7d44; }
+  .ok2 { color: #1b6b3a; font-weight: bold; }
+  .no { color: #a33; font-weight: bold; }
+  .pill { display: inline-block; background: #1a4a7a; color: #fff; border-radius: 3px;
+          padding: .4mm 1.6mm; font-size: 7.6pt; }
+  .brk { page-break-before: always; }
+  .dialogo { background: #fbfbf7; border: .8px solid #ddd; padding: 2.5mm 3mm; margin: 2mm 0;
+             font-family: "DejaVu Sans Mono", monospace; font-size: 8.4pt; line-height: 1.65; }
+  .dialogo b { color: #1a4a7a; }
+  ul { margin: 0 0 2.5mm; padding-left: 5mm; } li { margin-bottom: 1mm; }
+  .hdr { border-bottom: 3px solid #1a4a7a; padding-bottom: 3mm; margin-bottom: 5mm; }
+  .two { display: flex; gap: 5mm; } .two > div { flex: 1; }
+</style></head><body>
+
+<div class="hdr">
+  <h1>Micro-LM</h1>
+  <div class="sub">Un modelo de lenguaje de 3,5 MB entrenado desde cero, con el archivo
+  de memoria dentro de la red</div>
+  <div class="meta">Informe de construcción · 17 de agosto de 2026 · Maximiliano Speranza,
+  investigador independiente · ORCID 0009-0005-0413-8554</div>
+</div>
+
+<div class="box">
+<b>En una frase.</b> El Micro-LM es un modelo de lenguaje minúsculo —863.730 parámetros, 3,5 MB—
+entrenado <b>desde cero</b> con una particularidad: no aprende a escribir textos bonitos, aprende a
+<b>no olvidar lo que le dijeron</b> y a <b>decir «no sé»</b> cuando no se lo dijeron. El archivo de
+memoria no es una base de datos externa pegada por afuera: <b>está adentro de la red y se entrena
+junto con ella</b>.
+</div>
+
+<h2>1 · Qué problema resuelve</h2>
+
+<p>Un modelo de lenguaje corriente tiene dos fallas que no se arreglan haciéndolo más grande. La
+primera: cuando la conversación termina, olvida todo. La segunda: cuando no sabe algo,
+<b>lo inventa igual, y con la misma seguridad que cuando sí sabe</b>. Las dos fallas tienen la misma
+raíz —el modelo no distingue mecánicamente entre <i>recordar</i> e <i>inventar</i>— y por eso este
+proyecto las ataca juntas.</p>
+
+<p>El objetivo, en palabras del autor, es <b>«que un LLM no olvide nunca lo que le dije»</b>. El
+énfasis está en <i>lo que le dije</i>: no se trata de leer más documentos, sino de recordar lo que
+una persona concreta le contó, incluso cuando después lo <b>corrige</b>. Ésa es la tarea canónica:</p>
+
+<div class="dialogo">
+<b>sesión 1</b> · usuario: el director de norte es ana<br>
+<b>sesión 2</b> · usuario: no , el director de norte es beto<br>
+<b>sesión 5</b> · usuario: quien dirige norte ?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; modelo: <b>beto</b>
+</div>
+
+<p>Parece trivial y no lo es: el modelo tiene que archivar el hecho, archivar la corrección,
+entender que la segunda <b>reemplaza</b> a la primera, y recuperar la versión vigente varias sesiones
+después, con la memoria de trabajo reseteada en el medio.</p>
+
+<h3>Por qué un modelo tan chico</h3>
+<p>Porque a esta escala se puede <b>mirar todo</b>. Con 863.730 parámetros se puede abrir el modelo,
+medir qué entrada del archivo ganó la lectura, y saber si un error fue de escritura o de lectura.
+En un modelo de frontera eso es imposible. El tamaño no es una limitación asumida a regañadientes:
+es el instrumento.</p>
+
+<h2>2 · El idioma cerrado</h2>
+
+<p>El lenguaje acá es la <b>interfaz</b> de la prueba, no el objeto de estudio. Por eso el
+vocabulario es cerrado y minúsculo: <b>242 tokens en total</b>.</p>
+
+<table>
+<tr><th>Grupo</th><th class="n">Tokens</th><th>Contenido</th></tr>
+<tr><td>Números</td><td class="n">100</td><td><code>0 … 99</code> — los valores no personales</td></tr>
+<tr><td>Nombres</td><td class="n">58</td><td><code>ana beto carla dario…</code></td></tr>
+<tr><td>Entidades</td><td class="n">29</td><td><code>norte sur taller museo puerto…</code></td></tr>
+<tr><td>Funcionales</td><td class="n">35</td><td><code>el la de es no ahora quien…</code></td></tr>
+<tr><td>Control</td><td class="n">9</td><td><code>BOS SEP EOS USUARIO MODELO <b>NOSE</b> ? , .</code></td></tr>
+<tr><td>Relaciones</td><td class="n">6+</td><td>director, precio, altura, dueño, guardia, clave</td></tr>
+</table>
+
+<p><b>La respuesta es siempre un solo token</b> —un valor, o el token <code>NOSE</code>—. Esa decisión
+de diseño hace que la métrica sea exacta: no hace falta un juez ni un parser que interprete texto
+libre. Se aprendió a los golpes: el 12 de agosto, 10 de 11 «abstenciones» resultaron ser el modelo
+contestando bien otra cosa y el parser anotándolo mal.</p>
+
+<h3>Los cuatro niveles de dificultad</h3>
+<table>
+<tr><th>Nivel</th><th>Qué agrega</th><th>Por qué es más difícil</th></tr>
+<tr><td><b>N1</b> plantilla fija</td><td>una sola forma de decir cada hecho</td>
+    <td>basta con memorizar la forma</td></tr>
+<tr><td><b>N2</b> paráfrasis</td><td>cuatro formas del mismo hecho</td>
+    <td><b>el salto real</b>: obliga a indexar por <i>contenido</i>, no por forma</td></tr>
+<tr><td><b>N3</b> corrección elíptica</td><td><code>no , es beto</code> — sin nombrar la entidad</td>
+    <td>hay que saber <i>de qué</i> se está hablando</td></tr>
+<tr><td><b>N4</b> multi-sesión</td><td>varias sesiones, preguntas al final</td>
+    <td>la memoria de trabajo se resetea entre sesiones</td></tr>
+</table>
+
+<p>Un episodio real generado por el sistema, nivel 4:</p>
+<div class="dialogo">
+<b>sesión 1</b>: dario cuida faro | no , es ciro | barrio vale 79 | mercado cuesta 99<br>
+<b>sesión 2</b>: no , la clave de barrio es 33<br>
+<b>sesión 3</b>: <i>(vacía)</i><br>
+<br>
+<b>preguntas</b><br>
+&nbsp; cual es el guardia de faro ?&nbsp;&nbsp;→ <b>ciro</b> &nbsp;<span class="meta">(no dario: hubo corrección elíptica)</span><br>
+&nbsp; cual es la clave de barrio ? → <b>33</b> &nbsp;<span class="meta">(no 79: corregido en otra sesión)</span><br>
+&nbsp; cual es el precio de mercado ? → <b>99</b>
+</div>
+
+<div class="brk"></div>
+<h2>3 · Qué es una red neuronal acá, en concreto</h2>
+
+<p>Antes del plano general, lo elemental: <b>una capa de una red neuronal es una tabla de números
+(pesos) que mezcla una lista de números de entrada para producir otra de salida</b>. Cada círculo del
+dibujo es una <i>neurona</i> —un número—, y cada línea es un <i>peso</i> —cuánto influye esa entrada
+en esa salida—. Entrenar es ajustar los pesos.</p>
+
+<div class="fig">
+<svg viewBox="0 0 720 250" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L6,2.5 L0,5 z" fill="#1a4a7a"/></marker></defs>
+  <!-- conexiones -->
+  <g stroke="#b8c8d8" stroke-width=".7" opacity=".75">
+    
+    <path d="M150,60 L300,45"/><path d="M150,60 L300,95"/><path d="M150,60 L300,145"/><path d="M150,60 L300,195"/>
+    <path d="M150,110 L300,45"/><path d="M150,110 L300,95"/><path d="M150,110 L300,145"/><path d="M150,110 L300,195"/>
+    <path d="M150,160 L300,45"/><path d="M150,160 L300,95"/><path d="M150,160 L300,145"/><path d="M150,160 L300,195"/>
+    <path d="M150,210 L300,45"/><path d="M150,210 L300,95"/><path d="M150,210 L300,145"/><path d="M150,210 L300,195"/>
+  </g>
+  <g stroke="#b8c8d8" stroke-width=".7" opacity=".75">
+    <path d="M300,45 L450,80"/><path d="M300,45 L450,160"/>
+    <path d="M300,95 L450,80"/><path d="M300,95 L450,160"/>
+    <path d="M300,145 L450,80"/><path d="M300,145 L450,160"/>
+    <path d="M300,195 L450,80"/><path d="M300,195 L450,160"/>
+  </g>
+  <!-- destacar un peso -->
+  <path d="M150,110 L300,95" stroke="#c0392b" stroke-width="2.4" fill="none"/>
+  <text x="222" y="96" font-size="10" fill="#c0392b" text-anchor="middle" font-weight="bold">w = 0,37</text>
+  <!-- nodos -->
+  <g fill="#fff" stroke="#1a4a7a" stroke-width="1.6">
+    <circle cx="150" cy="60" r="13"/><circle cx="150" cy="110" r="13"/>
+    <circle cx="150" cy="160" r="13"/><circle cx="150" cy="210" r="13"/>
+  </g>
+  <g fill="#e8f0f7" stroke="#1a4a7a" stroke-width="1.6">
+    <circle cx="300" cy="45" r="13"/><circle cx="300" cy="95" r="13"/>
+    <circle cx="300" cy="145" r="13"/><circle cx="300" cy="195" r="13"/>
+  </g>
+  <g fill="#1a4a7a" stroke="#1a4a7a" stroke-width="1.6">
+    <circle cx="450" cy="80" r="13"/><circle cx="450" cy="160" r="13"/>
+  </g>
+  <g font-size="9.5" fill="#333" text-anchor="middle">
+    <text x="150" y="240" font-weight="bold">entrada</text>
+    <text x="150" y="252" font-size="8">el token</text>
+    <text x="300" y="240" font-weight="bold">capa oculta</text>
+    <text x="450" y="240" font-weight="bold">salida</text>
+  </g>
+  <g font-size="9" fill="#555">
+    <text x="500" y="70">Cada salida es la suma de</text>
+    <text x="500" y="84">todas las entradas, cada una</text>
+    <text x="500" y="98">multiplicada por su peso,</text>
+    <text x="500" y="112">pasada por una función</text>
+    <text x="500" y="126">que la curva (GELU).</text>
+    <text x="500" y="150" font-weight="bold" fill="#c0392b">Entrenar = mover los pesos</text>
+    <text x="500" y="164" font-weight="bold" fill="#c0392b">hasta que la salida acierte.</text>
+  </g>
+  <line x1="170" y1="130" x2="285" y2="130" stroke="#1a4a7a" stroke-width="1.4" marker-end="url(#a1)" opacity="0"/>
+</svg>
+<div class="cap">Figura 1 — Una capa densa. En el Micro-LM cada vector tiene <b>128 números</b> (no 4),
+y hay muchas capas de éstas encadenadas. El principio es el mismo.</div>
+</div>
+
+<h2>4 · La arquitectura completa</h2>
+
+<p>Éste es el plano general. La diferencia con un transformer común está en las <b>dos ramas</b>: la
+conversación pasada se <b>archiva</b> (izquierda) y la pregunta actual <b>lee ese archivo</b>
+(derecha) mientras se procesa.</p>
+
+<div class="fig">
+<svg viewBox="0 0 760 470" width="100%" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <marker id="fl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 z" fill="#1a4a7a"/></marker>
+  <marker id="flr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 z" fill="#c0392b"/></marker>
+ </defs>
+
+ <!-- RAMA ESCRITURA -->
+ <rect x="8" y="8" width="300" height="452" rx="6" fill="#f7fafc" stroke="#c3d3e2"/>
+ <text x="158" y="26" font-size="11" font-weight="bold" fill="#1a4a7a" text-anchor="middle">RAMA 1 · ESCRIBIR lo que se dijo</text>
+
+ <rect x="26" y="38" width="264" height="60" rx="4" fill="#fff" stroke="#8aa8c4"/>
+ <text x="36" y="53" font-size="8.6" font-weight="bold">Sesiones de la conversación</text>
+ <text x="36" y="66" font-size="8" font-family="DejaVu Sans Mono, monospace">s1: dario cuida faro | no , es ciro</text>
+ <text x="36" y="78" font-size="8" font-family="DejaVu Sans Mono, monospace">s2: no , la clave de barrio es 33</text>
+ <text x="36" y="92" font-size="7.6" fill="#777">se apilan como lote: un solo forward</text>
+
+ <line x1="158" y1="98" x2="158" y2="118" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <rect x="26" y="120" width="264" height="46" rx="4" fill="#e8f0f7" stroke="#1a4a7a"/>
+ <text x="158" y="138" font-size="9.4" font-weight="bold" text-anchor="middle">EL TRONCO · 4 bloques</text>
+ <text x="158" y="152" font-size="8" text-anchor="middle">convierte cada token en un vector de 128 números</text>
+ <text x="158" y="162" font-size="7.6" text-anchor="middle" fill="#777">(el mismo tronco que usa la rama 2 — pesos compartidos)</text>
+
+ <line x1="158" y1="166" x2="158" y2="186" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <rect x="26" y="188" width="264" height="52" rx="4" fill="#fff" stroke="#8aa8c4"/>
+ <text x="158" y="204" font-size="8.8" font-weight="bold" text-anchor="middle">Política de escritura</text>
+ <text x="158" y="217" font-size="8.2" text-anchor="middle">un vector por <tspan font-weight="bold">enunciado</tspan>, tomado en su último token</text>
+ <text x="158" y="230" font-size="8.2" text-anchor="middle" fill="#c0392b">«un hecho dicho = una entrada»</text>
+
+ <line x1="158" y1="240" x2="158" y2="258" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <!-- el archivo -->
+ <rect x="26" y="260" width="264" height="180" rx="4" fill="#fffdf5" stroke="#b5651d" stroke-width="1.6"/>
+ <text x="158" y="277" font-size="10" font-weight="bold" fill="#b5651d" text-anchor="middle">EL ARCHIVO</text>
+ <g font-size="7.8">
+  <rect x="38" y="286" width="240" height="21" rx="3" fill="#fff" stroke="#d8b48a"/>
+  <text x="46" y="300" font-family="DejaVu Sans Mono, monospace">#1 «dario cuida faro»</text>
+  <rect x="230" y="289" width="42" height="15" rx="2" fill="#ffe9c8" stroke="#b5651d"/>
+  <text x="251" y="300" text-anchor="middle" font-size="7.2" fill="#8a4a10">turno 1</text>
+
+  <rect x="38" y="311" width="240" height="21" rx="3" fill="#fff" stroke="#d8b48a"/>
+  <text x="46" y="325" font-family="DejaVu Sans Mono, monospace">#2 «no , es ciro»</text>
+  <rect x="230" y="314" width="42" height="15" rx="2" fill="#ffe9c8" stroke="#b5651d"/>
+  <text x="251" y="325" text-anchor="middle" font-size="7.2" fill="#8a4a10">turno 2</text>
+
+  <rect x="38" y="336" width="240" height="21" rx="3" fill="#fff" stroke="#d8b48a"/>
+  <text x="46" y="350" font-family="DejaVu Sans Mono, monospace">#3 «barrio vale 79»</text>
+  <rect x="230" y="339" width="42" height="15" rx="2" fill="#ffe9c8" stroke="#b5651d"/>
+  <text x="251" y="350" text-anchor="middle" font-size="7.2" fill="#8a4a10">turno 3</text>
+
+  <rect x="38" y="361" width="240" height="21" rx="3" fill="#fff" stroke="#d8b48a"/>
+  <text x="46" y="375" font-family="DejaVu Sans Mono, monospace">#4 «la clave de barrio es 33»</text>
+  <rect x="230" y="364" width="42" height="15" rx="2" fill="#ffe9c8" stroke="#b5651d"/>
+  <text x="251" y="375" text-anchor="middle" font-size="7.2" fill="#8a4a10">turno 4</text>
+ </g>
+ <text x="158" y="399" font-size="8" text-anchor="middle" fill="#8a4a10" font-weight="bold">SELLO DE ORDEN — qué se dijo antes y qué después</text>
+ <text x="158" y="412" font-size="7.8" text-anchor="middle" fill="#555">sin él, el modelo no puede saber cuál versión rige:</text>
+ <text x="158" y="424" font-size="7.8" text-anchor="middle" fill="#555">medido <tspan font-weight="bold">0,4570 → 0,9956</tspan> al agregarlo</text>
+ <text x="158" y="436" font-size="7.4" text-anchor="middle" fill="#777">el archivo se baraja: la posición no codifica el rol</text>
+
+ <!-- RAMA LECTURA -->
+ <rect x="320" y="8" width="432" height="452" rx="6" fill="#f7fafc" stroke="#c3d3e2"/>
+ <text x="536" y="26" font-size="11" font-weight="bold" fill="#1a4a7a" text-anchor="middle">RAMA 2 · RESPONDER la pregunta</text>
+
+ <rect x="340" y="38" width="392" height="34" rx="4" fill="#fff" stroke="#8aa8c4"/>
+ <text x="536" y="59" font-size="9" text-anchor="middle" font-family="DejaVu Sans Mono, monospace">« cual es el guardia de faro ? »</text>
+
+ <line x1="536" y1="72" x2="536" y2="92" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <!-- bloque 0 con lectura -->
+ <rect x="340" y="94" width="392" height="128" rx="4" fill="#e8f0f7" stroke="#1a4a7a" stroke-width="1.8"/>
+ <text x="352" y="110" font-size="9.4" font-weight="bold">BLOQUE 0 — acá entra la memoria</text>
+ <text x="352" y="123" font-size="7.8" fill="#555">y no más tarde: medido temprano 0,7275 vs tardío 0,3827</text>
+
+ <rect x="352" y="130" width="120" height="34" rx="3" fill="#fff" stroke="#8aa8c4"/>
+ <text x="412" y="145" font-size="8" text-anchor="middle">la pregunta se vuelve</text>
+ <text x="412" y="157" font-size="8" text-anchor="middle">una <tspan font-weight="bold">consulta</tspan> (q)</text>
+
+ <path d="M472,147 L520,147" stroke="#c0392b" stroke-width="1.8" marker-end="url(#flr)"/>
+
+ <rect x="524" y="128" width="196" height="80" rx="3" fill="#fff5f5" stroke="#c0392b"/>
+ <text x="622" y="143" font-size="8.6" font-weight="bold" text-anchor="middle" fill="#c0392b">LECTURA POR SOFTMAX</text>
+ <text x="622" y="156" font-size="7.8" text-anchor="middle">compara la consulta con cada entrada</text>
+ <text x="622" y="167" font-size="7.8" text-anchor="middle">del archivo y les reparte 100 % de peso</text>
+ <g font-size="7.4">
+  <rect x="536" y="173" width="82" height="10" fill="#f0d0d0"/><rect x="536" y="173" width="8" height="10" fill="#c0392b"/>
+  <text x="624" y="181" text-anchor="start">#1 «dario…» 6 %</text>
+  <rect x="536" y="186" width="82" height="10" fill="#f0d0d0"/><rect x="536" y="186" width="72" height="10" fill="#c0392b"/>
+  <text x="624" y="194" text-anchor="start">#2 «no, es ciro» <tspan font-weight="bold">88 %</tspan></text>
+ </g>
+
+ <line x1="536" y1="222" x2="536" y2="240" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <rect x="340" y="242" width="392" height="42" rx="4" fill="#e8f0f7" stroke="#1a4a7a"/>
+ <text x="536" y="260" font-size="9.4" font-weight="bold" text-anchor="middle">BLOQUES 1, 2 y 3</text>
+ <text x="536" y="274" font-size="8" text-anchor="middle">razonan CON la memoria ya adentro — por eso entra en el bloque 0</text>
+
+ <line x1="536" y1="284" x2="536" y2="302" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <rect x="340" y="304" width="392" height="42" rx="4" fill="#fff" stroke="#8aa8c4"/>
+ <text x="536" y="321" font-size="9" font-weight="bold" text-anchor="middle">CABEZA DE SALIDA</text>
+ <text x="536" y="335" font-size="8" text-anchor="middle">128 números → un puntaje para cada uno de los <tspan font-weight="bold">242 tokens</tspan></text>
+
+ <line x1="536" y1="346" x2="536" y2="364" stroke="#1a4a7a" stroke-width="1.6" marker-end="url(#fl)"/>
+
+ <rect x="380" y="366" width="140" height="40" rx="4" fill="#eaf6ec" stroke="#2e7d44" stroke-width="1.6"/>
+ <text x="450" y="382" font-size="8.4" text-anchor="middle">gana un solo token</text>
+ <text x="450" y="396" font-size="11" font-weight="bold" text-anchor="middle" fill="#2e7d44">ciro</text>
+
+ <rect x="552" y="366" width="160" height="40" rx="4" fill="#fdf4e8" stroke="#b5651d" stroke-width="1.6"/>
+ <text x="632" y="382" font-size="8.4" text-anchor="middle">o, si nada matchea:</text>
+ <text x="632" y="396" font-size="11" font-weight="bold" text-anchor="middle" fill="#b5651d">NOSE</text>
+
+ <text x="536" y="425" font-size="8" text-anchor="middle" fill="#555">«NOSE» es un token más del vocabulario: el modelo elige abstenerse</text>
+ <text x="536" y="437" font-size="8" text-anchor="middle" fill="#555">compitiendo contra los 241 valores posibles — y ahí está el problema del §8</text>
+ <text x="536" y="452" font-size="7.6" text-anchor="middle" fill="#999">la flecha roja marca el único punto donde la memoria entra a la red</text>
+</svg>
+<div class="cap">Figura 2 — Arquitectura completa. Las dos ramas comparten el mismo tronco de 4 bloques:
+los mismos pesos leen y escriben, y por eso el archivo se entrena junto con el modelo.</div>
+</div>
+
+<div class="brk"></div>
+<h2>5 · Un bloque por dentro</h2>
+
+<p>Cada uno de los 4 bloques del tronco tiene tres piezas en serie. Todas suman su resultado a la
+señal que viene (las «conexiones residuales», las flechas que rodean cada caja): así la información
+original nunca se pierde.</p>
+
+<div class="fig">
+<svg viewBox="0 0 740 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+ <defs><marker id="f2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+   <path d="M0,0 L7,3 L0,6 z" fill="#1a4a7a"/></marker></defs>
+
+ <line x1="20" y1="150" x2="700" y2="150" stroke="#1a4a7a" stroke-width="2" marker-end="url(#f2)"/>
+ <text x="22" y="142" font-size="8.4" fill="#555">entra</text>
+ <text x="672" y="142" font-size="8.4" fill="#555">sale</text>
+
+ <!-- pieza 1 -->
+ <rect x="70" y="60" width="150" height="72" rx="5" fill="#e8f0f7" stroke="#1a4a7a" stroke-width="1.5"/>
+ <text x="145" y="78" font-size="9.2" font-weight="bold" text-anchor="middle">1 · CONVOLUCIÓN</text>
+ <text x="145" y="91" font-size="8" text-anchor="middle">mira el token actual y</text>
+ <text x="145" y="102" font-size="8" text-anchor="middle">los <tspan font-weight="bold">2 anteriores</tspan></text>
+ <text x="145" y="116" font-size="7.6" text-anchor="middle" fill="#666">capta «no , es …»</text>
+ <text x="145" y="127" font-size="7.6" text-anchor="middle" fill="#666">como una unidad</text>
+ <path d="M145,132 L145,146" stroke="#1a4a7a" stroke-width="1.4" marker-end="url(#f2)"/>
+ <path d="M70,150 Q45,150 45,110 Q45,96 70,96" fill="none" stroke="#9ab" stroke-width="1" stroke-dasharray="3,2"/>
+
+ <!-- pieza 2 -->
+ <rect x="255" y="46" width="190" height="100" rx="5" fill="#fff5f5" stroke="#c0392b" stroke-width="1.8"/>
+ <text x="350" y="64" font-size="9.2" font-weight="bold" text-anchor="middle" fill="#c0392b">2 · REGLA DELTA</text>
+ <text x="350" y="78" font-size="8" text-anchor="middle">una memoria de trabajo S que</text>
+ <text x="350" y="89" font-size="8" text-anchor="middle">se <tspan font-weight="bold">corrige</tspan> en cada token</text>
+ <rect x="268" y="96" width="164" height="20" rx="3" fill="#fff" stroke="#e0b0b0"/>
+ <text x="350" y="110" font-size="8.6" text-anchor="middle" font-family="DejaVu Sans Mono, monospace">S ← S + β · (v − S·k) k</text>
+ <text x="350" y="128" font-size="7.6" text-anchor="middle" fill="#666">escribe la DIFERENCIA entre lo que</text>
+ <text x="350" y="139" font-size="7.6" text-anchor="middle" fill="#666">ya sabía y lo nuevo: por eso corrige</text>
+ <path d="M350,146 L350,146" stroke="#1a4a7a"/>
+
+ <!-- pieza 3 -->
+ <rect x="480" y="60" width="150" height="72" rx="5" fill="#e8f0f7" stroke="#1a4a7a" stroke-width="1.5"/>
+ <text x="555" y="78" font-size="9.2" font-weight="bold" text-anchor="middle">3 · MLP</text>
+ <text x="555" y="92" font-size="8" text-anchor="middle">128 → <tspan font-weight="bold">512</tspan> → 128</text>
+ <text x="555" y="106" font-size="7.6" text-anchor="middle" fill="#666">expande para tener lugar</text>
+ <text x="555" y="117" font-size="7.6" text-anchor="middle" fill="#666">donde combinar, y vuelve</text>
+ <text x="555" y="128" font-size="7.6" text-anchor="middle" fill="#666">a comprimir</text>
+ <path d="M555,132 L555,146" stroke="#1a4a7a" stroke-width="1.4" marker-end="url(#f2)"/>
+
+ <!-- explicacion delta -->
+ <rect x="70" y="185" width="600" height="100" rx="5" fill="#fafafa" stroke="#ddd"/>
+ <text x="86" y="202" font-size="9" font-weight="bold" fill="#c0392b">Por qué la regla delta y no la atención clásica</text>
+ <text x="86" y="217" font-size="8.2">Un transformer común guarda TODO lo que vio y lo repasa entero en cada pregunta: cuesta</text>
+ <text x="86" y="229" font-size="8.2">el cuadrado de la longitud. La regla delta mantiene <tspan font-weight="bold">una sola matriz S</tspan> que se actualiza a</text>
+ <text x="86" y="241" font-size="8.2">medida que lee, en tiempo lineal. Y lo importante para este proyecto: <tspan font-weight="bold">escribe la diferencia</tspan></text>
+ <text x="86" y="253" font-size="8.2">entre lo que ya tenía guardado y lo nuevo — que es exactamente la operación «no, es beto».</text>
+ <text x="86" y="270" font-size="8" fill="#666">β (beta) es una compuerta aprendida: decide <tspan font-weight="bold">cuánto</tspan> de lo nuevo pisa a lo viejo.</text>
+</svg>
+<div class="cap">Figura 3 — Un bloque. Las líneas punteadas son las conexiones residuales.</div>
+</div>
+
+<h2>6 · Las cuentas del modelo</h2>
+<div class="two"><div>
+<table>
+<tr><th>Pieza</th><th class="n">Valor</th></tr>
+<tr><td>Vocabulario (V)</td><td class="n">242</td></tr>
+<tr><td>Ancho del vector (D)</td><td class="n">128</td></tr>
+<tr><td>Bloques</td><td class="n">4</td></tr>
+<tr><td>MLP interno</td><td class="n">512</td></tr>
+<tr><td>Sellos de orden</td><td class="n">64</td></tr>
+<tr><td><b>Parámetros totales</b></td><td class="n"><b>863.730</b></td></tr>
+<tr><td>Tamaño (fp32)</td><td class="n">3,5 MB</td></tr>
+<tr><td>Checkpoint completo</td><td class="n">9,9 MB</td></tr>
+</table>
+</div><div>
+<table>
+<tr><th>Entrenamiento</th><th class="n">Valor</th></tr>
+<tr><td>Pasos</td><td class="n">12.000</td></tr>
+<tr><td>Lote</td><td class="n">64 episodios</td></tr>
+<tr><td>Tasa de aprendizaje</td><td class="n">1e-3</td></tr>
+<tr><td>Programa</td><td class="n">warmup + coseno</td></tr>
+<tr><td>Preguntas por versión vieja</td><td class="n">35 %</td></tr>
+<tr><td>Tiempo en GPU T4</td><td class="n">~1 h</td></tr>
+<tr><td>Tiempo en esta PC</td><td class="n">~27 h</td></tr>
+<tr><td>Optimizador</td><td class="n">AdamW (optax)</td></tr>
+</table>
+</div></div>
+
+<p><b>Un detalle que importa</b>: el 35 % de las preguntas son por la versión <i>anterior</i> del
+hecho, no por la vigente. Sin eso, el modelo aprendería el atajo de <i>«contestá siempre lo último
+que escuchaste»</i> y nunca aprendería a manejar versiones.</p>
+
+<div class="brk"></div>
+<h2>7 · Cómo se mide, y por qué así</h2>
+
+<p>Cada métrica existe para cerrarle la puerta a una forma de hacer trampa. Un instrumento que no
+puede fallar no mide nada.</p>
+
+<table>
+<tr><th>Métrica</th><th>Qué mide</th><th>Qué trampa impide</th></tr>
+<tr><td><code>vigente</code></td><td>acierto en la versión que rige hoy</td><td>—</td></tr>
+<tr><td><code>anterior</code></td><td>acierto en la versión vieja</td><td>contestar siempre lo último dicho</td></tr>
+<tr><td><code>nose</code></td><td>se abstiene cuando NO hay respuesta</td><td>inventar</td></tr>
+<tr><td><code>falsa_abst</code></td><td>se abstiene cuando SÍ había respuesta</td><td><b>abstenerse de todo</b></td></tr>
+<tr><td><code>nose_ent</code> / <code>nose_rel</code></td><td>los dos tipos de ausencia, separados</td>
+    <td>que uno fácil tape al difícil</td></tr>
+</table>
+
+<div class="box">
+<b>La compuerta de abstención: <code>nose ≥ 0,50</code> Y <code>falsa_abst ≤ 0,10</code>.</b>
+Las dos juntas, y no una sola. Un modelo que dijera <code>NOSE</code> a absolutamente todo sacaría
+<code>nose = 1,0000</code> —perfecto— y sería completamente inútil. Lo delata
+<code>falsa_abst = 1,0000</code>. El instrumento se verificó contra cuatro modelos simulados
+(oráculo, el que nunca se abstiene, el que siempre se abstiene, y el azar): <b>pasó las 10
+comprobaciones</b>, incluida la de rechazar a los dos degenerados.
+</div>
+
+<h2>8 · Resultados al 17 de agosto</h2>
+
+<h3>Memoria: resuelta en el régimen medido</h3>
+<p>La campaña base entrena el modelo sin preguntas sin respuesta, para medir sólo la memoria.
+<b>11 de 12 corridas cerradas</b> (la última en curso). Los niveles 1 y 2 llegan a
+<b>1,0000</b>; el nivel 4 —multi-sesión, con correcciones elípticas— se estabiliza en
+<b>0,75-0,77</b>. Un modelo de 3,5 MB recuerda qué le dijeron, qué corrigieron y en qué orden,
+varias sesiones después.</p>
+
+<h3>Abstención: el hallazgo del día</h3>
+<p>La pregunta era si el mismo modelo puede aprender a decir «no sé». La estrategia probada hoy es
+un <b>currículum</b>: entrenar primero sin preguntas sin respuesta hasta que el modelo domine la
+tarea, y recién entonces introducirlas. El resultado se parte exactamente en dos.</p>
+
+<div class="fig">
+<svg viewBox="0 0 720 330" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <!-- ejes -->
+  <line x1="80" y1="270" x2="660" y2="270" stroke="#333" stroke-width="1.3"/>
+  <line x1="80" y1="40" x2="80" y2="270" stroke="#333" stroke-width="1.3"/>
+  <text x="370" y="303" font-size="9.5" text-anchor="middle" font-weight="bold">MARGEN sobre el atajo antes de introducir «no sé»</text>
+  <text x="370" y="316" font-size="8" text-anchor="middle" fill="#666">(cuánto mejor era el modelo que la estrategia de contestar siempre algo)</text>
+  <text x="20" y="155" font-size="9.5" font-weight="bold" transform="rotate(-90 20,155)" text-anchor="middle">falsa abstención</text>
+
+  <!-- grilla y ticks Y -->
+  <g font-size="8" fill="#666">
+    <line x1="80" y1="270" x2="660" y2="270" stroke="#eee"/>
+    <text x="72" y="273" text-anchor="end">0,00</text>
+    <line x1="80" y1="178" x2="660" y2="178" stroke="#eee"/><text x="72" y="181" text-anchor="end">0,10</text>
+    <line x1="80" y1="86" x2="660" y2="86" stroke="#eee"/><text x="72" y="89" text-anchor="end">0,20</text>
+  </g>
+  <!-- ticks X -->
+  <g font-size="8" fill="#666" text-anchor="middle">
+    <text x="120" y="285">+0,16</text><text x="255" y="285">+0,24</text>
+    <text x="390" y="285">+0,32</text><text x="620" y="285">+0,41</text>
+  </g>
+
+  <!-- umbral de la compuerta -->
+  <line x1="80" y1="178" x2="660" y2="178" stroke="#2e7d44" stroke-width="1.8" stroke-dasharray="6,3"/>
+  <text x="655" y="172" font-size="8.4" fill="#2e7d44" text-anchor="end" font-weight="bold">umbral de la compuerta: 0,10</text>
+
+  <!-- zona sin muestrear -->
+  <rect x="280" y="40" width="255" height="230" fill="#f3f3f3" opacity=".8"/>
+  <text x="407" y="120" font-size="9" fill="#999" text-anchor="middle" font-weight="bold">ZONA SIN MEDIR</text>
+  <text x="407" y="134" font-size="8" fill="#999" text-anchor="middle">la frontera está acá adentro</text>
+  <text x="407" y="147" font-size="8" fill="#999" text-anchor="middle">y no tenemos ningún punto</text>
+
+  <!-- puntos: x = 80 + (margen-0.15)*2000 ; y = 270 - f_abst*920 -->
+  <!-- x4_s0 m .1672 f .1342 -->
+  <circle cx="114" cy="147" r="6.5" fill="#c0392b"/>
+  <text x="114" y="136" font-size="7.8" text-anchor="middle" fill="#c0392b">x4_s0</text>
+  <!-- x4_s1 m .1787 f .1599 -->
+  <circle cx="137" cy="123" r="6.5" fill="#c0392b"/>
+  <text x="137" y="112" font-size="7.8" text-anchor="middle" fill="#c0392b">x4_s1</text>
+  <!-- x3_s1 m .1870 f .1757 -->
+  <circle cx="154" cy="108" r="6.5" fill="#c0392b"/>
+  <text x="154" y="97" font-size="7.8" text-anchor="middle" fill="#c0392b">x3_s1</text>
+  <!-- x3_s2 m .2358 f .2237 -->
+  <circle cx="252" cy="64" r="6.5" fill="#c0392b"/>
+  <text x="252" y="53" font-size="7.8" text-anchor="middle" fill="#c0392b">x3_s2</text>
+  <!-- x2_s2 m .4071 f .0163 -->
+  <circle cx="594" cy="255" r="6.5" fill="#2e7d44"/>
+  <text x="594" y="244" font-size="7.8" text-anchor="middle" fill="#2e7d44">x2_s2</text>
+  <!-- x1_s0 m .4094 f .0095 -->
+  <circle cx="599" cy="261" r="6.5" fill="#2e7d44"/>
+  <text x="632" y="266" font-size="7.8" text-anchor="middle" fill="#2e7d44">x1_s0</text>
+
+  <!-- etiquetas de region -->
+  <rect x="92" y="46" width="150" height="30" rx="3" fill="#fdecea" stroke="#c0392b"/>
+  <text x="167" y="58" font-size="8.4" text-anchor="middle" fill="#c0392b" font-weight="bold">FALLAN — 4 de 4</text>
+  <text x="167" y="70" font-size="7.6" text-anchor="middle" fill="#c0392b">se callan de más</text>
+
+  <rect x="540" y="200" width="120" height="30" rx="3" fill="#eaf6ec" stroke="#2e7d44"/>
+  <text x="600" y="212" font-size="8.4" text-anchor="middle" fill="#2e7d44" font-weight="bold">PASAN — 2 de 2</text>
+  <text x="600" y="224" font-size="7.6" text-anchor="middle" fill="#2e7d44">nivel 1 y nivel 2</text>
+</svg>
+<div class="cap">Figura 4 — Cada punto es un modelo entrenado. Verde = pasa la compuerta, rojo = falla.
+La separación es total, pero <b>la frontera no está medida</b>: no hay ningún punto entre +0,24 y +0,41.</div>
+</div>
+
+<table>
+<tr><th>Modelo</th><th class="n">margen</th><th class="n">vigente</th><th class="n">nose</th>
+    <th class="n">falsa_abst</th><th>compuerta</th></tr>
+<tr><td>x1_s0 · nivel 1</td><td class="n">+0,4094</td><td class="n">0,9890</td><td class="n">0,8844</td>
+    <td class="n">0,0095</td><td class="ok2">PASA</td></tr>
+<tr><td>x2_s2 · nivel 2</td><td class="n">+0,4071</td><td class="n">0,9851</td><td class="n">0,9762</td>
+    <td class="n">0,0163</td><td class="ok2">PASA</td></tr>
+<tr><td>x3_s2 · nivel 3</td><td class="n">+0,2358</td><td class="n">0,5656</td><td class="n">0,6379</td>
+    <td class="n">0,2237</td><td class="no">falla</td></tr>
+<tr><td>x3_s1 · nivel 3</td><td class="n">+0,1870</td><td class="n">0,6388</td><td class="n">0,5765</td>
+    <td class="n">0,1757</td><td class="no">falla</td></tr>
+<tr><td>x4_s1 · nivel 4</td><td class="n">+0,1787</td><td class="n">0,7004</td><td class="n">0,6891</td>
+    <td class="n">0,1599</td><td class="no">falla</td></tr>
+<tr><td>x4_s0 · nivel 4</td><td class="n">+0,1672</td><td class="n">0,7047</td><td class="n">0,7106</td>
+    <td class="n">0,1342</td><td class="no">falla</td></tr>
+</table>
+
+<div class="box ok">
+<b>Lo que sí se puede afirmar.</b> En los dos casos donde el modelo dominaba la tarea con holgura
+antes de introducir «no sé», <b>aprendió a abstenerse casi perfecto sin volverse tímido</b>: detecta
+entre el 88 % y el 98 % de las preguntas sin respuesta, equivocándose en menos del 2 % de las que sí
+la tenían. Y ninguno de los seis fracasa por <i>no detectar</i> la ausencia: la métrica <code>nose</code>
+está entre 0,58 y 0,98 en todos. <b>Lo que falla siempre es lo mismo: se callan de más.</b>
+</div>
+
+<div class="box warn">
+<b>Lo que NO se puede afirmar todavía.</b> Son seis modelos, sin réplica en la mayoría de las celdas,
+y con la frontera sin muestrear. Además falta el <b>control que puede tumbar todo</b>: entrenar
+asignando «no sé» al azar al 40 % de las preguntas, tengan respuesta o no. Ese control hereda la
+frecuencia sin la señal; si el modelo entrenado no le gana claramente, lo que aprendió es a decir
+«no sé» seguido, no a saber cuándo. Está pre-registrado para mañana.
+</div>
+
+<h2>9 · Lo que este trabajo NO afirma</h2>
+
+<p>Conviene decirlo con todas las letras, porque es donde este proyecto se separa del discurso
+habitual: <b>«eliminar las alucinaciones» no es afirmable con este instrumento</b>, y una revisión
+externa nos obligó a corregir un informe interno que lo insinuaba.</p>
+
+<p>La abstención no elimina el error: lo convierte de <b>silencioso</b> en <b>avisado</b>, y compra
+una posición en la curva riesgo-cobertura. Además, «cero errores observados» nunca significa
+«eliminado»: con <i>n</i> preguntas y cero fallos, la cota superior al 95 % es ≈ 3/<i>n</i> —para
+sostener «inventa menos del 0,1 %» harían falta unas 3.000 preguntas sin un solo fallo.</p>
+
+<p>Y hay tres clases de alucinación con tres destinos distintos:</p>
+<table>
+<tr><th>Clase</th><th>Qué es</th><th>Destino</th></tr>
+<tr><td><b>1 · Invento</b></td><td>no hay respuesta y contesta igual</td>
+    <td class="ok2">eliminable — la ausencia deja firma</td></tr>
+<tr><td><b>2 · Confusión al leer</b></td><td>dos entradas del archivo compiten</td>
+    <td>convertible en abstención</td></tr>
+<tr><td><b>3 · Memoria falsa</b></td><td>la corrección se ligó al hecho equivocado <b>al escribir</b></td>
+    <td class="no">indetectable por abstención, por diseño</td></tr>
+</table>
+<p>La clase 3 es la más incómoda: al leerla, el hecho falso tiene puntaje alto y baja incertidumbre
+—es <b>mecánicamente idéntico</b> a uno verdadero—. Ninguna cantidad de abstención la va a tocar.
+Ahí hay que intervenir en la escritura, no en la lectura.</p>
+
+<h2>10 · Qué sigue</h2>
+<table>
+<tr><th>Próximo paso</th><th>Por qué</th></tr>
+<tr><td><b>Cabeza de abstención separada</b></td>
+    <td>Hoy «NOSE» es un token más y compite en el mismo softmax que los 241 valores. Eso mezcla dos
+    decisiones muy distintas: una binaria y balanceada («¿está?») contra una de 1-entre-100 («¿qué
+    valor?»). Esa asimetría explica por qué el modelo se calla de más. Separarlas es el cambio de
+    fondo.</td></tr>
+<tr><td><b>Control de permutación</b></td>
+    <td>El único control que puede invalidar el resultado positivo. 45 minutos.</td></tr>
+<tr><td><b>Muestrear la frontera</b></td>
+    <td>Ningún punto entre margen +0,24 y +0,41. Ahí está la respuesta a «¿cuánto hay que saber antes
+    de poder aprender a dudar?»</td></tr>
+<tr><td><b>Arreglar el ranking de lectura</b></td>
+    <td>Ya está medido que <b>el hecho siempre está escrito</b>: lo que se pierde es el puesto en el
+    ranking al leer. El arreglo va en la lectura, no en la escritura.</td></tr>
+<tr><td><b>Nombres nunca vistos</b></td>
+    <td>Entrenar con 40 de los 60 nombres y evaluar con los 20 restantes convierte «memorizó pares»
+    en <b>sistematicidad</b>. Barato.</td></tr>
+</table>
+
+<div class="box">
+<b>La pregunta grande, que sale de cruzar las dos líneas del proyecto.</b> Está medido que el
+contexto sirve sólo si llega <b>antes</b> del cómputo: un mismo acceso vale 0,9998 en el primer
+bloque y 0,4990 en el último. Si eso vale también para un archivo persistente, entonces lo que se
+recupera de la memoria <b>no puede inyectarse al final</b> — que es exactamente lo que hace todo
+sistema RAG hoy. Este modelo inyecta en el bloque 0 justamente por eso.
+</div>
+
+<p class="meta" style="margin-top:8mm;border-top:1px solid #ccc;padding-top:2mm">
+Generado el 17-08-2026 · Código: <code>delta-archivo/micro_lm/</code> ·
+Todas las cifras salen de corridas con pre-registro congelado antes de correr.
+Preprint relacionado: DOI 10.21203/rs.3.rs-10669947/v1
+</p>
+
+</body></html>

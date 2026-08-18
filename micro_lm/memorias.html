@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><style>
+  body { font-family:"DejaVu Sans",Arial,sans-serif; width:1240px; margin:0; padding:26px 30px;
+         background:#fff; color:#1a1a1a; }
+  h1 { font-size:25px; margin:0 0 3px; color:#12395f; }
+  .sub { color:#666; font-size:13.5px; margin-bottom:18px; }
+  h2 { font-size:16.5px; color:#12395f; border-bottom:2.5px solid #12395f; padding-bottom:4px;
+       margin:22px 0 10px; }
+  .nota { font-size:12.5px; color:#444; margin:8px 0 0; line-height:1.55; }
+  b { color:#0d2d4d; }
+</style></head><body>
+
+<h1>¿Lo que le hablás se carga en el modelo?</h1>
+<div class="sub">La respuesta corta es <b>no</b> — y esa es justamente la idea. Hay
+<b>dos memorias distintas</b>, y confundirlas es el error más común sobre cómo funciona esto.</div>
+
+<svg viewBox="0 0 1180 330" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <!-- IZQUIERDA: pesos -->
+  <rect x="14" y="10" width="566" height="310" rx="7" fill="#f4f7fa" stroke="#12395f" stroke-width="2"/>
+  <rect x="14" y="10" width="566" height="34" rx="7" fill="#12395f"/>
+  <text x="297" y="33" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold">MEMORIA 1 · LOS PESOS</text>
+
+  <text x="34" y="66" font-size="13.5" font-weight="bold" fill="#12395f">863.730 números</text>
+  <text x="34" y="88" font-size="12.5">Es el <tspan font-weight="bold">saber hacer</tspan>: cómo archivar una frase, cómo</text>
+  <text x="34" y="106" font-size="12.5">buscar en lo archivado, cómo saber qué se dijo antes.</text>
+
+  <rect x="34" y="120" width="512" height="52" rx="4" fill="#fff" stroke="#8aa8c4"/>
+  <text x="46" y="140" font-size="12.5" font-weight="bold">Se fijaron UNA vez, entrenando:</text>
+  <text x="46" y="160" font-size="12.5">12.000 pasos × 64 episodios = <tspan font-weight="bold">768.000 conversaciones</tspan> · ~1 h de GPU</text>
+
+  <rect x="34" y="184" width="512" height="60" rx="4" fill="#eaf6ec" stroke="#2e7d44" stroke-width="1.6"/>
+  <text x="46" y="205" font-size="13" font-weight="bold" fill="#2e7d44">Cuando vos hablás con el modelo:</text>
+  <text x="46" y="226" font-size="14" font-weight="bold" fill="#2e7d44">estos 863.730 números NO se mueven ni uno.</text>
+
+  <text x="34" y="268" font-size="12.5" fill="#555">Están congelados en el archivo <tspan font-family="DejaVu Sans Mono, monospace">n4_s1.pkl</tspan> de 3,5 MB.</text>
+  <text x="34" y="288" font-size="12.5" fill="#555">Podés copiarlo, mandarlo por mail, y en otra máquina</text>
+  <text x="34" y="306" font-size="12.5" fill="#555">se comporta exactamente igual.</text>
+
+  <!-- DERECHA: archivo -->
+  <rect x="600" y="10" width="566" height="310" rx="7" fill="#fffdf6" stroke="#b5651d" stroke-width="2"/>
+  <rect x="600" y="10" width="566" height="34" rx="7" fill="#b5651d"/>
+  <text x="883" y="33" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold">MEMORIA 2 · EL ARCHIVO</text>
+
+  <text x="620" y="66" font-size="13.5" font-weight="bold" fill="#b5651d">Un vector de 128 números por cada cosa que dijiste</text>
+  <text x="620" y="88" font-size="12.5">Es el <tspan font-weight="bold">qué</tspan>: el contenido concreto de esta conversación.</text>
+  <text x="620" y="106" font-size="12.5">Se calcula <tspan font-weight="bold">en el momento</tspan>, al vuelo.</text>
+
+  <rect x="620" y="120" width="512" height="124" rx="4" fill="#fff" stroke="#d8b48a"/>
+  <text x="632" y="140" font-size="12.5" font-weight="bold">Decís: «el director de norte es ana»</text>
+  <text x="700" y="160" font-size="13" fill="#b5651d">↓ pasa una vez por la red</text>
+  <text x="632" y="180" font-size="12" font-family="DejaVu Sans Mono, monospace">se guarda [−0.03, +0.06, +0.09, … ] · 128 números</text>
+  <text x="632" y="200" font-size="12.5" font-weight="bold">Decís: «no, es beto»</text>
+  <text x="700" y="220" font-size="13" fill="#b5651d">↓ NO borra lo anterior</text>
+  <text x="632" y="238" font-size="12" font-family="DejaVu Sans Mono, monospace">se agrega otra entrada, con su sello de turno</text>
+
+  <rect x="620" y="256" width="512" height="52" rx="4" fill="#fdf2f0" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="632" y="276" font-size="12.5" fill="#c0392b" font-weight="bold">Las dos versiones conviven en el archivo.</text>
+  <text x="632" y="296" font-size="12.5" fill="#c0392b">El modelo decide cuál rige leyendo el sello de orden.</text>
+</svg>
+
+<h2>La analogía que sirve</h2>
+<svg viewBox="0 0 1180 118" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="8" width="566" height="102" rx="6" fill="#f4f7fa" stroke="#8aa8c4"/>
+  <text x="34" y="32" font-size="13.5" font-weight="bold" fill="#12395f">Los pesos = saber leer, escribir y tomar nota</text>
+  <text x="34" y="56" font-size="12.5">Te llevó años aprenderlo. Es lento y carísimo de cambiar.</text>
+  <text x="34" y="80" font-size="12.5">Cuando anotás algo en un cuaderno, <tspan font-weight="bold">tu cerebro no cambia</tspan>:</text>
+  <text x="34" y="100" font-size="12.5">usás una capacidad que ya tenías.</text>
+
+  <rect x="600" y="8" width="566" height="102" rx="6" fill="#fffdf6" stroke="#d8b48a"/>
+  <text x="620" y="32" font-size="13.5" font-weight="bold" fill="#b5651d">El archivo = el cuaderno</text>
+  <text x="620" y="56" font-size="12.5">Escribir un renglón cuesta un segundo. Podés tachar,</text>
+  <text x="620" y="80" font-size="12.5">agregar, corregir. Y si perdés el cuaderno seguís sabiendo</text>
+  <text x="620" y="100" font-size="12.5">escribir — pero perdiste lo anotado.</text>
+</svg>
+
+<h2>Por qué NO conviene que hablar te cambie los pesos</h2>
+<svg viewBox="0 0 1180 140" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="8" width="378" height="124" rx="6" fill="#fdf2f0" stroke="#c0392b"/>
+  <text x="30" y="30" font-size="13" font-weight="bold" fill="#c0392b">1 · Costo</text>
+  <text x="30" y="52" font-size="12.5">Archivar un hecho: <tspan font-weight="bold">una pasada</tspan>, 0,5 KB.</text>
+  <text x="30" y="72" font-size="12.5">Cambiar los pesos: <tspan font-weight="bold">otra vez</tspan> las 768.000</text>
+  <text x="30" y="92" font-size="12.5">conversaciones de entrenamiento.</text>
+  <text x="30" y="118" font-size="12.5" fill="#c0392b" font-weight="bold">Son órdenes de magnitud distintos.</text>
+
+  <rect x="402" y="8" width="378" height="124" rx="6" fill="#fdf2f0" stroke="#c0392b"/>
+  <text x="418" y="30" font-size="13" font-weight="bold" fill="#c0392b">2 · Olvido catastrófico</text>
+  <text x="418" y="52" font-size="12.5">Reentrenar con lo nuevo <tspan font-weight="bold">pisa</tspan> lo viejo.</text>
+  <text x="418" y="72" font-size="12.5">El modelo aprendería tu último dato</text>
+  <text x="418" y="92" font-size="12.5">y perdería los anteriores. Es un problema</text>
+  <text x="418" y="112" font-size="12.5">conocido y sin solución buena.</text>
+
+  <rect x="790" y="8" width="376" height="124" rx="6" fill="#fdf2f0" stroke="#c0392b"/>
+  <text x="806" y="30" font-size="13" font-weight="bold" fill="#c0392b">3 · No se podría corregir</text>
+  <text x="806" y="52" font-size="12.5">Si «ana» quedara grabado en los pesos,</text>
+  <text x="806" y="72" font-size="12.5">«no, es beto» tendría que <tspan font-weight="bold">desaprenderlo</tspan>.</text>
+  <text x="806" y="92" font-size="12.5">En el archivo, la corrección es</text>
+  <text x="806" y="112" font-size="12.5">simplemente <tspan font-weight="bold">una entrada más</tspan>.</text>
+</svg>
+
+<h2>Entonces, ¿qué tiene de nuevo el Micro-LM?</h2>
+<svg viewBox="0 0 1180 156" width="1180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="8" width="566" height="140" rx="6" fill="#f7f7f7" stroke="#bbb"/>
+  <text x="34" y="32" font-size="13.5" font-weight="bold" fill="#555">Lo que hace todo el mundo (RAG)</text>
+  <text x="34" y="56" font-size="12.5">La conversación se guarda <tspan font-weight="bold">afuera</tspan>, en una base de datos.</text>
+  <text x="34" y="78" font-size="12.5">Un buscador aparte trae los trozos parecidos y se los</text>
+  <text x="34" y="100" font-size="12.5"><tspan font-weight="bold">pega al final</tspan> del texto de entrada.</text>
+  <text x="34" y="128" font-size="12.5" fill="#a33">El modelo nunca aprendió a usar esa memoria:</text>
+  <text x="34" y="144" font-size="12.5" fill="#a33">le llega texto pegado y se arregla como puede.</text>
+
+  <rect x="600" y="8" width="566" height="140" rx="6" fill="#eaf6ec" stroke="#2e7d44" stroke-width="1.8"/>
+  <text x="620" y="32" font-size="13.5" font-weight="bold" fill="#2e7d44">Lo que hace el Micro-LM</text>
+  <text x="620" y="56" font-size="12.5">El archivo está <tspan font-weight="bold">adentro</tspan> de la red, y los pesos que lo</text>
+  <text x="620" y="78" font-size="12.5">escriben y lo leen <tspan font-weight="bold">se entrenaron para eso</tspan>.</text>
+  <text x="620" y="100" font-size="12.5">Entra en el <tspan font-weight="bold">bloque 0</tspan> — antes de que el modelo piense,</text>
+  <text x="620" y="122" font-size="12.5">no pegado al final.</text>
+  <text x="620" y="144" font-size="12.5" fill="#2e7d44" font-weight="bold">Medido: temprano 0,7275 · tardío 0,3827.</text>
+</svg>
+
+<p class="nota"><b>Lo que todavía falta, dicho con honestidad:</b> hoy el archivo se reconstruye desde
+las sesiones cada vez que el programa corre — <b>no se guarda en disco entre una ejecución y otra</b>.
+Guardarlo es mecánicamente trivial; lo que no está resuelto es qué pasa cuando crece sin límite:
+cuántas entradas soporta antes de que la lectura empiece a fallar, y qué conviene tirar. Eso es lo
+próximo que hay que medir.</p>
+
+</body></html>
