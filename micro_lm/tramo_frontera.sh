@@ -158,6 +158,14 @@ for _ in $(seq 1 $(( MIN / 2 ))); do
       mv "$TMP/ck_p.pkl" "$CK"
       echo "   [checkpoint parcial guardado: paso $(grep -o '"paso": [0-9]*' "$JS" 2>/dev/null | tail -1 | grep -o '[0-9]*')]"
     fi
+    for v in $(echo "$CORTES" | tr ',' ' '); do
+      vv=$(awk -v x="$v" 'BEGIN{printf "%d", x*100+0.5}')   # awk, no printf: printf usa el locale
+      if [ ! -f "$CK.v$vv" ] \
+         && timeout 300 "${CL[@]}" download -s "$SESION" "/content/ck.pkl.v$vv" "$TMP/c.pkl" >/dev/null 2>&1 \
+         && [ -s "$TMP/c.pkl" ]; then
+        mv "$TMP/c.pkl" "$CK.v$vv"; echo "   [corte vigente $v bajado -> $(basename "$CK.v$vv")]"
+      fi
+    done
   fi
   { printf '%s\n' "$OUT" | grep '^@@JSON@@ ' || true; } | while read -r _ nombre resto; do
     printf '%s' "$resto" > "$SALIDA/$nombre"
@@ -167,6 +175,12 @@ for _ in $(seq 1 $(( MIN / 2 ))); do
     echo "!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado"; break
   fi
   if printf '%s' "$OUT" | grep -q "VIVO= False"; then LISTO=1; echo "== tramo terminado"; break; fi
+  # El PID no alcanza: un proceso ZOMBIE conserva /proc/<pid>, asi que VIVO se queda en True para
+  # siempre y el tramo muere por agotamiento del polling sin bajar nada (paso el 18-ago con las tres
+  # bases de la frontera). El hecho de que el tramo termino es que el JSON llego al paso pedido.
+  if [ -f "$JS" ] && grep -q "\"paso\": $PASOS" "$JS" 2>/dev/null; then
+    LISTO=1; echo "== tramo terminado (JSON en el paso $PASOS)"; break
+  fi
 done
 
 if [ "$LISTO" = "1" ]; then
@@ -176,7 +190,7 @@ if [ "$LISTO" = "1" ]; then
   # Los cortes por valor de `vigente` son el PRODUCTO de la campaña base: si no se bajan, el tramo
   # no sirvio de nada. Se intenta cada uno por separado; los que no existan fallan en silencio.
   for v in $(echo "$CORTES" | tr ',' ' '); do
-    vv=$(printf '%.0f' "$(echo "$v * 100" | bc -l 2>/dev/null || echo 0)")
+    vv=$(awk -v x="$v" 'BEGIN{printf "%d", x*100+0.5}')
     if timeout 420 "${CL[@]}" download -s "$SESION" "/content/ck.pkl.v$vv" "$TMP/c.pkl" >/dev/null 2>&1 \
        && [ -s "$TMP/c.pkl" ]; then
       mv "$TMP/c.pkl" "$CK.v$vv"; echo "   corte vigente $v -> $(basename "$CK.v$vv")"
