@@ -1,0 +1,4 @@
+b0ef03b911effaa1056f9451eb714eb328aa0986420f45adc1e8e3810a9aa76c  PREREG_UMBRAL_PROSPECTIVO.md
+531876844fa61180a7c153ac263f15ddb1d4a41d56dd93296881c5c56a78b1c4  micro_lm/sonda_umbral.py
+e9cdc1e19f827c8dda08dc1559f1daf5227ff4514d4fcf1d85ddfa9bd2ee555b  micro_lm/modelo.py
+congelado 2026-08-19T19:09:30Z · sonda_umbral_prospectiva.py TODAVIA NO EXISTE
