@@ -1,0 +1,280 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{spanish}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=azul,urlcolor=azul]{hyperref}
+\usepackage{tcolorbox}
+
+\definecolor{azul}{HTML}{1F4E79}
+\definecolor{gris}{HTML}{4A4A4A}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{B71C1C}
+\definecolor{fondo}{HTML}{F2F6FA}
+
+\titleformat{\section}{\Large\bfseries\color{azul}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries\color{gris}}{}{0em}{}
+\setlist{itemsep=2pt,topsep=4pt}
+\linespread{1.08}
+
+\newtcolorbox{caja}[1][]{colback=fondo,colframe=azul,boxrule=0.6pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,#1}
+
+\begin{document}
+
+\begin{center}
+{\Huge\bfseries\color{azul} Un modelo de lenguaje\\[2pt] que sabe decir «no sé»}\\[10pt]
+{\large Informe de resultados --- 18 de agosto de 2026}\\[4pt]
+{\color{gris} Maximiliano Speranza --- investigador independiente}\\[2pt]
+{\color{gris}\small ORCID 0009-0005-0413-8554}
+\end{center}
+
+\vspace{6pt}
+
+\begin{caja}
+\textbf{Para quién es este documento.} Está escrito para que se entienda sin saber nada de
+inteligencia artificial. Cada término técnico se explica la primera vez que aparece. Los números
+que figuran acá son los que ya están medidos y verificados; al final hay una sección con lo que
+todavía \emph{no} sabemos, que es igual de importante.
+\end{caja}
+
+\section{El problema, en una página}
+
+Cuando un sistema de inteligencia artificial no sabe algo, casi nunca lo dice. Inventa una
+respuesta con el mismo tono seguro que usa cuando acierta. A eso se le llama \textbf{alucinación}.
+
+El daño no es la respuesta equivocada en sí. Es lo que esa respuesta le hace a todas las demás:
+
+\begin{caja}
+Un error silencioso no cuesta una respuesta. Cuesta \textbf{la confianza en todas las otras}.
+Si el sistema inventa una de cada diez veces y nunca avisa cuál, hay que verificar las diez.
+\end{caja}
+
+Este trabajo ataca tres cosas que en realidad son la misma:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Que el modelo \textbf{no olvide} lo que se le dijo antes.
+  \item Que \textbf{sepa decir «no sé»} cuando no lo tiene.
+  \item Que \textbf{no invente} cuando no sabe.
+\end{enumerate}
+
+Son la misma porque un modelo que recuerda bien, pero no distingue entre «me acuerdo» y «no me
+acuerdo», va a inventar exactamente en los casos en que olvidó.
+
+\section{Qué se construyó}
+
+Un modelo de lenguaje entrenado \textbf{desde cero}, deliberadamente diminuto:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Tamaño & 863.730 parámetros --- 3,5 MB \\
+Vocabulario & 242 palabras \\
+Idioma & artificial, cerrado, pero legible \\
+Entrenamiento & desde cero, sin partir de ningún modelo existente \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Para comparar: los modelos comerciales tienen entre cien mil y un millón de veces más
+parámetros. Un \textbf{parámetro} es un número que el modelo ajusta mientras aprende; son las
+perillas internas que definen su comportamiento.
+
+\textbf{¿Por qué tan chico a propósito?} Porque acá no se busca que sepa mucho, sino poder
+\emph{ver} qué hace por dentro. En un modelo gigante, averiguar por qué inventó algo es
+prácticamente imposible: hay demasiadas piezas. En uno de 3,5 MB se puede abrir, medir cada
+parte y hacer experimentos controlados en horas en vez de meses.
+
+\subsection{La diferencia con lo que se hace habitualmente}
+
+La forma normal de que un sistema «recuerde» es pegarle un buscador por afuera: cuando llega una
+pregunta, el buscador va a una base de datos, trae textos parecidos y se los pasa al modelo. El
+modelo, en sí mismo, no recuerda nada.
+
+Acá el archivo de memoria está \textbf{adentro de la arquitectura}, y se entrena junto con el
+resto. El modelo no recibe textos: escribe sus propios recuerdos y aprende a consultarlos. Eso
+le permite contestar sobre algo dicho en una conversación anterior \textbf{cuyo estado interno ya
+se borró}, y si el dato se corrigió después, contestar con la versión corregida.
+
+\section{Los cinco resultados que ya están asegurados}
+
+\subsection{1. El modelo nunca olvida escribir: se equivoca al leer}
+
+Cuando el modelo se equivoca de dato, ¿es porque no lo guardó, o porque no lo encontró?
+
+Se revisaron 8000 casos. \textbf{El dato buscado estaba guardado en el archivo en el 100\,\% de
+ellos} --- literalmente ni un caso de 8000 en que faltara.
+
+Cuando responde mal, el dato correcto está ahí, en el segundo puesto de su propia lista de
+candidatos, y sólo gana entre el 14 y el 18\,\% de las veces. Cuando responde bien, está en el
+primer puesto.
+
+\begin{caja}
+\textbf{Por qué esto es una buena noticia:} un error de escritura sería irreparable --- lo que no
+se guardó no se puede recuperar. Un error de \emph{lectura} es distinto: la información está,
+sólo falta reconocer que la búsqueda salió mal. \textbf{Y eso se puede convertir en un «no sé».}
+\end{caja}
+
+\subsection{2. Cuando dice «no sé», es porque fue a buscar y no encontró}
+
+Un modelo podría aprender a decir «no sé» por el motivo equivocado: reconociendo la \emph{forma}
+de la pregunta en lugar de consultar su memoria. Sería un truco, no memoria.
+
+El control: se toma la misma pregunta, en el mismo contexto, y se cambia una sola cosa --- si el
+dato está guardado o no.
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Situación} & \textbf{Veces que dice «no sé»} \\
+\midrule
+El dato no está en su memoria & $\approx$ 90\,\% \\
+El dato sí está & \textbf{0,6\,\% a 2,2\,\%} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Con el dato disponible deja de abstenerse y responde, acertando el valor correcto entre el 98 y
+el 99\,\% de las veces. \textbf{Está consultando su memoria de verdad.}
+
+\subsection{3. El hallazgo principal: la abstención necesita su propia salida}
+
+Acá está el resultado central, y es de \emph{arquitectura} --- de cómo está construido el modelo,
+no de cuánto se lo entrena.
+
+Originalmente, «no sé» era una palabra más del vocabulario. Para responder, el modelo elegía
+entre todas sus palabras: «ana», «beto», «743»\ldots\ y «no sé». Todas competían en la misma
+votación interna.
+
+El problema es que ahí se mezclan dos preguntas de naturaleza distinta:
+
+\begin{itemize}
+  \item «¿Tengo el dato?» --- una pregunta de sí o no, más o menos balanceada.
+  \item «¿Cuál es el valor?» --- una elección entre cien opciones.
+\end{itemize}
+
+La propuesta fue \textbf{separarlas}: darle a la abstención una salida propia, independiente de
+la votación por el valor. Cuesta 129 parámetros más sobre 863.730 --- un 0,015\,\%.
+
+Se probaron tres versiones sobre los mismos modelos, con el mismo entrenamiento y el mismo
+presupuesto, cambiando \emph{únicamente} dónde se toma la decisión de callarse:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Versión} & \textbf{Modelos que pasan la prueba} & \textbf{Error medio} \\
+\midrule
+\textcolor{verde}{\textbf{Salida propia}} & \textcolor{verde}{\textbf{4 de 5}} & \textcolor{verde}{\textbf{0,093}} \\
+Palabra más del vocabulario & 0 de 5 & 0,186 \\
+Palabra, pero «amplificada» & 0 de 5 & 0,239 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{De 0 de 5 a 4 de 5 cambiando dónde se decide, no cuánto se entrena.}
+
+El «error medio» de la tabla es la \textbf{falsa abstención}: cuántas veces dice «no sé» aunque
+sí tenía el dato. Es el precio de enseñarle a callarse, y es el que hay que mantener bajo ---
+porque un modelo que contesta «no sé» a todo nunca se equivoca, y tampoco sirve para nada.
+
+\subsection{4. No era el tamaño: era la competencia}
+
+La tercera versión de la tabla merece una explicación, porque su fracaso enseña algo.
+
+Se había observado que el vector interno de «no sé» era tres veces más corto que el de una
+palabra normal --- como si compitiera en desventaja. La versión «amplificada» lo agrandaba para
+emparejarlo.
+
+Fracasó en los cinco modelos, y peor que no hacer nada. Al ir a mirar por qué, apareció que la
+observación original mezclaba dos partes distintas del modelo: en la parte que \emph{de verdad}
+decide la respuesta, «no sé» no estaba en desventaja --- era casi el \textbf{doble} de largo que
+una palabra normal.
+
+\begin{caja}
+\textbf{Conclusión:} el problema nunca fue el tamaño del vector. Era que dos decisiones distintas
+compartían la misma votación. Emparejar los tamaños no cambia nada; separar las decisiones sí.
+\end{caja}
+
+\subsection{5. Lo que falta es calibración, no capacidad}
+
+De los cinco modelos, uno no llegó a pasar la prueba. ¿Le falta capacidad, o sólo está mal
+ajustado?
+
+El modelo produce internamente un número que indica «cuán seguro estoy de que no lo tengo», y
+después lo compara con un punto de corte para decidir si se calla. Ese punto de corte estaba
+fijado en el valor de manual, sin ajustar.
+
+Midiendo qué tan bien ese número separa los casos en que el dato está de los casos en que no
+está, la puntuación va de \textbf{0,77 a 0,99} (donde 0,5 sería no distinguir nada y 1,0 sería
+perfecto). \textbf{La señal está y es buena.} Ajustando el punto de corte con datos separados de
+los de la evaluación, pasan 5 de 6 modelos --- incluido el que fallaba.
+
+\section{Cómo sabemos que esto es cierto}
+
+\subsection{Todo se predice por escrito antes de medir}
+
+Cada experimento se escribe primero: qué se espera, con qué números exactos se considera
+confirmado y con cuáles refutado. Ese documento se sella con una \textbf{huella digital
+criptográfica} --- un código que cambia si se altera una sola letra --- y se publica con fecha
+antes de correr nada.
+
+Sirve para una cosa concreta: hace imposible acomodar el criterio después de ver los resultados.
+Es una práctica común en medicina y rara en inteligencia artificial.
+
+\subsection{Se reportan también los resultados incómodos}
+
+En este mismo informe hay dos ejemplos:
+
+\begin{itemize}
+  \item Una de las cuatro predicciones \textbf{no se cumplió} en su forma literal. El desvío fue
+  \emph{a favor} del resultado --- el modelo con salida propia recuerda mejor de lo permitido por
+  el criterio --- pero queda registrado como incumplimiento, sin cambiar el criterio después.
+  \item La primera versión de un análisis dio un resultado demasiado bueno porque el ajuste y la
+  medición usaban los mismos datos. Se rehizo separándolos y el resultado bajó.
+\end{itemize}
+
+A lo largo del proyecto se detectaron \textbf{ocho} casos en que un número limpio escondía un
+error de instrumentación. Todos están documentados. La costumbre de buscarlos es parte del
+método.
+
+\section{Lo que todavía no sabemos}
+
+\begin{itemize}
+  \item \textbf{Es un idioma artificial de 242 palabras}, no lenguaje humano. Que el mecanismo
+  funcione acá no garantiza que funcione a escala real: lo hace plausible y medible.
+  \item \textbf{Un modelo de cinco no pasa} con el ajuste de fábrica. Hay evidencia de que es
+  calibración, pero se midió después de ver los resultados, así que es una pista fuerte, no una
+  conclusión.
+  \item \textbf{No sabemos cuán entrenado tiene que estar} el modelo antes de poder enseñarle a
+  callarse. Si hiciera falta entrenarlo casi hasta la perfección, el método no serviría en la
+  práctica. Ese experimento está corriendo mientras se escribe este informe.
+  \item \textbf{El ajuste del punto de corte no está probado} como parte de un experimento
+  predicho de antemano. Requiere su propio registro previo.
+\end{itemize}
+
+\section{Por qué importa}
+
+Hoy la industria intenta que los modelos no inventen \textbf{pidiéndoselo}: instrucciones,
+filtros, verificadores externos. Todo por afuera del modelo.
+
+Lo que estos resultados sugieren es distinto: \textbf{callarse a tiempo puede ser una propiedad
+de cómo está construido el modelo}. No hace falta que sea más grande ni que se lo entrene más.
+Hace falta que la decisión de «no sé» no compita con la decisión de «qué respondo».
+
+Ciento veintinueve parámetros sobre ochocientos sesenta mil. Un 0,015\,\% más de modelo, y pasa
+de no poder callarse nunca a poder hacerlo casi siempre.
+
+\vfill
+\begin{center}
+{\color{gris}\small
+Todos los experimentos citados están registrados con huella criptográfica y fecha anterior a su
+ejecución.\\
+Documento generado el 18 de agosto de 2026.}
+\end{center}
+
+\end{document}
