@@ -52,15 +52,31 @@ mandar() {
     -d chat_id="$CHAT" --data-urlencode "text=$1" >/dev/null 2>&1
 }
 
+# Una unidad se escribe "nivel:semilla" y toma el PREFIJO global, o "prefijo/nivel:semilla" para
+# traerse el suyo. Lo segundo es lo que necesitan las 18 fases del PREREG_FRONTERA: comparten nivel
+# y semilla pero difieren en margen de entrada (85/90/95) y en condición (token/cabeza), así que
+# conviven seis familias en la misma corrida del rotador y una sola variable global no alcanza.
 uni_de() {
-  local n="${1%%:*}"
-  local s="${1##*:}"
-  echo "${PREFIJO}${n}_s${s}"
+  local a="$1" pre="$PREFIJO"
+  case "$a" in */*) pre="${a%%/*}"; a="${a#*/}";; esac
+  local n="${a%%:*}"
+  local s="${a##*:}"
+  echo "${pre}${n}_s${s}"
+}
+
+# El paso final tampoco puede ser global en las fases: cada corte cayó en un paso distinto y el
+# presupuesto de 2000 pasos (§7) es lo que se mantiene igual. `fases.tsv` manda cuando la unidad
+# está ahí; si no, vale el PASOS de la línea de comandos.
+pasos_de() {
+  local u; u="$(uni_de "$1")"
+  local p=""
+  [ -f "$AQUI/fases.tsv" ] && p="$(awk -F'\t' -v u="$u" '$1==u {print $4; exit}' "$AQUI/fases.tsv")"
+  echo "${p:-$PASOS}"
 }
 
 completa() {
   local u; u="$(uni_de "$1")"
-  grep -q "\"paso\": $PASOS" "$SALIDA/${u}.json" 2>/dev/null
+  grep -q "\"paso\": $(pasos_de "$1")" "$SALIDA/${u}.json" 2>/dev/null
 }
 
 bloqueada() {
@@ -148,9 +164,12 @@ Arranca: $FALTAN"
 
     for u in $FALTAN; do
       completa "$u" && continue
-      echo "   -> tramo $u en $c (desde el paso $(paso_de "$u"))"
-      "$AQUI/tramo_frontera.sh" "$c" "$SESION" "$u" "$PASOS" "$TRAMO" "$CADA"
-      mandar "micro-LM · $(uni_de "$u") (cuenta $c): tramo cerrado en el paso $(paso_de "$u") de $PASOS."
+      P_U="$(pasos_de "$u")"
+      PRE_U="$PREFIJO"; NS_U="$u"
+      case "$u" in */*) PRE_U="${u%%/*}"; NS_U="${u#*/}";; esac
+      echo "   -> tramo $u en $c (desde el paso $(paso_de "$u") de $P_U)"
+      PREFIJO="$PRE_U" "$AQUI/tramo_frontera.sh" "$c" "$SESION" "$NS_U" "$P_U" "$TRAMO" "$CADA"
+      mandar "micro-LM · $(uni_de "$u") (cuenta $c): tramo cerrado en el paso $(paso_de "$u") de $P_U."
     done
 
     timeout 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true

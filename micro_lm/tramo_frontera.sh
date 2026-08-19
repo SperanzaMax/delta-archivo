@@ -65,6 +65,21 @@ CK="$CKPTS/${UNI}.pkl"
 # Siembra: la primera vez se arranca desde el checkpoint BASE ya saturado, igual que hizo la
 # campania `x`. Se COPIA (no se mueve ni se comparte) para que la base quede intacta.
 BASE="$CKPTS/n${NIVEL}_s${SEM}.pkl"
+# PREREG_FRONTERA §3 · LAS 18 FASES. Una fase no arranca de la campaña base sino de un CORTE de la
+# base de la frontera (`f2_s*.pkl.v85/90/95`), y cada corte cayó en un paso distinto porque el
+# criterio fue el VALOR de `vigente`, no el paso. `fases.tsv` (lo escribe preparar_fases.py) trae
+# para cada unidad su checkpoint de partida, su condicion y su paso final = corte + 2000. Los tres
+# datos salen de ahi y no del entorno, para que no puedan desincronizarse entre scripts.
+if [ -f "$AQUI/fases.tsv" ]; then
+  FILA="$(awk -F'\t' -v u="$UNI" '$1==u {print; exit}' "$AQUI/fases.tsv")"
+  if [ -n "$FILA" ]; then
+    BASE="$CKPTS/$(echo "$FILA" | cut -f2)"
+    PASOS="$(echo "$FILA" | cut -f4)"
+    ABST="$(echo "$FILA" | cut -f5)"
+    SEMBRAR=1; REINIT=1; CORTES=""
+    echo "== fase de la frontera: $UNI parte de $(basename "$BASE") · abst $ABST · hasta $PASOS"
+  fi
+fi
 SEMBRADO=0
 if [ "$SEMBRAR" = "1" ] && [ ! -f "$CK" ] && [ -f "$BASE" ]; then
   echo "== siembra: $UNI arranca desde $(basename "$BASE")"

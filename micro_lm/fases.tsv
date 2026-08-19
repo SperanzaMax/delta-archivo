@@ -1,0 +1,13 @@
+# unidad	base	paso_base	pasos_total	abst	vigente_corte
+k85t2_s0	f2_s0.pkl.v85	3000	5000	token	0.8732
+k85c2_s0	f2_s0.pkl.v85	3000	5000	cabeza	0.8732
+k85t2_s2	f2_s2.pkl.v85	3000	5000	token	0.8993
+k85c2_s2	f2_s2.pkl.v85	3000	5000	cabeza	0.8993
+k90t2_s0	f2_s0.pkl.v90	3250	5250	token	0.9276
+k90c2_s0	f2_s0.pkl.v90	3250	5250	cabeza	0.9276
+k90t2_s2	f2_s2.pkl.v90	3250	5250	token	0.9177
+k90c2_s2	f2_s2.pkl.v90	3250	5250	cabeza	0.9177
+k95t2_s0	f2_s0.pkl.v95	3500	5500	token	0.9601
+k95c2_s0	f2_s0.pkl.v95	3500	5500	cabeza	0.9601
+k95t2_s2	f2_s2.pkl.v95	3750	5750	token	0.9714
+k95c2_s2	f2_s2.pkl.v95	3750	5750	cabeza	0.9714

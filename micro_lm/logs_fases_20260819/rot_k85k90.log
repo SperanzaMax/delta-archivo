@@ -1,0 +1,66 @@
+== rotador-frontera · familia 'k' · p_nose 0.4 · unidades k85t/2:0,k85c/2:0,k85t/2:2,k85c/2:2,k90t/2:0,k90c/2:0,k90t/2:2,k90c/2:2 · cuentas: H K L M N
+-- vuelta 1 · cuenta H · faltan: k85t/2:0 k85c/2:0 k85t/2:2 k85c/2:2 k90t/2:0 k90c/2:0 k90t/2:2 k90c/2:2 · 07:15:09
+   >> OTORGADA en H: [tr2_h_0715] gpu-t4-s-kkb-ass1b2-21ofi575ruiwo | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo k85t/2:0 en H (desde el paso 0 de 5000)
+== fase de la frontera: k85t2_s0 parte de f2_s0.pkl.v85 · abst token · hasta 5000
+== siembra: k85t2_s0 arranca desde f2_s0.pkl.v85
+== tramo · cuenta H · sesion tr2_h_0715 · k85t2_s0 · +2000 de 5000 pasos · p_nose 0.4 · abst token
+[colab] Uploaded '/tmp/tmp.qbqlC9rIii/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (9,9M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/k85t2_s0.pkl' to '/content/ck.pkl'
+[colab] Session 'tr2_h_0715' appears to be lost (404/401). Cleaning up.
+   -> tramo k85c/2:0 en H (desde el paso 0 de 5000)
+== fase de la frontera: k85c2_s0 parte de f2_s0.pkl.v85 · abst cabeza · hasta 5000
+== siembra: k85c2_s0 arranca desde f2_s0.pkl.v85
+== tramo · cuenta H · sesion tr2_h_0715 · k85c2_s0 · +2000 de 5000 pasos · p_nose 0.4 · abst cabeza
+[colab] Session 'tr2_h_0715' not found.
+   -> tramo k85t/2:2 en H (desde el paso 0 de 5000)
+== fase de la frontera: k85t2_s2 parte de f2_s2.pkl.v85 · abst token · hasta 5000
+== siembra: k85t2_s2 arranca desde f2_s2.pkl.v85
+== tramo · cuenta H · sesion tr2_h_0715 · k85t2_s2 · +2000 de 5000 pasos · p_nose 0.4 · abst token
+[colab] Session 'tr2_h_0715' not found.
+   -> tramo k85c/2:2 en H (desde el paso 0 de 5000)
+== fase de la frontera: k85c2_s2 parte de f2_s2.pkl.v85 · abst cabeza · hasta 5000
+== siembra: k85c2_s2 arranca desde f2_s2.pkl.v85
+== tramo · cuenta H · sesion tr2_h_0715 · k85c2_s2 · +2000 de 5000 pasos · p_nose 0.4 · abst cabeza
+[colab] Session 'tr2_h_0715' not found.
+   -> tramo k90t/2:0 en H (desde el paso 0 de 5250)
+== fase de la frontera: k90t2_s0 parte de f2_s0.pkl.v90 · abst token · hasta 5250
+== siembra: k90t2_s0 arranca desde f2_s0.pkl.v90
+== tramo · cuenta H · sesion tr2_h_0715 · k90t2_s0 · +2000 de 5250 pasos · p_nose 0.4 · abst token
+[colab] Session 'tr2_h_0715' not found.
+   -> tramo k90c/2:0 en H (desde el paso 0 de 5250)
+== fase de la frontera: k90c2_s0 parte de f2_s0.pkl.v90 · abst cabeza · hasta 5250
+== siembra: k90c2_s0 arranca desde f2_s0.pkl.v90
+== tramo · cuenta H · sesion tr2_h_0715 · k90c2_s0 · +2000 de 5250 pasos · p_nose 0.4 · abst cabeza
+[colab] Session 'tr2_h_0715' not found.
+   -> tramo k90t/2:2 en H (desde el paso 0 de 5250)
+== fase de la frontera: k90t2_s2 parte de f2_s2.pkl.v90 · abst token · hasta 5250
+== siembra: k90t2_s2 arranca desde f2_s2.pkl.v90
+== tramo · cuenta H · sesion tr2_h_0715 · k90t2_s2 · +2000 de 5250 pasos · p_nose 0.4 · abst token
+[colab] Session 'tr2_h_0715' not found.
+   -> tramo k90c/2:2 en H (desde el paso 0 de 5250)
+== fase de la frontera: k90c2_s2 parte de f2_s2.pkl.v90 · abst cabeza · hasta 5250
+== siembra: k90c2_s2 arranca desde f2_s2.pkl.v90
+== tramo · cuenta H · sesion tr2_h_0715 · k90c2_s2 · +2000 de 5250 pasos · p_nose 0.4 · abst cabeza
+[colab] Session 'tr2_h_0715' not found.
+   tr2_h_0715 parada; pendientes ahora: k85t/2:0 k85c/2:0 k85t/2:2 k85c/2:2 k90t/2:0 k90c/2:0 k90t/2:2 k90c/2:2
+-- vuelta 1 · cuenta K · faltan: k85t/2:0 k85c/2:0 k85t/2:2 k85c/2:2 k90t/2:0 k90c/2:0 k90t/2:2 k90c/2:2 · 08:24:43
+   >> OTORGADA en K: [tr2_k_0824] gpu-t4-s-kkb-ass1c2-293n6nzfspzda | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo k85t/2:0 en K (desde el paso 0 de 5000)
+== fase de la frontera: k85t2_s0 parte de f2_s0.pkl.v85 · abst token · hasta 5000
+== tramo · cuenta K · sesion tr2_k_0824 · k85t2_s0 · +2000 de 5000 pasos · p_nose 0.4 · abst token
+[colab] Uploaded '/tmp/tmp.mnNgD31hUU/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (9,9M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/k85t2_s0.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2484
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 3000 de 5000 (12 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.7635 · anterior 0.4806 · abstencion 0.4102 · truncados 0.0000 · nose 0.7796 (ent 0.8160/rel 0.7449) · falsa_abst 0.1833 
+VIVO= True ULTIMO= ── eval: vigente 0.9335 · anterior 0.7000 · abstencion 0.3047 · truncados 0.0000 · nose 0.7253 (ent 0.7664/rel 0.6987) · falsa_abst 0.0374 
+   [checkpoint parcial guardado: paso 3750]
+VIVO= True ULTIMO= ── eval: vigente 0.8429 · anterior 0.7174 · abstencion 0.3672 · truncados 0.0000 · nose 0.7708 (ent 0.8008/rel 0.7400) · falsa_abst 0.1196 
+VIVO= True ULTIMO= ── eval: vigente 0.8478 · anterior 0.7118 · abstencion 0.3965 · truncados 0.0000 · nose 0.8444 (ent 0.8645/rel 0.8301) · falsa_abst 0.1153 
+VIVO= True ULTIMO= ── eval: vigente 0.8832 · anterior 0.7701 · abstencion 0.3828 · truncados 0.0000 · nose 0.8502 (ent 0.8692/rel 0.8335) · falsa_abst 0.0885 

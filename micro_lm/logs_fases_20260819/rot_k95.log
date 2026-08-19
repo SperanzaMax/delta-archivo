@@ -1,0 +1,46 @@
+== rotador-frontera · familia 'k' · p_nose 0.4 · unidades k95t/2:0,k95c/2:0,k95t/2:2,k95c/2:2 · cuentas: I G C D
+-- vuelta 1 · cuenta I · faltan: k95t/2:0 k95c/2:0 k95t/2:2 k95c/2:2 · 07:15:11
+   >> OTORGADA en I: [tr2_i_0715] gpu-t4-s-kkb-usw4a1-1vugubs2izaj1 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo k95t/2:0 en I (desde el paso 0 de 5500)
+== fase de la frontera: k95t2_s0 parte de f2_s0.pkl.v95 · abst token · hasta 5500
+== siembra: k95t2_s0 arranca desde f2_s0.pkl.v95
+== tramo · cuenta I · sesion tr2_i_0715 · k95t2_s0 · +2000 de 5500 pasos · p_nose 0.4 · abst token
+[colab] Uploaded '/tmp/tmp.LftDCRG7Z6/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (9,9M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/k95t2_s0.pkl' to '/content/ck.pkl'
+[colab] Session 'tr2_i_0715' appears to be lost (404/401). Cleaning up.
+   -> tramo k95c/2:0 en I (desde el paso 0 de 5500)
+== fase de la frontera: k95c2_s0 parte de f2_s0.pkl.v95 · abst cabeza · hasta 5500
+== siembra: k95c2_s0 arranca desde f2_s0.pkl.v95
+== tramo · cuenta I · sesion tr2_i_0715 · k95c2_s0 · +2000 de 5500 pasos · p_nose 0.4 · abst cabeza
+[colab] Session 'tr2_i_0715' not found.
+   -> tramo k95t/2:2 en I (desde el paso 0 de 5750)
+== fase de la frontera: k95t2_s2 parte de f2_s2.pkl.v95 · abst token · hasta 5750
+== siembra: k95t2_s2 arranca desde f2_s2.pkl.v95
+== tramo · cuenta I · sesion tr2_i_0715 · k95t2_s2 · +2000 de 5750 pasos · p_nose 0.4 · abst token
+[colab] Session 'tr2_i_0715' not found.
+   -> tramo k95c/2:2 en I (desde el paso 0 de 5750)
+== fase de la frontera: k95c2_s2 parte de f2_s2.pkl.v95 · abst cabeza · hasta 5750
+== siembra: k95c2_s2 arranca desde f2_s2.pkl.v95
+== tramo · cuenta I · sesion tr2_i_0715 · k95c2_s2 · +2000 de 5750 pasos · p_nose 0.4 · abst cabeza
+[colab] Session 'tr2_i_0715' not found.
+   tr2_i_0715 parada; pendientes ahora: k95t/2:0 k95c/2:0 k95t/2:2 k95c/2:2
+-- vuelta 1 · cuenta G · faltan: k95t/2:0 k95c/2:0 k95t/2:2 k95c/2:2 · 08:24:36
+   >> OTORGADA en G: [tr2_g_0824] gpu-t4-s-kkb-ass1c2-cq516rjn0huj | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo k95t/2:0 en G (desde el paso 0 de 5500)
+== fase de la frontera: k95t2_s0 parte de f2_s0.pkl.v95 · abst token · hasta 5500
+== tramo · cuenta G · sesion tr2_g_0824 · k95t2_s0 · +2000 de 5500 pasos · p_nose 0.4 · abst token
+[colab] Uploaded '/tmp/tmp.fzhKSDjfvY/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (9,9M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/k95t2_s0.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 896
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 3500 de 5500 (14 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.9386 · anterior 0.7278 · abstencion 0.3359 · truncados 0.0000 · nose 0.7944 (ent 0.8339/rel 0.7565) · falsa_abst 0.0440 
+VIVO= True ULTIMO= ── eval: vigente 0.8103 · anterior 0.7347 · abstencion 0.4121 · truncados 0.0000 · nose 0.8545 (ent 0.9103/rel 0.8066) · falsa_abst 0.1363 
+   [checkpoint parcial guardado: paso 4250]
+VIVO= True ULTIMO= ── eval: vigente 0.7110 · anterior 0.7806 · abstencion 0.4844 · truncados 0.0000 · nose 0.8784 (ent 0.8995/rel 0.8592) · falsa_abst 0.2403 
+VIVO= True ULTIMO= ── eval: vigente 0.8858 · anterior 0.8188 · abstencion 0.3809 · truncados 0.0000 · nose 0.8487 (ent 0.9021/rel 0.8048) · falsa_abst 0.0893 
+VIVO= True ULTIMO= ── eval: vigente 0.8630 · anterior 0.7736 · abstencion 0.4102 · truncados 0.0000 · nose 0.9014 (ent 0.9377/rel 0.8741) · falsa_abst 0.1049 
