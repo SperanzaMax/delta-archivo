@@ -155,6 +155,28 @@ el margen es la variable, no una demostración. **Lo que faltaría es la celda c
 nivel 3 o 4 detenido en un margen alto, o un nivel 2 entrenado a fondo pero trabado en margen bajo
 —que es, justamente, lo que `f2_s1` iba a dar y no dio.
 
+> ### ✅ RESUELTO EL MISMO DÍA — el margen sobrevive al contraste cruzado
+>
+> `f2_s1` **sí sirvió**, por el otro lado. Fracasó como base de cortes, pero es exactamente la celda
+> que faltaba: **nivel 2 (tarea fácil), entrenada a fondo, margen +0,2124**, o sea margen bajo por una
+> vía nunca probada. `PREREG_CELDA_CRUZADA.md` (SHA `6b75639a…`) congeló dos predicciones excluyentes
+> antes de correr, y el resultado es:
+>
+> | unidad | condición | `falsa_abst` | |
+> |---|---|---:|---|
+> | mt2_s1 | `token` | 0,1885 | falla |
+> | mc2_s1 | `cabeza` | 0,0902 | pasa |
+>
+> **C-2 queda descartada**: si gobernara la dificultad de la tarea, las dos habrían pasado, porque
+> todas las unidades de nivel 2 pasan con las dos condiciones. `token` falló. **El margen no era un
+> proxy de la dificultad de la tarea.**
+>
+> **Con una salvedad grande:** el «pasa» de `cabeza` depende del último tick (en los seis puntos
+> válidos anteriores estaba por encima de 0,10). Lo robusto no es el veredicto binario sino el
+> contraste pareado: `cabeza` tiene menor `falsa_abst` que `token` en **7 de 7** puntos válidos
+> (signos, p = 0,0078), con medias de **0,2718 contra 0,1430**. Detalle en
+> `INFORME_CELDA_CRUZADA_20260819.md`.
+
 ---
 
 ## §6 · Qué queda
