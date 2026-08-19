@@ -19,6 +19,7 @@ __pycache__/
 micro_lm/**/*.pkl
 # Ruido de operacion: el stdout de cada cuenta de Colab durante una campania.
 micro_lm/logs_campania_*/
+micro_lm/logs_frontera_*/
 preprint/*.aux
 preprint/*.log
 preprint/*.out
