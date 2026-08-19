@@ -11,3 +11,5 @@ k95t2_s0	f2_s0.pkl.v95	3500	5500	token	0.9601
 k95c2_s0	f2_s0.pkl.v95	3500	5500	cabeza	0.9601
 k95t2_s2	f2_s2.pkl.v95	3750	5750	token	0.9714
 k95c2_s2	f2_s2.pkl.v95	3750	5750	cabeza	0.9714
+mt2_s1	f2_s1.pkl	18000	20000	token	0.8030
+mc2_s1	f2_s1.pkl	18000	20000	cabeza	0.8030
