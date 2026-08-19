@@ -38,3 +38,4 @@ micro_lm/gasto/
 # Basura de ImageMagick que quedo en el arbol el 16-ago; no es del pipeline.
 micro_lm/jax
 micro_lm/logs_fases_*/
+micro_lm/logs_celda_dificil_*/
