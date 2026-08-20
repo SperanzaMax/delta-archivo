@@ -1,0 +1,30 @@
+MONITOR DE DESACUERDO v2 — PREREG_MONITOR_DESACUERDO_V2.md (SHA b8e187b4...)
+K=16 pasadas · f=0.25 de las entradas tapadas · corte estructural consistencia < 0.75
+rng 77000+s · 8x64 = 512 muestras por unidad
+
+unidad       AUC   M-1 |   f_abst     nose   M-2 |  M-3 cambia   M-3 |    M-4
+------------------------------------------------------------------------------
+c1_s0: c1_s0.pkl · paso 14000
+c1_s0      0.669    no |   0.5901   0.7474    no |      0.9969    SI |     OK
+c2_s0: c2_s0.pkl · paso 14000
+c2_s0      0.656    no |   0.4300   0.6537    no |      0.9831    SI |     OK
+c3_s0: c3_s0.pkl · paso 14000
+c3_s0      0.552    no |   0.5973   0.6484    no |      0.9865    SI |     OK
+c3_s1: c3_s1.pkl · paso 14000
+c3_s1      0.583    no |   0.5946   0.6806    no |      0.9793    SI |     OK
+c3_s2: c3_s2.pkl · paso 14000
+c3_s2      0.558    no |   0.5480   0.6138    no |      0.9770    SI |     OK
+c4_s0: c4_s0.pkl.p14000 · paso 14000
+c4_s0      0.509    no |   0.5625   0.5625    no |      0.9921    SI |     OK
+c4_s1: c4_s1.pkl.p14000 · paso 14000
+c4_s1      0.502    no |   0.5975   0.5515    no |      0.9922    SI |     OK
+c4_s2: c4_s2.pkl.p14000 · paso 14000
+c4_s2      0.586    no |   0.5440   0.5902    no |      0.9841    SI |     OK
+------------------------------------------------------------------------------
+M-1 · AUC >= 0,70 en 0/8   (>= 6/8)  -> NO CUMPLE
+M-2 · corte estructural pasa en 0/8   (>= 6/8)  -> NO CUMPLE
+      referencias del 20-ago, mismas unidades: U-1 = 2/8 · sigma>0,5 = 6/8 · U-2 = 7/8
+M-3 · tapar la entrada del hecho cambia la respuesta en >= 0,50 en 8/8 unidades
+M-4 · el nulo (f=0) da 1,000 exacto en 8/8  -> OK
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/desacuerdo_20260820.json
