@@ -1,0 +1,49 @@
+=== TRAMO CERRADO ===
+"paso": 20000
+
+historia: 52 puntos, 24 posteriores al paso 14000
+
+   paso  falsa_abst     nose   vigente
+--------------------------------------
+  14250      0.0557   0.5865    0.7276
+  14500      0.0923   0.5952    0.7023
+  14750      0.0919   0.6449    0.7596
+  15000      0.1667   0.7171    0.6530
+  15250      0.0660   0.6377    0.7742
+  15500      0.1075   0.7222    0.7013
+  15750      0.0162   0.5698    0.8102
+  16000      0.0711   0.6421    0.7716
+  16250      0.1424   0.7357    0.6821
+  16500      0.0505   0.6397    0.8048
+  16750      0.0450   0.6712    0.8092
+  17000      0.0259   0.6611    0.8008
+  17250      0.0424   0.6816    0.8105
+  17500      0.0812   0.7093    0.7729
+  17750      0.0588   0.7095    0.8439
+  18000      0.0519   0.7307    0.8692
+  18250      0.1463   0.8118    0.7239
+  18500      0.0536   0.6841    0.8710
+  18750      0.0750   0.7822    0.8268
+  19000      0.0924   0.7609    0.7813
+  19250      0.0289   0.7669    0.8779
+  19500      0.0540   0.7449    0.8392
+  19750      0.0593   0.7166    0.8461
+  20000      0.0036   0.7102    0.8712
+
+T-1 · Spearman(falsa_abst, paso) = -0.3096  p = 0.141  (n=24)
+      criterio rho >= +0,41 y p < 0,05  ->  NO CUMPLE
+T-3 · Spearman(nose, paso)       = +0.6635  p = 0.0004089  ->  CUMPLE (hay intercambio)
+
+T-2 · EXTREMOS con 2048 muestras y el rng de prueba (77000+semilla)
+      paso 14000: falsa_abst 0.1927 · nose 0.6704 · vigente 0.6168  (n=2048)
+      paso 20000: falsa_abst 0.0170 · nose 0.6962 · vigente 0.8793  (n=2048)
+      diferencia falsa_abst = -0.1757  (criterio >= +0,03)  ->  NO CONFIRMA
+T-4 · vigente +0.2625  (criterio: no cae mas de 0,10)  ->  CUMPLE
+
+VEREDICTO segun el §4 del prereg:
+  T-1 no cumple -> los tres puntos del 19-ago eran ruido de muestra chica.
+  Se RETIRA la advertencia del INFORME_CELDA_DIFICIL.
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/c4s2_presupuesto_20260820.json
+
+[exited with code 0]
