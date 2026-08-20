@@ -88,9 +88,13 @@ def medir(ck, nivel, semilla, n, B, p_nose=0.4, p_vieja=0.35):
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--hist", default=os.path.join(AQUI, "corridas_20260820", "c4_s2.json"))
-ap.add_argument("--ck-viejo", default=os.path.join(AQUI, "ckpts", "c4_s2.pkl.p14000"))
-ap.add_argument("--ck-nuevo", default=os.path.join(AQUI, "ckpts", "c4_s2.pkl"))
+ap.add_argument("--unidad", default="c4_s2",
+                help="unidad a analizar. La replica de PREREG_C4_REPLICA.md corre los mismos T-1..T-4 "
+                     "sobre c4_s0 y c4_s1, asi que el nivel y la semilla salen del nombre en vez de "
+                     "estar escritos a mano.")
+ap.add_argument("--hist", default=None)
+ap.add_argument("--ck-viejo", default=None)
+ap.add_argument("--ck-nuevo", default=None)
 ap.add_argument("--n", type=int, default=32)
 ap.add_argument("--batch", type=int, default=64)
 ap.add_argument("--salida", default=os.path.join(AQUI, "c4s2_presupuesto_20260820.json"))
@@ -98,8 +102,16 @@ ap.add_argument("--sin-extremos", action="store_true",
                 help="salta T-2/T-4 (que muestrean 2048 y compiten por la CPU). El aviso automatico "
                      "lo usa para mandar la tendencia sin frenar lo que este corriendo.")
 a_ = ap.parse_args()
+U = a_.unidad
+NIVEL, SEMILLA = int(U[1]), int(U.split("_s")[1])
+a_.hist = a_.hist or os.path.join(AQUI, "corridas_20260820", f"{U}.json")
+a_.ck_viejo = a_.ck_viejo or os.path.join(AQUI, "ckpts", f"{U}.pkl.p14000")
+a_.ck_nuevo = a_.ck_nuevo or os.path.join(AQUI, "ckpts", f"{U}.pkl")
+if a_.salida.endswith("c4s2_presupuesto_20260820.json") and U != "c4_s2":
+    a_.salida = os.path.join(AQUI, f"{U}_presupuesto_20260820.json")
 
-print("c4_s2 CON MAS PRESUPUESTO — PREREG_C4S2_PRESUPUESTO.md (SHA 8446a27e...)\n")
+print(f"{U} CON MAS PRESUPUESTO — PREREG_C4S2_PRESUPUESTO.md (SHA 8446a27e...) / "
+      f"PREREG_C4_REPLICA.md (SHA 372d53c8...)\n")
 
 hist = json.load(open(a_.hist))["historia"]
 nuevos = [h for h in hist if h["paso"] > CORTE]
@@ -137,7 +149,7 @@ for nom, ck in () if a_.sin_extremos else (("14000", a_.ck_viejo), ("nuevo", a_.
     if not os.path.exists(ck):
         print(f"      {nom}: falta {ck}")
         continue
-    res2[nom] = medir(ck, nivel=4, semilla=2, n=a_.n, B=a_.batch)
+    res2[nom] = medir(ck, nivel=NIVEL, semilla=SEMILLA, n=a_.n, B=a_.batch)
     m = res2[nom]
     print(f"      paso {m['paso']:>5}: falsa_abst {m['falsa_abst']:.4f} · nose {m['nose']:.4f} "
           f"· vigente {m['vigente']:.4f}  (n={m['n']})")
@@ -166,7 +178,7 @@ elif not ok1:
 else:
     print("  T-1 cumple y T-2 no -> no concluyente. No se elige la mitad que mas gusta.")
 
-json.dump({"prereg": "PREREG_C4S2_PRESUPUESTO.md", "sha": "8446a27e",
+json.dump({"prereg": "PREREG_C4S2_PRESUPUESTO.md", "sha": "8446a27e", "unidad": U,
            "serie": nuevos, "T1": {"rho": r1, "p": p1, "cumple": ok1},
            "T3": {"rho": r3, "p": p3, "cumple": ok3},
            "T2": {"extremos": res2, "cumple": ok2}, "T4": {"cumple": ok4}},
