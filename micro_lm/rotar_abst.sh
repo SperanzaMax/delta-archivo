@@ -50,6 +50,18 @@ mandar() {
     -d chat_id="$CHAT" --data-urlencode "text=$1" >/dev/null 2>&1
 }
 
+# Red de seguridad, arriba del `timeout -k` de cada llamada. El 19-ago un tramo estuvo 3h47 colgado
+# contra una VM que ya no existia y trabo la campaña entera, porque el rotador espera al tramo. La
+# causa de fondo era que los `timeout` mandaban SIGTERM y nada mas —ya corregido con `-k 30`— pero
+# el watchdog cubre lo que un timeout por llamada no puede: que el tramo se cuelgue SIN estar dentro
+# de una llamada con timeout. Se lanza solo y muere con el rotador.
+if [ -x "$AQUI/watchdog_tramo.sh" ] && ! pgrep -f watchdog_tramo.sh >/dev/null 2>&1; then
+  LOG_ROT="${LOG_ROTADOR:-$SALIDA/rotador.log}"
+  touch "$LOG_ROT" 2>/dev/null
+  setsid nohup "$AQUI/watchdog_tramo.sh" "$LOG_ROT" >/dev/null 2>&1 < /dev/null &
+  echo "== watchdog de tramos armado sobre $LOG_ROT"
+fi
+
 uni_de() {
   local n="${1%%:*}"
   local s="${1##*:}"
@@ -134,11 +146,11 @@ for v in $(seq 1 "$VUELTAS"); do
     echo "-- vuelta $v · cuenta $c · faltan: $FALTAN · $(date +%H:%M:%S)"
     cli_de "$c"
     SESION="tr2_${c,,}_$(date +%H%M)"
-    if ! timeout 420 "${CL[@]}" new -s "$SESION" --gpu T4 >/dev/null 2>&1; then
+    if ! timeout -k 30 420 "${CL[@]}" new -s "$SESION" --gpu T4 >/dev/null 2>&1; then
       echo "   503 en $c — SIGUIENTE CUENTA ya (sin esperar)"
       soltar_cuenta "$c"; continue
     fi
-    HW="$(timeout 180 "${CL[@]}" status -s "$SESION" 2>&1 | tail -1)"
+    HW="$(timeout -k 30 180 "${CL[@]}" status -s "$SESION" 2>&1 | tail -1)"
     echo "   >> OTORGADA en $c: $HW"
     mandar "🟢 micro-LM · '$PREFIJO' · la cuenta $c otorgó GPU (vuelta $v).
 $HW
@@ -151,7 +163,7 @@ Arranca: $FALTAN"
       mandar "micro-LM · $(uni_de "$u") (cuenta $c): tramo cerrado en el paso $(paso_de "$u") de $PASOS."
     done
 
-    timeout 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
+    timeout -k 30 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
     soltar_cuenta "$c"
     echo "   $SESION parada; pendientes ahora: $(pendientes)"
   done

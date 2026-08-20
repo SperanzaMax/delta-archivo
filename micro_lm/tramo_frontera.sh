@@ -90,12 +90,12 @@ JS="$SALIDA/${UNI}.json"
 echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
-timeout 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
+timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
 if [ -f "$CK" ]; then
   echo "== subiendo checkpoint previo ($(du -h "$CK" | cut -f1))"
-  timeout 420 "${CL[@]}" upload -s "$SESION" "$CK" /content/ck.pkl || exit 1
+  timeout -k 30 420 "${CL[@]}" upload -s "$SESION" "$CK" /content/ck.pkl || exit 1
 fi
-timeout 420 "${CL[@]}" install -s "$SESION" optax >/dev/null 2>&1
+timeout -k 30 420 "${CL[@]}" install -s "$SESION" optax >/dev/null 2>&1
 
 cat > "$TMP/lanzar.py" <<PY
 import os, subprocess, sys
@@ -132,7 +132,7 @@ p = subprocess.Popen(cmd, cwd='/content/micro', stdout=log, stderr=subprocess.ST
 open('/content/micro.pid', 'w').write(str(p.pid))
 print('lanzado pid', p.pid, flush=True)
 PY
-timeout 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || exit 1
+timeout -k 30 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || exit 1
 
 cat > "$TMP/ver.py" <<'PY'
 import json, os
@@ -160,7 +160,7 @@ TICK=0
 for _ in $(seq 1 $(( MIN / 2 ))); do
   sleep 120
   TICK=$((TICK + 1))
-  OUT="$(timeout 240 "${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
+  OUT="$(timeout -k 30 240 "${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
 
   # El checkpoint se BAJA cada ~8 min, no sólo al final del tramo. El 14-ago la VM murio a mitad
   # del tramo 2 y se perdieron 2000 pasos de computo: el JSON habia llegado por streaming al paso
@@ -168,7 +168,7 @@ for _ in $(seq 1 $(( MIN / 2 ))); do
   # Son 10 MB cada 8 min; a cambio, lo que se pierde cuando cae la VM baja de un tramo entero a un
   # solo intervalo de evaluacion.
   if [ $((TICK % 4)) -eq 0 ]; then
-    if timeout 300 "${CL[@]}" download -s "$SESION" /content/ck.pkl "$TMP/ck_p.pkl" >/dev/null 2>&1 \
+    if timeout -k 30 300 "${CL[@]}" download -s "$SESION" /content/ck.pkl "$TMP/ck_p.pkl" >/dev/null 2>&1 \
        && [ -s "$TMP/ck_p.pkl" ]; then
       mv "$TMP/ck_p.pkl" "$CK"
       echo "   [checkpoint parcial guardado: paso $(grep -o '"paso": [0-9]*' "$JS" 2>/dev/null | tail -1 | grep -o '[0-9]*')]"
@@ -176,7 +176,7 @@ for _ in $(seq 1 $(( MIN / 2 ))); do
     for v in $(echo "$CORTES" | tr ',' ' '); do
       vv=$(awk -v x="$v" 'BEGIN{printf "%d", x*100+0.5}')   # awk, no printf: printf usa el locale
       if [ ! -f "$CK.v$vv" ] \
-         && timeout 300 "${CL[@]}" download -s "$SESION" "/content/ck.pkl.v$vv" "$TMP/c.pkl" >/dev/null 2>&1 \
+         && timeout -k 30 300 "${CL[@]}" download -s "$SESION" "/content/ck.pkl.v$vv" "$TMP/c.pkl" >/dev/null 2>&1 \
          && [ -s "$TMP/c.pkl" ]; then
         mv "$TMP/c.pkl" "$CK.v$vv"; echo "   [corte vigente $v bajado -> $(basename "$CK.v$vv")]"
       fi
@@ -200,13 +200,13 @@ done
 
 if [ "$LISTO" = "1" ]; then
   echo "== bajando checkpoint"
-  timeout 420 "${CL[@]}" download -s "$SESION" /content/ck.pkl "$TMP/ck.pkl" >/dev/null 2>&1 \
+  timeout -k 30 420 "${CL[@]}" download -s "$SESION" /content/ck.pkl "$TMP/ck.pkl" >/dev/null 2>&1 \
     && mv "$TMP/ck.pkl" "$CK" && echo "   checkpoint en $CK ($(du -h "$CK" | cut -f1))"
   # Los cortes por valor de `vigente` son el PRODUCTO de la campaña base: si no se bajan, el tramo
   # no sirvio de nada. Se intenta cada uno por separado; los que no existan fallan en silencio.
   for v in $(echo "$CORTES" | tr ',' ' '); do
     vv=$(awk -v x="$v" 'BEGIN{printf "%d", x*100+0.5}')
-    if timeout 420 "${CL[@]}" download -s "$SESION" "/content/ck.pkl.v$vv" "$TMP/c.pkl" >/dev/null 2>&1 \
+    if timeout -k 30 420 "${CL[@]}" download -s "$SESION" "/content/ck.pkl.v$vv" "$TMP/c.pkl" >/dev/null 2>&1 \
        && [ -s "$TMP/c.pkl" ]; then
       mv "$TMP/c.pkl" "$CK.v$vv"; echo "   corte vigente $v -> $(basename "$CK.v$vv")"
     fi

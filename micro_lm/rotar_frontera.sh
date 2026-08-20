@@ -152,11 +152,11 @@ for v in $(seq 1 "$VUELTAS"); do
     echo "-- vuelta $v · cuenta $c · faltan: $FALTAN · $(date +%H:%M:%S)"
     cli_de "$c"
     SESION="tr2_${c,,}_$(date +%H%M)"
-    if ! timeout 420 "${CL[@]}" new -s "$SESION" --gpu T4 >/dev/null 2>&1; then
+    if ! timeout -k 30 420 "${CL[@]}" new -s "$SESION" --gpu T4 >/dev/null 2>&1; then
       echo "   503 en $c — SIGUIENTE CUENTA ya (sin esperar)"
       soltar_cuenta "$c"; continue
     fi
-    HW="$(timeout 180 "${CL[@]}" status -s "$SESION" 2>&1 | tail -1)"
+    HW="$(timeout -k 30 180 "${CL[@]}" status -s "$SESION" 2>&1 | tail -1)"
     echo "   >> OTORGADA en $c: $HW"
     mandar "🟢 micro-LM · '$PREFIJO' · la cuenta $c otorgó GPU (vuelta $v).
 $HW
@@ -172,7 +172,7 @@ Arranca: $FALTAN"
       mandar "micro-LM · $(uni_de "$u") (cuenta $c): tramo cerrado en el paso $(paso_de "$u") de $P_U."
     done
 
-    timeout 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
+    timeout -k 30 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true
     soltar_cuenta "$c"
     echo "   $SESION parada; pendientes ahora: $(pendientes)"
   done
