@@ -55,8 +55,26 @@ mandar() {
 # causa de fondo era que los `timeout` mandaban SIGTERM y nada mas —ya corregido con `-k 30`— pero
 # el watchdog cubre lo que un timeout por llamada no puede: que el tramo se cuelgue SIN estar dentro
 # de una llamada con timeout. Se lanza solo y muere con el rotador.
+#
+# El log que se vigila sale del PROPIO stdout, no de una ruta supuesta. El 20-ago el rotador se
+# lanzo con el stdout redirigido a otro archivo: `$SALIDA/rotador.log` quedo en 0 bytes, el watchdog
+# midio SU mtime, lo vio quieto y mato un tramo sano a los 12 min exactos —dos veces habria bastado
+# para gastar la cuota del dia en 1250 pasos por cuenta—. El watchdog hacia lo que le pedimos; lo
+# que estaba mal era que se le pasaba un archivo que nadie escribia. `/proc/$$/fd/1` dice a donde va
+# la salida de verdad, asi que la vigilancia deja de depender de como se invoco el rotador.
+#
+# Va `$$` y no `self` a proposito: dentro de `$(...)` el que corre es `readlink`, y `/proc/self` es
+# EL, con su stdout enganchado al pipe de la sustitucion de comandos. Preguntando por `self` la
+# deteccion contesta siempre «pipe» y nunca encuentra el archivo. `$$` es el shell del rotador.
 if [ -x "$AQUI/watchdog_tramo.sh" ] && ! pgrep -f watchdog_tramo.sh >/dev/null 2>&1; then
-  LOG_ROT="${LOG_ROTADOR:-$SALIDA/rotador.log}"
+  SALIDA_REAL="$(readlink -f /proc/$$/fd/1 2>/dev/null || true)"
+  if [ -n "${LOG_ROTADOR:-}" ]; then
+    LOG_ROT="$LOG_ROTADOR"
+  elif [ -f "$SALIDA_REAL" ]; then
+    LOG_ROT="$SALIDA_REAL"                 # el stdout es un archivo regular: eso es lo que crece
+  else
+    LOG_ROT="$SALIDA/rotador.log"          # tty o pipe: no hay mtime que mirar, se usa el de siempre
+  fi
   touch "$LOG_ROT" 2>/dev/null
   setsid nohup "$AQUI/watchdog_tramo.sh" "$LOG_ROT" >/dev/null 2>&1 < /dev/null &
   echo "== watchdog de tramos armado sobre $LOG_ROT"
