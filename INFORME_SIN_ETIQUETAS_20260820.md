@@ -77,11 +77,35 @@ Ocho unidades del mismo modelo (863.730 parámetros) sobre un idioma cerrado de 
 corte, no que ningún estimador sin etiquetas pueda hacerlo. La sensibilidad a la tasa base no se
 midió y sigue siendo la continuación natural.
 
-## 6 · Post-hoc declarado (§7)
+## 6 · Post-hoc declarado (§7) · por qué falla, y es más preciso de lo esperado
 
-`posthoc_mezcla.py` mide por qué falla U-1: si la mezcla ajustada no es bimodal —separación entre
-componentes por debajo de ~2 desvíos— entonces el EM está partiendo en dos una masa unimodal y el
-punto de igual densidad no marca ninguna frontera, sino que cae donde hay más masa. Eso encajaría con
-que U-1 ponga el corte en `z` entre **+0,04 y +0,15** (casi la media) mientras el oráculo lo pone en
-**≈ +0,35**, y con que abstenga de más (`falsa_abst` 0,13-0,31). **No decide ningún veredicto**: los
-criterios ya se juzgaron arriba.
+`posthoc_mezcla.py`, sobre la misma muestra de ajuste. **No decide ningún veredicto**: los criterios
+ya se juzgaron arriba.
+
+| unidad | separación de la mezcla | ¿bimodal? | valle `z` | separación REAL de las dos poblaciones |
+|---|---:|---|---:|---:|
+| `c1_s0` | **5,59 σ** | sí | −0,059 | +1,889 |
+| `c2_s0` | **4,06 σ** | sí | +0,043 | +1,758 |
+| `c3_s0` | 0,55 σ | no | +0,081 | +1,207 |
+| `c3_s1` | 0,66 σ | no | +0,107 | +1,161 |
+| `c3_s2` | 0,56 σ | no | +0,154 | +1,213 |
+| `c4_s0` | 0,63 σ | no | +0,108 | +1,188 |
+| `c4_s1` | 0,61 σ | no | +0,058 | +1,271 |
+| `c4_s2` | 0,21 σ | no | +0,051 | +1,151 |
+
+**Seis de ocho mezclas no son bimodales**, y las dos que sí lo son (5,59 y 4,06 desvíos de
+separación) son exactamente las dos unidades fáciles — o sea aquellas donde el nulo ya pasaba
+99-100/100 y no hacía falta estimar nada. **U-1 acierta sólo donde el problema no existe.**
+
+**Lo que lo explica del todo está en la última columna.** Las dos poblaciones reales —preguntas con
+respuesta y sin respuesta— están separadas **1,15 a 1,27 σ** en las seis unidades difíciles: la
+estructura *existe*, y es la misma que el 19-ago se midió como AUC 0,825. Pero una mezcla de dos
+gaussianas necesita ~2 σ de separación para que la densidad tenga dos modas; con 1,2 σ **la suma es
+unimodal**. No hay ningún valle que encontrar, y el EM termina partiendo en dos una masa de una sola
+cima: ajusta componentes con 0,6 σ de separación cuando las clases están a 1,2 σ, o sea **ni siquiera
+recupera las poblaciones que existen**. Por eso el corte cae en `z` entre +0,05 y +0,15 —casi la
+media, donde está el grueso de la masa— en vez del +0,35 del oráculo, y por eso abstiene de más.
+
+**La moraleja, que es lo que hay que llevarse para el próximo intento: la información está, pero no
+en forma de valle.** Cualquier estimador que la busque en la *forma de la densidad* va a fracasar por
+la misma razón; el que la busque tiene que apoyarse en otra cosa.

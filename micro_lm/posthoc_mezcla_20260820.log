@@ -1,0 +1,18 @@
+POST-HOC · por que falla U-1 — no decide ningun veredicto (§7 del prereg)
+
+unidad      pi1    pi2      mu1      mu2   sep/sd  bimodal   valle z  z real sep
+----------------------------------------------------------------------------------
+c1_s0     0.616  0.384   -4.279    6.228    5.587       SI    -0.059      +1.889
+c2_s0     0.640  0.360   -3.840    4.557    4.061       SI    +0.043      +1.758
+c3_s0     0.367  0.633   -0.920    0.021    0.548       no    +0.081      +1.207
+c3_s1     0.447  0.553   -1.091    0.120    0.658       no    +0.107      +1.161
+c3_s2     0.407  0.593   -1.020   -0.084    0.561       no    +0.154      +1.213
+c4_s0     0.394  0.606   -1.067   -0.067    0.629       no    +0.108      +1.188
+c4_s1     0.371  0.629   -1.194   -0.138    0.614       no    +0.058      +1.271
+c4_s2     0.281  0.719   -0.712   -0.380    0.211       no    +0.051      +1.151
+----------------------------------------------------------------------------------
+mezclas NO bimodales (separacion <= 2 desvios): 6/8
+Si son casi todas, U-1 estaba buscando un valle que no existe: el EM parte en dos una masa
+unimodal y el punto de igual densidad cae donde hay mas masa, no en una frontera.
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/posthoc_mezcla_20260820.json
