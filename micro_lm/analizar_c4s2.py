@@ -94,6 +94,9 @@ ap.add_argument("--ck-nuevo", default=os.path.join(AQUI, "ckpts", "c4_s2.pkl"))
 ap.add_argument("--n", type=int, default=32)
 ap.add_argument("--batch", type=int, default=64)
 ap.add_argument("--salida", default=os.path.join(AQUI, "c4s2_presupuesto_20260820.json"))
+ap.add_argument("--sin-extremos", action="store_true",
+                help="salta T-2/T-4 (que muestrean 2048 y compiten por la CPU). El aviso automatico "
+                     "lo usa para mandar la tendencia sin frenar lo que este corriendo.")
 a_ = ap.parse_args()
 
 print("c4_s2 CON MAS PRESUPUESTO — PREREG_C4S2_PRESUPUESTO.md (SHA 8446a27e...)\n")
@@ -130,7 +133,7 @@ if ok1 and not ok3:
 print()
 print(f"T-2 · EXTREMOS con {a_.n * a_.batch} muestras y el rng de prueba ({SEM_PRUEBA}+semilla)")
 res2 = {}
-for nom, ck in (("14000", a_.ck_viejo), ("nuevo", a_.ck_nuevo)):
+for nom, ck in () if a_.sin_extremos else (("14000", a_.ck_viejo), ("nuevo", a_.ck_nuevo)):
     if not os.path.exists(ck):
         print(f"      {nom}: falta {ck}")
         continue
@@ -151,7 +154,10 @@ if len(res2) == 2:
 
 print()
 print("VEREDICTO segun el §4 del prereg:")
-if ok1 and ok2:
+if a_.sin_extremos:
+    print("  PARCIAL — T-2 no se corrio (--sin-extremos), asi que el veredicto del §4 queda abierto.")
+    print(f"  Lo unico que se puede decir hoy: la tendencia {'ESTA' if ok1 else 'NO esta'} en la serie.")
+elif ok1 and ok2:
     print("  T-1 y T-2 cumplen -> la cabeza se degrada al entrenarla de mas en tarea dificil.")
     print("  Corresponde parada temprana gobernada por falsa_abst, y mirar c4_s0/c4_s1.")
 elif not ok1:
