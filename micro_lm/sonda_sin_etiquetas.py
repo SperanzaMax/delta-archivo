@@ -164,7 +164,13 @@ ap.add_argument("--n", type=int, default=32)
 ap.add_argument("--batch", type=int, default=64)
 ap.add_argument("--p-nose", type=float, default=0.4)
 ap.add_argument("--salida", default=os.path.join(AQUI, "corte_sin_etiquetas_20260820.json"))
+ap.add_argument("--ckpt-alt", action="append", default=[], metavar="UNIDAD=RUTA",
+                help="fija el checkpoint de una unidad. Existe porque la 1a corrida leyo c4_s2.pkl "
+                     "mientras un tramo de Colab lo estaba sobrescribiendo y se midio el paso 15000 "
+                     "en vez del 14000 que declara el §3 del prereg. La copia preservada antes de "
+                     "lanzar el tramo es lo que hace que esto tenga arreglo.")
 a_ = ap.parse_args()
+ALT = dict(x.split("=", 1) for x in a_.ckpt_alt)
 
 print(f"CORTE SIN ETIQUETAS — PREREG_CORTE_SIN_ETIQUETAS.md (SHA 17e0a35e...)")
 print(f"ajuste rng {SEM_AJUSTE}+s · prueba rng {SEM_PRUEBA}+s · "
@@ -172,11 +178,16 @@ print(f"ajuste rng {SEM_AJUSTE}+s · prueba rng {SEM_PRUEBA}+s · "
 
 datos = {}
 for u in UNIDADES:
-    ck = os.path.join(AQUI, "ckpts", f"c{u}.pkl")
+    ck = ALT.get(u, os.path.join(AQUI, "ckpts", f"c{u}.pkl"))
+    if not os.path.isabs(ck):
+        ck = os.path.join(AQUI, ck)
     if not os.path.exists(ck):
         print(f"c{u}: sin checkpoint, se saltea")
         continue
-    nivel, semilla = int(u[0]), int(u.split("_s")[1])
+    with open(ck, "rb") as _f:
+        _paso = pickle.load(_f).get("paso", "?")
+    print(f"c{u}: {os.path.basename(ck)} · paso {_paso}", flush=True)   # queda en el log: la unidad
+    nivel, semilla = int(u[0]), int(u.split("_s")[1])                   # medida es la que se declara
     aj = juntar(ck, nivel, semilla, a_.n, a_.batch, a_.p_nose, SEM_AJUSTE)
     pr = juntar(ck, nivel, semilla, a_.n, a_.batch, a_.p_nose, SEM_PRUEBA)
     if aj is None or pr is None:

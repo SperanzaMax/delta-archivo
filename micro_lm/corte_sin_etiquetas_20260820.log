@@ -1,0 +1,98 @@
+CORTE SIN ETIQUETAS — PREREG_CORTE_SIN_ETIQUETAS.md (SHA 17e0a35e...)
+ajuste rng 90000+s · prueba rng 77000+s · 32x64 = 2048 muestras por unidad y muestra · p_nose 0.4
+
+c1_s0: c1_s0.pkl · paso 14000
+c1_s0: muestreado (2048 ajuste + 2048 prueba)
+c2_s0: c2_s0.pkl · paso 14000
+c2_s0: muestreado (2048 ajuste + 2048 prueba)
+c3_s0: c3_s0.pkl · paso 14000
+c3_s0: muestreado (2048 ajuste + 2048 prueba)
+c3_s1: c3_s1.pkl · paso 14000
+c3_s1: muestreado (2048 ajuste + 2048 prueba)
+c3_s2: c3_s2.pkl · paso 14000
+c3_s2: muestreado (2048 ajuste + 2048 prueba)
+c4_s0: c4_s0.pkl · paso 14000
+c4_s0: muestreado (2048 ajuste + 2048 prueba)
+c4_s1: c4_s1.pkl · paso 14000
+c4_s1: muestreado (2048 ajuste + 2048 prueba)
+c4_s2: c4_s2.pkl.p14000 · paso 14000
+c4_s2: muestreado (2048 ajuste + 2048 prueba)
+
+========================================================================================================
+PRINCIPAL · U-1 — el corte se estima con la MEZCLA sobre el ajuste, sin mirar una etiqueta,
+             y se mide en la muestra fresca. Al lado, el techo (oraculo) y el piso (sigma>0,5).
+========================================================================================================
+unidad       U-1 a   z(U-1)    f_abst     nose   pasa |     ORACULO f/nose  pasa |   sigma>0,5 f/nose  pasa
+--------------------------------------------------------------------------------------------------------
+c1_s0       -0.565   -0.059    0.0178   0.9323     SI |      0.0647/0.9643    SI |      0.0113/0.9261    SI
+c2_s0       -0.628   +0.043    0.0113   0.8720     SI |      0.0724/0.9329    SI |      0.0048/0.8460    SI
+c3_s0       -0.166   +0.081    0.1477   0.6262     no |      0.0536/0.5502    SI |      0.1177/0.6115    no
+c3_s1       -0.205   +0.107    0.1263   0.6177     no |      0.0727/0.5747    SI |      0.0900/0.5866    SI
+c3_s2       -0.179   +0.154    0.1270   0.5761     no |      0.0627/0.5343    SI |      0.0937/0.5533    SI
+c4_s0       -0.267   +0.108    0.1304   0.6452     no |      0.0596/0.5558    SI |      0.0845/0.5893    SI
+c4_s1       -0.415   +0.058    0.1815   0.7052     no |      0.0743/0.6286    SI |      0.0955/0.6532    SI
+c4_s2       -0.380   +0.051    0.3093   0.7601     no |      0.0988/0.5670    SI |      0.1927/0.6704    no
+--------------------------------------------------------------------------------------------------------
+S-1 · U-1 pasa en 2/8  (criterio: >= 6/8)   -> NO CUMPLE
+S-4 · sigma>0,5 falla en 2/8  (criterio: >= 6/8)  -> NO CUMPLE
+
+S-2 · COSTO CONTRA EL ORACULO — cuanto `nose` se paga por no mirar las etiquetas.
+unidad     nose U-1    nose a*     caida   f_abst U-1
+------------------------------------------------------
+c1_s0        0.9323     0.9643   +0.0320       0.0178
+c2_s0        0.8720     0.9329   +0.0609       0.0113
+c3_s0        0.6262     0.5502   -0.0760       0.1477
+c3_s1        0.6177     0.5747   -0.0430       0.1263
+c3_s2        0.5761     0.5343   -0.0419       0.1270
+c4_s0        0.6452     0.5558   -0.0893       0.1304
+c4_s1        0.7052     0.6286   -0.0766       0.1815
+c4_s2        0.7601     0.5670   -0.1931       0.3093
+caida media -0.0534 · f_abst maxima 0.3093  (criterio: caida <= 0,10 y f_abst <= 0,10)  -> NO CUMPLE
+
+U-2 · CONSTANTE TRANSFERIDA leave-one-out, y S-5 el signo por asimetria
+unidad        skew   z* real  signo pred   ok   z barra     U-2 a    f_abst     nose   pasa
+--------------------------------------------------------------------------------------------
+c1_s0       +0.580    -0.368          +1   no     0.348     1.631    0.0049   0.8867     SI
+c2_s0       +0.764    -0.255          +1   no     0.367     0.809    0.0024   0.8000     SI
+c3_s0       +0.475    +0.379          +1   SI     0.348     0.358    0.0617   0.5564     SI
+c3_s1       +0.413    +0.280          +1   SI     0.367     0.320    0.0537   0.5603     SI
+c3_s2       +0.439    +0.342          +1   SI     0.367     0.216    0.0603   0.5330     SI
+c4_s0       +0.510    +0.367          +1   SI     0.348     0.163    0.0668   0.5583     SI
+c4_s1       +0.507    +0.348          +1   SI     0.367     0.193    0.0736   0.6247     SI
+c4_s2       -0.120    +0.525          -1   no     0.348    -1.114    0.5644   0.9041     no
+--------------------------------------------------------------------------------------------
+S-5 · el signo se acierta en 5/8  (criterio: >= 7/8)  -> NO CUMPLE
+       U-2 pasa la compuerta en 7/8 (secundario, sin criterio propio)
+
+U-3 · CUANTIL DE LA TASA BASE (1 - p_nose = 0.60) — la linea de base honesta.
+       Si iguala a U-1, U-1 no aporta nada y hay que decirlo (PREREG §4).
+unidad       U-3 a    f_abst     nose   pasa
+--------------------------------------------
+c1_s0       -1.517    0.0380   0.9569     SI
+c2_s0       -1.746    0.0531   0.9267     SI
+c3_s0       -0.316    0.1891   0.6581     no
+c3_s1       -0.525    0.2122   0.6762     no
+c3_s2       -0.459    0.2024   0.6472     no
+c4_s0       -0.422    0.1683   0.6861     no
+c4_s1       -0.531    0.2175   0.7195     no
+c4_s2       -0.187    0.2445   0.7134     no
+--------------------------------------------
+       U-3 pasa en 2/8
+
+S-3 · EL NULO — `a` reemplazado por una gaussiana de la MISMA media y desvio. Conserva los dos
+      momentos que U-1 usa y destruye la estructura bimodal. 100 repeticiones.
+unidad     corte hallado     pasa
+------------------------------------
+c1_s0             99/100   99/100
+c2_s0            100/100  100/100
+c3_s0            100/100    6/100
+c3_s1            100/100   12/100
+c3_s2            100/100    2/100
+c4_s0             99/100    7/100
+c4_s1             99/100    2/100
+c4_s2            100/100    0/100
+------------------------------------
+      tasa media de «pasa» bajo el nulo: 0.2850
+S-3 · criterio: U-1 pasa en <= 1/8 unidades bajo el nulo. Unidades con tasa nula > 0,5: 2/8  -> NO CUMPLE
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corte_sin_etiquetas_20260820.json
