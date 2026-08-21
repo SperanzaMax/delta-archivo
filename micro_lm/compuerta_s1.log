@@ -1,0 +1,8 @@
+COMPUERTA · 2048 muestras · rng 77000+semilla · p_nose 0.4
+checkpoint                 cond      paso  falsa_abst    nose  vigente  pasa
+------------------------------------------------------------------------------
+t4_s1.pkl.p20000           token    20000      0.0713  0.7262   0.7876    SI
+s4_s1.pkl.p20000           escala   20000      0.0722  0.7768   0.8283    SI
+
+-> compuerta_s1_20260820.json
+Compuerta: falsa_abst <= 0,10 y nose >= 0,50. El veredicto lo escribe una persona.

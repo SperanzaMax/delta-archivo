@@ -1,0 +1,15 @@
+DIAGNÓSTICO del round-trip · ¿cambia la RESPUESTA al cambiar la entidad?
+512 muestras por unidad · p_nose=0.4
+
+unidad   igual_todas  distintas  resp=valor de E'  H_media
+------------------------------------------------------------
+c1_s0         0.0098       3.90            0.6846         
+c2_s0         0.0254       3.61            0.8379         
+c3_s0         0.9727       1.03            0.1624         
+c3_s1         0.9824       1.02            0.1579         
+c4_s0         0.7344       1.27            0.1948         
+c4_s2         0.6973       1.32            0.2103         
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/diag_roundtrip_20260820.json
+Lectura: `igual_todas` alto => el modelo NO condiciona en la entidad (A).
+         `igual_todas` bajo con RT-3 fallando => el instrumento no lee esa dependencia (B).

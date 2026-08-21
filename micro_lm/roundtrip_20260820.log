@@ -1,0 +1,47 @@
+CONSISTENCIA DE IDA Y VUELTA — PREREG_ROUNDTRIP.md (SHA 55ba857a...)
+32x64 = 2048 muestras por unidad · p_nose=0.4 · rng 77000+s · |C|=5
+
+c1_s0: c1_s0.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.992 · RT-1 AUC 0.975
+   corte: f_abst 0.0154 nose 0.2229 pasa no | σ>0,5: f_abst 0.0113 nose 0.9261 pasa SI | domina no
+   RT-3 ausentes 0.844 · RT-4 AUC nulo 0.616 · RT-5 al dueño 1.000 (n=8) · H ok/err 0.140/1.081
+c2_s0: c2_s0.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.991 · RT-1 AUC 0.932
+   corte: f_abst 0.0161 nose 0.3491 pasa no | σ>0,5: f_abst 0.0048 nose 0.8460 pasa SI | domina no
+   RT-3 ausentes 0.790 · RT-4 AUC nulo 0.540 · RT-5 al dueño 1.000 (n=7) · H ok/err 0.325/0.745
+c3_s0: c3_s0.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.241 · RT-1 AUC 0.502
+   corte: f_abst 0.7589 nose 0.7635 pasa no | σ>0,5: f_abst 0.1177 nose 0.6115 pasa no | domina no
+   RT-3 ausentes 0.212 · RT-4 AUC nulo 0.473 · RT-5 al dueño 0.268 (n=254) · H ok/err 1.386/1.386
+c3_s1: c3_s1.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.229 · RT-1 AUC 0.483
+   corte: f_abst 0.7721 nose 0.7646 pasa no | σ>0,5: f_abst 0.0900 nose 0.5866 pasa SI | domina no
+   RT-3 ausentes 0.201 · RT-4 AUC nulo 0.494 · RT-5 al dueño 0.241 (n=237) · H ok/err 1.386/1.386
+c3_s2: c3_s2.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.260 · RT-1 AUC 0.524
+   corte: f_abst 0.7492 nose 0.7652 pasa no | σ>0,5: f_abst 0.0937 nose 0.5533 pasa SI | domina no
+   RT-3 ausentes 0.196 · RT-4 AUC nulo 0.491 · RT-5 al dueño 0.238 (n=235) · H ok/err 1.386/1.386
+c4_s0: c4_s0.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.394 · RT-1 AUC 0.554
+   corte: f_abst 0.6288 nose 0.6960 pasa no | σ>0,5: f_abst 0.0845 nose 0.5893 pasa SI | domina no
+   RT-3 ausentes 0.275 · RT-4 AUC nulo 0.470 · RT-5 al dueño 0.282 (n=195) · H ok/err 1.299/1.309
+c4_s1: c4_s1.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.366 · RT-1 AUC 0.611
+   corte: f_abst 0.6659 nose 0.7247 pasa no | σ>0,5: f_abst 0.0955 nose 0.6532 pasa SI | domina no
+   RT-3 ausentes 0.251 · RT-4 AUC nulo 0.511 · RT-5 al dueño 0.278 (n=241) · H ok/err 1.351/1.359
+c4_s2: c4_s2.pkl · paso 14000
+   RT-0a Δlogit>1e-3 1.000 · RT-0b cierra|acierto 0.401 · RT-1 AUC 0.590
+   corte: f_abst 0.6332 nose 0.6950 pasa no | σ>0,5: f_abst 0.1927 nose 0.6704 pasa no | domina no
+   RT-3 ausentes 0.284 · RT-4 AUC nulo 0.496 · RT-5 al dueño 0.295 (n=224) · H ok/err 1.298/1.331
+
+------------------------------------------------------------------------------
+RT-1 · AUC >= 0,70 en 2/8   (criterio >= 6/8)
+RT-2 · compuerta en 0/8 (>= 6/8) y domina a σ>0,5 en 0/8 (>= 5/8)
+        referencias del 20-ago: U-1 = 2/8 · σ>0,5 = 6/8 · U-2 = 7/8 · monitor = 0/8
+RT-3 · cierra >= 0,95 con rivales ausentes en 0/8
+RT-4 · AUC del nulo en 0,45-0,55 en 7/8
+RT-5 · apunta al dueño real >= 0,50 en 2/8   (azar ≈ 1/3)
+
+El veredicto lo escribe una persona leyendo esta tabla (regla del 13-ago).
+
+-> roundtrip_20260820.json

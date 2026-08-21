@@ -1,0 +1,34 @@
+{
+ "instrumento": "entrenar.evaluar, regla por condicion",
+ "rng": 77000,
+ "n": 2048,
+ "p_nose": 0.4,
+ "unidades": {
+  "t4_s1.pkl.p20000": {
+   "vigente": 0.7876475507548858,
+   "anterior": 0.8866995851370851,
+   "nose": 0.7262161561883411,
+   "nose_ent": 0.6898956716282083,
+   "nose_rel": 0.7716456337779867,
+   "falsa_abst": 0.07133085611431303,
+   "abstencion": 0.3173828125,
+   "paso": 20000,
+   "cond": "token",
+   "ckpt": "t4_s1.pkl.p20000",
+   "pasa": true
+  },
+  "s4_s1.pkl.p20000": {
+   "vigente": 0.8282575956172049,
+   "anterior": 0.8842340818903318,
+   "nose": 0.7768262296870732,
+   "nose_ent": 0.749725667510594,
+   "nose_rel": 0.816328672348893,
+   "falsa_abst": 0.07223139300300166,
+   "abstencion": 0.33740234375,
+   "paso": 20000,
+   "cond": "escala",
+   "ckpt": "s4_s1.pkl.p20000",
+   "pasa": true
+  }
+ }
+}

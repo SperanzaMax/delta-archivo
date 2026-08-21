@@ -1,0 +1,44 @@
+{
+ "prereg": "PREREG_ROUNDTRIP.md",
+ "sha": "55ba857a",
+ "config": {
+  "n": 1,
+  "batch": 64,
+  "p_nose": 0.4,
+  "cand_max": 5,
+  "rng_prueba": 77000,
+  "smoke": true
+ },
+ "unidades": {
+  "1_s0": {
+   "ckpt": "c1_s0.pkl",
+   "paso": 14000,
+   "n": 64,
+   "RT0a": 1.0,
+   "RT0b": 1.0,
+   "RT1_auc": NaN,
+   "cierra": 0.875,
+   "falsa": 0.0,
+   "nose": 0.38095238095238093,
+   "vigente": 1.0,
+   "RT2_pasa": false,
+   "s05_falsa": 0.0,
+   "s05_nose": 1.0,
+   "s05_pasa": true,
+   "RT2_domina": false,
+   "RT3_cierra_ausentes": 0.859375,
+   "RT4_auc": NaN,
+   "RT5_al_duenio": NaN,
+   "RT5_n": 0,
+   "RT5_sin_resp": 0.75,
+   "H_acierto": 0.12721233069896698,
+   "H_error": NaN,
+   "tasas": {
+    "acierto": 1.0,
+    "err_version": 0.0,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0
+   }
+  }
+ }
+}
