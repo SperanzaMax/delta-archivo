@@ -1,0 +1,41 @@
+{
+ "que_es": "diagnostico post-hoc del PREREG_ROUNDTRIP, sin criterio de decision",
+ "unidades": {
+  "1_s0": {
+   "igual_todas": 0.009765625,
+   "respuestas_distintas_media": 3.90234375,
+   "resp_es_valor_de_Ep": 0.6845703125,
+   "n": 512
+  },
+  "2_s0": {
+   "igual_todas": 0.025390625,
+   "respuestas_distintas_media": 3.611328125,
+   "resp_es_valor_de_Ep": 0.837890625,
+   "n": 512
+  },
+  "3_s0": {
+   "igual_todas": 0.97265625,
+   "respuestas_distintas_media": 1.02734375,
+   "resp_es_valor_de_Ep": 0.16243489583333331,
+   "n": 512
+  },
+  "3_s1": {
+   "igual_todas": 0.982421875,
+   "respuestas_distintas_media": 1.017578125,
+   "resp_es_valor_de_Ep": 0.15787760416666666,
+   "n": 512
+  },
+  "4_s0": {
+   "igual_todas": 0.734375,
+   "respuestas_distintas_media": 1.2734375,
+   "resp_es_valor_de_Ep": 0.19482421875,
+   "n": 512
+  },
+  "4_s2": {
+   "igual_todas": 0.697265625,
+   "respuestas_distintas_media": 1.3203125,
+   "resp_es_valor_de_Ep": 0.21028645833333331,
+   "n": 512
+  }
+ }
+}

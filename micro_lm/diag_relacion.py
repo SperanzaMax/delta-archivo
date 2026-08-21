@@ -61,7 +61,8 @@ for u in A.unidades.split(","):
     with open(ck, "rb") as f:
         d = pickle.load(f)
     params = jax.tree_util.tree_map(jnp.asarray, d["params"])
-    nivel, semilla = int(u[0]), int(u.split("_s")[1])
+    # el nombre puede traer sufijo de paso (`4_s0_p20000`): la semilla es el numero pegado a `_s`
+    nivel, semilla = int(u[0]), int(u.split("_s")[1].split("_")[0])
     rng = np.random.default_rng(RT.SEM_PRUEBA + semilla)
     fn = jax.jit(responder)
 
