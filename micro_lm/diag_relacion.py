@@ -45,6 +45,9 @@ ap.add_argument("--batch", type=int, default=64)
 ap.add_argument("--p-nose", type=float, default=0.0)   # solo preguntas CON respuesta
 ap.add_argument("--unidades", default="1_s0,2_s0,3_s0,3_s1,3_s2,4_s0,4_s1,4_s2")
 ap.add_argument("--dir-ckpt", default=os.path.join(AQUI, "ckpts", "rt_congelados"))
+ap.add_argument("--prefijo", default="c",
+                help="familia de la corrida. Estaba escrito a mano como 'c' (la campania de la "
+                     "cabeza); la campania de la query conjunta usa 'p' (pre) y 'q' (post)")
 ap.add_argument("--salida", default=os.path.join(AQUI, "diag_relacion_20260820.json"))
 A = ap.parse_args()
 
@@ -56,7 +59,7 @@ print("-" * 82)
 
 res = {}
 for u in A.unidades.split(","):
-    ck = os.path.join(A.dir_ckpt, f"c{u}.pkl")
+    ck = os.path.join(A.dir_ckpt, f"{A.prefijo}{u}.pkl")
     if not os.path.exists(ck):
         print(f"c{u}: sin checkpoint"); continue
     with open(ck, "rb") as f:

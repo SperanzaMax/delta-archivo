@@ -19,6 +19,7 @@ no se mezcla con los aciertos.
 """
 import argparse
 import collections
+import json
 import pickle
 
 import numpy as np
@@ -64,6 +65,9 @@ def main():
     ap.add_argument("--nivel", type=int, default=None)
     ap.add_argument("--p-nose", type=float, default=None)
     ap.add_argument("--semilla", type=int, default=54321)
+    ap.add_argument("--json", default=None,
+                    help="ruta donde volcar los mismos numeros que se imprimen, para que una "
+                         "campania de varias unidades no tenga que parsear stdout")
     a = ap.parse_args()
 
     with open(a.pesos, "rb") as f:
@@ -163,6 +167,32 @@ def main():
         m = sum(c.values())
         print(f"    {t:<10} {m:>6} {c['acierto']/m:>8.4f} {c['err_version']/m:>8.4f} "
               f"{c['err_identidad']/m:>10.4f} {c['err_fuera']/m:>10.4f} {c['abstencion']/m:>7.4f}")
+
+    # --- salida programatica (2026-08-22) --------------------------------------------------------
+    # Hasta hoy este script solo imprimia, y el analisis de una campania de seis unidades tenia que
+    # parsear su stdout. Los numeros que se guardan son EXACTAMENTE los que se imprimen arriba, con
+    # los mismos denominadores; no se recalcula nada aparte.
+    if a.json:
+        salida = {
+            "pesos": a.pesos, "nivel": nivel, "semilla": cfg["semilla"],
+            "paso": bulto.get("paso"), "donde": cfg.get("donde", "pre"),
+            "abst": cfg.get("abst", "token"), "p_nose": p_nose, "n": n,
+            "acierto": cuenta["acierto"] / max(1, con_resp),
+            "nose": cuenta["acierto_nose"] / sin_resp if sin_resp else None,
+            "falsa_abst": cuenta["abstencion"] / max(1, con_resp),
+            "invento_sobre_sin_resp": cuenta["invento"] / sin_resp if sin_resp else None,
+            "SER": err_seguro / n,
+            "err_version": cuenta["err_version"] / n,
+            "err_identidad": cuenta["err_identidad"] / n,
+            "err_fuera": cuenta["err_fuera"] / n,
+            "invento": cuenta["invento"] / n,
+            "por_tipo": {t: {k: v / max(1, sum(c.values())) for k, v in c.items()}
+                         for t, c in por_tipo.items()},
+            "n_por_tipo": {t: sum(c.values()) for t, c in por_tipo.items()},
+        }
+        with open(a.json, "w") as f:
+            json.dump(salida, f, indent=1)
+        print(f"\n  -> {a.json}")
 
 
 if __name__ == "__main__":
