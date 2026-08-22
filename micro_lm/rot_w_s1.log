@@ -1,0 +1,26 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_w_s1.log (rotador 2319399)
+== rotador2 · familia 'w' · p_nose 0.4 · unidades 3:1 · cuentas: H K G C D E F J A L M N I
+-- vuelta 1 · cuenta H · faltan: 3:1 · 15:02:36
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta G · faltan: 3:1 · 15:02:38
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta C · faltan: 3:1 · 15:02:41
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta E · faltan: 3:1 · 15:02:44
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta F · faltan: 3:1 · 15:02:47
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta J · faltan: 3:1 · 15:02:51
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta L · faltan: 3:1 · 15:02:54
+   >> OTORGADA en L: [tr2_l_1502] gpu-t4-s-kkb-usw4a2-166so5ckjzgby | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en L (desde el paso 0)
+== tramo · cuenta L · sesion tr2_l_1502 · w3_s1 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza
+[colab] Uploaded '/tmp/tmp.DhjD8a6tiP/micro.tgz' to '/content/micro.tgz'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 711
+== polling cada 2 min (presupuesto ~100 min)

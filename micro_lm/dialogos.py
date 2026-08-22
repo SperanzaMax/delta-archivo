@@ -36,16 +36,24 @@ def main():
     params, cfg = bulto["params"], bulto["config"]
     nivel = a.nivel if a.nivel is not None else cfg["nivel"]
     p_nose = a.p_nose if a.p_nose is not None else cfg.get("p_nose", 0.0)
+    # Igual que en `ser.py`: la arquitectura y la regla de decision se leen DEL CHECKPOINT, no de
+    # flags. Este script es del 14-ago, la cabeza de abstencion del 18 y `donde` del 22; sin esto,
+    # un ckpt de `cabeza` se mostraria con el argmax plano, que le da a NOSE una ruta que en el
+    # entrenamiento no tuvo. Es la leccion del 12-ago —10 de 11 «abstenciones» eran el parser— con
+    # otra cara: aca el que puede mentir es el instrumento, no el parser.
+    E._DONDE = cfg.get("donde", "pre")
+    predecir = E.predecir_cabeza if cfg.get("abst", "token") == "cabeza" else E.predecir
     print(f"pesos: {a.pesos}\nnivel {nivel} · semilla de entrenamiento {cfg['semilla']} · "
-          f"{cfg['pasos']} pasos · p_nose {p_nose}\n")
+          f"{cfg['pasos']} pasos · p_nose {p_nose} · lectura {E._DONDE} · "
+          f"abstencion {cfg.get('abst', 'token')}\n")
 
     rng = np.random.default_rng(a.semilla)
     aciertos = 0
     for i in range(a.n):
         ses, cortes, turnos, mask, cons, pos, tgt, tipo = DAT.lote(
             rng, 1, nivel=nivel, n_hechos=4, n_sesiones=4, p_nose=p_nose)
-        pred = int(E.predecir(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
-                              jnp.array(mask), jnp.array(cons), jnp.array(pos))[0])
+        pred = int(predecir(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
+                            jnp.array(mask), jnp.array(cons), jnp.array(pos))[0])
         ok = pred == tgt[0]
         aciertos += ok
 

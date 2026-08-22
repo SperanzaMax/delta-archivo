@@ -21,16 +21,16 @@ except Exception: print(-1)
 
 while true; do
   listas=0; detalle=""
-  for u in p3_s0 p3_s1 p3_s2 q3_s0 q3_s1 q3_s2; do
+  for u in w3_s0 w3_s1 w3_s2; do
     p="$(paso_de "$AQUI/ckpts/$u.pkl")"
     [ "$p" -ge "$PASO" ] 2>/dev/null && listas=$((listas+1))
     detalle="$detalle $u=$p"
   done
-  echo "$(date +%H:%M) · $listas/6 ·$detalle"
-  if [ "$listas" -ge 6 ]; then
+  echo "$(date +%H:%M) · $listas/3 ·$detalle"
+  if [ "$listas" -ge 3 ]; then
     curl -s -m 20 -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
       -d chat_id="$CHAT" --data-urlencode \
-      "text=✅ micro-LM · query conjunta: las 6 unidades llegaron al paso $PASO.
+      "text=✅ micro-LM · camino lateral: las 3 unidades llegaron al paso $PASO.
 $detalle" >/dev/null 2>&1
     exit 0
   fi

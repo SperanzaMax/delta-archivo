@@ -1,0 +1,131 @@
+pesos: ckpts/qc_congelados/p3_s0.pkl
+nivel 3 · semilla de entrenamiento 0 · 26000 pasos · p_nose 0.4 · lectura pre · abstencion cabeza
+
+========================================================================
+  sesion 1   USUARIO  enzo posee club no , raul la clave de barrio es 67 plaza cuesta 15 no , ahora es 89 quien dirige sur es julio no , es fabio
+
+  consulta    USUARIO  cual es el director de mercado ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  parque tiene como dueño a kena escuela tiene como director a dana no , es mara el precio que tiene hotel es 46 el precio de faro es 66 no , es 20
+
+  consulta    USUARIO  cual es la altura de club ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  el director de bosque es ivan laguna vale 45 no , es 38 quien posee oeste es emma la altura de plaza es 15 no , 49
+
+  consulta    USUARIO  cual era antes la altura de plaza ?
+              MODELO   15   ✓   [anterior]
+========================================================================
+  sesion 1   USUARIO  el guardia de taller es yamil parque vale 20 museo mide 69 no , 66 el guardia de sur es olga no , es julio
+
+  consulta    USUARIO  cual es el dueño de puente ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  sur vale 18 no , 70 quien dirige barrio es marco no , es fabio quien posee teatro es dario kevin cuida parque
+
+  consulta    USUARIO  cual es la altura de sur ?
+              MODELO   NOSE   ✓   [sin respuesta (relacion no dicha)]
+========================================================================
+  sesion 1   USUARIO  diego posee taller no , ana sofia dirige mercado no , es wanda molino tiene como dueño a jazmin no , es gonza la altura que tiene estudio es 38
+
+  consulta    USUARIO  cual es la clave de faro ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  el precio de barrio es 94 banco vale 96 norte vale 82 no , es 70 cabaña tiene como dueño a olga
+
+  consulta    USUARIO  cual es el director de tienda ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  laguna tiene la clave en 20 la altura de fabrica es 86 no , es 95 el guardia de granja es ivan no , ahora es enzo el guardia de sur es yamil no , ximena
+
+  consulta    USUARIO  cual es el guardia de sur ?
+              MODELO   ximena   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  enzo dirige puente teatro cuesta 91 la altura de escuela es 34 no , 42 lara posee hotel no , ahora es gonza
+
+  consulta    USUARIO  cual era antes la altura de escuela ?
+              MODELO   34   ✓   [anterior]
+========================================================================
+  sesion 1   USUARIO  el dueño de sur es ian barrio cuesta 19 quien dirige fabrica es fabio teatro tiene como guardia a tomas
+
+  consulta    USUARIO  cual es el director de tienda ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  la altura de escuela es 10 no , es 26 hotel tiene la altura en 35 teatro tiene la altura en 47 la clave de parque es 4
+
+  consulta    USUARIO  cual es la altura de teatro ?
+              MODELO   47   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  el director de banco es agus club tiene como guardia a hilda no , ahora es elsa el director de escuela es dana laguna tiene como dueño a ivan
+
+  consulta    USUARIO  cual es el director de laguna ?
+              MODELO   NOSE   ✓   [sin respuesta (relacion no dicha)]
+========================================================================
+  sesion 1   USUARIO  la altura de cabaña es 69 ximena cuida tienda mercado tiene la clave en 93 quien posee norte es wanda
+
+  consulta    USUARIO  cual es la altura de cabaña ?
+              MODELO   69   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  sara posee templo no , ahora es quena quien posee banco es raul quien posee norte es lara no , es diego oscar posee oeste
+
+  consulta    USUARIO  cual es el dueño de oeste ?
+              MODELO   oscar   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  puerto cuesta 54 no , es 44 norte tiene como guardia a carla no , es hugo la clave que tiene banco es 77 no , 55 gonza posee sur
+
+  consulta    USUARIO  cual es el guardia de norte ?
+              MODELO   hugo   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  puerto tiene la altura en 84 bruno dirige museo la altura que tiene templo es 21 taller tiene como dueño a hilda no , es bruno
+
+  consulta    USUARIO  cual era antes el dueño de taller ?
+              MODELO   hilda   ✓   [anterior]
+========================================================================
+  sesion 1   USUARIO  bruno dirige hotel no , ahora es gala la clave que tiene tienda es 13 el precio que tiene mercado es 90 no , es 41 quien posee templo es ian no , ahora es hilda
+
+  consulta    USUARIO  cual era antes el director de hotel ?
+              MODELO   bruno   ✓   [anterior]
+========================================================================
+  sesion 1   USUARIO  gala cuida sur la clave que tiene molino es 99 no , ahora es 94 la clave que tiene fabrica es 23 quien cuida laguna es abril
+
+  consulta    USUARIO  cual es el director de equipo ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  quien posee templo es gema tienda tiene como dueño a yago el precio que tiene puente es 61 museo mide 7 no , es 91
+
+  consulta    USUARIO  cual era antes la altura de museo ?
+              MODELO   7   ✓   [anterior]
+========================================================================
+  sesion 1   USUARIO  la altura que tiene club es 24 museo tiene el precio en 55 no , es 1 vera posee tienda no , paula kena posee barrio no , es zaira
+
+  consulta    USUARIO  cual es el director de equipo ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  la altura de sur es 7 no , es 48 escuela vale 13 no , ahora es 16 el director de oeste es ivan la clave que tiene equipo es 92 no , ahora es 81
+
+  consulta    USUARIO  cual es la clave de equipo ?
+              MODELO   81   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  cabaña vale 63 zaira cuida teatro la altura de faro es 84 no , ahora es 76 equipo vale 8 no , es 31
+
+  consulta    USUARIO  cual es el guardia de teatro ?
+              MODELO   zaira   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  olga dirige este agus cuida centro no , yamil quien posee museo es nadia quena cuida molino no , tomas
+
+  consulta    USUARIO  cual es el guardia de equipo ?
+              MODELO   NOSE   ✓   [sin respuesta (entidad ausente)]
+========================================================================
+  sesion 1   USUARIO  quien posee este es yago no , ursula luis posee barrio hotel tiene como dueño a zaira no , ahora es teo cabaña tiene el precio en 8 no , es 93
+
+  consulta    USUARIO  cual es el precio de cabaña ?
+              MODELO   93   ✓   [vigente]
+========================================================================
+  sesion 1   USUARIO  barrio tiene como director a dario no , ahora es gala quien posee museo es celia ivan posee sur molino tiene como director a gala
+
+  consulta    USUARIO  cual es el director de molino ?
+              MODELO   gala   ✓   [vigente]
+========================================================================
+
+25/25 en esta muestra (no es la metrica: para eso esta el JSON de la corrida)
