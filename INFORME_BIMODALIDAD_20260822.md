@@ -76,11 +76,43 @@ Aquella vez la solucion fue hacer del balance un parametro explicito —`--p-vie
 > alcanzable condicionando en la entidad (~1,0), con lo cual el gradiente deja de tener donde
 > estacionarse.
 
+## ★ LA PRUEBA DIRECTA: se sustituye la entidad y se mira si cambia la respuesta
+
+Todo lo anterior es indirecto —surge de correlaciones entre metricas—. `sonda_atajo_relacion.py` lo
+prueba de frente y **sin entrenar nada**: en los episodios donde la relacion preguntada se repite, se
+arma **la misma consulta cambiando la entidad** por la otra que comparte esa relacion, y se comparan
+las dos respuestas. Es una intervencion, no una correlacion.
+
+| unidad | «misma respuesta a las dos entidades» | acierto |
+|---|---:|---:|
+| `p3_s0` | **0,0983** | 0,9309 |
+| `p3_s1` | **0,9742** | 0,5258 |
+| `p3_s2` | 0,5434 | 0,7397 |
+
+**`s1` contesta lo mismo a las dos entidades el 97,4 % de las veces.** Las dos consultas son
+literalmente indistinguibles para el modelo. `s0` contesta distinto el 90 % de las veces. `s2` queda a
+mitad de camino, y eso ya dice que **no es un interruptor: es un continuo.**
+
+Y hay una prediccion cuantitativa que sale sola: si el modelo contesta lo mismo a las dos, **solo una
+de las dos respuestas puede ser correcta**, asi que
+
+> acierto = 1 − «misma respuesta» / 2
+
+| unidad | predicho | medido | error |
+|---|---:|---:|---:|
+| `p3_s0` | 0,9508 | 0,9309 | 0,0200 |
+| `p3_s1` | 0,5129 | 0,5258 | 0,0129 |
+| `p3_s2` | 0,7283 | 0,7397 | 0,0114 |
+
+**Una sola variable —cuanto mira la entidad— explica el acierto de las tres semillas con error de uno
+a dos puntos, sobre un rango que va de 0,53 a 0,93.** No queda margen para que la bimodalidad sea otra
+cosa.
+
 ## Lo que NO dice este analisis
 
-- Es **post-hoc y sobre tres unidades**. Que `s1` este 0,013 por encima de su techo es consistente con
-  el atajo puro, pero tres puntos no prueban que el techo sea *causal*. La prueba es la intervencion:
-  mover `P_rep` y ver si el techo se mueve con el.
+- Es **post-hoc y sobre tres unidades**. La sustitucion de entidad es una intervencion y por eso el
+  diagnostico del atajo es solido; lo que sigue sin probar es que **`P_rep` sea la palanca**. Para eso
+  hay que moverlo y ver si el techo se mueve con el, y eso todavia no se corrio.
 - No dice que subir `p_colision` **funcione**. Puede pasar que con el atajo cerrado el modelo
   simplemente no aprenda nada y todas las semillas caigan, que es lo que hay que medir.
 - La distribucion de entrenamiento y la de evaluacion tendrian que moverse juntas o por separado
