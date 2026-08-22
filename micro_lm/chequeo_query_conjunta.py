@@ -76,16 +76,31 @@ def main():
     x2 = jnp.array(otra)[None, :]
 
     res = {}
-    for donde in ("pre", "post"):
+    for donde in ("pre", "post", "lat"):
         q1, q2 = queries(params, x1, donde), queries(params, x2, donde)
         res[donde] = {"delta_contexto": delta_relativo(q1[p], q2[p])}
+
+    # L-2 · el contexto LEJANO. `lat` tiene que depender de las dos posiciones anteriores y de nada
+    # mas: la conv de kernel 3 no ve mas atras. Si dependiera del contexto lejano seria `post` con
+    # otro nombre —habria reintroducido el mixer— y el experimento volveria a mezclar los dos
+    # factores que el informe de la mañana pide separar.
+    lejos = base.copy()
+    lejos[p - 5] = (int(base[p - 5]) + 7) % V          # un solo token, cinco posiciones atras
+    cerca = base.copy()
+    cerca[p - 1] = (int(base[p - 1]) + 7) % V          # un solo token, la posicion anterior
+    for donde in ("pre", "post", "lat"):
+        q0 = queries(params, jnp.array(base)[None, :], donde)
+        res[donde]["delta_lejano"] = delta_relativo(
+            q0[p], queries(params, jnp.array(lejos)[None, :], donde)[p])
+        res[donde]["delta_vecino"] = delta_relativo(
+            q0[p], queries(params, jnp.array(cerca)[None, :], donde)[p])
 
     # C-3: dos posiciones distintas con el MISMO token, dentro de una sola secuencia.
     rep = rng.integers(0, V, size=T)
     tok = int(rep[3])
     rep[3], rep[T - 2] = tok, tok
     xr = jnp.array(rep)[None, :]
-    for donde in ("pre", "post"):
+    for donde in ("pre", "post", "lat"):
         q = queries(params, xr, donde)
         res[donde]["delta_mismo_token"] = delta_relativo(q[3], q[T - 2])
 
@@ -93,19 +108,29 @@ def main():
     c2 = res["post"]["delta_contexto"] > 0.01
     c3 = res["pre"]["delta_mismo_token"] < 1e-6 and res["post"]["delta_mismo_token"] > 0.01
 
-    print(f"{'':6} {'delta por contexto':>20} {'delta mismo token':>20}")
-    for donde in ("pre", "post"):
+    print(f"{'':6} {'contexto':>12} {'vecino p-1':>12} {'lejano p-5':>12} {'mismo token':>12}")
+    for donde in ("pre", "post", "lat"):
         r = res[donde]
-        print(f"{donde:6} {r['delta_contexto']:20.8f} {r['delta_mismo_token']:20.8f}")
+        print(f"{donde:6} {r['delta_contexto']:12.8f} {r['delta_vecino']:12.8f} "
+              f"{r['delta_lejano']:12.8f} {r['delta_mismo_token']:12.8f}")
     print()
     print(f"C-1 (pre es funcion pura del token)   : {'CUMPLE' if c1 else 'NO CUMPLE'}")
     print(f"C-2 (post depende del contexto)       : {'CUMPLE' if c2 else 'NO CUMPLE'}")
     print(f"C-3 (mismo token -> misma query en pre): {'CUMPLE' if c3 else 'NO CUMPLE'}")
+
+    # --- el camino lateral (22-ago, tarde) --------------------------------------------------------
+    l1 = res["lat"]["delta_vecino"] > 0.01      # SI depende del token anterior
+    l2 = res["lat"]["delta_lejano"] < 1e-6      # NO depende del lejano: es contexto local, no global
+    l3 = res["pre"]["delta_vecino"] < 1e-6      # y `pre` sigue siendo funcion pura del token
+    print(f"L-1 (lat depende del vecino p-1)      : {'CUMPLE' if l1 else 'NO CUMPLE'}")
+    print(f"L-2 (lat NO depende del lejano p-5)   : {'CUMPLE' if l2 else 'NO CUMPLE'}")
+    print(f"L-3 (pre no depende ni del vecino)    : {'CUMPLE' if l3 else 'NO CUMPLE'}")
+    ok = c1 and c2 and c3 and l1 and l2 and l3
     print()
-    print("VEREDICTO:", "instrumento VALIDO" if (c1 and c2 and c3) else "REVISAR — no seguir")
+    print("VEREDICTO:", "instrumento VALIDO" if ok else "REVISAR — no seguir")
 
     res["veredicto"] = {"C1": bool(c1), "C2": bool(c2), "C3": bool(c3),
-                        "valido": bool(c1 and c2 and c3)}
+                        "L1": bool(l1), "L2": bool(l2), "L3": bool(l3), "valido": bool(ok)}
     with open("chequeo_query_conjunta.json", "w") as f:
         json.dump(res, f, indent=1)
 

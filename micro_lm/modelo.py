@@ -114,6 +114,23 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     for i, blk in enumerate(params["blocks"]):
         if lectura is not None and i == bloque and donde == "pre":
             h = h + lectura(ln(blk["ln1"], h))
+        elif lectura is not None and i == bloque and donde == "lat":
+            # CAMINO LATERAL (2026-08-22, tarde). La inyeccion queda EXACTAMENTE donde `pre` la
+            # tiene —antes de la conv y del mixer, sumada a `h`— y lo unico que cambia es de que se
+            # forma la query: `conv3(ln1(h))` en vez de `ln1(h)`.
+            #
+            # Sale del informe de la mañana. `post` movio dos cosas a la vez —la forma de la query y
+            # el punto donde la lectura entra al computo— y la segunda resulto devastadora (acierto
+            # 0,97 -> 0,39, plano desde el paso 4000), asi que la hipotesis quedo sin probar. Aca los
+            # factores se separan: la lectura entra a tiempo, y la query igual puede depender de las
+            # dos posiciones anteriores, que es lo que hace falta para combinar entidad y relacion
+            # —en la forma canonica del idioma caen a distancia 2 (`el director de museo es X`)—.
+            #
+            # La conv es la MISMA del bloque, asi que no estrena parametros: las tres condiciones
+            # tienen los mismos 863.859. Y sigue siendo contexto LOCAL: la conv de kernel 3 no ve
+            # mas alla de dos tokens atras, con lo cual no reintroduce la dependencia global que en
+            # `post` venia del mixer.
+            h = h + lectura(conv3(blk["conv"], ln(blk["ln1"], h)))
         h = h + jax.vmap(delta_mixer, in_axes=(None, 0))(blk, conv3(blk["conv"], ln(blk["ln1"], h)))
         if lectura is not None and i == bloque and donde == "post":
             h = h + lectura(ln(blk["ln2"], h))

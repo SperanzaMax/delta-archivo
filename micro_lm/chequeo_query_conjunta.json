@@ -1,16 +1,29 @@
 {
  "pre": {
   "delta_contexto": 0.0,
+  "delta_lejano": 0.0,
+  "delta_vecino": 0.0,
   "delta_mismo_token": 0.0
  },
  "post": {
   "delta_contexto": 0.6523269414901733,
+  "delta_lejano": 0.17371441423892975,
+  "delta_vecino": 0.8120740652084351,
   "delta_mismo_token": 0.9866436123847961
+ },
+ "lat": {
+  "delta_contexto": 0.0,
+  "delta_lejano": 0.0,
+  "delta_vecino": 0.7532970309257507,
+  "delta_mismo_token": 1.2152111530303955
  },
  "veredicto": {
   "C1": true,
   "C2": true,
   "C3": true,
+  "L1": true,
+  "L2": true,
+  "L3": true,
   "valido": true
  }
 }

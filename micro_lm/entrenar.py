@@ -142,12 +142,16 @@ def main():
                          "escala = idem pero renormalizando el vector de NOSE a la norma media de "
                          "los tokens de valor al arrancar la fase; "
                          "cabeza = salida binaria separada, con NOSE excluido del softmax de valores")
-    ap.add_argument("--donde", default="pre", choices=("pre", "post"),
+    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat"),
                     help="en que punto del bloque 0 entra la lectura del archivo "
                          "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
                          "emb[x], que es lo que se venia haciendo y deja la query como funcion pura "
                          "del token; post = despues del mixer del mismo bloque, con lo que la query "
-                         "puede depender de la entidad y de la relacion a la vez")
+                         "puede depender de la entidad y de la relacion a la vez (medido el 22-ago: "
+                         "rompe el modelo, porque la lectura deja de entrar antes del computo); "
+                         "lat = camino lateral, la inyeccion queda donde `pre` la tiene y solo la "
+                         "QUERY se forma sobre conv3(ln1(h)), que da contexto local sin mover el "
+                         "punto de inyeccion")
     ap.add_argument("--reinit-adam", action="store_true",
                     help="reinicia el estado de Adam al reanudar. La condicion `cabeza` lo hace sola "
                          "porque el arbol de params cambia de forma; este flag existe para que "
