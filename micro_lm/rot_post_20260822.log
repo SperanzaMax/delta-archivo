@@ -10,3 +10,5 @@ compuerta de padding OK
 lanzado pid 1269
 == polling cada 2 min (presupuesto ~100 min)
 VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.2195 · anterior 0.1814 · abstencion 0.0488 · truncados 0.0000 · nose 0.0671 (ent 0.0768/rel 0.0755) · falsa_abst 0.0331 
+VIVO= True ULTIMO= ── eval: vigente 0.1697 · anterior 0.0585 · abstencion 0.1230 · truncados 0.0000 · nose 0.1857 (ent 0.2133/rel 0.1660) · falsa_abst 0.0760 
