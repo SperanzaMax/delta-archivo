@@ -45,3 +45,52 @@ VIVO= True ULTIMO= ── eval: vigente 0.8019 · anterior 0.1321 · abstencion 
 VIVO= True ULTIMO= ── eval: vigente 0.7161 · anterior 0.1888 · abstencion 0.3066 · truncados 0.0000 · nose 0.4846 (ent 0.8156/rel 0.1522) · falsa_abst 0.1956 
 VIVO= True ULTIMO= ── eval: vigente 0.8511 · anterior 0.1933 · abstencion 0.1797 · truncados 0.0000 · nose 0.3543 (ent 0.6471/rel 0.0524) · falsa_abst 0.0661 
 VIVO= True ULTIMO= ── eval: vigente 0.8311 · anterior 0.2277 · abstencion 0.1816 · truncados 0.0000 · nose 0.3877 (ent 0.6781/rel 0.0976) · falsa_abst 0.0517 
+   [checkpoint parcial guardado: paso 5500]
+VIVO= True ULTIMO= ── eval: vigente 0.7753 · anterior 0.2402 · abstencion 0.2090 · truncados 0.0000 · nose 0.3925 (ent 0.6905/rel 0.0732) · falsa_abst 0.0874 
+VIVO= True ULTIMO= ── eval: vigente 0.7850 · anterior 0.1433 · abstencion 0.2266 · truncados 0.0000 · nose 0.4262 (ent 0.7557/rel 0.1005) · falsa_abst 0.1010 
+VIVO= True ULTIMO= ── eval: vigente 0.7837 · anterior 0.3094 · abstencion 0.1777 · truncados 0.0000 · nose 0.3572 (ent 0.6797/rel 0.0402) · falsa_abst 0.0630 
+VIVO= True ULTIMO= ── eval: vigente 0.8258 · anterior 0.1214 · abstencion 0.2070 · truncados 0.0000 · nose 0.4256 (ent 0.8298/rel 0.0462) · falsa_abst 0.0693 
+   [checkpoint parcial guardado: paso 6500]
+VIVO= True ULTIMO= ── eval: vigente 0.8674 · anterior 0.3004 · abstencion 0.1855 · truncados 0.0000 · nose 0.4020 (ent 0.7595/rel 0.0533) · falsa_abst 0.0528 
+VIVO= True ULTIMO= ── eval: vigente 0.8533 · anterior 0.1621 · abstencion 0.1953 · truncados 0.0000 · nose 0.4030 (ent 0.7386/rel 0.0784) · falsa_abst 0.0629 
+VIVO= True ULTIMO= ── eval: vigente 0.8003 · anterior 0.3304 · abstencion 0.2051 · truncados 0.0000 · nose 0.4238 (ent 0.7548/rel 0.0925) · falsa_abst 0.0660 
+VIVO= True ULTIMO= ── eval: vigente 0.8416 · anterior 0.1638 · abstencion 0.1875 · truncados 0.0000 · nose 0.4202 (ent 0.8055/rel 0.0533) · falsa_abst 0.0427 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_a_1502)
+   tr2_a_1502 parada; pendientes ahora: 3:2
+-- vuelta 1 · cuenta L · faltan: 3:2 · 16:03:36
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta M · faltan: 3:2 · 16:03:39
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta N · faltan: 3:2 · 16:03:41
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:2 · 16:03:44
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta H · faltan: 3:2 · 16:13:47
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta G · faltan: 3:2 · 16:13:50
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta C · faltan: 3:2 · 16:13:53
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta D · faltan: 3:2 · 16:13:56
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta E · faltan: 3:2 · 16:13:59
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta F · faltan: 3:2 · 16:14:02
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta J · faltan: 3:2 · 16:14:05
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta A · faltan: 3:2 · 16:14:08
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta L · faltan: 3:2 · 16:14:11
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta M · faltan: 3:2 · 16:14:13
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta N · faltan: 3:2 · 16:14:16
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta I · faltan: 3:2 · 16:14:19
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
