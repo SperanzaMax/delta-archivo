@@ -193,7 +193,18 @@ def main():
     print(f"C-2e · AUC(hecho > repeticion) estratificado por (posicion, largo)  "
           f"{a_hr_e:.4f}  [n={n_hr}]")
 
-    ok = (not np.isnan(a_hc_e)) and (a_hc_e >= 0.65 or a_hr_e >= 0.65)
+    # El criterio se decide por **hecho vs repeticion**, y el `or` que tenia antes estaba mal puesto
+    # (cuarta vez en el programa que un criterio propio es mas laxo que los datos que ya habia).
+    # Razon: `repeticion` es el contraste LIMPIO —mismo largo, las MISMAS palabras, y la unica
+    # diferencia es si el archivo ya lo tiene—, mientras que `hecho vs charla` arrastra el largo. Con
+    # un `or`, una unidad con la comparacion de charla DADA VUELTA seguia dando «abre», que es lo que
+    # paso con `c4_s0` (C-1e = 0,1494) y casi se pasa por alto.
+    ok = (not np.isnan(a_hr_e)) and a_hr_e >= 0.65
+    if not np.isnan(a_hc_e) and a_hc_e < 0.5:
+        print(f"\n  ⚠ AVISO: C-1e esta DADO VUELTA ({a_hc_e:.4f}). El estrato de largo comun entre "
+              f"hecho y charla\n    es angosto y puede apoyarse en pocos armazones: C-1e no decide, "
+              f"pero un valor invertido\n    es motivo de mirar la distribucion antes de usar esta "
+              f"unidad.")
     print("\n" + "-" * 70)
     if ok:
         print("COMPUERTA ABRE: la sorpresa distingue. La politica sorpresa-gated tiene senial")

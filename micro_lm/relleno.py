@@ -46,6 +46,17 @@ ARMAZONES = [
     "no , {n} no",
     "ayer {n} esta en {e}",
     "{n} esta en {e} ahora",
+    # Armazones LARGOS (6-7 tokens), agregados el 22-ago despues de medir. Un hecho mide 6 tokens y
+    # la charla median 4,3, asi que al comparar dentro de estratos de igual largo el unico estrato
+    # comun era el de 6 y lo cubria **un solo armazon de doce**. Ese control no controlaba nada: era
+    # una muestra de conveniencia, y en `c4_s0` dio el AUC dado vuelta (0,1494) por esa razon y no
+    # por una propiedad del modelo. Con estos, el estrato de 6 deja de depender de una sola frase.
+    "antes {n} no esta en {e} ahora",
+    "hoy {n} y {n2} no ahora",
+    "pero ayer {n} esta en {e}",
+    "y entonces {n} tambien esta en {e}",
+    "si , {n} y {n2} tambien",
+    "no , {n} no esta en {e}",
 ]
 
 

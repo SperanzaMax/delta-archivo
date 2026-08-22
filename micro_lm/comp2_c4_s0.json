@@ -1,0 +1,18 @@
+{
+ "pesos": "ckpts/c4_s0.pkl",
+ "auc_hecho_charla": 0.6627972222222223,
+ "auc_hecho_repeticion": 0.87605,
+ "auc_hecho_charla_estrat": 0.5231103798497431,
+ "auc_hecho_repeticion_estrat": 0.8764784012793677,
+ "abre": true,
+ "medias": {
+  "hecho": 0.8799788231650988,
+  "charla": 0.7941645779212316,
+  "repeticion": 0.6617677455147107
+ },
+ "n": {
+  "hecho": 1200,
+  "charla": 1200,
+  "repeticion": 600
+ }
+}

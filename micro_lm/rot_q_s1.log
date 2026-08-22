@@ -14,3 +14,5 @@ lanzado pid 4671
 VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
 VIVO= True ULTIMO= ── eval: vigente 0.1899 · anterior 0.1525 · abstencion 0.0508 · truncados 0.0000 · nose 0.0723 (ent 0.0491/rel 0.0963) · falsa_abst 0.0358 
 VIVO= True ULTIMO= ── eval: vigente 0.1409 · anterior 0.1151 · abstencion 0.2617 · truncados 0.0000 · nose 0.3044 (ent 0.3359/rel 0.2723) · falsa_abst 0.2335 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.1929 · anterior 0.0878 · abstencion 0.0781 · truncados 0.0000 · nose 0.0891 (ent 0.0909/rel 0.0792) · falsa_abst 0.0689 
