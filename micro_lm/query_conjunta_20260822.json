@@ -1,0 +1,356 @@
+{
+ "paso": 26000,
+ "n_ser": 2048,
+ "n_diag": 2048,
+ "ser": {
+  "pre": {
+   "0": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s0.pkl",
+    "nivel": 3,
+    "semilla": 0,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.970467596390484,
+    "nose": 0.9119420989143546,
+    "falsa_abst": 0.008203445447087777,
+    "invento_sobre_sin_resp": 0.08805790108564536,
+    "SER": 0.04833984375,
+    "err_version": 0.0,
+    "err_identidad": 0.01220703125,
+    "err_fuera": 0.00048828125,
+    "invento": 0.03564453125,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 0.9752720079129574,
+      "err_identidad": 0.01483679525222552,
+      "abstencion": 0.009891196834817012
+     },
+     "nose_rel": {
+      "acierto_nose": 0.923469387755102,
+      "invento": 0.07653061224489796
+     },
+     "nose_ent": {
+      "invento": 0.09839816933638444,
+      "acierto_nose": 0.9016018306636155
+     },
+     "anterior": {
+      "acierto": 0.9471153846153846,
+      "err_fuera": 0.004807692307692308,
+      "err_identidad": 0.04807692307692308
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "1": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s1.pkl",
+    "nivel": 3,
+    "semilla": 1,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.7768662838392125,
+    "nose": 0.5416164053075995,
+    "falsa_abst": 0.004101722723543888,
+    "invento_sobre_sin_resp": 0.4583835946924005,
+    "SER": 0.31591796875,
+    "err_version": 0.00146484375,
+    "err_identidad": 0.12890625,
+    "err_fuera": 0.0,
+    "invento": 0.185546875,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 0.7655786350148368,
+      "err_identidad": 0.2265084075173096,
+      "abstencion": 0.004945598417408506,
+      "err_version": 0.002967359050445104
+     },
+     "nose_rel": {
+      "acierto_nose": 0.5892857142857143,
+      "invento": 0.4107142857142857
+     },
+     "nose_ent": {
+      "invento": 0.5011441647597255,
+      "acierto_nose": 0.4988558352402746
+     },
+     "anterior": {
+      "acierto": 0.8317307692307693,
+      "err_identidad": 0.16826923076923078
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "2": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s2.pkl",
+    "nivel": 3,
+    "semilla": 2,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.8351107465135357,
+    "nose": 0.729794933655006,
+    "falsa_abst": 0.03527481542247744,
+    "invento_sobre_sin_resp": 0.27020506634499397,
+    "SER": 0.1865234375,
+    "err_version": 0.0009765625,
+    "err_identidad": 0.076171875,
+    "err_fuera": 0.0,
+    "invento": 0.109375,
+    "por_tipo": {
+     "vigente": {
+      "err_identidad": 0.11572700296735905,
+      "acierto": 0.8397626112759644,
+      "abstencion": 0.04253214638971316,
+      "err_version": 0.0019782393669634025
+     },
+     "nose_rel": {
+      "acierto_nose": 0.7755102040816326,
+      "invento": 0.22448979591836735
+     },
+     "nose_ent": {
+      "invento": 0.3112128146453089,
+      "acierto_nose": 0.6887871853546911
+     },
+     "anterior": {
+      "acierto": 0.8125,
+      "err_identidad": 0.1875
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   }
+  },
+  "post": {
+   "0": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/q3_s0.pkl",
+    "nivel": 3,
+    "semilla": 0,
+    "paso": 26000,
+    "donde": "post",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.38802296964725186,
+    "nose": 0.3715319662243667,
+    "falsa_abst": 0.12633305988515175,
+    "invento_sobre_sin_resp": 0.6284680337756333,
+    "SER": 0.54345703125,
+    "err_version": 0.0048828125,
+    "err_identidad": 0.2841796875,
+    "err_fuera": 0.0,
+    "invento": 0.25439453125,
+    "por_tipo": {
+     "vigente": {
+      "err_identidad": 0.5044510385756676,
+      "acierto": 0.3363006923837784,
+      "abstencion": 0.152324431256182,
+      "err_version": 0.006923837784371909
+     },
+     "nose_rel": {
+      "invento": 0.6096938775510204,
+      "acierto_nose": 0.3903061224489796
+     },
+     "nose_ent": {
+      "acierto_nose": 0.35469107551487417,
+      "invento": 0.6453089244851259
+     },
+     "anterior": {
+      "err_identidad": 0.34615384615384615,
+      "acierto": 0.6394230769230769,
+      "err_version": 0.014423076923076924
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "1": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/q3_s1.pkl",
+    "nivel": 3,
+    "semilla": 1,
+    "paso": 26000,
+    "donde": "post",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.3978671041837572,
+    "nose": 0.3775633293124246,
+    "falsa_abst": 0.12715340442986053,
+    "invento_sobre_sin_resp": 0.6224366706875754,
+    "SER": 0.53466796875,
+    "err_version": 0.00439453125,
+    "err_identidad": 0.2783203125,
+    "err_fuera": 0.0,
+    "invento": 0.251953125,
+    "por_tipo": {
+     "vigente": {
+      "err_identidad": 0.49950544015825915,
+      "acierto": 0.34025717111770526,
+      "abstencion": 0.1533135509396637,
+      "err_version": 0.006923837784371909
+     },
+     "nose_rel": {
+      "invento": 0.6071428571428571,
+      "acierto_nose": 0.39285714285714285
+     },
+     "nose_ent": {
+      "acierto_nose": 0.36384439359267734,
+      "invento": 0.6361556064073226
+     },
+     "anterior": {
+      "err_identidad": 0.3125,
+      "acierto": 0.6778846153846154,
+      "err_version": 0.009615384615384616
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "2": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/q3_s2.pkl",
+    "nivel": 3,
+    "semilla": 2,
+    "paso": 26000,
+    "donde": "post",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.3675143560295324,
+    "nose": 0.3896260554885404,
+    "falsa_abst": 0.14191960623461855,
+    "invento_sobre_sin_resp": 0.6103739445114595,
+    "SER": 0.5390625,
+    "err_version": 0.0078125,
+    "err_identidad": 0.2841796875,
+    "err_fuera": 0.0,
+    "invento": 0.2470703125,
+    "por_tipo": {
+     "vigente": {
+      "err_identidad": 0.49455984174085066,
+      "acierto": 0.3273986152324431,
+      "abstencion": 0.17111770524233433,
+      "err_version": 0.006923837784371909
+     },
+     "nose_rel": {
+      "invento": 0.5994897959183674,
+      "acierto_nose": 0.4005102040816326
+     },
+     "nose_ent": {
+      "acierto_nose": 0.37986270022883295,
+      "invento": 0.620137299771167
+     },
+     "anterior": {
+      "err_identidad": 0.3942307692307692,
+      "acierto": 0.5625,
+      "err_version": 0.04326923076923077
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   }
+  }
+ },
+ "diag": {
+  "pre": {
+   "3_s0": {
+    "n": 2048,
+    "P_rep": 0.42431640625,
+    "n_unica": 1179,
+    "ac_unica": 0.998303647158609,
+    "ident_unica": 0.0008481764206955047,
+    "n_rep": 869,
+    "ac_rep": 0.9424626006904487,
+    "ident_rep": 0.05638665132336018
+   },
+   "3_s1": {
+    "n": 2048,
+    "P_rep": 0.40869140625,
+    "n_unica": 1211,
+    "ac_unica": 1.0,
+    "ident_unica": 0.0,
+    "n_rep": 837,
+    "ac_rep": 0.5316606929510155,
+    "ident_rep": 0.46833930704898447
+   },
+   "3_s2": {
+    "n": 2048,
+    "P_rep": 0.4267578125,
+    "n_unica": 1174,
+    "ac_unica": 0.9974446337308348,
+    "ident_unica": 0.002555366269165247,
+    "n_rep": 874,
+    "ac_rep": 0.7471395881006865,
+    "ident_rep": 0.2528604118993135
+   }
+  },
+  "post": {
+   "3_s0": {
+    "n": 2048,
+    "P_rep": 0.42431640625,
+    "n_unica": 1179,
+    "ac_unica": 0.5860899067005937,
+    "ident_unica": 0.41306191687871074,
+    "n_rep": 869,
+    "ac_rep": 0.45109321058688145,
+    "ident_rep": 0.5466052934407365
+   },
+   "3_s1": {
+    "n": 2048,
+    "P_rep": 0.40869140625,
+    "n_unica": 1211,
+    "ac_unica": 0.5962014863748968,
+    "ident_unica": 0.40132122213047067,
+    "n_rep": 837,
+    "ac_rep": 0.3823178016726404,
+    "ident_rep": 0.6176821983273596
+   },
+   "3_s2": {
+    "n": 2048,
+    "P_rep": 0.4267578125,
+    "n_unica": 1174,
+    "ac_unica": 0.5894378194207837,
+    "ident_unica": 0.4097103918228279,
+    "n_rep": 874,
+    "ac_rep": 0.41762013729977115,
+    "ident_rep": 0.5766590389016019
+   }
+  }
+ },
+ "veredicto": {
+  "P1": false,
+  "P2": false,
+  "P3": false,
+  "P4": false
+ }
+}

@@ -1,38 +1,126 @@
-== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_p_s2.log (rotador 714900)
-== rotador2 · familia 'p' · p_nose 0.4 · unidades 3:2 · cuentas: N I
--- vuelta 1 · cuenta N · faltan: 3:2 · 08:20:36
-   503 en N — SIGUIENTE CUENTA ya (sin esperar)
--- vuelta 1 · cuenta I · faltan: 3:2 · 08:20:39
-   >> OTORGADA en I: [tr2_i_0820] gpu-t4-s-kkb-ass1c1-alwxjifru23v | Hardware: T4 | Variant: GPU | Status: IDLE
-   -> tramo 3:2 en I (desde el paso 0)
-== tramo · cuenta I · sesion tr2_i_0820 · p3_s2 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza
-[colab] Uploaded '/tmp/tmp.7H7HW8HHUP/micro.tgz' to '/content/micro.tgz'
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_p_s2.log (rotador 1068290)
+== rotador2 · familia 'p' · p_nose 0.4 · unidades 3:2 · cuentas: H K G C D E F J A L M N I
+-- vuelta 1 · cuenta H · faltan: 3:2 · 11:16:30
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta K · faltan: 3:2 · 11:16:33
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta G · faltan: 3:2 · 11:16:36
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta D · faltan: 3:2 · 11:16:39
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta F · faltan: 3:2 · 11:16:42
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta A · faltan: 3:2 · 11:16:45
+   >> OTORGADA en A: [tr2_a_1116] gpu-t4-s-kkb-euw4c1-vjviqpg2t1dl | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en A (desde el paso 15250)
+== tramo · cuenta A · sesion tr2_a_1116 · p3_s2 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza
+[colab] Uploaded '/tmp/tmp.1PxpndpQtD/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/p3_s2.pkl' to '/content/ck.pkl'
 jax 0.7.2 | [CudaDevice(id=0)]
 compuerta de padding OK
-lanzado pid 1897
+lanzado pid 792
 == polling cada 2 min (presupuesto ~100 min)
-VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
-VIVO= True ULTIMO= ── eval: vigente 0.1243 · anterior 0.0563 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
-VIVO= True ULTIMO= ── eval: vigente 0.1615 · anterior 0.0656 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
-   [checkpoint parcial guardado: paso 750]
-VIVO= True ULTIMO= ── eval: vigente 0.2516 · anterior 0.1388 · abstencion 0.0059 · truncados 0.0000 · nose 0.0105 (ent 0.0074/rel 0.0114) · falsa_abst 0.0033 
-VIVO= True ULTIMO= ── eval: vigente 0.2889 · anterior 0.1982 · abstencion 0.0664 · truncados 0.0000 · nose 0.0795 (ent 0.0690/rel 0.0802) · falsa_abst 0.0599 
-VIVO= True ULTIMO= ── eval: vigente 0.3612 · anterior 0.1638 · abstencion 0.0137 · truncados 0.0000 · nose 0.0251 (ent 0.0301/rel 0.0227) · falsa_abst 0.0063 
-VIVO= True ULTIMO= ── eval: vigente 0.4151 · anterior 0.3174 · abstencion 0.0098 · truncados 0.0000 · nose 0.0157 (ent 0.0301/rel 0.0000) · falsa_abst 0.0058 
-   [checkpoint parcial guardado: paso 2000]
-VIVO= True ULTIMO= ── eval: vigente 0.4291 · anterior 0.5188 · abstencion 0.0762 · truncados 0.0000 · nose 0.0978 (ent 0.0819/rel 0.1073) · falsa_abst 0.0663 
-VIVO= True ULTIMO= ── eval: vigente 0.5469 · anterior 0.3746 · abstencion 0.0625 · truncados 0.0000 · nose 0.1028 (ent 0.1032/rel 0.0968) · falsa_abst 0.0390 
-VIVO= True ULTIMO= ── eval: vigente 0.4211 · anterior 0.3246 · abstencion 0.1934 · truncados 0.0000 · nose 0.2636 (ent 0.2254/rel 0.3126) · falsa_abst 0.1489 
-VIVO= True ULTIMO= ── eval: vigente 0.5191 · anterior 0.3259 · abstencion 0.1445 · truncados 0.0000 · nose 0.2482 (ent 0.3088/rel 0.2219) · falsa_abst 0.0787 
-   [checkpoint parcial guardado: paso 3000]
-VIVO= True ULTIMO= ── eval: vigente 0.6274 · anterior 0.5335 · abstencion 0.1875 · truncados 0.0000 · nose 0.4022 (ent 0.3748/rel 0.4569) · falsa_abst 0.0596 
-VIVO= True ULTIMO= ── eval: vigente 0.5631 · anterior 0.4375 · abstencion 0.2715 · truncados 0.0000 · nose 0.5141 (ent 0.4924/rel 0.5535) · falsa_abst 0.1242 
+VIVO= True ULTIMO= paso  15500  loss 0.9880  acc 0.6406  (125s) 
+VIVO= True ULTIMO= ── eval: vigente 0.7697 · anterior 0.9143 · abstencion 0.2129 · truncados 0.0000 · nose 0.5363 (ent 0.4692/rel 0.6270) · falsa_abst 0.0150 
+VIVO= True ULTIMO= ── eval: vigente 0.7487 · anterior 0.8424 · abstencion 0.2285 · truncados 0.0000 · nose 0.5469 (ent 0.5101/rel 0.6226) · falsa_abst 0.0344 
+   [checkpoint parcial guardado: paso 16000]
+VIVO= True ULTIMO= ── eval: vigente 0.7475 · anterior 0.8246 · abstencion 0.2168 · truncados 0.0000 · nose 0.5286 (ent 0.4630/rel 0.6052) · falsa_abst 0.0288 
+VIVO= True ULTIMO= ── eval: vigente 0.7548 · anterior 0.8268 · abstencion 0.2129 · truncados 0.0000 · nose 0.5224 (ent 0.4505/rel 0.6052) · falsa_abst 0.0251 
+VIVO= True ULTIMO= ── eval: vigente 0.7996 · anterior 0.8589 · abstencion 0.2070 · truncados 0.0000 · nose 0.5173 (ent 0.4743/rel 0.5818) · falsa_abst 0.0180 
+VIVO= True ULTIMO= ── eval: vigente 0.8286 · anterior 0.8839 · abstencion 0.2227 · truncados 0.0000 · nose 0.5579 (ent 0.5335/rel 0.6087) · falsa_abst 0.0185 
+   [checkpoint parcial guardado: paso 17250]
 
-VIVO= True ULTIMO= ── eval: vigente 0.5347 · anterior 0.6888 · abstencion 0.3184 · truncados 0.0000 · nose 0.5551 (ent 0.4585/rel 0.6525) · falsa_abst 0.1744 
-   [checkpoint parcial guardado: paso 4750]
-VIVO= True ULTIMO= ── eval: vigente 0.6421 · anterior 0.7036 · abstencion 0.2559 · truncados 0.0000 · nose 0.5391 (ent 0.4975/rel 0.5882) · falsa_abst 0.0837 
-VIVO= True ULTIMO= ── eval: vigente 0.6393 · anterior 0.5920 · abstencion 0.2832 · truncados 0.0000 · nose 0.5474 (ent 0.5357/rel 0.5756) · falsa_abst 0.1201 
-VIVO= True ULTIMO= ── eval: vigente 0.5987 · anterior 0.7424 · abstencion 0.3320 · truncados 0.0000 · nose 0.6231 (ent 0.6168/rel 0.6622) · falsa_abst 0.1547 
-VIVO= True ULTIMO= ── eval: vigente 0.6106 · anterior 0.7674 · abstencion 0.2969 · truncados 0.0000 · nose 0.6028 (ent 0.5521/rel 0.6725) · falsa_abst 0.1104 
-   [checkpoint parcial guardado: paso 6000]
-VIVO= True ULTIMO= ── eval: vigente 0.7079 · anterior 0.8424 · abstencion 0.2012 · truncados 0.0000 · nose 0.5125 (ent 0.4743/rel 0.5651) · falsa_abst 0.0116 
+VIVO= True ULTIMO= ── eval: vigente 0.7675 · anterior 0.8518 · abstencion 0.2715 · truncados 0.0000 · nose 0.6125 (ent 0.5747/rel 0.6881) · falsa_abst 0.0659 
+VIVO= True ULTIMO= ── eval: vigente 0.8166 · anterior 0.9330 · abstencion 0.2422 · truncados 0.0000 · nose 0.5804 (ent 0.5478/rel 0.6557) · falsa_abst 0.0382 
+VIVO= True ULTIMO= ── eval: vigente 0.8343 · anterior 0.8580 · abstencion 0.2676 · truncados 0.0000 · nose 0.6480 (ent 0.6229/rel 0.6953) · falsa_abst 0.0379 
+   [checkpoint parcial guardado: paso 18750]
+VIVO= True ULTIMO= ── eval: vigente 0.8234 · anterior 0.8589 · abstencion 0.2617 · truncados 0.0000 · nose 0.6287 (ent 0.5494/rel 0.7252) · falsa_abst 0.0407 
+VIVO= True ULTIMO= ── eval: vigente 0.8333 · anterior 0.8839 · abstencion 0.2480 · truncados 0.0000 · nose 0.6081 (ent 0.5741/rel 0.6874) · falsa_abst 0.0317 
+VIVO= True ULTIMO= ── eval: vigente 0.7836 · anterior 0.8518 · abstencion 0.2871 · truncados 0.0000 · nose 0.6499 (ent 0.6181/rel 0.7027) · falsa_abst 0.0695 
+VIVO= True ULTIMO= ── eval: vigente 0.8524 · anterior 0.8674 · abstencion 0.2344 · truncados 0.0000 · nose 0.5789 (ent 0.5583/rel 0.6327) · falsa_abst 0.0251 
+   [checkpoint parcial guardado: paso 20000]
+VIVO= True ULTIMO= ── eval: vigente 0.8268 · anterior 0.9080 · abstencion 0.2480 · truncados 0.0000 · nose 0.6133 (ent 0.6089/rel 0.6526) · falsa_abst 0.0293 
+VIVO= True ULTIMO= ── eval: vigente 0.7693 · anterior 0.8268 · abstencion 0.3008 · truncados 0.0000 · nose 0.6633 (ent 0.6666/rel 0.6965) · falsa_abst 0.0834 
+VIVO= True ULTIMO= ── eval: vigente 0.8426 · anterior 0.8589 · abstencion 0.2539 · truncados 0.0000 · nose 0.6254 (ent 0.6089/rel 0.6725) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.8015 · anterior 0.8746 · abstencion 0.2969 · truncados 0.0000 · nose 0.6850 (ent 0.6354/rel 0.7619) · falsa_abst 0.0630 
+   [checkpoint parcial guardado: paso 21000]
+VIVO= True ULTIMO= ── eval: vigente 0.8373 · anterior 0.8589 · abstencion 0.2559 · truncados 0.0000 · nose 0.6422 (ent 0.6245/rel 0.6963) · falsa_abst 0.0227 
+VIVO= True ULTIMO= ── eval: vigente 0.8034 · anterior 0.8402 · abstencion 0.2773 · truncados 0.0000 · nose 0.6615 (ent 0.6502/rel 0.7184) · falsa_abst 0.0487 
+VIVO= True ULTIMO= ── eval: vigente 0.8232 · anterior 0.8830 · abstencion 0.2891 · truncados 0.0000 · nose 0.6865 (ent 0.6975/rel 0.7223) · falsa_abst 0.0470 
+VIVO= True ULTIMO= ── eval: vigente 0.8432 · anterior 0.8558 · abstencion 0.2715 · truncados 0.0000 · nose 0.6746 (ent 0.6232/rel 0.7511) · falsa_abst 0.0281 
+   [checkpoint parcial guardado: paso 22250]
+VIVO= True ULTIMO= ── eval: vigente 0.8340 · anterior 0.8737 · abstencion 0.2676 · truncados 0.0000 · nose 0.6641 (ent 0.6717/rel 0.6910) · falsa_abst 0.0284 
+VIVO= True ULTIMO= ── eval: vigente 0.8501 · anterior 0.8558 · abstencion 0.2715 · truncados 0.0000 · nose 0.6705 (ent 0.6441/rel 0.7319) · falsa_abst 0.0311 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_a_1116)
+   tr2_a_1116 parada; pendientes ahora: 3:2
+-- vuelta 1 · cuenta L · faltan: 3:2 · 12:17:21
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta N · faltan: 3:2 · 12:17:24
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta H · faltan: 3:2 · 12:27:27
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta K · faltan: 3:2 · 12:27:29
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta G · faltan: 3:2 · 12:27:32
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta D · faltan: 3:2 · 12:27:36
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta E · faltan: 3:2 · 12:27:39
+   >> OTORGADA en E: [tr2_e_1227] gpu-t4-s-kkb-usw4a1-3181nytuc4zvl | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en E (desde el paso 23000)
+== tramo · cuenta E · sesion tr2_e_1227 · p3_s2 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza
+[colab] Uploaded '/tmp/tmp.bVuPJTW2FY/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/p3_s2.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 865
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 22750 de 26000 (91 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.8466 · anterior 0.8987 · abstencion 0.2617 · truncados 0.0000 · nose 0.6609 (ent 0.6406/rel 0.7145) · falsa_abst 0.0187 
+VIVO= True ULTIMO= ── eval: vigente 0.8467 · anterior 0.8308 · abstencion 0.2598 · truncados 0.0000 · nose 0.6635 (ent 0.6389/rel 0.7170) · falsa_abst 0.0155 
+   [checkpoint parcial guardado: paso 23500]
+VIVO= True ULTIMO= ── eval: vigente 0.8148 · anterior 0.8580 · abstencion 0.2773 · truncados 0.0000 · nose 0.6688 (ent 0.6501/rel 0.7145) · falsa_abst 0.0401 
+VIVO= True ULTIMO= ── eval: vigente 0.8321 · anterior 0.8379 · abstencion 0.2715 · truncados 0.0000 · nose 0.6631 (ent 0.6710/rel 0.6953) · falsa_abst 0.0349 
+VIVO= True ULTIMO= ── eval: vigente 0.8420 · anterior 0.8759 · abstencion 0.2598 · truncados 0.0000 · nose 0.6596 (ent 0.6632/rel 0.6935) · falsa_abst 0.0192 
+VIVO= True ULTIMO= ── eval: vigente 0.8725 · anterior 0.8830 · abstencion 0.2500 · truncados 0.0000 · nose 0.6353 (ent 0.6120/rel 0.6893) · falsa_abst 0.0149 
+   [checkpoint parcial guardado: paso 24500]
+VIVO= True ULTIMO= ── eval: vigente 0.8298 · anterior 0.9080 · abstencion 0.2891 · truncados 0.0000 · nose 0.6957 (ent 0.6705/rel 0.7601) · falsa_abst 0.0436 
+VIVO= True ULTIMO= ── eval: vigente 0.8452 · anterior 0.8987 · abstencion 0.2676 · truncados 0.0000 · nose 0.6805 (ent 0.6705/rel 0.7223) · falsa_abst 0.0187 
+VIVO= True ULTIMO= ── eval: vigente 0.8448 · anterior 0.9237 · abstencion 0.2637 · truncados 0.0000 · nose 0.6705 (ent 0.6450/rel 0.7259) · falsa_abst 0.0154 
+VIVO= True ULTIMO= ── eval: vigente 0.8278 · anterior 0.9080 · abstencion 0.2676 · truncados 0.0000 · nose 0.6726 (ent 0.6658/rel 0.7188) · falsa_abst 0.0219 
+   [checkpoint parcial guardado: paso 25750]
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+   [checkpoint parcial guardado: paso 26000]
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+   [checkpoint parcial guardado: paso 26000]
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+   [checkpoint parcial guardado: paso 26000]
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+   [checkpoint parcial guardado: paso 26000]
+VIVO= True ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'vigente': 0.8196411419491889, 'anterior': 0.9080357142857143, 'nose': 0.6901671245421246, 'nose_ent': 0.6783197968182488, 'nose_rel': 0.7319238053613053, 'falsa_abst': 0.02758971012647483, 'abstencion': 0.27734375} 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_e_1227)

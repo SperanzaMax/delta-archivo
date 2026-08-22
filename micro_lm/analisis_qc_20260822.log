@@ -1,0 +1,59 @@
+== congelando checkpoints en el paso 26000
+  medibles: pre [0, 1, 2] · post [0, 1, 2]
+
+== SER · familia pre
+  p3_s0: err_identidad 0.0122 · falsa_abst 0.0082 · nose 0.9119 · acierto 0.9705  [lectura pre]
+  p3_s1: err_identidad 0.1289 · falsa_abst 0.0041 · nose 0.5416 · acierto 0.7769  [lectura pre]
+  p3_s2: err_identidad 0.0762 · falsa_abst 0.0353 · nose 0.7298 · acierto 0.8351  [lectura pre]
+
+== relacion unica vs repetida · familia pre
+p3_s0   |    1179    0.9983       0.0008 |    869  0.9425     0.0564 |  0.4243
+p3_s1   |    1211    1.0000       0.0000 |    837  0.5317     0.4683 |  0.4087
+p3_s2   |    1174    0.9974       0.0026 |    874  0.7471     0.2529 |  0.4268
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/qc_26000/diag_pre.json
+Si (A') gobierna: `ident_unica` ~ 0 y `ident_rep` ~ 0,5. Si el error esta repartido parejo,
+la relacion NO es el atajo y la lectura de la marginalizacion sigue en pie.
+
+== SER · familia post
+  q3_s0: err_identidad 0.2842 · falsa_abst 0.1263 · nose 0.3715 · acierto 0.3880  [lectura post]
+  q3_s1: err_identidad 0.2783 · falsa_abst 0.1272 · nose 0.3776 · acierto 0.3979  [lectura post]
+  q3_s2: err_identidad 0.2842 · falsa_abst 0.1419 · nose 0.3896 · acierto 0.3675  [lectura post]
+
+== relacion unica vs repetida · familia post
+q3_s0   |    1179    0.5861       0.4131 |    869  0.4511     0.5466 |  0.4243
+q3_s1   |    1211    0.5962       0.4013 |    837  0.3823     0.6177 |  0.4087
+q3_s2   |    1174    0.5894       0.4097 |    874  0.4176     0.5767 |  0.4268
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/qc_26000/diag_post.json
+Si (A') gobierna: `ident_unica` ~ 0 y `ident_rep` ~ 0,5. Si el error esta repartido parejo,
+la relacion NO es el atajo y la lectura de la marginalizacion sigue en pie.
+
+==============================================================================
+EVALUACION DEL PRE-REGISTRO
+==============================================================================
+
+P-1 · err_identidad   pre ['0.0122', '0.1289', '0.0762']
+                      post ['0.2842', '0.2783', '0.2842']
+     baja en 0/3 semillas · caida de la mediana -0.2080 (hace falta >= 0,03 y >= 2 semillas)
+     P-1: NO CUMPLE
+
+P-2 · brecha acierto(relacion unica) - acierto(relacion repetida)
+     s0: pre 0.0558 -> post 0.1350 no
+     s1: pre 0.4683 -> post 0.2139 OK
+     s2: pre 0.2503 -> post 0.1718 no
+     P-2: NO CUMPLE  (1/3 semillas)
+
+P-3 · falsa_abst post ['0.1263', '0.1272', '0.1419'] (compuerta <= 0,10)
+     vigente  pre 0.8398 -> post 0.3363 (caida +0.5035, tolerancia 0,02)
+     P-3: NO CUMPLE
+
+P-4 · err_identidad con relacion UNICA en post ['0.4131', '0.4013', '0.4097'] (tope 0,03)
+     P-4: NO CUMPLE
+
+------------------------------------------------------------------------------
+LECTURA: por el §5, la forma de la query NO es la causa de la colision. El mecanismo
+del 21-ago queda como correlacion y no se prueba una tercera posicion de inyeccion.
+AVISO: P-3 no cumple — lo que haya bajado se pago con abstencion o con la vigente.
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/query_conjunta_20260822.json

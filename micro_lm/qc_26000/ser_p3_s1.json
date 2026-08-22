@@ -1,0 +1,45 @@
+{
+ "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s1.pkl",
+ "nivel": 3,
+ "semilla": 1,
+ "paso": 26000,
+ "donde": "pre",
+ "abst": "cabeza",
+ "p_nose": 0.4,
+ "n": 2048,
+ "acierto": 0.7768662838392125,
+ "nose": 0.5416164053075995,
+ "falsa_abst": 0.004101722723543888,
+ "invento_sobre_sin_resp": 0.4583835946924005,
+ "SER": 0.31591796875,
+ "err_version": 0.00146484375,
+ "err_identidad": 0.12890625,
+ "err_fuera": 0.0,
+ "invento": 0.185546875,
+ "por_tipo": {
+  "vigente": {
+   "acierto": 0.7655786350148368,
+   "err_identidad": 0.2265084075173096,
+   "abstencion": 0.004945598417408506,
+   "err_version": 0.002967359050445104
+  },
+  "nose_rel": {
+   "acierto_nose": 0.5892857142857143,
+   "invento": 0.4107142857142857
+  },
+  "nose_ent": {
+   "invento": 0.5011441647597255,
+   "acierto_nose": 0.4988558352402746
+  },
+  "anterior": {
+   "acierto": 0.8317307692307693,
+   "err_identidad": 0.16826923076923078
+  }
+ },
+ "n_por_tipo": {
+  "vigente": 1011,
+  "nose_rel": 392,
+  "nose_ent": 437,
+  "anterior": 208
+ }
+}

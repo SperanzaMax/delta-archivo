@@ -239,8 +239,9 @@ def evaluar(res):
 
     print("-" * 74)
     if not a3:
-        print("VEREDICTO: sin nulo limpio no hay resultado. Es la leccion del 20-ago —U-1 'pasaba'")
-        print("en las 2 celdas donde el nulo tambien pasaba—.")
+        print("VEREDICTO: el margen contra el nulo es ~0, o sea NO hay señal mas alla de la escala")
+        print("de los scores. Es la leccion del 20-ago aplicada: lo que decide es el cruce con el")
+        print("nulo, no el AUC crudo.")
     elif a1 and a2:
         print("VEREDICTO: hay senial sin etiquetas en la ENTRADA, y con magnitud utilizable. El")
         print("cierre del 21-ago era del REGIMEN, no del metodo. Falta el corte.")
