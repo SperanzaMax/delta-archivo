@@ -91,9 +91,9 @@ def main():
 
     print("A-1..A-4 · ¿se ve en la ENTRADA que la respuesta no esta?")
     print(f"{A.n * A.batch} muestras por unidad · p_nose={A.p_nose}\n")
-    print(f"{'unidad':<8} {'donde':<5} | {'A-1 s1':>8} {'norm':>8} | {'nulo':>7} | "
-          f"{'estrat':>7} | {'n_con':>6} {'n_sin':>6}")
-    print("-" * 74)
+    print(f"{'unidad':<8} {'donde':<5} | {'A-1 s1':>8} {'s1|tam':>9} | {'nulo':>7} {'nulo|tam':>9} | "
+          f"{'ok':>7} | {'n_con':>6} {'n_sin':>6}")
+    print("-" * 88)
 
     res = {}
     for uni in A.unidades.split(","):
@@ -111,7 +111,7 @@ def main():
         rng_nulo = np.random.default_rng(9000 + semilla)
         fn = jax.jit(lambda p, s, c, t, m, q, po: scores_y_pred(p, s, c, t, m, q, po, donde))
 
-        S1, S1N, SIN, OK, NUL = [], [], [], [], []
+        S1, S1N, SIN, OK, NUL, TAM = [], [], [], [], [], []
         for _ in range(A.n):
             ses, cortes, turnos, mask, cons, pos, tgt, tipo, meta = DAT.lote(
                 rng, A.batch, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=0.35,
@@ -142,22 +142,51 @@ def main():
                 S1.append(float(s1)); S1N.append(float(s1n)); NUL.append(nul)
                 SIN.append(bool(tipo[b] >= 2))       # la respuesta NO esta en el archivo
                 OK.append(bool(pred[b] == tgt[b]))
+                # TAMAÑO del episodio: cuantas posiciones de consulta y cuantas entradas compiten.
+                # `s1` es un MAXIMO, y el maximo de una muestra crece con la cantidad de elementos
+                # sobre los que se toma, sin que el modelo tenga nada que ver. Si las preguntas sin
+                # respuesta difieren en tamaño de las que si la tienen, `s1` las separa por eso solo.
+                # Medido en la linea de base del 22-ago sobre `pre` maduro: el NULO —gaussianas de
+                # igual media y desvio— daba 0,53-0,60 en vez de 0,50, que es la firma exacta de este
+                # confound. Se guarda el tamaño para poder estratificar.
+                TAM.append((int(val.shape[0]), int(val.sum())))
 
         S1 = np.array(S1); S1N = np.array(S1N); NUL = np.array(NUL)
         SIN = np.array(SIN); OK = np.array(OK)
         con = ~SIN
+
+        def auc_estrat(x, sel_pos, sel_neg):
+            """AUC comparando SOLO dentro de episodios del mismo tamaño, pesado por estrato."""
+            grupos = {}
+            for i, t in enumerate(TAM):
+                grupos.setdefault(t, ([], []))
+                if sel_pos[i]:
+                    grupos[t][0].append(x[i])
+                elif sel_neg[i]:
+                    grupos[t][1].append(x[i])
+            num, den = 0.0, 0
+            for t, (a_, b_) in grupos.items():
+                if a_ and b_:
+                    v = auc(a_, b_)
+                    if not np.isnan(v):
+                        w = min(len(a_), len(b_))
+                        num += v * w; den += w
+            return (num / den) if den else float("nan")
         # Positivo = CON respuesta. Se espera score MAS ALTO cuando la respuesta esta.
         r = {"donde": donde, "n": int(len(S1)), "n_con": int(con.sum()), "n_sin": int(SIN.sum()),
              "auc_s1": auc(S1[con], S1[SIN]),
              "auc_s1_norm": auc(S1N[con], S1N[SIN]),
-             "auc_nulo": auc(NUL[con], NUL[SIN])}
+             "auc_nulo": auc(NUL[con], NUL[SIN]),
+             # Las dos que deciden: mismo estadistico comparando solo episodios del mismo tamaño.
+             "auc_s1_estratam": auc_estrat(S1, con, SIN),
+             "auc_nulo_estratam": auc_estrat(NUL, con, SIN)}
         # A-4 · estratificado por acierto: sólo entre las que el modelo contesto BIEN, ¿sigue
         # separando? (las SIN respuesta acertadas son las que dijo NOSE bien)
         sel = OK
         r["auc_estrat"] = auc(S1[con & sel], S1[SIN & sel])
         res[uni] = r
-        print(f"{uni:<8} {donde:<5} | {r['auc_s1']:>8.4f} {r['auc_s1_norm']:>8.4f} | "
-              f"{r['auc_nulo']:>7.4f} | {r['auc_estrat']:>7.4f} | "
+        print(f"{uni:<8} {donde:<5} | {r['auc_s1']:>8.4f} {r['auc_s1_estratam']:>9.4f} | "
+              f"{r['auc_nulo']:>7.4f} {r['auc_nulo_estratam']:>9.4f} | {r['auc_estrat']:>7.4f} | "
               f"{r['n_con']:>6} {r['n_sin']:>6}")
 
     evaluar(res)
@@ -172,16 +201,20 @@ def evaluar(res):
     if not pre or not post:
         print("\nfaltan familias: no se evalua")
         return
+    # ENMIENDA E-1 (22-ago): todo se lee sobre el MARGEN contra el nulo de la misma unidad, no
+    # sobre el AUC crudo. El nulo preserva la escala de los scores del episodio, asi que mide cuanto
+    # se consigue con la escala sola; en `pre` maduro vale 0,53-0,60 y `s1` queda POR DEBAJO.
+    margen = lambda v: v["auc_s1"] - v["auc_nulo"]
     pares = []
     for u, v in post.items():
         s = u.split("_s")[1]
         gemelo = next((w for w in pre if w.endswith(f"_s{s}")), None)
         if gemelo:
-            pares.append((s, pre[gemelo]["auc_s1"], v["auc_s1"]))
+            pares.append((s, margen(pre[gemelo]), margen(v)))
 
     print("\n" + "=" * 74)
     a1_ok = [p for p in pares if p[2] - p[1] >= 0.05]
-    print(f"A-1 · AUC(s1) sube >= 0,05 de pre a post")
+    print(f"A-1 · el MARGEN (s1 - nulo) sube >= 0,05 de pre a post")
     for s, x, y in pares:
         print(f"     s{s}: {x:.4f} -> {y:.4f}  ({y - x:+.4f})")
     a1 = len(a1_ok) >= 2
@@ -192,10 +225,14 @@ def evaluar(res):
     print(f"\nA-2 · AUC(s1) en post >= 0,75 en >= 2 de 3: {len(altos)}/{len(post)} "
           f"-> {'CUMPLE' if a2 else 'NO CUMPLE'}")
 
-    nulos = [v["auc_nulo"] for v in post.values()]
-    a3 = all(0.45 <= x <= 0.55 for x in nulos)
-    print(f"\nA-3 · NULO (bloqueante) en post: {[f'{x:.4f}' for x in nulos]} "
-          f"-> {'LIMPIO' if a3 else 'NO PASA'}")
+    # A-3 nuevo: el margen contra el propio nulo tiene que ser >= 0,05. Un s1 alto con un nulo
+    # igual de alto no es señal, es la escala.
+    margenes = [margen(v) for v in post.values()]
+    a3 = sum(m >= 0.05 for m in margenes) >= 2
+    print(f"\nA-3 · margen (s1 - nulo) en post: {[f'{m:+.4f}' for m in margenes]} "
+          f"(hace falta >= +0,05 en >= 2) -> {'PASA' if a3 else 'NO PASA'}")
+    for u, v in post.items():
+        print(f"     {u}: s1 {v['auc_s1']:.4f} · nulo {v['auc_nulo']:.4f} · margen {margen(v):+.4f}")
 
     estr = [v["auc_estrat"] for v in post.values()]
     print(f"\nA-4 · estratificado por acierto en post: {[f'{x:.4f}' for x in estr]}")

@@ -23,3 +23,16 @@ VIVO= True ULTIMO= ── eval: vigente 0.2720 · anterior 0.1326 · abstencion 
 VIVO= True ULTIMO= ── eval: vigente 0.2668 · anterior 0.2576 · abstencion 0.0977 · truncados 0.0000 · nose 0.1212 (ent 0.1132/rel 0.1389) · falsa_abst 0.0835 
 
 VIVO= True ULTIMO= ── eval: vigente 0.2288 · anterior 0.3464 · abstencion 0.1074 · truncados 0.0000 · nose 0.1438 (ent 0.1019/rel 0.1845) · falsa_abst 0.0822 
+VIVO= True ULTIMO= ── eval: vigente 0.2942 · anterior 0.3067 · abstencion 0.0840 · truncados 0.0000 · nose 0.1212 (ent 0.0524/rel 0.1952) · falsa_abst 0.0592 
+   [checkpoint parcial guardado: paso 3500]
+VIVO= True ULTIMO= ── eval: vigente 0.3262 · anterior 0.1647 · abstencion 0.1582 · truncados 0.0000 · nose 0.2259 (ent 0.1927/rel 0.2961) · falsa_abst 0.1128 
+VIVO= True ULTIMO= ── eval: vigente 0.2862 · anterior 0.2683 · abstencion 0.1719 · truncados 0.0000 · nose 0.2141 (ent 0.2005/rel 0.2340) · falsa_abst 0.1484 
+VIVO= True ULTIMO= ── eval: vigente 0.2999 · anterior 0.2049 · abstencion 0.1074 · truncados 0.0000 · nose 0.1618 (ent 0.1613/rel 0.1800) · falsa_abst 0.0746 
+VIVO= True ULTIMO= ── eval: vigente 0.2924 · anterior 0.1973 · abstencion 0.2422 · truncados 0.0000 · nose 0.3230 (ent 0.2942/rel 0.3745) · falsa_abst 0.1922 
+   [checkpoint parcial guardado: paso 4750]
+VIVO= True ULTIMO= ── eval: vigente 0.3339 · anterior 0.1982 · abstencion 0.0898 · truncados 0.0000 · nose 0.1479 (ent 0.1469/rel 0.1570) · falsa_abst 0.0530 
+VIVO= True ULTIMO= ── eval: vigente 0.3255 · anterior 0.0991 · abstencion 0.1250 · truncados 0.0000 · nose 0.1764 (ent 0.1715/rel 0.1983) · falsa_abst 0.0929 
+VIVO= True ULTIMO= ── eval: vigente 0.3447 · anterior 0.1848 · abstencion 0.1816 · truncados 0.0000 · nose 0.2649 (ent 0.2465/rel 0.3143) · falsa_abst 0.1320 
+VIVO= True ULTIMO= ── eval: vigente 0.3406 · anterior 0.2161 · abstencion 0.2090 · truncados 0.0000 · nose 0.3079 (ent 0.2754/rel 0.3572) · falsa_abst 0.1485 
+   [checkpoint parcial guardado: paso 6000]
+VIVO= True ULTIMO= ── eval: vigente 0.3435 · anterior 0.2683 · abstencion 0.1387 · truncados 0.0000 · nose 0.2016 (ent 0.2143/rel 0.2151) · falsa_abst 0.1007 
