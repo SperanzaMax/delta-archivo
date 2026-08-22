@@ -28,3 +28,11 @@ VIVO= True ULTIMO= ── eval: vigente 0.8092 · anterior 0.3117 · abstencion 
 VIVO= True ULTIMO= ── eval: vigente 0.7703 · anterior 0.1352 · abstencion 0.2773 · truncados 0.0000 · nose 0.4615 (ent 0.7797/rel 0.1258) · falsa_abst 0.1415 
 VIVO= True ULTIMO= ── eval: vigente 0.7699 · anterior 0.2272 · abstencion 0.2715 · truncados 0.0000 · nose 0.4786 (ent 0.7977/rel 0.1377) · falsa_abst 0.1194 
 VIVO= True ULTIMO= ── eval: vigente 0.7988 · anterior 0.3703 · abstencion 0.2676 · truncados 0.0000 · nose 0.4753 (ent 0.7909/rel 0.1325) · falsa_abst 0.1109 
+VIVO= True ULTIMO= ── eval: vigente 0.8612 · anterior 0.2680 · abstencion 0.1934 · truncados 0.0000 · nose 0.4069 (ent 0.7330/rel 0.0456) · falsa_abst 0.0370 
+   [checkpoint parcial guardado: paso 4000]
+VIVO= True ULTIMO= ── eval: vigente 0.8221 · anterior 0.2195 · abstencion 0.2305 · truncados 0.0000 · nose 0.4370 (ent 0.7782/rel 0.0491) · falsa_abst 0.0693 
+VIVO= True ULTIMO= ── eval: vigente 0.8298 · anterior 0.3604 · abstencion 0.1875 · truncados 0.0000 · nose 0.4040 (ent 0.7136/rel 0.0347) · falsa_abst 0.0261 
+VIVO= True ULTIMO= ── eval: vigente 0.7938 · anterior 0.3279 · abstencion 0.2598 · truncados 0.0000 · nose 0.4936 (ent 0.8588/rel 0.1001) · falsa_abst 0.0834 
+VIVO= True ULTIMO= ── eval: vigente 0.8219 · anterior 0.2927 · abstencion 0.2441 · truncados 0.0000 · nose 0.4808 (ent 0.8382/rel 0.0988) · falsa_abst 0.0660 
+   [checkpoint parcial guardado: paso 5250]
+VIVO= True ULTIMO= ── eval: vigente 0.8581 · anterior 0.1488 · abstencion 0.2227 · truncados 0.0000 · nose 0.4692 (ent 0.8332/rel 0.0677) · falsa_abst 0.0383 

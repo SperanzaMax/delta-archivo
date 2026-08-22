@@ -1,0 +1,11 @@
+{
+ "que_es": "eslabon mecanico del camino lateral",
+ "unidades": {
+  "p3_s0": {
+   "donde": "pre",
+   "n": 256,
+   "delta_por_relacion": 7.320457092244159e-08,
+   "delta_por_lejano": 7.320457092244159e-08
+  }
+ }
+}
