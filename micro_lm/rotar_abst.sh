@@ -36,6 +36,11 @@ export REINIT="${REINIT:-1}"
 # 2026-08-22 · campania de la query conjunta. Los dos viajan hasta `entrenar.py` por el tramo.
 export DONDE="${DONDE:-pre}"
 export SEMBRAR="${SEMBRAR:-1}"
+# El horizonte de la curva de lr NO se exportaba, asi que `tramo_abst.sh` usaba su default de 20000
+# aunque el rotador corriera hasta otro paso. Con PASOS=26000 eso dejaba los ultimos 6000 pasos a la
+# lr minima, que no es lo que la enmienda E-1 declaro. Cazado en el paso 1000 leyendo la config del
+# primer checkpoint, no el log del rotador (D-1 del 22-ago).
+export HORIZONTE="${HORIZONTE:-$PASOS}"
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SALIDA="$AQUI/corridas_$(date +%Y%m%d)"

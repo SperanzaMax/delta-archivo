@@ -1,0 +1,11 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_pre_s1.log (rotador 656215)
+== rotador2 · familia 'p' · p_nose 0.4 · unidades 3:1 · cuentas: L M
+-- vuelta 1 · cuenta L · faltan: 3:1 · 08:18:13
+   >> OTORGADA en L: [tr2_l_0818] gpu-t4-s-kkb-ass1c2-3qggz2kpoiou5 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en L (desde el paso 0)
+== tramo · cuenta L · sesion tr2_l_0818 · p3_s1 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza
+[colab] Uploaded '/tmp/tmp.aC46QNUpfG/micro.tgz' to '/content/micro.tgz'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1506
+== polling cada 2 min (presupuesto ~100 min)

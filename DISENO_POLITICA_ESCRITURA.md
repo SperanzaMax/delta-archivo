@@ -73,3 +73,15 @@ hechos. Es un resultado real y es mas chico que «el modelo sabe que guardar».
 
 Hoy queda en el paso 0. La campania de la query conjunta tiene prioridad porque ataca el error
 dominante y esta corriendo.
+
+## 7. Restriccion de operacion mientras haya campania corriendo
+
+`tramo_abst.sh` empaqueta y sube `idioma.py`, `datos.py`, `modelo.py`, `entrenar.py` y
+`chequeo_padding.py` **en cada tramo**, no una sola vez al lanzar. Entonces tocar el generador
+mientras una campania rota entre cuentas no afecta a los tramos que ya corren, pero **si a los
+siguientes**: la unidad quedaria entrenada mitad con un generador y mitad con otro, y el JSON lo
+mostraria como una sola curva. Es la D-1 del 20-ago con otra cara —dos cosas compartiendo un estado
+mutable—, y esta vez el estado mutable es el codigo.
+
+Por eso el relleno del §3 se escribe como modulo NUEVO y no se integra a `idioma.py`/`datos.py` hasta
+que la campania de la query conjunta haya cerrado.
