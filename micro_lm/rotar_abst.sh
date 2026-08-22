@@ -66,7 +66,11 @@ mandar() {
 # Va `$$` y no `self` a proposito: dentro de `$(...)` el que corre es `readlink`, y `/proc/self` es
 # EL, con su stdout enganchado al pipe de la sustitucion de comandos. Preguntando por `self` la
 # deteccion contesta siempre «pipe» y nunca encuentra el archivo. `$$` es el shell del rotador.
-if [ -x "$AQUI/watchdog_tramo.sh" ] && ! pgrep -f watchdog_tramo.sh >/dev/null 2>&1; then
+# 2026-08-21: pasa al v2. El v1 elegia la victima con `pgrep | head -1` y vigilaba un solo
+# log, asi que con DOS campanias podia matar el tramo sano de la otra; el v2 identifica al
+# tramo por parentesco (`pgrep -P` del rotador). Y se cae el `! pgrep -f watchdog` global:
+# con el v2 cada rotador arma el SUYO, y esa guarda impedia justamente eso.
+if [ -x "$AQUI/watchdog_tramo2.sh" ]; then
   SALIDA_REAL="$(readlink -f /proc/$$/fd/1 2>/dev/null || true)"
   if [ -n "${LOG_ROTADOR:-}" ]; then
     LOG_ROT="$LOG_ROTADOR"
@@ -76,8 +80,8 @@ if [ -x "$AQUI/watchdog_tramo.sh" ] && ! pgrep -f watchdog_tramo.sh >/dev/null 2
     LOG_ROT="$SALIDA/rotador.log"          # tty o pipe: no hay mtime que mirar, se usa el de siempre
   fi
   touch "$LOG_ROT" 2>/dev/null
-  setsid nohup "$AQUI/watchdog_tramo.sh" "$LOG_ROT" >/dev/null 2>&1 < /dev/null &
-  echo "== watchdog de tramos armado sobre $LOG_ROT"
+  setsid nohup "$AQUI/watchdog_tramo2.sh" "$LOG_ROT" $$ >/dev/null 2>&1 < /dev/null &
+  echo "== watchdog2 armado sobre $LOG_ROT (rotador $$)"
 fi
 
 uni_de() {

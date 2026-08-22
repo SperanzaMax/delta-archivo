@@ -1,0 +1,60 @@
+{
+ "instrumento": "entrenar.evaluar, regla por condicion",
+ "rng": 77000,
+ "n": 2048,
+ "p_nose": 0.4,
+ "unidades": {
+  "t4_s2.pkl.p20000": {
+   "vigente": 0.8603753817077163,
+   "anterior": 0.9060110028860029,
+   "nose": 0.8004586201922752,
+   "nose_ent": 0.7718206706487957,
+   "nose_rel": 0.8270818887800795,
+   "falsa_abst": 0.045803547879390456,
+   "abstencion": 0.34521484375,
+   "paso": 20000,
+   "cond": "token",
+   "ckpt": "t4_s2.pkl.p20000",
+   "pasa": true
+  },
+  "c4_s0_p20000.pkl": {
+   "vigente": 0.8072562872477895,
+   "anterior": 0.8152270472582972,
+   "nose": 0.714250829289109,
+   "nose_ent": 0.6793113978545964,
+   "nose_rel": 0.7465232505443902,
+   "falsa_abst": 0.06328702353813423,
+   "abstencion": 0.3193359375,
+   "paso": 20000,
+   "cond": "cabeza",
+   "ckpt": "c4_s0_p20000.pkl",
+   "pasa": true
+  },
+  "c4_s1_p20000.pkl": {
+   "vigente": 0.8375574574861273,
+   "anterior": 0.9109081890331889,
+   "nose": 0.7462383670139578,
+   "nose_ent": 0.6988008162180956,
+   "nose_rel": 0.8043473683179565,
+   "falsa_abst": 0.04205163155280563,
+   "abstencion": 0.30712890625,
+   "paso": 20000,
+   "cond": "cabeza",
+   "ckpt": "c4_s1_p20000.pkl",
+   "pasa": true
+  },
+  "c4_s2_p20000.pkl": {
+   "vigente": 0.8797868368680556,
+   "anterior": 0.888837031024531,
+   "nose": 0.6966360419470213,
+   "nose_ent": 0.6575417637917638,
+   "nose_rel": 0.722412713839523,
+   "falsa_abst": 0.01662135510430922,
+   "abstencion": 0.28662109375,
+   "paso": 20000,
+   "cond": "cabeza",
+   "ckpt": "c4_s2_p20000.pkl",
+   "pasa": true
+  }
+ }
+}
