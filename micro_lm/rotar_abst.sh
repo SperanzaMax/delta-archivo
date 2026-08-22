@@ -33,6 +33,9 @@ export PREFIJO="${PREFIJO:-n}"
 export P_NOSE="${P_NOSE:-0.0}"
 export ABST="${ABST:-token}"
 export REINIT="${REINIT:-1}"
+# 2026-08-22 · campania de la query conjunta. Los dos viajan hasta `entrenar.py` por el tramo.
+export DONDE="${DONDE:-pre}"
+export SEMBRAR="${SEMBRAR:-1}"
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SALIDA="$AQUI/corridas_$(date +%Y%m%d)"

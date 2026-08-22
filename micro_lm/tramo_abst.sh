@@ -54,6 +54,10 @@ P_NOSE="${P_NOSE:-0.0}"
 #   ABST=escala -> "s"   idem, renormalizando el vector de NOSE al entrar
 #   ABST=cabeza -> "c"   salida binaria separada
 ABST="${ABST:-token}"
+# 2026-08-22 · campania de la QUERY CONJUNTA (PREREG_QUERY_CONJUNTA.md). Donde entra la lectura del
+# archivo dentro del bloque 0. Viaja hasta `entrenar.py`, que lo asienta en la config del checkpoint
+# y aborta si un tramo intenta continuar una corrida con la otra posicion.
+DONDE="${DONDE:-pre}"
 REINIT="${REINIT:-1}"
 UNI="${PREFIJO}${NIVEL}_s${SEM}"
 
@@ -62,7 +66,14 @@ CK="$CKPTS/${UNI}.pkl"
 # campania `x`. Se COPIA (no se mueve ni se comparte) para que la base quede intacta.
 BASE="$CKPTS/n${NIVEL}_s${SEM}.pkl"
 SEMBRADO=0
-if [ ! -f "$CK" ] && [ -f "$BASE" ]; then
+# SEMBRAR=0 apaga la siembra a proposito (ENMIENDA_E1_QUERY_CONJUNTA.md). La campania de la query
+# conjunta compara dos ARQUITECTURAS, asi que las dos ramas tienen que partir del mismo lugar; heredar
+# una base entrenada con la query pura le daria al brazo `post` un encoder que tiene que desaprender.
+# Se declara con un flag en vez de depender de que el archivo base no exista.
+SEMBRAR="${SEMBRAR:-1}"
+if [ "$SEMBRAR" = "0" ]; then
+  :
+elif [ ! -f "$CK" ] && [ -f "$BASE" ]; then
   echo "== siembra: $UNI arranca desde $(basename "$BASE")"
   cp "$BASE" "$CK"
   SEMBRADO=1
@@ -100,7 +111,7 @@ print('compuerta de padding OK', flush=True)
 cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$SEM',
        '--pasos', '$PASOS', '--tramo', '$TRAMO', '--cada', '$CADA', '--d', '128', '--capas', '4',
        '--lr', '1e-3', '--p-vieja', '0.35', '--idioma', '2', '--horizonte', '$HORIZONTE',
-       '--p-nose', '$P_NOSE', '--abst', '$ABST',
+       '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$REINIT' == '1' and '$SEMBRADO' == '1':
     # Adam se reinicia SOLO al entrar en la fase (primer tramo, sembrado desde la base), nunca al
