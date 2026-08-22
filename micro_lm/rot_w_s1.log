@@ -25,3 +25,8 @@ compuerta de padding OK
 lanzado pid 711
 == polling cada 2 min (presupuesto ~100 min)
 VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.2677 · anterior 0.3686 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.6420 · anterior 0.3261 · abstencion 0.0938 · truncados 0.0000 · nose 0.1056 (ent 0.1209/rel 0.0922) · falsa_abst 0.0860 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.7776 · anterior 0.2158 · abstencion 0.0254 · truncados 0.0000 · nose 0.0193 (ent 0.0352/rel 0.0114) · falsa_abst 0.0295 
+VIVO= True ULTIMO= ── eval: vigente 0.8442 · anterior 0.3643 · abstencion 0.0176 · truncados 0.0000 · nose 0.0375 (ent 0.0613/rel 0.0139) · falsa_abst 0.0033 

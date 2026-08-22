@@ -12,3 +12,8 @@ compuerta de padding OK
 lanzado pid 4001
 == polling cada 2 min (presupuesto ~100 min)
 VIVO= True ULTIMO= ── eval: vigente 0.1168 · anterior 0.0491 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.2233 · anterior 0.3804 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.6918 · anterior 0.3206 · abstencion 0.0059 · truncados 0.0000 · nose 0.0077 (ent 0.0069/rel 0.0089) · falsa_abst 0.0028 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.7315 · anterior 0.3330 · abstencion 0.0156 · truncados 0.0000 · nose 0.0211 (ent 0.0069/rel 0.0296) · falsa_abst 0.0144 
+VIVO= True ULTIMO= ── eval: vigente 0.7339 · anterior 0.2995 · abstencion 0.0312 · truncados 0.0000 · nose 0.0424 (ent 0.0464/rel 0.0367) · falsa_abst 0.0187 
