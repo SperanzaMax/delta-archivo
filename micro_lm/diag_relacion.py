@@ -99,7 +99,10 @@ for u in A.unidades.split(","):
          "n_rep": int(REP.sum()), "ac_rep": float(OK[REP].mean()),
          "ident_rep": float(ID[REP].mean())}
     res[u] = r
-    print(f"c{u:<6} | {r['n_unica']:>7} {r['ac_unica']:>9.4f} {r['ident_unica']:>12.4f} | "
+    # El prefijo salia escrito a mano como "c" tambien aca, asi que la familia `q` se imprimia como
+    # `c3_s0`. El checkpoint leido era el correcto —eso ya usa `A.prefijo`—, pero una tabla que
+    # miente el nombre de la unidad es justo lo que despues se copia a un informe.
+    print(f"{A.prefijo}{u:<6} | {r['n_unica']:>7} {r['ac_unica']:>9.4f} {r['ident_unica']:>12.4f} | "
           f"{r['n_rep']:>6} {r['ac_rep']:>7.4f} {r['ident_rep']:>10.4f} | {r['P_rep']:>7.4f}")
 
 json.dump({"que_es": "diagnostico post-hoc, sin criterio de decision", "unidades": res},
