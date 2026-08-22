@@ -20,6 +20,7 @@ episodio o esta REPETIDA. Si (A') gobierna, el error tiene que concentrarse casi
 repetidas y casi desaparecer en las unicas.
 """
 import os, sys, json, pickle, argparse
+from functools import partial
 import numpy as np
 import jax, jax.numpy as jnp
 
@@ -31,9 +32,9 @@ import sonda_roundtrip as RT
 NOSE = I.STOI["NOSE"]
 
 
-def responder(params, ses, cortes, turnos, cons, mask, pos):
+def responder(params, ses, cortes, turnos, cons, mask, pos, donde="pre"):
     archivo = M.escribir(params, ses, cortes)
-    lg, _ = M.responder_con_abst(params, archivo, turnos, cons, mask)
+    lg, _ = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=donde)
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     return lg.at[:, NOSE].set(-jnp.inf).argmax(-1)
 
@@ -61,10 +62,14 @@ for u in A.unidades.split(","):
     with open(ck, "rb") as f:
         d = pickle.load(f)
     params = jax.tree_util.tree_map(jnp.asarray, d["params"])
+    # La posicion de la lectura se lee DEL CHECKPOINT, no de un flag: la sonda tiene que correr la
+    # arquitectura con la que la unidad se entreno, y un flag a mano es justo la clase de cosa que se
+    # olvida al medir media campania. Los ckpts anteriores al 22-ago no la traen y todos son `pre`.
+    donde = d.get("config", {}).get("donde", "pre")
     # el nombre puede traer sufijo de paso (`4_s0_p20000`): la semilla es el numero pegado a `_s`
     nivel, semilla = int(u[0]), int(u.split("_s")[1].split("_")[0])
     rng = np.random.default_rng(RT.SEM_PRUEBA + semilla)
-    fn = jax.jit(responder)
+    fn = jax.jit(partial(responder, donde=donde))
 
     REP, OK, ID = [], [], []
     for _ in range(A.n):

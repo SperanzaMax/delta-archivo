@@ -88,13 +88,35 @@ def delta_mixer(blk, x):
     return out
 
 
-def tronco(params, x, lectura=None, bloque=0):
-    """Pasa la secuencia por los bloques; si hay `lectura`, la inyecta en `bloque`."""
+def tronco(params, x, lectura=None, bloque=0, donde="pre"):
+    """Pasa la secuencia por los bloques; si hay `lectura`, la inyecta en `bloque`.
+
+    `donde` decide en que punto del bloque entra la lectura, y es el eje del experimento del 22-ago:
+
+      · "pre"  — ANTES de la conv y del mixer, sobre `ln1(h)`. Es lo que se venia haciendo. Ahi
+        `h = emb[x]` todavia, asi que la query es `ln(emb[token]) @ qr`: **funcion pura del token de
+        su posicion**, sin una sola operacion de contexto delante. De ahi sale que el modelo no pueda
+        formar una query conjunta entidad x relacion y consulte el archivo token por token
+        (`SMOKE_EMPATE_20260821.md`), que es el mecanismo al que el round-trip le atribuyo
+        `err_identidad` (colision de clave: la relacion sola matchea a todas las que la comparten).
+
+      · "post" — DESPUES de la conv y del mixer del MISMO bloque, sobre `ln2(h)`. La inyeccion sigue
+        siendo temprana (quedan 3,5 bloques de computo aguas abajo, y E-I1/E-I2 penalizaban la
+        inyeccion en capas PROFUNDAS, no esta), pero la query ya vio el pasado causal de la secuencia
+        y puede depender de la entidad y de la relacion a la vez.
+
+    La simetria entre las dos condiciones es exacta: cada una reusa el LayerNorm que ya precede a la
+    operacion siguiente (`ln1` para el mixer, `ln2` para el MLP), asi que ninguna estrena parametros
+    que la otra no tenga. El arbol de params no cambia de forma y los checkpoints siguen siendo
+    intercambiables.
+    """
     h = params["emb"][x]
     for i, blk in enumerate(params["blocks"]):
-        if lectura is not None and i == bloque:
+        if lectura is not None and i == bloque and donde == "pre":
             h = h + lectura(ln(blk["ln1"], h))
         h = h + jax.vmap(delta_mixer, in_axes=(None, 0))(blk, conv3(blk["conv"], ln(blk["ln1"], h)))
+        if lectura is not None and i == bloque and donde == "post":
+            h = h + lectura(ln(blk["ln2"], h))
         h2 = ln(blk["ln2"], h)
         h = h + jax.nn.gelu(h2 @ blk["m1"]["w"] + blk["m1"]["b"]) @ blk["m2"]["w"] + blk["m2"]["b"]
     return h
@@ -120,7 +142,7 @@ def escribir(params, sesiones, cortes):
     return ent.reshape(B, S * E, D)
 
 
-def responder(params, archivo, turnos, consulta, mask_arch, bloque=0):
+def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre"):
     """Lee el archivo mientras procesa la consulta. Devuelve logits (B, T, V)."""
     a = params["arch"]
     ak = archivo @ a["kw"] + a["ord"][turnos]
@@ -132,11 +154,11 @@ def responder(params, archivo, turnos, consulta, mask_arch, bloque=0):
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
         return jnp.einsum("btn,bnd->btd", jax.nn.softmax(sim, -1), av) @ a["wo"]
 
-    h = tronco(params, consulta, lectura, bloque)
+    h = tronco(params, consulta, lectura, bloque, donde)
     return ln(params["ln_f"], h) @ params["head"]["w"] + params["head"]["b"]
 
 
-def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0):
+def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre"):
     """Igual que `responder`, mas el logit de la cabeza de abstencion. Devuelve (logits, a).
 
     `a` es (B, T): un escalar por posicion, con proyeccion propia desde el MISMO estado final que
@@ -155,7 +177,7 @@ def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0):
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
         return jnp.einsum("btn,bnd->btd", jax.nn.softmax(sim, -1), av) @ a_p["wo"]
 
-    h = tronco(params, consulta, lectura, bloque)
+    h = tronco(params, consulta, lectura, bloque, donde)
     hn = ln(params["ln_f"], h)
     logits = hn @ params["head"]["w"] + params["head"]["b"]
     a = (hn @ params["abst"]["w"] + params["abst"]["b"])[..., 0]

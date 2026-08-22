@@ -34,6 +34,13 @@ import modelo as M
 
 NOSE = I.STOI["NOSE"]
 
+# Donde entra la lectura del archivo dentro del bloque 0 (ver `modelo.tronco`). Es el eje del
+# experimento del 22-ago. Se fija UNA vez en `main()`, antes de que jax tracee nada, y queda horneado
+# en los grafos compilados —es un `if` sobre un string de Python, no un valor de array—. No puede
+# cambiar en el medio de una corrida, y por eso `main` lo deja asentado en el JSON de config: si
+# alguna vez una corrida sale con el valor que no era, el JSON es donde se ve.
+_DONDE = "pre"
+
 
 def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None):
     """Devuelve un dict de metricas. Las dos caras de la abstencion van SEPARADAS:
@@ -66,7 +73,7 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
 
 def logits_de(params, ses, cortes, turnos, mask, cons, pos):
     archivo = M.escribir(params, ses, cortes)
-    lg = M.responder(params, archivo, turnos, cons, mask)
+    lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE)
     return jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
 
 
@@ -87,7 +94,7 @@ def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
 
 def _partes(params, ses, cortes, turnos, mask, cons, pos):
     archivo = M.escribir(params, ses, cortes)
-    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask)
+    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE)
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     a = jnp.take_along_axis(a, pos[:, None], axis=1)[:, 0]
     return lg, a
@@ -135,6 +142,12 @@ def main():
                          "escala = idem pero renormalizando el vector de NOSE a la norma media de "
                          "los tokens de valor al arrancar la fase; "
                          "cabeza = salida binaria separada, con NOSE excluido del softmax de valores")
+    ap.add_argument("--donde", default="pre", choices=("pre", "post"),
+                    help="en que punto del bloque 0 entra la lectura del archivo "
+                         "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
+                         "emb[x], que es lo que se venia haciendo y deja la query como funcion pura "
+                         "del token; post = despues del mixer del mismo bloque, con lo que la query "
+                         "puede depender de la entidad y de la relacion a la vez")
     ap.add_argument("--reinit-adam", action="store_true",
                     help="reinicia el estado de Adam al reanudar. La condicion `cabeza` lo hace sola "
                          "porque el arbol de params cambia de forma; este flag existe para que "
@@ -169,8 +182,13 @@ def main():
 
     I.fijar_version(a.idioma)       # antes de construir el modelo: define I.V
 
-    print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas}",
-          flush=True)
+    # Antes de que jax tracee nada: el valor queda horneado en los grafos compilados, asi que fijarlo
+    # tarde seria peor que no fijarlo (compilaria con `pre` y el JSON diria `post`).
+    global _DONDE
+    _DONDE = a.donde
+
+    print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
+          f"· lectura {a.donde}", flush=True)
     # El hardware va al JSON, no sólo al log. Cuando Colab raciona las T4 hay que aceptar el
     # acelerador que haya, y entonces «en qué corrió esta celda» deja de ser un detalle de
     # operación: es una variable que podría explicar una diferencia entre celdas, y sin registrarla
@@ -229,6 +247,15 @@ def main():
             if ck["config"].get(k) != vars(a).get(k):
                 sys.exit(f"ABORTA: el checkpoint tiene {k}={ck['config'].get(k)} y se pidio "
                          f"{k}={vars(a).get(k)}. No es la misma corrida.")
+        # `donde` va aparte porque los checkpoints anteriores al 22-ago no lo tienen en su config y
+        # todos ellos son `pre` (era la unica posicion que existia). El chequeo importa mas que los
+        # otros: la campania corre POR TRAMOS entre cuentas de Colab, y reanudar un tramo `post` sin
+        # pasar el flag lo continuaria como `pre` sin decir nada —la arquitectura cambia a mitad de
+        # corrida y el JSON mostraria una curva sola—. Es la misma familia de la D-1 del 20-ago:
+        # el estado que dos pasos comparten tiene que estar declarado, no supuesto.
+        if ck["config"].get("donde", "pre") != a.donde:
+            sys.exit(f"ABORTA: el checkpoint se entreno con donde={ck['config'].get('donde', 'pre')} "
+                     f"y se pidio donde={a.donde}. Es otra arquitectura, no la misma corrida.")
         hor_ck = ck["config"].get("horizonte") or ck["config"].get("pasos")
         if hor_ck != HOR:
             sys.exit(f"ABORTA: el checkpoint se entreno con horizonte de lr {hor_ck} y se pidio "

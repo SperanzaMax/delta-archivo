@@ -72,6 +72,20 @@ def main():
     nivel = a.nivel if a.nivel is not None else cfg["nivel"]
     p_nose = a.p_nose if a.p_nose is not None else cfg.get("p_nose", 0.0)
 
+    # --- la sonda corre la arquitectura y la regla de decision DEL CHECKPOINT (2026-08-22) --------
+    # Las dos cosas se leen del pkl y no de flags, porque las dos son propiedades de la unidad
+    # medida, no de la medicion.
+    #  · `donde`: posicion de la lectura. Los ckpts anteriores al 22-ago no la traen y son `pre`.
+    #  · `abst`:  con `cabeza` la abstencion sale de una salida binaria propia y `NOSE` esta EXCLUIDO
+    #    del softmax de valores. Medir esas unidades con `predecir` —el argmax plano, que es lo que
+    #    este script hacia— le da a `NOSE` una ruta que en el entrenamiento no tuvo, y desvia
+    #    justamente el reparto de categorias que el SER existe para medir. `ser.py` es del 15-ago y
+    #    la cabeza es del 18: la incompatibilidad venia de la diferencia de fechas.
+    E._DONDE = cfg.get("donde", "pre")          # antes del primer trace de jax
+    usa_cabeza = cfg.get("abst", "token") == "cabeza"
+    predecir = E.predecir_cabeza if usa_cabeza else E.predecir
+    print(f"checkpoint: nivel {nivel} · lectura {E._DONDE} · abstencion {cfg.get('abst', 'token')}")
+
     rng = np.random.default_rng(a.semilla)
     cuenta = collections.Counter()
     azar = collections.Counter()
@@ -82,8 +96,8 @@ def main():
         B = min(a.B, a.n - vistos)
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, meta = DAT.lote(
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_nose=p_nose, con_meta=True)
-        pred = E.predecir(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
-                          jnp.array(mask), jnp.array(cons), jnp.array(pos))
+        pred = predecir(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
+                        jnp.array(mask), jnp.array(cons), jnp.array(pos))
         for i in range(B):
             cat = clasificar(I.ITOS[int(pred[i])], I.ITOS[int(tgt[i])], meta[i])
             cuenta[cat] += 1

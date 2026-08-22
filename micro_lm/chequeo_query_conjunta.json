@@ -1,0 +1,16 @@
+{
+ "pre": {
+  "delta_contexto": 0.0,
+  "delta_mismo_token": 0.0
+ },
+ "post": {
+  "delta_contexto": 0.6523269414901733,
+  "delta_mismo_token": 0.9866436123847961
+ },
+ "veredicto": {
+  "C1": true,
+  "C2": true,
+  "C3": true,
+  "valido": true
+ }
+}
