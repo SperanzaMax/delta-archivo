@@ -11,3 +11,4 @@ jax 0.7.2 | [CudaDevice(id=0)]
 compuerta de padding OK
 lanzado pid 1668
 == polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
