@@ -101,3 +101,162 @@ VIVO= True ULTIMO= ── eval: vigente 0.7383 · anterior 0.7960 · abstencion 
 VIVO= True ULTIMO= ── eval: vigente 0.7245 · anterior 0.8509 · abstencion 0.2363 · truncados 0.0000 · nose 0.5737 (ent 0.5497/rel 0.6297) · falsa_abst 0.0311 
 VIVO= True ULTIMO= ── eval: vigente 0.7651 · anterior 0.7973 · abstencion 0.2012 · truncados 0.0000 · nose 0.5216 (ent 0.4827/rel 0.5904) · falsa_abst 0.0063 
 VIVO= True ULTIMO= ── eval: vigente 0.7541 · anterior 0.9165 · abstencion 0.2109 · truncados 0.0000 · nose 0.5259 (ent 0.4535/rel 0.6070) · falsa_abst 0.0197 
+   [checkpoint parcial guardado: paso 13250]
+VIVO= True ULTIMO= ── eval: vigente 0.7468 · anterior 0.9143 · abstencion 0.2246 · truncados 0.0000 · nose 0.5426 (ent 0.4822/rel 0.6244) · falsa_abst 0.0314 
+VIVO= True ULTIMO= ── eval: vigente 0.7672 · anterior 0.9143 · abstencion 0.2109 · truncados 0.0000 · nose 0.5213 (ent 0.4583/rel 0.6035) · falsa_abst 0.0216 
+VIVO= True ULTIMO= ── eval: vigente 0.7528 · anterior 0.9143 · abstencion 0.2227 · truncados 0.0000 · nose 0.5462 (ent 0.4833/rel 0.6230) · falsa_abst 0.0273 
+VIVO= True ULTIMO= ── eval: vigente 0.6957 · anterior 0.8246 · abstencion 0.2324 · truncados 0.0000 · nose 0.5560 (ent 0.5399/rel 0.6021) · falsa_abst 0.0371 
+   [checkpoint parcial guardado: paso 14250]
+VIVO= True ULTIMO= ── eval: vigente 0.7425 · anterior 0.8201 · abstencion 0.2148 · truncados 0.0000 · nose 0.5389 (ent 0.4934/rel 0.6029) · falsa_abst 0.0184 
+VIVO= True ULTIMO= ── eval: vigente 0.7505 · anterior 0.8558 · abstencion 0.2168 · truncados 0.0000 · nose 0.5437 (ent 0.5012/rel 0.6063) · falsa_abst 0.0176 
+VIVO= True ULTIMO= ── eval: vigente 0.7658 · anterior 0.9321 · abstencion 0.2090 · truncados 0.0000 · nose 0.5385 (ent 0.4822/rel 0.6160) · falsa_abst 0.0092 
+VIVO= True ULTIMO= ── eval: vigente 0.7265 · anterior 0.8902 · abstencion 0.2246 · truncados 0.0000 · nose 0.5697 (ent 0.5286/rel 0.6394) · falsa_abst 0.0155 
+   [checkpoint parcial guardado: paso 15500]
+VIVO= True ULTIMO= ── eval: vigente 0.7495 · anterior 0.9058 · abstencion 0.2207 · truncados 0.0000 · nose 0.5592 (ent 0.4971/rel 0.6466) · falsa_abst 0.0153 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_m_1031)
+   tr2_m_1031 parada; pendientes ahora: 3:2
+-- vuelta 2 · cuenta L · faltan: 3:2 · 11:32:07
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta F · faltan: 3:2 · 11:32:10
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta D · faltan: 3:2 · 11:32:12
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta C · faltan: 3:2 · 11:32:16
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta K · faltan: 3:2 · 11:32:19
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta N · faltan: 3:2 · 11:42:22
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta I · faltan: 3:2 · 11:42:25
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta M · faltan: 3:2 · 11:42:28
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta L · faltan: 3:2 · 11:42:31
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta F · faltan: 3:2 · 11:42:34
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta E · faltan: 3:2 · 11:42:36
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta D · faltan: 3:2 · 11:42:39
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta C · faltan: 3:2 · 11:42:42
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta K · faltan: 3:2 · 11:42:45
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 4 · cuenta N · faltan: 3:2 · 11:52:48
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta I · faltan: 3:2 · 11:52:50
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta M · faltan: 3:2 · 11:52:54
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta L · faltan: 3:2 · 11:52:57
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 4 · cuenta F · faltan: 3:2 · 11:53:00
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta E · faltan: 3:2 · 11:53:02
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta D · faltan: 3:2 · 11:53:05
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta C · faltan: 3:2 · 11:53:08
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta K · faltan: 3:2 · 11:53:11
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 5 · cuenta N · faltan: 3:2 · 12:03:13
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta I · faltan: 3:2 · 12:03:16
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta M · faltan: 3:2 · 12:03:20
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta L · faltan: 3:2 · 12:03:22
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 5 · cuenta F · faltan: 3:2 · 12:03:25
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta E · faltan: 3:2 · 12:03:28
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta D · faltan: 3:2 · 12:03:31
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta C · faltan: 3:2 · 12:03:34
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta K · faltan: 3:2 · 12:03:37
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 6 · cuenta N · faltan: 3:2 · 12:13:40
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta M · faltan: 3:2 · 12:13:43
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta L · faltan: 3:2 · 12:13:46
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta F · faltan: 3:2 · 12:13:48
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta E · faltan: 3:2 · 12:13:51
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta D · faltan: 3:2 · 12:13:54
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta C · faltan: 3:2 · 12:13:57
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta K · faltan: 3:2 · 12:13:59
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta N · faltan: 3:2 · 12:24:03
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta I · faltan: 3:2 · 12:24:06
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta L · faltan: 3:2 · 12:24:09
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta A · faltan: 3:2 · 12:24:12
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta J · faltan: 3:2 · 12:24:15
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta F · faltan: 3:2 · 12:24:18
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta E · faltan: 3:2 · 12:24:20
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta D · faltan: 3:2 · 12:24:23
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta C · faltan: 3:2 · 12:24:26
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta K · faltan: 3:2 · 12:24:29
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta N · faltan: 3:2 · 12:34:31
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta I · faltan: 3:2 · 12:34:34
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta M · faltan: 3:2 · 12:34:38
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta L · faltan: 3:2 · 12:34:40
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta A · faltan: 3:2 · 12:34:43
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta J · faltan: 3:2 · 12:34:46
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta F · faltan: 3:2 · 12:34:49
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta E · faltan: 3:2 · 12:34:52
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta D · faltan: 3:2 · 12:34:55
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta C · faltan: 3:2 · 12:34:58
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta K · faltan: 3:2 · 12:35:00
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+./rotar_abst.sh: línea 212: EOF inesperado mientras se buscaba un «"» coincidente

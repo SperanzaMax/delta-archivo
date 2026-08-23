@@ -19,3 +19,140 @@
    503 en A — SIGUIENTE CUENTA ya (sin esperar)
 -- M la esta usando otro proceso, se saltea
 -- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- H la esta usando otro proceso, se saltea
+-- K la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta G · faltan: 3:0 · 11:16:23
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta F · faltan: 3:0 · 11:16:27
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta N · faltan: 3:0 · 11:16:31
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- I la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta H · faltan: 3:0 · 11:26:34
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta G · faltan: 3:0 · 11:26:37
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta F · faltan: 3:0 · 11:26:40
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta N · faltan: 3:0 · 11:26:43
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- I la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 4 · cuenta H · faltan: 3:0 · 11:36:46
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta K · faltan: 3:0 · 11:36:48
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- G la esta usando otro proceso, se saltea
+-- vuelta 4 · cuenta D · faltan: 3:0 · 11:36:52
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta F · faltan: 3:0 · 11:36:54
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta L · faltan: 3:0 · 11:36:57
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- N la esta usando otro proceso, se saltea
+-- vuelta 4 · cuenta C · faltan: 3:0 · 11:37:01
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta E · faltan: 3:0 · 11:37:04
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- vuelta 4 · cuenta M · faltan: 3:0 · 11:37:07
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 recorrida entera sin T4 en ninguna; descanso 10 min
+-- H la esta usando otro proceso, se saltea
+-- vuelta 5 · cuenta K · faltan: 3:0 · 11:47:10
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- G la esta usando otro proceso, se saltea
+-- vuelta 5 · cuenta D · faltan: 3:0 · 11:47:13
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 5 · cuenta L · faltan: 3:0 · 11:47:16
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- N la esta usando otro proceso, se saltea
+-- vuelta 5 · cuenta C · faltan: 3:0 · 11:47:19
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 5 · cuenta I · faltan: 3:0 · 11:47:22
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 5 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 6 · cuenta H · faltan: 3:0 · 11:57:25
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta G · faltan: 3:0 · 11:57:28
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta F · faltan: 3:0 · 11:57:31
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta N · faltan: 3:0 · 11:57:34
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta E · faltan: 3:0 · 11:57:37
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- vuelta 6 · cuenta M · faltan: 3:0 · 11:57:40
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- H la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta K · faltan: 3:0 · 12:07:43
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- G la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta D · faltan: 3:0 · 12:07:46
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta L · faltan: 3:0 · 12:07:48
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- N la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta C · faltan: 3:0 · 12:07:51
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta I · faltan: 3:0 · 12:07:54
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta H · faltan: 3:0 · 12:17:57
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta G · faltan: 3:0 · 12:18:00
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta F · faltan: 3:0 · 12:18:03
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta N · faltan: 3:0 · 12:18:06
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta E · faltan: 3:0 · 12:18:08
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta J · faltan: 3:0 · 12:18:11
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta M · faltan: 3:0 · 12:18:14
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+== fin · pendientes: 3:0

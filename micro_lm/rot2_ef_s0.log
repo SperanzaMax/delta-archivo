@@ -1,0 +1,25 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot2_ef_s0.log (rotador 1249375)
+== rotador2 · familia 'ef' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:0 · cuentas: N I M L A J F E D C H G K
+-- vuelta 1 · cuenta N · faltan: 3:0 · 14:56:48
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:0 · 14:56:51
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta M · faltan: 3:0 · 14:56:55
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta L · faltan: 3:0 · 14:56:58
+   >> OTORGADA en L: [tr2_l_1456] gpu-t4-s-kkb-ass1c1-133qn40h7g4vj | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en L (desde el paso 7750)
+== tramo · cuenta L · sesion tr2_l_1456 · ef3_s0 · +8000 de 20000 pasos · p_nose 0.4 · abst cabeza · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.HpIe0v7O5O/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ef3_s0.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3206
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 15500 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.7559 · anterior 0.8541 · abstencion 0.2188 · truncados 0.0000 · nose 0.4842 (ent 0.4579/rel 0.5048) · falsa_abst 0.0262 
+VIVO= True ULTIMO= ── eval: vigente 0.8037 · anterior 0.7702 · abstencion 0.2031 · truncados 0.0000 · nose 0.4721 (ent 0.4457/rel 0.4829) · falsa_abst 0.0095 
+   [checkpoint parcial guardado: paso 8250]
+VIVO= True ULTIMO= ── eval: vigente 0.7444 · anterior 0.8063 · abstencion 0.2188 · truncados 0.0000 · nose 0.4895 (ent 0.4553/rel 0.5197) · falsa_abst 0.0229 
+VIVO= True ULTIMO= ── eval: vigente 0.7990 · anterior 0.8789 · abstencion 0.2207 · truncados 0.0000 · nose 0.4836 (ent 0.4622/rel 0.4987) · falsa_abst 0.0306 

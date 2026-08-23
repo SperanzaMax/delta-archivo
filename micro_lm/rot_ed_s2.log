@@ -148,3 +148,39 @@ VIVO= True ULTIMO= mezcla -> vigente 0.342 · anterior 0.231 · nose 0.427   (p_
    503 en N — SIGUIENTE CUENTA ya (sin esperar)
 -- I la esta usando otro proceso, se saltea
 -- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta K · faltan: 3:2 · 11:21:29
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta C · faltan: 3:2 · 11:21:32
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta F · faltan: 3:2 · 11:21:35
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta L · faltan: 3:2 · 11:21:38
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta N · faltan: 3:2 · 11:21:41
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta K · faltan: 3:2 · 11:31:44
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta C · faltan: 3:2 · 11:31:47
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta D · faltan: 3:2 · 11:31:50
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta F · faltan: 3:2 · 11:31:53
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta L · faltan: 3:2 · 11:31:56
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta N · faltan: 3:2 · 11:31:59
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+./rotar_abst.sh: línea 212: EOF inesperado mientras se buscaba un «"» coincidente

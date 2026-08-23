@@ -149,3 +149,39 @@ VIVO= True ULTIMO= ── eval: vigente 0.7647 · anterior 0.8276 · abstencion 
 -- vuelta 6 · cuenta K · faltan: 3:1 · 11:11:21
    503 en K — SIGUIENTE CUENTA ya (sin esperar)
 -- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta N · faltan: 3:1 · 11:21:24
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta L · faltan: 3:1 · 11:21:27
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta F · faltan: 3:1 · 11:21:30
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 7 · cuenta D · faltan: 3:1 · 11:21:33
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta C · faltan: 3:1 · 11:21:36
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta K · faltan: 3:1 · 11:21:39
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta N · faltan: 3:1 · 11:31:42
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta L · faltan: 3:1 · 11:31:45
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta F · faltan: 3:1 · 11:31:48
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- D la esta usando otro proceso, se saltea
+-- vuelta 8 · cuenta C · faltan: 3:1 · 11:31:51
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta K · faltan: 3:1 · 11:31:54
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+./rotar_abst.sh: línea 212: EOF inesperado mientras se buscaba un «"» coincidente

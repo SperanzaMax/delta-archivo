@@ -1,0 +1,40 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot2_ef_s2.log (rotador 1254217)
+== rotador2 · familia 'ef' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:2 · cuentas: N I M L A J F E D C H G K
+-- vuelta 1 · cuenta N · faltan: 3:2 · 14:57:01
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:2 · 14:57:05
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- L la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- F la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta E · faltan: 3:2 · 14:57:10
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta C · faltan: 3:2 · 14:57:15
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- H la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta G · faltan: 3:2 · 14:57:21
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta N · faltan: 3:2 · 15:07:24
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta M · faltan: 3:2 · 15:07:29
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- F la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta E · faltan: 3:2 · 15:07:34
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta C · faltan: 3:2 · 15:07:39
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta H · faltan: 3:2 · 15:07:44
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- G la esta usando otro proceso, se saltea
+-- K la esta usando otro proceso, se saltea
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min

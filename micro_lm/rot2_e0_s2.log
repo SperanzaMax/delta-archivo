@@ -1,0 +1,54 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot2_e0_s2.log (rotador 1254570)
+== rotador2 · familia 'e0' · p_nose 0.4 · mezcla dinamica · piso 0.0 · p_vieja 0.35 · unidades 3:2 · cuentas: G H K F E D C M N I J A L
+-- vuelta 1 · cuenta G · faltan: 3:2 · 14:57:03
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta H · faltan: 3:2 · 14:57:07
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta K · faltan: 3:2 · 14:57:13
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta F · faltan: 3:2 · 14:57:18
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta E · faltan: 3:2 · 14:57:22
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta D · faltan: 3:2 · 14:57:25
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta C · faltan: 3:2 · 14:57:29
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta M · faltan: 3:2 · 14:57:31
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta N · faltan: 3:2 · 14:57:34
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:2 · 14:57:37
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta J · faltan: 3:2 · 14:57:39
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta A · faltan: 3:2 · 14:57:42
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta G · faltan: 3:2 · 15:07:45
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta H · faltan: 3:2 · 15:07:49
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta K · faltan: 3:2 · 15:07:52
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta F · faltan: 3:2 · 15:07:55
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta E · faltan: 3:2 · 15:07:57
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta D · faltan: 3:2 · 15:08:00
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta C · faltan: 3:2 · 15:08:04
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta M · faltan: 3:2 · 15:08:06
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta N · faltan: 3:2 · 15:08:09
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta I · faltan: 3:2 · 15:08:12
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta J · faltan: 3:2 · 15:08:15
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta A · faltan: 3:2 · 15:08:17
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min

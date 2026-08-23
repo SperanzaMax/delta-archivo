@@ -1,0 +1,41 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot2_e0_s1.log (rotador 1252745)
+== rotador2 · familia 'e0' · p_nose 0.4 · mezcla dinamica · piso 0.0 · p_vieja 0.35 · unidades 3:1 · cuentas: G H K F E D C M N I J A L
+-- G la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta H · faltan: 3:1 · 14:56:57
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- F la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta D · faltan: 3:1 · 14:57:01
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta N · faltan: 3:1 · 14:57:06
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:1 · 14:57:11
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta A · faltan: 3:1 · 14:57:15
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta G · faltan: 3:1 · 15:07:20
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta H · faltan: 3:1 · 15:07:24
+   503 en H — SIGUIENTE CUENTA ya (sin esperar)
+-- K la esta usando otro proceso, se saltea
+-- F la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta D · faltan: 3:1 · 15:07:28
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta C · faltan: 3:1 · 15:07:33
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- N la esta usando otro proceso, se saltea
+-- I la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta J · faltan: 3:1 · 15:07:39
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta A · faltan: 3:1 · 15:07:44
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
