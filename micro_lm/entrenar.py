@@ -28,6 +28,19 @@ import jax
 import jax.numpy as jnp
 import optax
 
+# --- la aritmetica no puede depender de que acelerador toco (2026-08-23) ------------------------
+# Desde hoy el rotador pide TPU v5e1 cuando no hay T4, asi que una MISMA corrida puede hacer un
+# tramo en GPU y el siguiente en TPU. Y por defecto no son la misma cuenta: en TPU jax resuelve los
+# matmul de float32 pasando por bf16, mientras que en la T4 (que es Turing, sin TF32) los hace en
+# fp32 de verdad. Sin fijar esto, «w3_s1 corrio en TPU» seria una variable escondida capaz de
+# explicar una diferencia entre celdas — exactamente el confound que el proyecto ya evita
+# registrando `hw` en el JSON, solo que registrado no alcanza cuando pasa DENTRO de una corrida.
+#
+# `highest` fuerza fp32 en las dos. En T4 no cambia nada (ya era su default, verificado bit a bit);
+# en TPU cuesta velocidad —hace tres pasadas bf16— y esa es justamente la moneda con la que se paga
+# que el numero signifique lo mismo.
+jax.config.update("jax_default_matmul_precision", "highest")
+
 import datos as DAT
 import idioma as I
 import modelo as M

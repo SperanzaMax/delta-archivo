@@ -38,3 +38,25 @@
    503 en N — SIGUIENTE CUENTA ya (sin esperar)
 -- I la esta usando otro proceso, se saltea
 -- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta K · faltan: 3:2 · 15:17:40
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta G · faltan: 3:2 · 15:17:43
+   503 en G — SIGUIENTE CUENTA ya (sin esperar)
+-- H la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta C · faltan: 3:2 · 15:17:46
+   503 en C — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta D · faltan: 3:2 · 15:17:49
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta F · faltan: 3:2 · 15:17:53
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta A · faltan: 3:2 · 15:17:57
+   503 en A — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- N la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta I · faltan: 3:2 · 15:18:01
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+Terminado
