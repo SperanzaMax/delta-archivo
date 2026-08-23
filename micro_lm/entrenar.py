@@ -256,6 +256,16 @@ def main():
                          "con 512 muestras y tiene ruido de +-0,02, y ademas hay realimentacion "
                          "—el muestreo cambia el error que decide el muestreo—, asi que una EMA "
                          "rapida perseguiria el ruido y oscilaria")
+    ap.add_argument("--parar-si-estanca", type=int, default=0,
+                    help="para la corrida si el acierto global no mejora su mejor valor en N "
+                         "evaluaciones seguidas (0 = apagado, que es lo que corre la campania del "
+                         "23-ago). Es el pedido de Maxi —«que se detenga cuando alcanza su mejor "
+                         "capacidad»— y es lo que convierte el ahorro de S-2 en ahorro de reloj: "
+                         "sin esto, escalonar llega antes al techo pero igual gasta los 20000 "
+                         "pasos. VA APAGADO EN LA CAMPANIA QUE MIDE porque cortar antes deja la "
+                         "curva sin cola, y la cola es justamente lo que S-2 y S-4 leen. Se "
+                         "enciende DESPUES, cuando ya no se esta midiendo sino produciendo. "
+                         "N cuenta EVALUACIONES, no pasos: con --cada 250, N=20 son 5000 pasos")
     ap.add_argument("--salida", default="resultados_micro.json")
     ap.add_argument("--pesos", default=None, help="ruta .pkl donde dejar los pesos finales")
     ap.add_argument("--idioma", type=int, default=2, choices=(1, 2, 3),
@@ -460,6 +470,15 @@ def main():
         p_vieja_tr, p_nose_tr = a.p_vieja, a.p_nose
         w = pesos_de_probs(p_vieja_tr, p_nose_tr)
     ult_eval = paso0
+    # El mejor global visto, para `--parar-si-estanca`. Se siembra con la historia ya vivida: si no,
+    # un tramo que reanuda arrancaria creyendo que nunca vio nada bueno y no cortaria nunca.
+    mejor = {"valor": -1.0, "paso": 0, "seguidas": 0}
+    for e in hist:
+        v = 0.39 * e.get("vigente", 0) + 0.21 * e.get("anterior", 0) + 0.40 * e.get("nose", 0)
+        if v > mejor["valor"]:
+            mejor.update(valor=v, paso=e["paso"], seguidas=0)
+        else:
+            mejor["seguidas"] += 1
 
     for s in range(paso0 + 1, fin + 1):
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
@@ -535,6 +554,23 @@ def main():
             # Lo del 13-ago no se repite: si se esta truncando, se corta ACA y no despues de 73 min.
             if trunc > 0.01:
                 sys.exit(f"ABORTA: truncamiento {trunc:.4f} > 0,01 — se estaria midiendo el padding")
+
+            # --- parada por techo alcanzado (pedido de Maxi, 23-ago) -----------------------------
+            # El acierto global se pondera con la mezcla de REFERENCIA, no con la que la corrida
+            # este usando: si se ponderara con la dinamica, mover el muestreo hacia lo dificil
+            # bajaria el numero sola y la corrida se cortaria por haberse puesto un examen mas
+            # dificil, no por haber dejado de aprender.
+            if a.parar_si_estanca > 0:
+                glob = 0.39 * m["vigente"] + 0.21 * m["anterior"] + 0.40 * m["nose"]
+                if glob > mejor["valor"] + 1e-6:
+                    mejor.update(valor=glob, paso=s, seguidas=0)
+                else:
+                    mejor["seguidas"] += 1
+                    if mejor["seguidas"] >= a.parar_si_estanca:
+                        print(f"\nPARA: el acierto global no mejora {mejor['valor']:.4f} "
+                              f"(paso {mejor['paso']}) desde hace {mejor['seguidas']} evaluaciones "
+                              f"= {mejor['seguidas'] * a.cada} pasos. Techo alcanzado.", flush=True)
+                        break
 
     if a.pesos:
         with open(a.pesos, "wb") as f:
