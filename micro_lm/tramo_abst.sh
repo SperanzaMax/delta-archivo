@@ -64,6 +64,10 @@ DONDE="${DONDE:-pre}"
 # comportamiento de siempre.
 MEZCLA="${MEZCLA:-fija}"
 P_VIEJA="${P_VIEJA:-0.35}"
+# `MEZCLA_PISO=0.0` es la celda `e0`: un tipo resuelto deja de entrenarse en vez de bajar al piso
+# (pregunta de Maxi del 23-ago). Tiene que viajar hasta aca o la celda correria con el piso normal
+# y las dos condiciones serian la misma corrida con dos nombres.
+MEZCLA_PISO="${MEZCLA_PISO:-0.10}"
 REINIT="${REINIT:-1}"
 UNI="${PREFIJO}${NIVEL}_s${SEM}"
 
@@ -85,7 +89,7 @@ elif [ ! -f "$CK" ] && [ -f "$BASE" ]; then
   SEMBRADO=1
 fi
 JS="$SALIDA/${UNI}.json"
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · mezcla $MEZCLA · p_vieja $P_VIEJA"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -118,7 +122,7 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--pasos', '$PASOS', '--tramo', '$TRAMO', '--cada', '$CADA', '--d', '128', '--capas', '4',
        '--lr', '1e-3', '--p-vieja', '$P_VIEJA', '--idioma', '2', '--horizonte', '$HORIZONTE',
        '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
-       '--mezcla', '$MEZCLA',
+       '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$REINIT' == '1' and '$SEMBRADO' == '1':
     # Adam se reinicia SOLO al entrar en la fase (primer tramo, sembrado desde la base), nunca al

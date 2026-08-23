@@ -350,6 +350,15 @@ def main():
         if ck["config"].get("mezcla", "fija") != a.mezcla:
             sys.exit(f"ABORTA: el checkpoint se entreno con mezcla={ck['config'].get('mezcla', 'fija')} "
                      f"y se pidio mezcla={a.mezcla}. Es otra politica de muestreo, no la misma corrida.")
+        # El piso distingue `ed` de `e0`, que sólo se diferencian en ese numero. Un tramo al que se
+        # le olvida la variable continuaria `e0` con piso 0,10 y las dos celdas serian la misma
+        # corrida con dos nombres — el mismo agujero que taparon las guardas de `donde` y `mezcla`.
+        # Sólo se compara en dinamica: en `fija` el piso no se usa, y los ckpts previos no lo traen.
+        if a.mezcla == "dinamica" and \
+                abs(float(ck["config"].get("mezcla_piso", 0.10)) - a.mezcla_piso) > 1e-9:
+            sys.exit(f"ABORTA: el checkpoint se entreno con mezcla_piso="
+                     f"{ck['config'].get('mezcla_piso', 0.10)} y se pidio {a.mezcla_piso}. "
+                     f"Es otra politica de muestreo, no la misma corrida.")
         if ck["config"].get("donde", "pre") != a.donde:
             sys.exit(f"ABORTA: el checkpoint se entreno con donde={ck['config'].get('donde', 'pre')} "
                      f"y se pidio donde={a.donde}. Es otra arquitectura, no la misma corrida.")

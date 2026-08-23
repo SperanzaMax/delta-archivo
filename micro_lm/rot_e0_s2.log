@@ -1,0 +1,19 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_e0_s2.log (rotador 3998958)
+== rotador2 · familia 'e0' · p_nose 0.4 · mezcla dinamica · piso 0.0 · p_vieja 0.35 · unidades 3:2 · cuentas: H K G D F L N C E I J A M
+-- H la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta K · faltan: 3:2 · 11:06:13
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- G la esta usando otro proceso, se saltea
+-- D la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta F · faltan: 3:2 · 11:06:16
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- L la esta usando otro proceso, se saltea
+-- N la esta usando otro proceso, se saltea
+-- C la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- I la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta J · faltan: 3:2 · 11:06:20
+   503 en J — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min

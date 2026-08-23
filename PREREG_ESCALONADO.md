@@ -60,7 +60,26 @@ nivel 3, d=128, capas=4, 20000 pasos, `--cada` 250, semillas 0/1/2.
 |---|---|---|
 | dinámica | `ed` | `--mezcla dinamica` (piso 0,10 · alpha 0,10) |
 | fija | `ef` | `--mezcla fija --p-vieja 0.35 --p-nose 0.4` |
+| **parada suave** | `e0` | `--mezcla dinamica --mezcla-piso 0.0` |
 | **control** `fijo_promedio` | `ep` | `--mezcla fija` con el promedio que la dinámica terminó usando |
+
+### 4.1 La celda `e0` — «cuando alcanza su óptimo, que se detenga» (pregunta de Maxi, 23-ago)
+
+Es la versión fuerte de la idea: que un tipo resuelto no baje al piso sino que **deje de entrenarse**.
+Se corre con `--mezcla-piso 0.0`, sin código nuevo. Dos cosas que hay que dejar dichas antes:
+
+- **La parada es suave, no un corte.** Con piso 0 el peso no llega a cero: la EMA arranca en 1,0 y
+  decae con alpha 0,10, así que el tipo conserva una fracción proporcional a lo que todavía falla.
+  Con el error real de `w3_s0` al 15750, `vigente` pasa de 0,107 (piso 0,10) a **0,010** (piso 0).
+- **Y se auto-repara, porque la evaluación es de mezcla fija.** Al tipo se lo sigue midiendo aunque
+  casi no se lo entrene, así que si se degrada su error sube y **recupera peso solo**: error 0,0025
+  → peso 0,010; error 0,05 → 0,174; error 0,15 → 0,388. El riesgo de la parada dura no es olvido
+  permanente, entonces, sino **oscilación**.
+
+Lo que justifica correrla en vez de decidirla por opinión: en `w3_s0`, `vigente` toca 1,0000 en el
+paso 14750 y después **baja en 15 de 46 evaluaciones** (mínimo 0,9835, caída máxima 0,0165) —
+mientras se lo sigue entrenando con el 39 % de las muestras. Una capacidad resuelta no se queda
+quieta ni con presupuesto pleno. Cuánto se movería con el 1 % es exactamente lo que `e0` mide.
 
 `ef` se corre **fresca y pareada** aunque haya campañas previas con esa configuración. Es la misma
 razón por la que la campaña `token` del 17-ago no se reusó como línea de base.
@@ -92,6 +111,13 @@ referencia**, no como un promedio simple: es la misma cantidad en las tres condi
   válido el resultado.
 - **S-4 · sin olvido.** Ninguna capacidad termina por debajo de donde estaba cuando dejó de
   muestrearse. Es para lo que existe el piso, y hay que verificar que alcance.
+- **S-5 · el piso, ¿hace falta?** (celda `e0`, agregada el 23-ago). Predicción escrita antes de
+  correr: `e0` **iguala o gana** a `ed` en el acierto global —porque el presupuesto liberado es
+  mayor— pero muestra **más varianza entre evaluaciones consecutivas** en los tipos ya resueltos,
+  que es la firma de la oscilación. Si `e0` gana y **no** oscila, el piso es equipaje y se saca; si
+  oscila sin perder acierto final, es una cuestión de gusto y se deja el piso por prudencia; si
+  pierde acierto, el piso queda justificado con un número en vez de con una intuición.
+  La varianza se mide sobre las últimas 20 evaluaciones de cada tipo, comparada entre `e0` y `ed`.
 
 ## 7. Riesgo declarado
 

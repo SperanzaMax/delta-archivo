@@ -15,3 +15,100 @@ lanzado pid 1425
 VIVO= True ULTIMO= mezcla dinamica · piso 0.10 · alpha 0.10 · arranca en vigente 0.333 / anterior 0.333 / nose 0.333 
 VIVO= True ULTIMO= mezcla -> vigente 0.333 · anterior 0.333 · nose 0.335   (p_vieja 0.500 · p_nose 0.335) 
 VIVO= True ULTIMO= mezcla -> vigente 0.331 · anterior 0.330 · nose 0.339   (p_vieja 0.499 · p_nose 0.339) 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= mezcla -> vigente 0.330 · anterior 0.329 · nose 0.341   (p_vieja 0.499 · p_nose 0.341) 
+VIVO= True ULTIMO= mezcla -> vigente 0.329 · anterior 0.327 · nose 0.344   (p_vieja 0.498 · p_nose 0.344) 
+VIVO= True ULTIMO= mezcla -> vigente 0.327 · anterior 0.326 · nose 0.347   (p_vieja 0.499 · p_nose 0.347) 
+VIVO= True ULTIMO= mezcla -> vigente 0.324 · anterior 0.325 · nose 0.351   (p_vieja 0.501 · p_nose 0.351) 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= mezcla -> vigente 0.322 · anterior 0.324 · nose 0.355   (p_vieja 0.501 · p_nose 0.355) 
+VIVO= True ULTIMO= mezcla -> vigente 0.320 · anterior 0.320 · nose 0.360   (p_vieja 0.500 · p_nose 0.360) 
+VIVO= True ULTIMO= mezcla -> vigente 0.316 · anterior 0.315 · nose 0.369   (p_vieja 0.499 · p_nose 0.369) 
+VIVO= True ULTIMO= mezcla -> vigente 0.318 · anterior 0.312 · nose 0.370   (p_vieja 0.496 · p_nose 0.370) 
+   [checkpoint parcial guardado: paso 3000]
+VIVO= True ULTIMO= mezcla -> vigente 0.321 · anterior 0.308 · nose 0.371   (p_vieja 0.489 · p_nose 0.371) 
+VIVO= True ULTIMO= mezcla -> vigente 0.324 · anterior 0.304 · nose 0.372   (p_vieja 0.484 · p_nose 0.372) 
+VIVO= True ULTIMO= mezcla -> vigente 0.329 · anterior 0.301 · nose 0.370   (p_vieja 0.477 · p_nose 0.370) 
+VIVO= True ULTIMO= mezcla -> vigente 0.333 · anterior 0.299 · nose 0.368   (p_vieja 0.473 · p_nose 0.368) 
+   [checkpoint parcial guardado: paso 4000]
+VIVO= True ULTIMO= mezcla -> vigente 0.333 · anterior 0.295 · nose 0.372   (p_vieja 0.469 · p_nose 0.372) 
+VIVO= True ULTIMO= mezcla -> vigente 0.331 · anterior 0.296 · nose 0.372   (p_vieja 0.472 · p_nose 0.372) 
+VIVO= True ULTIMO= mezcla -> vigente 0.331 · anterior 0.293 · nose 0.376   (p_vieja 0.469 · p_nose 0.376) 
+VIVO= True ULTIMO= mezcla -> vigente 0.333 · anterior 0.290 · nose 0.377   (p_vieja 0.465 · p_nose 0.377) 
+   [checkpoint parcial guardado: paso 5250]
+VIVO= True ULTIMO= mezcla -> vigente 0.332 · anterior 0.286 · nose 0.382   (p_vieja 0.463 · p_nose 0.382) 
+VIVO= True ULTIMO= mezcla -> vigente 0.331 · anterior 0.284 · nose 0.384   (p_vieja 0.462 · p_nose 0.384) 
+VIVO= True ULTIMO= mezcla -> vigente 0.329 · anterior 0.285 · nose 0.386   (p_vieja 0.464 · p_nose 0.386) 
+VIVO= True ULTIMO= mezcla -> vigente 0.328 · anterior 0.285 · nose 0.387   (p_vieja 0.465 · p_nose 0.387) 
+   [checkpoint parcial guardado: paso 6250]
+VIVO= True ULTIMO= mezcla -> vigente 0.328 · anterior 0.282 · nose 0.390   (p_vieja 0.462 · p_nose 0.390) 
+VIVO= True ULTIMO= mezcla -> vigente 0.325 · anterior 0.277 · nose 0.397   (p_vieja 0.460 · p_nose 0.397) 
+VIVO= True ULTIMO= mezcla -> vigente 0.328 · anterior 0.273 · nose 0.399   (p_vieja 0.454 · p_nose 0.399) 
+VIVO= True ULTIMO= mezcla -> vigente 0.329 · anterior 0.268 · nose 0.403   (p_vieja 0.449 · p_nose 0.403) 
+   [checkpoint parcial guardado: paso 7500]
+VIVO= True ULTIMO= mezcla -> vigente 0.327 · anterior 0.268 · nose 0.405   (p_vieja 0.450 · p_nose 0.405) 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_d_0919)
+   tr2_d_0919 parada; pendientes ahora: 3:0
+-- E la esta usando otro proceso, se saltea
+-- F la esta usando otro proceso, se saltea
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- L la esta usando otro proceso, se saltea
+-- M la esta usando otro proceso, se saltea
+-- N la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta I · faltan: 3:0 · 10:19:56
+   503 en I — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta K · faltan: 3:0 · 10:29:59
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta D · faltan: 3:0 · 10:30:02
+   503 en D — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta E · faltan: 3:0 · 10:30:05
+   503 en E — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta F · faltan: 3:0 · 10:30:08
+   503 en F — SIGUIENTE CUENTA ya (sin esperar)
+-- J la esta usando otro proceso, se saltea
+-- A la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta L · faltan: 3:0 · 10:30:11
+   503 en L — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta M · faltan: 3:0 · 10:30:14
+   503 en M — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta N · faltan: 3:0 · 10:30:17
+   503 en N — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta I · faltan: 3:0 · 10:30:20
+   >> OTORGADA en I: [tr2_i_1030] gpu-t4-s-kkb-euw4c0-2su4362c1bxe6 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en I (desde el paso 7750)
+== tramo · cuenta I · sesion tr2_i_1030 · ed3_s0 · +8000 de 20000 pasos · p_nose 0.4 · abst cabeza · mezcla dinamica · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.z2t6EbBUUs/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ed3_s0.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2812
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= mezcla dinamica · piso 0.10 · alpha 0.10 · arranca en vigente 0.327 / anterior 0.268 / nose 0.405 
+VIVO= True ULTIMO= mezcla -> vigente 0.322 · anterior 0.265 · nose 0.413   (p_vieja 0.451 · p_nose 0.413) 
+VIVO= True ULTIMO= mezcla -> vigente 0.321 · anterior 0.260 · nose 0.419   (p_vieja 0.448 · p_nose 0.419) 
+   [checkpoint parcial guardado: paso 8500]
+VIVO= True ULTIMO= mezcla -> vigente 0.315 · anterior 0.261 · nose 0.423   (p_vieja 0.453 · p_nose 0.423) 
+VIVO= True ULTIMO= mezcla -> vigente 0.314 · anterior 0.259 · nose 0.426   (p_vieja 0.452 · p_nose 0.426) 
+VIVO= True ULTIMO= mezcla -> vigente 0.316 · anterior 0.259 · nose 0.425   (p_vieja 0.451 · p_nose 0.425) 
+VIVO= True ULTIMO= mezcla -> vigente 0.314 · anterior 0.258 · nose 0.427   (p_vieja 0.451 · p_nose 0.427) 
+   [checkpoint parcial guardado: paso 9500]
+VIVO= True ULTIMO= mezcla -> vigente 0.313 · anterior 0.258 · nose 0.429   (p_vieja 0.451 · p_nose 0.429) 
+VIVO= True ULTIMO= mezcla -> vigente 0.310 · anterior 0.256 · nose 0.434   (p_vieja 0.452 · p_nose 0.434) 
+VIVO= True ULTIMO= mezcla -> vigente 0.309 · anterior 0.254 · nose 0.437   (p_vieja 0.451 · p_nose 0.437) 
+VIVO= True ULTIMO= mezcla -> vigente 0.309 · anterior 0.252 · nose 0.438   (p_vieja 0.449 · p_nose 0.438) 
+   [checkpoint parcial guardado: paso 10750]
+VIVO= True ULTIMO= mezcla -> vigente 0.310 · anterior 0.248 · nose 0.442   (p_vieja 0.444 · p_nose 0.442) 
+VIVO= True ULTIMO= mezcla -> vigente 0.307 · anterior 0.246 · nose 0.447   (p_vieja 0.445 · p_nose 0.447) 
+VIVO= True ULTIMO= mezcla -> vigente 0.307 · anterior 0.244 · nose 0.449   (p_vieja 0.442 · p_nose 0.449) 
+VIVO= True ULTIMO= paso  12000  loss 0.6962  acc 0.7188  (1877s) 
+   [checkpoint parcial guardado: paso 11750]
+VIVO= True ULTIMO= mezcla -> vigente 0.310 · anterior 0.241 · nose 0.450   (p_vieja 0.438 · p_nose 0.450) 
+VIVO= True ULTIMO= mezcla -> vigente 0.312 · anterior 0.238 · nose 0.451   (p_vieja 0.433 · p_nose 0.451) 
+VIVO= True ULTIMO= mezcla -> vigente 0.312 · anterior 0.241 · nose 0.447   (p_vieja 0.436 · p_nose 0.447) 
+VIVO= True ULTIMO= mezcla -> vigente 0.312 · anterior 0.240 · nose 0.449   (p_vieja 0.435 · p_nose 0.449) 
