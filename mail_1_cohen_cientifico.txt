@@ -1,0 +1,39 @@
+Para:  Roi.Cohen@hpi.de, Konstantin.Dobler@hpi.de, Gerard.DeMelo@hpi.de, edenbiran@mail.tau.ac.il
+Asunto: A small-model testbed for the [IDK] failure mode, with a different cause
+
+---
+
+Dear Roi, Konstantin, Eden and Gerard,
+
+I am an independent researcher running a research programme on a deliberately tiny language model, 863,859 parameters trained from scratch with an explicit persistent memory. The small model is a testbed, not the destination. The point of working at this size is that a full paired campaign with several seeds and pre-registered predictions costs hours instead of weeks, so a mechanism can be isolated cheaply and only then be taken to a real scale. Your NeurIPS 2024 paper is the closest prior work to what I am doing, and the first thing I ran into was the failure mode you report.
+
+You note that the method fails on the smallest models you tried, pythia-70m and pythia-160m, and attribute it to numerical precision in the [IDK] embedding initialization. My setup sits entirely inside that regime, so I tested that explanation directly rather than assuming it.
+
+I ran seven units in three paired conditions, twenty-one runs in total, all starting from the same base checkpoint with Adam reinitialized in all three, and the same 2000-step budget:
+
+1. token, which is your design. The abstention symbol is one more entry of the vocabulary softmax.
+2. scale, an attempt at your explanation. The abstention embedding is renormalized to the mean norm of the value tokens, in both the input and the output matrix, at the start of the phase.
+3. head, a separate binary abstention output outside the vocabulary softmax. It adds 129 parameters over 863,730, which is 0.015 percent.
+
+The gate was fixed beforehand and asks for two things at once, since a model that abstains from everything scores perfectly on the first one. On the five hard units, token passes 0 of 5, scale passes 0 of 5, and head passes 4 of 5. On false abstention, scale averages 0.2394 against 0.0929 for head.
+
+Three details make me think condition 2 is a clean negative rather than a botched implementation, and they are the reason I am writing.
+
+First, the premise that motivated it was measured on the wrong matrix. The abstention vector was indeed short, 0.367 against about 1.01 for a value token, but that is the input embedding. The softmax that actually decides the answer uses the output matrix, and there the abstention vector was already 1.77 to 2.05 times longer than an average value in the five hard units. In the place where the decision is made, the vector was not too short at all.
+
+Second, the renormalization survived training. It enters at 1.000 by construction and closes at 0.899 on the input side and 1.131 on the output side. The norm stayed where it was put and it still did not help.
+
+Third, and this is the part closest to your hypothesis, the anomalous norm does have an origin in initialization. The abstention vector was never trained during the base phase and stayed where it was initialized, while the value vectors shrank around it. So the initialization account is right about where the asymmetry comes from. What my runs suggest is that it is not what causes the failure, because correcting it explicitly changes nothing.
+
+What is left, in my setup, is that two decisions of different kinds compete for mass in one softmax, whether an answer exists and which answer it is. That is a structural constraint rather than a numerical one, and it would explain why capping the shiftable mass at 0.5 helps without removing the problem.
+
+I want to be clear about the limits, because they are real. This is a synthetic task, at a scale far below yours, with a persistent memory component your models do not have, and the result may simply not transfer. That is exactly the question I cannot answer from here. The whole design of this programme is to find candidate mechanisms cheaply and then replicate them at a scale where they matter, and I have no way to do the second half on my own.
+
+So the reason for this email is twofold. If the mechanism really is the shared softmax, a separate binary head is a 0.015 percent intervention that would be worth a single ablation at your scale. And if you think the small-model result is an artifact of my setup, I would rather hear that from you than keep building on it.
+
+I am happy to share the code, the pre-registration and the full runs, and I would be glad to help set up such an ablation if it is of interest.
+
+Best regards,
+Maximiliano R. Speranza
+Independent researcher
+ORCID 0009-0005-0413-8554

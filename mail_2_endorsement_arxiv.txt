@@ -1,0 +1,26 @@
+Para:  Gerard.DeMelo@hpi.de
+Asunto: arXiv endorsement for cs.CL
+
+*** NO MANDAR ESTE TODAVIA. Va sólo si contestan el primero, y una vez que Maxi tenga
+*** la cuenta de arXiv creada, porque el código XXXXXX lo genera arXiv al pedir el endorsement.
+
+---
+
+Dear Gerard,
+
+Thank you for the exchange about the abstention result.
+
+I would like to post the write-up of these experiments on arXiv, in cs.CL. I am an independent researcher with no institutional address, so under the policy that came into effect in January 2026 the only route open to me is a personal endorsement from an established author in the domain.
+
+Would you be willing to endorse me? The code is XXXXXX and the request can be completed at
+
+    https://arxiv.org/auth/endorse?x=XXXXXX
+
+As you know it carries no obligation and says nothing about the quality of the work, only that the submission belongs in the category.
+
+If you would rather not, that is completely fine, and I am grateful for the discussion either way.
+
+Best regards,
+Maximiliano R. Speranza
+Independent researcher
+ORCID 0009-0005-0413-8554
