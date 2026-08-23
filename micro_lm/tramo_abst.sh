@@ -58,6 +58,12 @@ ABST="${ABST:-token}"
 # archivo dentro del bloque 0. Viaja hasta `entrenar.py`, que lo asienta en la config del checkpoint
 # y aborta si un tramo intenta continuar una corrida con la otra posicion.
 DONDE="${DONDE:-pre}"
+# 2026-08-23 · campania del entrenamiento ESCALONADO (DISENO_ESCALONADO.md). `P_VIEJA` deja de estar
+# escrito a mano en la linea de comando porque el control `fijo_promedio` necesita justamente otro
+# valor: es `fija` corrida con el promedio que la dinamica termino usando. Los defaults dejan el
+# comportamiento de siempre.
+MEZCLA="${MEZCLA:-fija}"
+P_VIEJA="${P_VIEJA:-0.35}"
 REINIT="${REINIT:-1}"
 UNI="${PREFIJO}${NIVEL}_s${SEM}"
 
@@ -79,7 +85,7 @@ elif [ ! -f "$CK" ] && [ -f "$BASE" ]; then
   SEMBRADO=1
 fi
 JS="$SALIDA/${UNI}.json"
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · mezcla $MEZCLA · p_vieja $P_VIEJA"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -110,8 +116,9 @@ assert 'compuerta ABRE' in chk.stdout, 'la compuerta de padding NO abre'
 print('compuerta de padding OK', flush=True)
 cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$SEM',
        '--pasos', '$PASOS', '--tramo', '$TRAMO', '--cada', '$CADA', '--d', '128', '--capas', '4',
-       '--lr', '1e-3', '--p-vieja', '0.35', '--idioma', '2', '--horizonte', '$HORIZONTE',
+       '--lr', '1e-3', '--p-vieja', '$P_VIEJA', '--idioma', '2', '--horizonte', '$HORIZONTE',
        '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
+       '--mezcla', '$MEZCLA',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$REINIT' == '1' and '$SEMBRADO' == '1':
     # Adam se reinicia SOLO al entrar en la fase (primer tramo, sembrado desde la base), nunca al

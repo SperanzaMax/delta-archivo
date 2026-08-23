@@ -124,6 +124,70 @@ def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt):
     return bce + ce, (pred == tgt).mean()
 
 
+# --- mezcla escalonada por capacidad (2026-08-23, `DISENO_ESCALONADO.md`) ------------------------
+# Idea de Maxi: «¿por que todo tiene que terminar a 4000? Que cada cosa termine cuando le conviene y
+# el resto continue hasta su turno.» En vez de fijar la mezcla de tipos de pregunta una vez a mano,
+# se muestrea cada tipo con probabilidad proporcional a su ERROR actual. Una capacidad ya resuelta
+# tiene error ~0 y deja de gastar muestras SOLA; el presupuesto se va a las que faltan sin que nadie
+# elija un umbral. Esto importa porque la palanca ya existia y estaba clavada: `p_vieja` esta en 0,35
+# porque E-I3d la subio a mano de 0,05 para que el atajo de la recencia no ganara. Esto generaliza
+# esa correccion.
+TIPOS = ("vigente", "anterior", "nose")
+
+
+def probs_de_pesos(w):
+    """(w_vigente, w_anterior, w_nose) normalizados -> (p_vieja, p_nose).
+
+    `datos.lote` no acepta tres pesos: acepta las dos palancas que ya tenia. La traduccion es exacta
+    y biyectiva, porque los tipos se eligen en cascada —primero si la consulta tiene respuesta, y
+    despues cual—:
+
+        p(nose)     = p_nose
+        p(anterior) = (1 - p_nose) * p_vieja
+        p(vigente)  = (1 - p_nose) * (1 - p_vieja)
+
+    Asi que la mezcla dinamica no necesita tocar `datos.py`, que es codigo compartido con las
+    campanias ya cerradas.
+    """
+    v, an, no = (max(0.0, float(x)) for x in w)
+    tot = v + an + no
+    if tot <= 0:
+        return 0.35, 0.0
+    v, an, no = v / tot, an / tot, no / tot
+    con_resp = v + an
+    p_vieja = an / con_resp if con_resp > 1e-9 else 0.0
+    return float(p_vieja), float(no)
+
+
+def pesos_de_probs(p_vieja, p_nose):
+    """La inversa de `probs_de_pesos`. Existe para que el registro de una corrida FIJA diga la
+    mezcla que de verdad uso: si anotara los pesos de la EMA, el JSON de la condicion de control
+    mostraria un reparto que nadie muestreo."""
+    return [(1 - p_nose) * (1 - p_vieja), (1 - p_nose) * p_vieja, p_nose]
+
+
+def pesos_de_ema(ema, piso):
+    """error EMA por tipo -> pesos de muestreo, con piso.
+
+    El PISO no es decoracion: sin el, una capacidad resuelta deja de muestrearse del todo y se
+    olvida —olvido catastrofico dentro del propio entrenamiento—. Con piso queda viva a costo bajo.
+    """
+    piso = max(0.0, min(piso, 1.0 / len(TIPOS)))
+    libre = 1.0 - piso * len(TIPOS)
+    err = [max(0.0, float(ema[t])) for t in TIPOS]
+    tot = sum(err)
+    if tot <= 1e-9:                       # todo resuelto: reparto parejo dentro de lo que sobra
+        return [piso + libre / len(TIPOS)] * len(TIPOS)
+    return [piso + libre * e / tot for e in err]
+
+
+def estado_mezcla_inicial():
+    # El error arranca en 1,0 para los tres: sin evidencia todavia, la mezcla inicial es uniforme y
+    # no privilegia a ninguno. `acum` suma pesos POR PASO para poder reconstruir despues la mezcla
+    # promedio que la corrida termino usando, que es lo que necesita el control `fijo_promedio`.
+    return {"ema": {t: 1.0 for t in TIPOS}, "acum": [0.0] * len(TIPOS), "pasos_acum": 0}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--nivel", type=int, default=1)
@@ -161,10 +225,31 @@ def main():
                     help="lista de valores de `vigente` (ej. 0.85,0.90,0.95). Cada vez que la "
                          "metrica cruza uno por primera vez se guarda un checkpoint aparte, para "
                          "muestrear la frontera del margen (PREREG_FRONTERA.md)")
+    ap.add_argument("--mezcla", default="fija", choices=("fija", "dinamica"),
+                    help="como se reparte el presupuesto de muestras entre tipos de pregunta "
+                         "(DISENO_ESCALONADO.md). fija = --p-vieja y --p-nose mandan de principio a "
+                         "fin, que es lo que se venia haciendo; dinamica = cada tipo se muestrea "
+                         "proporcional a su error EMA, asi la capacidad que ya se resolvio deja de "
+                         "gastar muestras sola. OJO: el CONTROL `fijo_promedio` no es un modo "
+                         "aparte — es `fija` con --p-vieja/--p-nose puestos en el promedio que la "
+                         "corrida dinamica termino usando (sale de `mezcla_promedio` en su JSON). "
+                         "Se hace asi a proposito: la mezcla del control queda escrita en la config "
+                         "del control, en vez de depender de que otro archivo siga estando")
+    ap.add_argument("--mezcla-piso", type=float, default=0.10,
+                    help="piso de probabilidad por tipo en --mezcla dinamica. Evita que un tipo "
+                         "resuelto deje de verse del todo y se olvide")
+    ap.add_argument("--mezcla-alpha", type=float, default=0.1,
+                    help="alpha de la EMA del error por tipo. Va LENTA a proposito: el error se mide "
+                         "con 512 muestras y tiene ruido de +-0,02, y ademas hay realimentacion "
+                         "—el muestreo cambia el error que decide el muestreo—, asi que una EMA "
+                         "rapida perseguiria el ruido y oscilaria")
     ap.add_argument("--salida", default="resultados_micro.json")
     ap.add_argument("--pesos", default=None, help="ruta .pkl donde dejar los pesos finales")
-    ap.add_argument("--idioma", type=int, default=2, choices=(1, 2),
-                    help="1 = verbo «pertenece_a» (campania del 14-ago), 2 = «posee» (corregido)")
+    ap.add_argument("--idioma", type=int, default=2, choices=(1, 2, 3),
+                    help="1 = verbo «pertenece_a» (campania del 14-ago), 2 = «posee» (corregido), "
+                         "3 = 24 relaciones en vez de 6, para que la colision de clave baje del "
+                         "72,4 %% al 23,5 %% de los episodios y el error deje de estar dominado por "
+                         "el empate entre dos entradas (2026-08-23)")
     ap.add_argument("--horizonte", type=int, default=0,
                     help="sobre cuantos pasos se calcula el decaimiento de la lr (0 = usar --pasos). "
                          "Sirve para poder PARAR antes y CONTINUAR despues sin romper nada: si el "
@@ -229,6 +314,7 @@ def main():
     DAT.reset_truncados()
     hist, t0 = [], time.time()
     paso0 = 0
+    mez = estado_mezcla_inicial()
 
     # --- reanudacion -----------------------------------------------------------------------
     # Se guardan las CUATRO cosas que definen el estado del entrenamiento, no sólo los pesos:
@@ -257,6 +343,13 @@ def main():
         # pasar el flag lo continuaria como `pre` sin decir nada —la arquitectura cambia a mitad de
         # corrida y el JSON mostraria una curva sola—. Es la misma familia de la D-1 del 20-ago:
         # el estado que dos pasos comparten tiene que estar declarado, no supuesto.
+        # Misma familia que la guarda de `donde`, y por el mismo motivo: la campania corre por tramos
+        # entre cuentas, asi que un tramo al que se le olvida el flag continuaria una corrida
+        # dinamica como fija sin decir nada, y el JSON mostraria una curva sola. Los checkpoints
+        # anteriores al 23-ago no traen la clave y todos ellos son `fija`, que es el default.
+        if ck["config"].get("mezcla", "fija") != a.mezcla:
+            sys.exit(f"ABORTA: el checkpoint se entreno con mezcla={ck['config'].get('mezcla', 'fija')} "
+                     f"y se pidio mezcla={a.mezcla}. Es otra politica de muestreo, no la misma corrida.")
         if ck["config"].get("donde", "pre") != a.donde:
             sys.exit(f"ABORTA: el checkpoint se entreno con donde={ck['config'].get('donde', 'pre')} "
                      f"y se pidio donde={a.donde}. Es otra arquitectura, no la misma corrida.")
@@ -301,6 +394,14 @@ def main():
             state = opt.init(params)
         rng.bit_generator.state = ck["rng"]
         hist, paso0 = ck["historia"], ck["paso"]
+        # La EMA del error y el acumulado de la mezcla son ESTADO del entrenamiento, igual que Adam.
+        # Esta campania corre por tramos de 8000 pasos entre cuentas de Colab: sin esto, cada tramo
+        # reiniciaria la EMA en 1,0 y la mezcla volveria a uniforme tres veces en una corrida, con lo
+        # que «dinamica» ya no seria una sola politica sino tres arranques pegados.
+        if "mezcla" in ck:
+            mez = ck["mezcla"]
+            mez.setdefault("pasos_acum", 0)
+            mez.setdefault("acum", [0.0] * len(TIPOS))
         print(f"REANUDA desde {a.ckpt}: paso {paso0} de {a.pasos} "
               f"({len(hist)} evaluaciones ya hechas)\n", flush=True)
 
@@ -315,7 +416,7 @@ def main():
         with open(tmp, "wb") as f:
             pickle.dump({"params": jax.device_get(params), "opt_state": jax.device_get(state),
                          "rng": rng.bit_generator.state, "historia": hist, "paso": s,
-                         "config": vars(a)}, f)
+                         "config": vars(a), "mezcla": mez}, f)
         os.replace(tmp, a.ckpt)
 
     # El tramo se redondea al múltiplo de `--cada` para terminar SIEMPRE sobre un checkpoint: si
@@ -324,10 +425,24 @@ def main():
     if fin < a.pasos:
         print(f"tramo: se corre hasta el paso {fin} y se guarda para continuar despues\n", flush=True)
 
+    # La mezcla de ENTRENAMIENTO puede moverse; la de EVALUACION nunca. Si la evaluacion siguiera a
+    # la mezcla dinamica, cada condicion se estaria midiendo sobre una poblacion de preguntas
+    # distinta y `dinamica` vs `fija` dejaria de ser comparable —el numero cambiaria por como se
+    # midio, no por lo que aprendio—. `a.p_vieja` y `a.p_nose` quedan como la mezcla de REFERENCIA.
+    if a.mezcla == "dinamica":
+        w = pesos_de_ema(mez["ema"], a.mezcla_piso)
+        p_vieja_tr, p_nose_tr = probs_de_pesos(w)
+        print(f"mezcla dinamica · piso {a.mezcla_piso:.2f} · alpha {a.mezcla_alpha:.2f} · "
+              f"arranca en vigente {w[0]:.3f} / anterior {w[1]:.3f} / nose {w[2]:.3f}\n", flush=True)
+    else:
+        p_vieja_tr, p_nose_tr = a.p_vieja, a.p_nose
+        w = pesos_de_probs(p_vieja_tr, p_nose_tr)
+    ult_eval = paso0
+
     for s in range(paso0 + 1, fin + 1):
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
-            rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=a.p_vieja,
-            p_nose=a.p_nose)
+            rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
+            p_nose=p_nose_tr)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),
                                      jnp.array(pos), jnp.array(tgt))
@@ -344,12 +459,38 @@ def main():
             # deliberado —el curriculum de dos fases entrena primero sin preguntas sin respuesta y
             # las introduce despues— pero deja una curva cuya segunda mitad es OTRA tarea. Sin este
             # registro, mañana leeriamos un salto de metrica como si fuera aprendizaje.
-            hist.append({"paso": s, "truncados": float(trunc), "p_nose": float(a.p_nose), **m})
+            # --- escalonado: se acumula lo YA gastado y recien despues se mueve la mezcla ---------
+            # El orden importa. Los pesos `w` son los que rigieron el bloque que termina en `s`, asi
+            # que el acumulado se cierra con ELLOS; recien despues la evaluacion nueva mueve la EMA.
+            # Al reves, el promedio le atribuiria a cada bloque la mezcla del bloque siguiente, y el
+            # control `fijo_promedio` se correria con una mezcla que nadie uso.
+            tramo_pasos = s - ult_eval
+            ult_eval = s
+            if tramo_pasos > 0:
+                mez["acum"] = [c + wi * tramo_pasos for c, wi in zip(mez["acum"], w)]
+                mez["pasos_acum"] += tramo_pasos
+            prom = ([c / mez["pasos_acum"] for c in mez["acum"]] if mez["pasos_acum"] else list(w))
+            usada = {"vigente": w[0], "anterior": w[1], "nose": w[2]}
+            if a.mezcla == "dinamica":
+                for i, t in enumerate(TIPOS):
+                    # nan cuando el lote de eval no trajo ningun caso de ese tipo: se deja la EMA
+                    # quieta en vez de empujarla con un valor inventado.
+                    if not np.isnan(m[t]):
+                        err = 1.0 - float(m[t])
+                        mez["ema"][t] = (1 - a.mezcla_alpha) * mez["ema"][t] + a.mezcla_alpha * err
+                w = pesos_de_ema(mez["ema"], a.mezcla_piso)
+                p_vieja_tr, p_nose_tr = probs_de_pesos(w)
+            hist.append({"paso": s, "truncados": float(trunc), "p_nose": float(a.p_nose),
+                         "mezcla_usada": usada, "mezcla_promedio": dict(zip(TIPOS, prom)),
+                         "p_vieja_tr": float(p_vieja_tr), "p_nose_tr": float(p_nose_tr), **m})
             extra = ("" if a.p_nose == 0 else
                      f" · nose {m['nose']:.4f} (ent {m['nose_ent']:.4f}/rel {m['nose_rel']:.4f})"
                      f" · falsa_abst {m['falsa_abst']:.4f}")
             print(f"    ── eval: vigente {m['vigente']:.4f} · anterior {m['anterior']:.4f}"
                   f" · abstencion {m['abstencion']:.4f} · truncados {trunc:.4f}{extra}", flush=True)
+            if a.mezcla == "dinamica":
+                print(f"       mezcla -> vigente {w[0]:.3f} · anterior {w[1]:.3f} · nose {w[2]:.3f}"
+                      f"   (p_vieja {p_vieja_tr:.3f} · p_nose {p_nose_tr:.3f})", flush=True)
             json.dump({"config": vars(a), "params": n, "hw": hw, "historia": hist},
                       open(a.salida, "w"), indent=1)
             guardar_ckpt(s)
@@ -379,6 +520,13 @@ def main():
                          "vocab": I.ITOS}, f)
         print(f"pesos guardados en {a.pesos} ({os.path.getsize(a.pesos)/1e6:.1f} MB)", flush=True)
     print("\nlisto:", hist[-1] if hist else "sin evaluaciones")
+    # La receta del control, impresa donde se la va a buscar. `fijo_promedio` no se puede armar antes
+    # de correr la dinamica —el promedio es un RESULTADO de la corrida—, asi que la corrida lo deja
+    # listo para copiar y pegar en vez de dejar el calculo para despues.
+    if a.mezcla == "dinamica" and mez["pasos_acum"]:
+        pv, pn = probs_de_pesos([c / mez["pasos_acum"] for c in mez["acum"]])
+        print(f"CONTROL fijo_promedio: --mezcla fija --p-vieja {pv:.4f} --p-nose {pn:.4f}",
+              flush=True)
 
 
 if __name__ == "__main__":

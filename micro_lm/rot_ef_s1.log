@@ -1,0 +1,15 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_ef_s1.log (rotador 1171757)
+== rotador2 · familia 'ef' · p_nose 0.4 · mezcla fija · p_vieja 0.35 · unidades 3:1 · cuentas: N I M L A J F E D C K
+-- N la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta I · faltan: 3:1 · 09:19:32
+   >> OTORGADA en I: [tr2_i_0919] gpu-t4-s-kkb-usw1b1-29duyjjbl4wci | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en I (desde el paso 0)
+== tramo · cuenta I · sesion tr2_i_0919 · ef3_s1 · +8000 de 20000 pasos · p_nose 0.4 · abst cabeza · mezcla fija · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.XM1yDPhTbe/micro.tgz' to '/content/micro.tgz'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2571
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.1035 · anterior 0.0312 · abstencion 0.0020 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0035 
+VIVO= True ULTIMO= ── eval: vigente 0.1656 · anterior 0.1868 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 

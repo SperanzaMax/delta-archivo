@@ -36,6 +36,10 @@ export REINIT="${REINIT:-1}"
 # 2026-08-22 · campania de la query conjunta. Los dos viajan hasta `entrenar.py` por el tramo.
 export DONDE="${DONDE:-pre}"
 export SEMBRAR="${SEMBRAR:-1}"
+# 2026-08-23 · escalonado (DISENO_ESCALONADO.md). Viajan hasta `entrenar.py` por el tramo, igual que
+# DONDE. Sin exportarlos, el tramo usaria sus defaults y la campania dinamica correria fija.
+export MEZCLA="${MEZCLA:-fija}"
+export P_VIEJA="${P_VIEJA:-0.35}"
 # El horizonte de la curva de lr NO se exportaba, asi que `tramo_abst.sh` usaba su default de 20000
 # aunque el rotador corriera hasta otro paso. Con PASOS=26000 eso dejaba los ultimos 6000 pasos a la
 # lr minima, que no es lo que la enmienda E-1 declaro. Cazado en el paso 1000 leyendo la config del
@@ -155,7 +159,7 @@ cli_de() {
   fi
 }
 
-echo "== rotador2 · familia '$PREFIJO' · p_nose $P_NOSE · unidades $UNIDADES · cuentas: ${CUENTAS[*]}"
+echo "== rotador2 · familia '$PREFIJO' · p_nose $P_NOSE · mezcla $MEZCLA · p_vieja $P_VIEJA · unidades $UNIDADES · cuentas: ${CUENTAS[*]}"
 for v in $(seq 1 "$VUELTAS"); do
   for c in "${CUENTAS[@]}"; do
     FALTAN="$(pendientes)"

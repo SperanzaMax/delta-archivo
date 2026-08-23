@@ -1,0 +1,19 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_ed_s2.log (rotador 1173076)
+== rotador2 · familia 'ed' · p_nose 0.4 · mezcla dinamica · p_vieja 0.35 · unidades 3:2 · cuentas: K C D E F J A L M N I
+-- vuelta 1 · cuenta K · faltan: 3:2 · 09:19:34
+   503 en K — SIGUIENTE CUENTA ya (sin esperar)
+-- C la esta usando otro proceso, se saltea
+-- D la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta F · faltan: 3:2 · 09:19:37
+   >> OTORGADA en F: [tr2_f_0919] gpu-t4-s-kkb-usw1b0-35vc6vuiyluvy | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en F (desde el paso 0)
+== tramo · cuenta F · sesion tr2_f_0919 · ed3_s2 · +8000 de 20000 pasos · p_nose 0.4 · abst cabeza · mezcla dinamica · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.pvAynGI1mu/micro.tgz' to '/content/micro.tgz'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1914
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= mezcla dinamica · piso 0.10 · alpha 0.10 · arranca en vigente 0.333 / anterior 0.333 / nose 0.333 
+VIVO= True ULTIMO= mezcla -> vigente 0.331 · anterior 0.333 · nose 0.336   (p_vieja 0.502 · p_nose 0.336) 
+VIVO= True ULTIMO= mezcla -> vigente 0.329 · anterior 0.333 · nose 0.338   (p_vieja 0.503 · p_nose 0.338) 

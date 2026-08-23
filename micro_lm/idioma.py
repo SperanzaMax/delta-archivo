@@ -52,6 +52,61 @@ RELACIONES = {                      # relacion -> (sustantivo, verbo, articulo)
 }
 PERSONALES = ("director", "duenio", "guardia")   # su valor es un nombre; el resto, un numero
 
+# --- version 3: el mismo idioma con MAS RELACIONES (2026-08-23) ---------------------------------
+# Por que existe. Un episodio sortea 4 hechos con entidades distintas (`replace=False`) pero con
+# relaciones CON reemplazo, asi que con 6 relaciones el **72,4 %** de los episodios tiene dos hechos
+# que comparten relacion (medido sobre 200000 episodios; teorico 0,722). Y el 20-ago se midio que
+# eso es justo donde el modelo falla: con relacion unica el error es 0,005-0,014, con relacion
+# repetida 0,38-0,54 —o sea azar entre las dos entradas que empatan—. La causa mecanica se cerro el
+# 21-ago: la query se forma sobre `emb[x]`, es funcion PURA del token, y por eso el modelo no puede
+# consultar por entidad Y relacion a la vez.
+#
+# Consecuencia para la MEDICION, que es lo que esto viene a arreglar: con 6 relaciones, lo que se
+# lee como «el modelo alucina» esta dominado por «dos entradas empatan y elige una». Son dos cosas
+# distintas y el vocabulario chico las mantiene pegadas. Con 24 relaciones la colision cae al
+# 23,5 %, y lo que quede de error se puede atribuir de verdad a la lectura del archivo.
+#
+# Va como VERSION y no como reemplazo porque `idioma` ya esta en la guarda de identidad del
+# checkpoint: una corrida v2 no puede reanudarse como v3 ni al reves, que es exactamente lo que hay
+# que impedir cuando cambia el tamaño del vocabulario.
+#
+# Los verbos respetan los dos moldes de `formas()`: en las NO personales el sujeto es la entidad
+# («taller pesa 42»), y en las personales es la persona («ana manda taller»).
+RELACIONES_V3 = {
+    "director":  ("director", "dirige", "el"),
+    "precio":    ("precio", "cuesta", "el"),
+    "altura":    ("altura", "mide", "la"),
+    "duenio":    ("dueño", VERBO_DUENIO[2], "el"),
+    "guardia":   ("guardia", "cuida", "el"),
+    "clave":     ("clave", "vale", "la"),
+    # no personales nuevas (valor = numero)
+    "peso":      ("peso", "pesa", "el"),
+    "largo":     ("largo", "abarca", "el"),
+    "puntaje":   ("puntaje", "suma", "el"),
+    "codigo":    ("codigo", "lleva", "el"),
+    "cupo":      ("cupo", "admite", "el"),
+    "gasto":     ("gasto", "gasta", "el"),
+    "tarifa":    ("tarifa", "cobra", "la"),
+    "demora":    ("demora", "tarda", "la"),
+    "distancia": ("distancia", "dista", "la"),
+    # personales nuevas (valor = nombre)
+    "jefe":      ("jefe", "manda", "el"),
+    "chofer":    ("chofer", "maneja", "el"),
+    "cocinero":  ("cocinero", "cocina", "el"),
+    "medico":    ("medico", "atiende", "el"),
+    "maestro":   ("maestro", "instruye", "el"),
+    "capitan":   ("capitan", "lidera", "el"),
+    "fundador":  ("fundador", "fundo", "el"),
+    "socio":     ("socio", "acompania", "el"),
+    "vecino":    ("vecino", "visita", "el"),
+}
+PERSONALES_V3 = ("director", "duenio", "guardia",
+                 "jefe", "chofer", "cocinero", "medico", "maestro",
+                 "capitan", "fundador", "socio", "vecino")
+
+_RELACIONES_V12 = dict(RELACIONES)
+_PERSONALES_V12 = tuple(PERSONALES)
+
 FUNCIONALES = """el la de del es era esta en un una y o no si ahora antes ayer hoy cual quien que a
 tiene como con por para se lo su mas menos tambien pero entonces""".split()
 
@@ -92,10 +147,21 @@ def fijar_version(v):
 
     El vocabulario mantiene su tamaño (242) y los bloques CONTROL/NUMEROS/NOMBRES/ENTIDADES sus
     indices: la permutacion queda contenida en el bloque de palabras de relaciones.
+
+    La version 3 (2026-08-23) es OTRA cosa y por eso se aclara aparte: no permuta un token, agrega
+    18 relaciones para que la COLISION DE CLAVE deje de dominar la tarea (ver `RELACIONES_V3`). El
+    vocabulario crece, asi que una corrida v3 no es comparable con una v2 y el chequeo de identidad
+    del checkpoint —que ya mira `idioma`— lo impide solo.
     """
-    global ITOS, STOI, V
-    sust, _, art = RELACIONES["duenio"]
-    RELACIONES["duenio"] = (sust, VERBO_DUENIO[v], art)
+    global ITOS, STOI, V, RELACIONES, PERSONALES
+    if v == 3:
+        RELACIONES = dict(RELACIONES_V3)
+        PERSONALES = tuple(PERSONALES_V3)
+    else:
+        RELACIONES = dict(_RELACIONES_V12)
+        PERSONALES = tuple(_PERSONALES_V12)
+        sust, _, art = RELACIONES["duenio"]
+        RELACIONES["duenio"] = (sust, VERBO_DUENIO[v], art)
     ITOS, STOI = construir_vocab()
     V = len(ITOS)
     return V
