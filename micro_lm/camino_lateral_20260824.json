@@ -1,0 +1,348 @@
+{
+ "paso": 26000,
+ "n_ser": 2048,
+ "n_diag": 2048,
+ "prereg": "PREREG_CAMINO_LATERAL.md",
+ "ser": {
+  "lat": {
+   "0": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lat_congelados/w3_s0.pkl",
+    "nivel": 3,
+    "semilla": 0,
+    "paso": 26000,
+    "donde": "lat",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.9975389663658737,
+    "nose": 0.7889022919179735,
+    "falsa_abst": 0.0016406890894175555,
+    "invento_sobre_sin_resp": 0.21109770808202655,
+    "SER": 0.0859375,
+    "err_version": 0.00048828125,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0,
+    "invento": 0.08544921875,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 0.9970326409495549,
+      "abstencion": 0.0019782393669634025,
+      "err_version": 0.0009891196834817012
+     },
+     "nose_rel": {
+      "acierto_nose": 0.5841836734693877,
+      "invento": 0.41581632653061223
+     },
+     "nose_ent": {
+      "acierto_nose": 0.9725400457665904,
+      "invento": 0.02745995423340961
+     },
+     "anterior": {
+      "acierto": 1.0
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "1": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lat_congelados/w3_s1.pkl",
+    "nivel": 3,
+    "semilla": 1,
+    "paso": 26000,
+    "donde": "lat",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 1.0,
+    "nose": 0.8624849215922799,
+    "falsa_abst": 0.0,
+    "invento_sobre_sin_resp": 0.13751507840772015,
+    "SER": 0.0556640625,
+    "err_version": 0.0,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0,
+    "invento": 0.0556640625,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 1.0
+     },
+     "nose_rel": {
+      "acierto_nose": 0.7193877551020408,
+      "invento": 0.28061224489795916
+     },
+     "nose_ent": {
+      "acierto_nose": 0.9908466819221968,
+      "invento": 0.009153318077803204
+     },
+     "anterior": {
+      "acierto": 1.0
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "2": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lat_congelados/w3_s2.pkl",
+    "nivel": 3,
+    "semilla": 2,
+    "paso": 26000,
+    "donde": "lat",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.8843314191960624,
+    "nose": 0.7696019300361882,
+    "falsa_abst": 0.0016406890894175555,
+    "invento_sobre_sin_resp": 0.23039806996381182,
+    "SER": 0.1611328125,
+    "err_version": 0.06787109375,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0,
+    "invento": 0.09326171875,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 0.9881305637982196,
+      "err_version": 0.009891196834817012,
+      "abstencion": 0.0019782393669634025
+     },
+     "nose_rel": {
+      "acierto_nose": 0.5816326530612245,
+      "invento": 0.41836734693877553
+     },
+     "nose_ent": {
+      "acierto_nose": 0.9382151029748284,
+      "invento": 0.06178489702517163
+     },
+     "anterior": {
+      "err_version": 0.6201923076923077,
+      "acierto": 0.3798076923076923
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   }
+  },
+  "pre": {
+   "0": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s0.pkl",
+    "nivel": 3,
+    "semilla": 0,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.970467596390484,
+    "nose": 0.9119420989143546,
+    "falsa_abst": 0.008203445447087777,
+    "invento_sobre_sin_resp": 0.08805790108564536,
+    "SER": 0.04833984375,
+    "err_version": 0.0,
+    "err_identidad": 0.01220703125,
+    "err_fuera": 0.00048828125,
+    "invento": 0.03564453125,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 0.9752720079129574,
+      "err_identidad": 0.01483679525222552,
+      "abstencion": 0.009891196834817012
+     },
+     "nose_rel": {
+      "acierto_nose": 0.923469387755102,
+      "invento": 0.07653061224489796
+     },
+     "nose_ent": {
+      "invento": 0.09839816933638444,
+      "acierto_nose": 0.9016018306636155
+     },
+     "anterior": {
+      "acierto": 0.9471153846153846,
+      "err_fuera": 0.004807692307692308,
+      "err_identidad": 0.04807692307692308
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "1": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s1.pkl",
+    "nivel": 3,
+    "semilla": 1,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.7768662838392125,
+    "nose": 0.5416164053075995,
+    "falsa_abst": 0.004101722723543888,
+    "invento_sobre_sin_resp": 0.4583835946924005,
+    "SER": 0.31591796875,
+    "err_version": 0.00146484375,
+    "err_identidad": 0.12890625,
+    "err_fuera": 0.0,
+    "invento": 0.185546875,
+    "por_tipo": {
+     "vigente": {
+      "acierto": 0.7655786350148368,
+      "err_identidad": 0.2265084075173096,
+      "abstencion": 0.004945598417408506,
+      "err_version": 0.002967359050445104
+     },
+     "nose_rel": {
+      "acierto_nose": 0.5892857142857143,
+      "invento": 0.4107142857142857
+     },
+     "nose_ent": {
+      "invento": 0.5011441647597255,
+      "acierto_nose": 0.4988558352402746
+     },
+     "anterior": {
+      "acierto": 0.8317307692307693,
+      "err_identidad": 0.16826923076923078
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   },
+   "2": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/qc_congelados/p3_s2.pkl",
+    "nivel": 3,
+    "semilla": 2,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "p_nose": 0.4,
+    "n": 2048,
+    "acierto": 0.8351107465135357,
+    "nose": 0.729794933655006,
+    "falsa_abst": 0.03527481542247744,
+    "invento_sobre_sin_resp": 0.27020506634499397,
+    "SER": 0.1865234375,
+    "err_version": 0.0009765625,
+    "err_identidad": 0.076171875,
+    "err_fuera": 0.0,
+    "invento": 0.109375,
+    "por_tipo": {
+     "vigente": {
+      "err_identidad": 0.11572700296735905,
+      "acierto": 0.8397626112759644,
+      "abstencion": 0.04253214638971316,
+      "err_version": 0.0019782393669634025
+     },
+     "nose_rel": {
+      "acierto_nose": 0.7755102040816326,
+      "invento": 0.22448979591836735
+     },
+     "nose_ent": {
+      "invento": 0.3112128146453089,
+      "acierto_nose": 0.6887871853546911
+     },
+     "anterior": {
+      "acierto": 0.8125,
+      "err_identidad": 0.1875
+     }
+    },
+    "n_por_tipo": {
+     "vigente": 1011,
+     "nose_rel": 392,
+     "nose_ent": 437,
+     "anterior": 208
+    }
+   }
+  }
+ },
+ "diag": {
+  "lat": {
+   "3_s0": {
+    "n": 2048,
+    "P_rep": 0.42431640625,
+    "n_unica": 1179,
+    "ac_unica": 0.9991518235793045,
+    "ident_unica": 0.0,
+    "n_rep": 869,
+    "ac_rep": 0.998849252013809,
+    "ident_rep": 0.0
+   },
+   "3_s1": {
+    "n": 2048,
+    "P_rep": 0.40869140625,
+    "n_unica": 1211,
+    "ac_unica": 1.0,
+    "ident_unica": 0.0,
+    "n_rep": 837,
+    "ac_rep": 1.0,
+    "ident_rep": 0.0
+   },
+   "3_s2": {
+    "n": 2048,
+    "P_rep": 0.4267578125,
+    "n_unica": 1174,
+    "ac_unica": 0.8943781942078365,
+    "ident_unica": 0.004258943781942078,
+    "n_rep": 874,
+    "ac_rep": 0.8741418764302059,
+    "ident_rep": 0.006864988558352402
+   }
+  },
+  "pre": {
+   "3_s0": {
+    "n": 2048,
+    "P_rep": 0.42431640625,
+    "n_unica": 1179,
+    "ac_unica": 0.998303647158609,
+    "ident_unica": 0.0008481764206955047,
+    "n_rep": 869,
+    "ac_rep": 0.9424626006904487,
+    "ident_rep": 0.05638665132336018
+   },
+   "3_s1": {
+    "n": 2048,
+    "P_rep": 0.40869140625,
+    "n_unica": 1211,
+    "ac_unica": 1.0,
+    "ident_unica": 0.0,
+    "n_rep": 837,
+    "ac_rep": 0.5316606929510155,
+    "ident_rep": 0.46833930704898447
+   },
+   "3_s2": {
+    "n": 2048,
+    "P_rep": 0.4267578125,
+    "n_unica": 1174,
+    "ac_unica": 0.9974446337308348,
+    "ident_unica": 0.002555366269165247,
+    "n_rep": 874,
+    "ac_rep": 0.7471395881006865,
+    "ident_rep": 0.2528604118993135
+   }
+  }
+ },
+ "veredicto": {
+  "W-0": true,
+  "W-1": true,
+  "W-2": true,
+  "W-3": true,
+  "W-4": false
+ }
+}

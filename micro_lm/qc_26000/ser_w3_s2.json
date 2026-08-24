@@ -1,0 +1,44 @@
+{
+ "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lat_congelados/w3_s2.pkl",
+ "nivel": 3,
+ "semilla": 2,
+ "paso": 26000,
+ "donde": "lat",
+ "abst": "cabeza",
+ "p_nose": 0.4,
+ "n": 2048,
+ "acierto": 0.8843314191960624,
+ "nose": 0.7696019300361882,
+ "falsa_abst": 0.0016406890894175555,
+ "invento_sobre_sin_resp": 0.23039806996381182,
+ "SER": 0.1611328125,
+ "err_version": 0.06787109375,
+ "err_identidad": 0.0,
+ "err_fuera": 0.0,
+ "invento": 0.09326171875,
+ "por_tipo": {
+  "vigente": {
+   "acierto": 0.9881305637982196,
+   "err_version": 0.009891196834817012,
+   "abstencion": 0.0019782393669634025
+  },
+  "nose_rel": {
+   "acierto_nose": 0.5816326530612245,
+   "invento": 0.41836734693877553
+  },
+  "nose_ent": {
+   "acierto_nose": 0.9382151029748284,
+   "invento": 0.06178489702517163
+  },
+  "anterior": {
+   "err_version": 0.6201923076923077,
+   "acierto": 0.3798076923076923
+  }
+ },
+ "n_por_tipo": {
+  "vigente": 1011,
+  "nose_rel": 392,
+  "nose_ent": 437,
+  "anterior": 208
+ }
+}

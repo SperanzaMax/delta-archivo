@@ -1,0 +1,43 @@
+{
+ "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lat_congelados/w3_s0.pkl",
+ "nivel": 3,
+ "semilla": 0,
+ "paso": 26000,
+ "donde": "lat",
+ "abst": "cabeza",
+ "p_nose": 0.4,
+ "n": 2048,
+ "acierto": 0.9975389663658737,
+ "nose": 0.7889022919179735,
+ "falsa_abst": 0.0016406890894175555,
+ "invento_sobre_sin_resp": 0.21109770808202655,
+ "SER": 0.0859375,
+ "err_version": 0.00048828125,
+ "err_identidad": 0.0,
+ "err_fuera": 0.0,
+ "invento": 0.08544921875,
+ "por_tipo": {
+  "vigente": {
+   "acierto": 0.9970326409495549,
+   "abstencion": 0.0019782393669634025,
+   "err_version": 0.0009891196834817012
+  },
+  "nose_rel": {
+   "acierto_nose": 0.5841836734693877,
+   "invento": 0.41581632653061223
+  },
+  "nose_ent": {
+   "acierto_nose": 0.9725400457665904,
+   "invento": 0.02745995423340961
+  },
+  "anterior": {
+   "acierto": 1.0
+  }
+ },
+ "n_por_tipo": {
+  "vigente": 1011,
+  "nose_rel": 392,
+  "nose_ent": 437,
+  "anterior": 208
+ }
+}

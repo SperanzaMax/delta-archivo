@@ -1,0 +1,35 @@
+{
+ "que_es": "diagnostico post-hoc, sin criterio de decision",
+ "unidades": {
+  "3_s0": {
+   "n": 2048,
+   "P_rep": 0.42431640625,
+   "n_unica": 1179,
+   "ac_unica": 0.9991518235793045,
+   "ident_unica": 0.0,
+   "n_rep": 869,
+   "ac_rep": 0.998849252013809,
+   "ident_rep": 0.0
+  },
+  "3_s1": {
+   "n": 2048,
+   "P_rep": 0.40869140625,
+   "n_unica": 1211,
+   "ac_unica": 1.0,
+   "ident_unica": 0.0,
+   "n_rep": 837,
+   "ac_rep": 1.0,
+   "ident_rep": 0.0
+  },
+  "3_s2": {
+   "n": 2048,
+   "P_rep": 0.4267578125,
+   "n_unica": 1174,
+   "ac_unica": 0.8943781942078365,
+   "ident_unica": 0.004258943781942078,
+   "n_rep": 874,
+   "ac_rep": 0.8741418764302059,
+   "ident_rep": 0.006864988558352402
+  }
+ }
+}
