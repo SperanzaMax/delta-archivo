@@ -67,7 +67,7 @@ import os, subprocess, sys
 os.makedirs('/content/micro', exist_ok=True); os.makedirs('/content/salidas', exist_ok=True)
 subprocess.run('tar xzf /content/micro.tgz -C /content/micro', shell=True, check=True)
 # La deteccion del acelerador va en un SUBPROCESO que muere enseguida, no con un import acá
-# (2026-08-15). En TPU, el proceso que hace `import jax` se queda con el chip TOMADO, y este
+# (2026-08-15). En TPU, el proceso que hace el import de jax se queda con el chip TOMADO, y este
 # proceso es el kernel de Colab: sobrevive todo el tramo. El entrenamiento arrancaba después y
 # moría con "The TPU is already in use by process with pid N". Costó las 5 únicas TPU que Colab
 # nos asignó en todo el día —el 13 % de las asignaciones conseguidas— y ninguna llegó a entrenar.

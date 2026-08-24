@@ -22,3 +22,69 @@
 -- vuelta 1 · cuenta L · faltan: 3:0 · 08:02:38
    503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
 -- vuelta 1 recorrida entera sin T4 en ninguna; descanso 7 min
+-- vuelta 2 · cuenta C · faltan: 3:0 · 08:09:44
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta D · faltan: 3:0 · 08:09:50
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta F · faltan: 3:0 · 08:09:56
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta J · faltan: 3:0 · 08:10:01
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta A · faltan: 3:0 · 08:10:07
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta G · faltan: 3:0 · 08:10:13
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- H la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta K · faltan: 3:0 · 08:10:19
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta M · faltan: 3:0 · 08:10:25
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta N · faltan: 3:0 · 08:10:31
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta L · faltan: 3:0 · 08:10:37
+   503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 7 min
+-- vuelta 3 · cuenta C · faltan: 3:0 · 08:17:43
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta D · faltan: 3:0 · 08:17:48
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- E la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta F · faltan: 3:0 · 08:17:54
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta J · faltan: 3:0 · 08:17:59
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta A · faltan: 3:0 · 08:18:05
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta G · faltan: 3:0 · 08:18:12
+   >> OTORGADA en G (T4): [tr2_g_0818] gpu-t4-s-kkb-usw1b1-1dgy1iqu5uind | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en G (desde el paso 0)
+== tramo · cuenta G · sesion tr2_g_0818 · v3_s0 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.qOSsEi3XMO/micro.tgz' to '/content/micro.tgz'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1312
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 8000 y se guarda para continuar despues 
+VIVO= True ULTIMO= paso    500  loss 5.0217  acc 0.0938  (239s) 
+VIVO= True ULTIMO= ── eval: vigente 0.1839 · anterior 0.0708 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.1775 · anterior 0.1618 · abstencion 0.0020 · truncados 0.0000 · nose 0.0046 (ent 0.0089/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.2963 · anterior 0.2524 · abstencion 0.0176 · truncados 0.0000 · nose 0.0212 (ent 0.0234/rel 0.0248) · falsa_abst 0.0166 
+VIVO= True ULTIMO= ── eval: vigente 0.3391 · anterior 0.3937 · abstencion 0.0195 · truncados 0.0000 · nose 0.0381 (ent 0.0270/rel 0.0453) · falsa_abst 0.0072 
+VIVO= True ULTIMO= ── eval: vigente 0.5356 · anterior 0.3357 · abstencion 0.0215 · truncados 0.0000 · nose 0.0452 (ent 0.0454/rel 0.0456) · falsa_abst 0.0067 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= ── eval: vigente 0.5839 · anterior 0.3464 · abstencion 0.1543 · truncados 0.0000 · nose 0.2977 (ent 0.3622/rel 0.2359) · falsa_abst 0.0594 
+VIVO= True ULTIMO= ── eval: vigente 0.6734 · anterior 0.3498 · abstencion 0.1875 · truncados 0.0000 · nose 0.3761 (ent 0.3956/rel 0.3783) · falsa_abst 0.0564 
+VIVO= True ULTIMO= ── eval: vigente 0.6960 · anterior 0.3425 · abstencion 0.2344 · truncados 0.0000 · nose 0.4846 (ent 0.4617/rel 0.5246) · falsa_abst 0.0563 
+VIVO= True ULTIMO= ── eval: vigente 0.8161 · anterior 0.2324 · abstencion 0.2461 · truncados 0.0000 · nose 0.5249 (ent 0.4879/rel 0.5756) · falsa_abst 0.0530 
+   [checkpoint parcial guardado: paso 3000]
+VIVO= True ULTIMO= ── eval: vigente 0.7290 · anterior 0.4469 · abstencion 0.3125 · truncados 0.0000 · nose 0.5553 (ent 0.5596/rel 0.5699) · falsa_abst 0.1411 
+VIVO= True ULTIMO= ── eval: vigente 0.8194 · anterior 0.3145 · abstencion 0.2754 · truncados 0.0000 · nose 0.5446 (ent 0.5666/rel 0.5424) · falsa_abst 0.0839 
+VIVO= True ULTIMO= ── eval: vigente 0.8054 · anterior 0.5236 · abstencion 0.3262 · truncados 0.0000 · nose 0.6248 (ent 0.6664/rel 0.6012) · falsa_abst 0.1179 
+VIVO= True ULTIMO= ── eval: vigente 0.8770 · anterior 0.6329 · abstencion 0.2520 · truncados 0.0000 · nose 0.5605 (ent 0.5941/rel 0.5486) · falsa_abst 0.0390 
+   [checkpoint parcial guardado: paso 4000]
+VIVO= True ULTIMO= ── eval: vigente 0.8486 · anterior 0.6605 · abstencion 0.2949 · truncados 0.0000 · nose 0.6147 (ent 0.6608/rel 0.5803) · falsa_abst 0.0699 
+VIVO= True ULTIMO= ── eval: vigente 0.8822 · anterior 0.7512 · abstencion 0.2930 · truncados 0.0000 · nose 0.6199 (ent 0.6549/rel 0.5950) · falsa_abst 0.0596 
+VIVO= True ULTIMO= ── eval: vigente 0.9204 · anterior 0.7247 · abstencion 0.2793 · truncados 0.0000 · nose 0.5951 (ent 0.6154/rel 0.5713) · falsa_abst 0.0552 

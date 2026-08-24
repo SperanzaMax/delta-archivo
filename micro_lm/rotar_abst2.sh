@@ -203,15 +203,18 @@ for v in $(seq 1 "$VUELTAS"); do
     fi
     HW="$(timeout -k 30 180 "${CL[@]}" status -s "$SESION" 2>&1 | tail -1)"
     echo "   >> OTORGADA en $c ($ACC): $HW"
-    mandar "🟢 micro-LM · '$PREFIJO' · la cuenta $c otorgó $ACC (vuelta $v).
-$HW
-Arranca: $FALTAN"
+    # SIN aviso por asignacion (2026-08-24). Esto mandaba un Telegram cada vez que una cuenta
+    # otorgaba, y con 8 rotadores a la vez y el pool abriendose de golpe fueron cientos de mensajes
+    # en una mañana. Queda en el log, que es donde se lo busca cuando importa; el estado agregado ya
+    # lo manda `vigia_escalonado.sh` cada media hora con la foto de todas las unidades.
 
     for u in $FALTAN; do
       completa "$u" && continue
       echo "   -> tramo $u en $c (desde el paso $(paso_de "$u"))"
       "$AQUI/tramo_abst.sh" "$c" "$SESION" "$u" "$PASOS" "$TRAMO" "$CADA"
-      mandar "micro-LM · $(uni_de "$u") (cuenta $c): tramo cerrado en el paso $(paso_de "$u") de $PASOS."
+      # SIN aviso por tramo cerrado, por lo mismo: son varios por unidad por dia, y el latido del
+      # vigia ya dice en que paso va cada una.
+      echo "   tramo de $u cerrado en el paso $(paso_de "$u") de $PASOS"
     done
 
     timeout -k 30 180 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1 || true

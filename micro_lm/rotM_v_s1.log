@@ -23,3 +23,82 @@
 -- vuelta 1 · cuenta L · faltan: 3:1 · 08:02:46
    503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
 -- vuelta 1 recorrida entera sin T4 en ninguna; descanso 7 min
+-- D la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta E · faltan: 3:1 · 08:09:52
+   503 en E (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta C · faltan: 3:1 · 08:09:57
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta F · faltan: 3:1 · 08:10:03
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta J · faltan: 3:1 · 08:10:09
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta H · faltan: 3:1 · 08:10:15
+   503 en H (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta G · faltan: 3:1 · 08:10:21
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta K · faltan: 3:1 · 08:10:27
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta I · faltan: 3:1 · 08:10:33
+   503 en I (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta N · faltan: 3:1 · 08:10:39
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta L · faltan: 3:1 · 08:10:45
+   503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 7 min
+-- D la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta E · faltan: 3:1 · 08:17:50
+   503 en E (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta C · faltan: 3:1 · 08:17:56
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta F · faltan: 3:1 · 08:18:02
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta J · faltan: 3:1 · 08:18:08
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta H · faltan: 3:1 · 08:18:13
+   >> OTORGADA en H (T4): [tr2_h_0818] gpu-t4-s-kkb-ass1a2-gt0pyd6dwou9 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en H (desde el paso 0)
+== tramo · cuenta H · sesion tr2_h_0818 · v3_s1 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.fpE8FuFYOR/micro.tgz' to '/content/micro.tgz'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1167
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= ── eval: vigente 0.0891 · anterior 0.0317 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0905 · anterior 0.0156 · abstencion 0.0039 · truncados 0.0000 · nose 0.0054 (ent 0.0000/rel 0.0114) · falsa_abst 0.0030 
+VIVO= True ULTIMO= ── eval: vigente 0.1709 · anterior 0.1567 · abstencion 0.0020 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0030 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.2093 · anterior 0.2535 · abstencion 0.0078 · truncados 0.0000 · nose 0.0046 (ent 0.0083/rel 0.0000) · falsa_abst 0.0096 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_0818)
+   tr2_h_0818 parada; pendientes ahora: 3:1
+-- G la esta usando otro proceso, se saltea
+-- vuelta 3 · cuenta M · faltan: 3:1 · 08:29:48
+   >> OTORGADA en M (T4): [tr2_m_0829] gpu-t4-s-kkb-usw4b1-1pa7u3xgqvgtz | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en M (desde el paso 1000)
+== tramo · cuenta M · sesion tr2_m_0829 · v3_s1 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.5AdFvIHdNH/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/v3_s1.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3680
+== polling cada 2 min (presupuesto ~100 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 9000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.5419 · anterior 0.1250 · abstencion 0.0059 · truncados 0.0000 · nose 0.0108 (ent 0.0000/rel 0.0187) · falsa_abst 0.0029 
+VIVO= True ULTIMO= ── eval: vigente 0.6781 · anterior 0.3673 · abstencion 0.0859 · truncados 0.0000 · nose 0.1743 (ent 0.2048/rel 0.1484) · falsa_abst 0.0274 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= ── eval: vigente 0.6757 · anterior 0.3170 · abstencion 0.2852 · truncados 0.0000 · nose 0.5287 (ent 0.5254/rel 0.5473) · falsa_abst 0.1179 
+VIVO= True ULTIMO= ── eval: vigente 0.7885 · anterior 0.3743 · abstencion 0.2285 · truncados 0.0000 · nose 0.5043 (ent 0.5148/rel 0.5083) · falsa_abst 0.0432 
+VIVO= True ULTIMO= ── eval: vigente 0.7699 · anterior 0.5543 · abstencion 0.2520 · truncados 0.0000 · nose 0.5464 (ent 0.5256/rel 0.5756) · falsa_abst 0.0500 
+VIVO= True ULTIMO= ── eval: vigente 0.8226 · anterior 0.4152 · abstencion 0.2324 · truncados 0.0000 · nose 0.5175 (ent 0.5288/rel 0.5123) · falsa_abst 0.0386 
+   [checkpoint parcial guardado: paso 2750]
+VIVO= True ULTIMO= ── eval: vigente 0.8519 · anterior 0.7217 · abstencion 0.2402 · truncados 0.0000 · nose 0.5668 (ent 0.5626/rel 0.5790) · falsa_abst 0.0191 
+VIVO= True ULTIMO= ── eval: vigente 0.9109 · anterior 0.5997 · abstencion 0.2402 · truncados 0.0000 · nose 0.5410 (ent 0.5876/rel 0.5109) · falsa_abst 0.0384 
+VIVO= True ULTIMO= ── eval: vigente 0.9165 · anterior 0.4621 · abstencion 0.2676 · truncados 0.0000 · nose 0.5743 (ent 0.6291/rel 0.5331) · falsa_abst 0.0644 
+VIVO= True ULTIMO= ── eval: vigente 0.8297 · anterior 0.8872 · abstencion 0.3203 · truncados 0.0000 · nose 0.6317 (ent 0.6803/rel 0.5910) · falsa_abst 0.1106 
+   [checkpoint parcial guardado: paso 4000]
+VIVO= True ULTIMO= ── eval: vigente 0.9039 · anterior 0.8993 · abstencion 0.3105 · truncados 0.0000 · nose 0.6544 (ent 0.7232/rel 0.5980) · falsa_abst 0.0794 
