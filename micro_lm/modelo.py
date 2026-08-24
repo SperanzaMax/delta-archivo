@@ -41,6 +41,17 @@ def init_params(seed, V, D=192, NB=6, N_TURNOS=64):
          # Arranca en cero (no glorot): con una sola unidad de salida no hay simetria que romper, y
          # asi el logit inicial es 0 -> sigma = 0,5, sin sesgo a favor ni en contra de abstenerse.
          "abst": {"w": jnp.zeros((D, 1)), "b": jnp.zeros(1)}}
+    # SLOT NULO (2026-08-24). Vive dentro de `arch` porque es una entrada mas del archivo, no una
+    # cabeza de salida. Existe siempre —el arbol no cambia de forma— pero solo lo lee `--abst slot`.
+    # `k_nulo` en glorot como cualquier clave; `v_nulo` en CERO, para que al empezar leer «nada»
+    # aporte un vector nulo al residuo y el slot arranque siendo inofensivo: lo que el modelo haga
+    # con el tiene que ser algo que el gradiente fue a buscar.
+    # Keys propias derivadas de `seed`, no un indice reusado de `ks`: `ks[2]` ya genera `kw`, y
+    # aunque con otra forma da otros numeros, hacer depender el slot de una key compartida es la
+    # clase de detalle que despues nadie puede auditar. Esto ademas no depende de NB.
+    _kn = jax.random.split(jax.random.PRNGKey(seed + 104729), 2)
+    p["arch"]["k_nulo"] = glorot(_kn[0], (D,)) * 0.5
+    p["arch"]["v_nulo"] = jnp.zeros(D)
     for i in range(NB):
         b = 7 + i * 8
         p["blocks"].append({
@@ -231,7 +242,8 @@ def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre
     return ln(params["ln_f"], h) @ params["head"]["w"] + params["head"]["b"]
 
 
-def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre"):
+def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre",
+                       abst="cabeza"):
     """Igual que `responder`, mas el logit de la cabeza de abstencion. Devuelve (logits, a).
 
     `a` es (B, T): un escalar por posicion, con proyeccion propia desde el MISMO estado final que
@@ -245,15 +257,54 @@ def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, d
     av = archivo @ a_p["vw"]
     penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]
 
+    # SLOT NULO (2026-08-24, `DISENO_ATRIBUCION.md`). Una columna aprendida que compite con las
+    # entradas del archivo y a la que el modelo puede mandar su atencion cuando nada matchea.
+    #
+    # El argumento mecanico es del dictamen del 16-ago y es el que motiva todo: la lectura es un
+    # softmax sobre las entradas, o sea **suma 1 siempre**, asi que hoy no existe la posibilidad de
+    # que devuelva «nada» — el modelo esta OBLIGADO a leer algo aunque nada matchee. De ahi que el
+    # score del archivo diera AUC 0,4984 para separar «esta» de «no esta»: azar exacto, porque la
+    # ausencia no tiene donde vivir.
+    #
+    # `penal` sigue tapando las entradas vacias, pero la columna nula NO se penaliza nunca: compite
+    # siempre. Son 2 x D = 256 params sobre 863.859 (0,030 %).
+    #
+    # NO es una invencion de este proyecto: es el pointer sentinel (Merity 2016) y el no-answer score
+    # de SQuAD 2.0. Lo que no esta hecho es contrastarlo contra `token` y `cabeza` dentro del mismo
+    # modelo con memoria, a igualdad de semillas y presupuesto.
+    # `k_nulo`/`v_nulo` existen SIEMPRE en los params —mismo criterio que la cabeza `abst` y que
+    # `convq`: el arbol no cambia de forma entre condiciones y los checkpoints siguen siendo
+    # intercambiables— pero solo los lee `--abst slot`. En las demas condiciones no entran en la
+    # perdida y quedan en su valor inicial. Sin esta guarda, agregar el slot cambiaria el
+    # comportamiento de `token`, `escala` y `cabeza`, que son los controles ya corridos.
+    usa_slot = (abst == "slot") and ("k_nulo" in a_p)
+    if usa_slot:
+        B = archivo.shape[0]
+        kn = jnp.broadcast_to(a_p["k_nulo"], (B, 1, a_p["k_nulo"].shape[-1]))
+        vn = jnp.broadcast_to(a_p["v_nulo"], (B, 1, a_p["v_nulo"].shape[-1]))
+        ak = jnp.concatenate([ak, kn], axis=1)
+        av = jnp.concatenate([av, vn], axis=1)
+        penal = jnp.concatenate([penal, jnp.zeros((B, 1, 1))], axis=-1)
+
+    masa_nulo = {}
+
     def lectura(h):
         q = h @ a_p["qr"]
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
-        return jnp.einsum("btn,bnd->btd", jax.nn.softmax(sim, -1), av) @ a_p["wo"]
+        p = jax.nn.softmax(sim, -1)
+        if usa_slot:
+            masa_nulo["p"] = p[..., -1]          # (B, T) — la masa que se fue a «nada»
+        return jnp.einsum("btn,bnd->btd", p, av) @ a_p["wo"]
 
     h = tronco(params, consulta, lectura, bloque, donde)
     hn = ln(params["ln_f"], h)
     logits = hn @ params["head"]["w"] + params["head"]["b"]
     a = (hn @ params["abst"]["w"] + params["abst"]["b"])[..., 0]
+    if usa_slot:
+        # La decision de abstenerse sale de la MASA del slot, no de un escalar aparte. Va en logit
+        # para que la perdida sea la misma BCE que usa `cabeza` y el contraste no cambie de forma.
+        m = jnp.clip(masa_nulo["p"], 1e-6, 1 - 1e-6)
+        return logits, jnp.log(m / (1 - m))
     return logits, a
 
 

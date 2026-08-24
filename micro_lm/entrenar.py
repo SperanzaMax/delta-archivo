@@ -53,6 +53,7 @@ NOSE = I.STOI["NOSE"]
 # cambiar en el medio de una corrida, y por eso `main` lo deja asentado en el JSON de config: si
 # alguna vez una corrida sale con el valor que no era, el JSON es donde se ve.
 _DONDE = "pre"
+_ABST = "token"
 
 
 def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None):
@@ -107,7 +108,7 @@ def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
 
 def _partes(params, ses, cortes, turnos, mask, cons, pos):
     archivo = M.escribir(params, ses, cortes)
-    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE)
+    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE, abst=_ABST)
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     a = jnp.take_along_axis(a, pos[:, None], axis=1)[:, 0]
     return lg, a
@@ -213,7 +214,7 @@ def main():
     ap.add_argument("--p-vieja", type=float, default=0.35)
     ap.add_argument("--p-nose", type=float, default=0.0,
                     help="fraccion de preguntas SIN respuesta en el archivo (respuesta = NOSE)")
-    ap.add_argument("--abst", default="token", choices=("token", "escala", "cabeza"),
+    ap.add_argument("--abst", default="token", choices=("token", "escala", "cabeza", "slot"),
                     help="como se decide la abstencion (PREREG_CABEZA_ABSTENCION.md). "
                          "token = NOSE es una entrada mas del softmax de vocabulario (lo de hoy); "
                          "escala = idem pero renormalizando el vector de NOSE a la norma media de "
@@ -300,8 +301,13 @@ def main():
 
     # Antes de que jax tracee nada: el valor queda horneado en los grafos compilados, asi que fijarlo
     # tarde seria peor que no fijarlo (compilaria con `pre` y el JSON diria `post`).
-    global _DONDE
+    # `_ABST` va en el mismo `global` que `_DONDE` y por el mismo motivo. Sin declararlo, la
+    # asignacion crea una LOCAL y la global se queda en "token": `--abst slot` no tendria efecto y
+    # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
+    # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
+    global _DONDE, _ABST
     _DONDE = a.donde
+    _ABST = a.abst
 
     print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
           f"· lectura {a.donde}", flush=True)
@@ -324,8 +330,13 @@ def main():
 
     # El eje `--abst` elige QUE funcion de perdida y que regla de decision se usan. `escala` comparte
     # las dos con `token`: lo unico que cambia es el init del vector de NOSE al entrar en la fase.
-    fn_perd = perdida_cabeza if a.abst == "cabeza" else perdida
-    fn_pred = predecir_cabeza if a.abst == "cabeza" else predecir
+    # `slot` reusa el camino de `cabeza` a proposito: misma BCE, mismo argmax con NOSE excluido, y
+    # lo unico que cambia es de DONDE sale el logit binario —la masa del slot nulo en vez de una
+    # proyeccion del estado final—. Asi el contraste mide «donde vive la abstencion» y no «que
+    # perdida se uso», que es la forma del error que arruino a `post` el 22-ago.
+    _bin = a.abst in ("cabeza", "slot")
+    fn_perd = perdida_cabeza if _bin else perdida
+    fn_pred = predecir_cabeza if _bin else predecir
 
     cortes_vigente = sorted(float(x) for x in a.cortes_vigente.split(",") if x.strip())
     cortes_hechos = set()
