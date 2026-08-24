@@ -47,6 +47,36 @@ def init_params(seed, V, D=192, NB=6, N_TURNOS=64):
             "ln1": {"g": jnp.ones(D), "b": jnp.zeros(D)},
             "ln2": {"g": jnp.ones(D), "b": jnp.zeros(D)},
             "conv": glorot(ks[b], (3, D)),
+            # Conv PROPIA para la query de la lectura (2026-08-24, condicion `lat2`). Existe siempre
+            # en los params —mismo criterio que la cabeza `abst`: el arbol no cambia de forma entre
+            # condiciones y los checkpoints siguen siendo intercambiables— pero sólo la usa
+            # `--donde lat2`; en las demas no entra en la perdida y queda en su valor inicial.
+            #
+            # Arranca en [1, 0, 0], o sea `conv3(convq, z) == z` exactamente. Eso le da a `lat2` una
+            # propiedad que ninguna condicion anterior tuvo: **contiene a `pre` como caso
+            # particular**, asi que no puede ser estructuralmente peor, y cualquier contexto que
+            # aparezca es contexto que el modelo fue A BUSCAR y no que le vino impuesto por el
+            # diseño.
+            #
+            # Contabilidad exacta, porque el compromiso del 22-ago decia «384 params» y el numero
+            # completo es otro: `convq` se instancia en los CUATRO bloques para que el arbol no
+            # cambie de forma (+1.536 params, 863.859 -> 865.395), pero la lectura entra en el
+            # bloque 0 y sólo esa se usa. **384 params efectivos (0,044 %), 1.536 en el arbol
+            # (0,178 %).**
+            #
+            # Los otros tres NO quedan clavados en [1,0,0], y esto lo escribi mal la primera vez: el
+            # optimizador es `adamw(weight_decay=0.01)`, que decae TODO parametro tenga gradiente o
+            # no. Medido a 60 pasos: bloque 0 se movio 0,014011 (gradiente) y los bloques 1-3
+            # exactamente 0,000235 cada uno, sólo en el tap 0, que es decay puro.
+            #
+            # Sale gratis un control que no hay que construir: **los `convq` de los bloques 1-3 son
+            # la trayectoria del weight decay con gradiente CERO garantizado.** Al cerrar la campania,
+            # cualquier diferencia entre el convq del bloque 0 y los de 1-3 es gradiente y no decay,
+            # sin tener que simular nada ni suponer una tasa. Es lo que hace falsable el riesgo
+            # declarado en el §7 del prereg —«lat2 puede quedarse en pre»—, porque el atractor sin
+            # gradiente no es [1,0,0] sino [0,0,0], y sin este control un convq atenuado se leeria
+            # como aprendizaje cuando podria ser decay.
+            "convq": jnp.stack([jnp.ones(D), jnp.zeros(D), jnp.zeros(D)]),
             "wq": glorot(ks[b + 1], (D, D)), "wk": glorot(ks[b + 2], (D, D)),
             "wv": glorot(ks[b + 3], (D, D)), "beta": jnp.zeros(D) + 0.5,
             "m1": {"w": glorot(ks[b + 4], (D, 4 * D)), "b": jnp.zeros(4 * D)},
@@ -105,10 +135,19 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
         inyeccion en capas PROFUNDAS, no esta), pero la query ya vio el pasado causal de la secuencia
         y puede depender de la entidad y de la relacion a la vez.
 
-    La simetria entre las dos condiciones es exacta: cada una reusa el LayerNorm que ya precede a la
-    operacion siguiente (`ln1` para el mixer, `ln2` para el MLP), asi que ninguna estrena parametros
-    que la otra no tenga. El arbol de params no cambia de forma y los checkpoints siguen siendo
-    intercambiables.
+      · "lat"  — la inyeccion queda donde `pre` la tiene y la query se forma sobre
+        `conv3(blk["conv"], ln1(h))`, o sea el token y los dos anteriores, con la conv COMPARTIDA con
+        el mixer. Cerrada el 24-ago: disuelve la colision de clave entera (`err_identidad` 0,0000 en
+        las tres semillas) pero cobra el marcador de orden, por el acoplamiento de esa conv.
+
+      · "lat2" — igual que `lat` pero con `blk["convq"]` PROPIA, inicializada en [1,0,0]. Contiene a
+        `pre` como caso particular.
+
+    La simetria entre las dos condiciones originales es exacta: cada una reusa el LayerNorm que ya
+    precede a la operacion siguiente (`ln1` para el mixer, `ln2` para el MLP), asi que ninguna
+    estrena parametros que la otra no tenga. El arbol de params no cambia de forma y los checkpoints
+    siguen siendo intercambiables — `convq` mantiene esa propiedad porque existe en TODAS las
+    condiciones y sólo `lat2` la lee.
     """
     h = params["emb"][x]
     for i, blk in enumerate(params["blocks"]):
@@ -131,6 +170,23 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
             # mas alla de dos tokens atras, con lo cual no reintroduce la dependencia global que en
             # `post` venia del mixer.
             h = h + lectura(conv3(blk["conv"], ln(blk["ln1"], h)))
+        elif lectura is not None and i == bloque and donde == "lat2":
+            # CAMINO LATERAL CON CONV PROPIA (2026-08-24). Corrige el defecto de diseño de `lat`
+            # diagnosticado en `DIAGNOSTICO_CONV_COMPARTIDA_20260822.md`.
+            #
+            # `lat` usa la MISMA `blk["conv"]` para la query de la lectura y para el mixer. Lo escribi
+            # en el prereg como virtud —«no estrena parametros»— y la simetria es real, pero acopla
+            # dos cosas con balances OPUESTOS: el mixer quiere el mix que le sirve a la regla delta,
+            # y la query quiere mucho contexto para formar entidad x relacion (distancia 2) y POCO
+            # para no diluir el marcador temporal. En `cual era antes el precio de banco ?` el token
+            # `antes` cae fuera de la ventana de la conv, y encima en `lat` la query en su posicion
+            # pasa a ser `conv3(cual, era, antes)` en vez de `antes` puro. La conv da la query
+            # conjunta y COBRA el marcador de orden — medido: `anterior` en 0,3798 en w3_s2, contra
+            # 0,8125 en su gemela `pre` (INFORME_CAMINO_LATERAL_20260824.md, §5).
+            #
+            # Con `convq` propia e inicializada en [1,0,0], `lat2` arranca siendo EXACTAMENTE `pre` y
+            # el modelo decide por gradiente cuanto contexto quiere. 3 x D = 384 params, 0,044 %.
+            h = h + lectura(conv3(blk["convq"], ln(blk["ln1"], h)))
         h = h + jax.vmap(delta_mixer, in_axes=(None, 0))(blk, conv3(blk["conv"], ln(blk["ln1"], h)))
         if lectura is not None and i == bloque and donde == "post":
             h = h + lectura(ln(blk["ln2"], h))

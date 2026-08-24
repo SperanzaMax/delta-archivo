@@ -1,0 +1,29 @@
+{
+ "K-1": {
+  "query": 0.0,
+  "tronco": 0.0,
+  "cumple": true
+ },
+ "K-2": {
+  "query": 0.0,
+  "cumple": true
+ },
+ "K-3": {
+  "tronco": 0.0,
+  "cumple": true
+ },
+ "K-4/pre": {
+  "vecino": 0.0,
+  "lejano": 0.0
+ },
+ "K-4/lat2*": {
+  "vecino": 0.6611035466194153,
+  "lejano": 0.0
+ },
+ "K-4": {
+  "cumple": true
+ },
+ "K-5": {
+  "nota": "se verifica con ser.py sobre p3_s0, ver el informe"
+ }
+}

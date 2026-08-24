@@ -219,7 +219,7 @@ def main():
                          "escala = idem pero renormalizando el vector de NOSE a la norma media de "
                          "los tokens de valor al arrancar la fase; "
                          "cabeza = salida binaria separada, con NOSE excluido del softmax de valores")
-    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat"),
+    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2"),
                     help="en que punto del bloque 0 entra la lectura del archivo "
                          "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
                          "emb[x], que es lo que se venia haciendo y deja la query como funcion pura "
@@ -228,7 +228,11 @@ def main():
                          "rompe el modelo, porque la lectura deja de entrar antes del computo); "
                          "lat = camino lateral, la inyeccion queda donde `pre` la tiene y solo la "
                          "QUERY se forma sobre conv3(ln1(h)), que da contexto local sin mover el "
-                         "punto de inyeccion")
+                         "punto de inyeccion; "
+                         "lat2 = igual que lat pero con conv PROPIA para la query (`convq`), "
+                         "inicializada en [1,0,0] — arranca siendo exactamente `pre` y el modelo "
+                         "decide por gradiente cuanto contexto usa, con lo cual no puede ser "
+                         "estructuralmente peor. Corrige el acoplamiento diagnosticado el 22-ago")
     ap.add_argument("--reinit-adam", action="store_true",
                     help="reinicia el estado de Adam al reanudar. La condicion `cabeza` lo hace sola "
                          "porque el arbol de params cambia de forma; este flag existe para que "
@@ -398,7 +402,18 @@ def main():
         # OJO: sólo se toca el arbol cuando la condicion lo NECESITA. Si `--abst token` reanudara
         # agregando la cabeza, cualquier corrida en curso de la campania `x` se reanudaria con Adam
         # reiniciado a mitad de camino — dejaria de ser la misma corrida partida en dos.
-        if "abst" not in params and (a.abst != "token" or a.reinit_adam):
+        # Misma familia que la guarda de arriba, y por el mismo motivo (2026-08-24): un ckpt anterior
+        # a `lat2` no trae `convq` en sus bloques. Se agrega SOLO si la condicion la necesita —igual
+        # que con `abst`—, para que ninguna corrida en curso de otra condicion se reanude con Adam
+        # reiniciado a mitad de camino y deje de ser la misma corrida partida en dos.
+        if a.donde == "lat2" and "convq" not in params["blocks"][0]:
+            frescos = M.init_params(a.semilla, I.V, D=a.d, NB=a.capas)
+            for blk, fresco in zip(params["blocks"], frescos["blocks"]):
+                blk["convq"] = fresco["convq"]
+            state = opt.init(params)
+            print("el checkpoint no traia `convq`: se agrega en [1,0,0] y se reinicia Adam\n",
+                  flush=True)
+        elif "abst" not in params and (a.abst != "token" or a.reinit_adam):
             params["abst"] = M.init_params(a.semilla, I.V, D=a.d, NB=a.capas)["abst"]
             state = opt.init(params)
             print("el checkpoint no traia cabeza de abstencion: se agrega y se reinicia Adam\n",
