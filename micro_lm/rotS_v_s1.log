@@ -1,0 +1,9 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rotS_v_s1.log (rotador 2872390)
+== rotador2 · familia 'v' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:1 · cuentas: D E C F A J H G M K I N L
+-- vuelta 1 · cuenta D · faltan: 3:1 · 18:26:42
+   >> OTORGADA en D (T4): [tr2_d_1826] gpu-t4-s-kkb-ass1b1-3htzqzrztg45e | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en D (desde el paso 4250)
+== tramo · cuenta D · sesion tr2_d_1826 · v3_s1 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.ZSXX1p7CmY/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/v3_s1.pkl' to '/content/ck.pkl'

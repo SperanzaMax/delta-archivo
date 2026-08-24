@@ -35,11 +35,11 @@ except Exception: print(-1)
 ultimo_latido=0
 while true; do
   listas=0; total=0; detalle=""
-  for par in w3_s0:26000 w3_s1:26000 w3_s2:26000 \
-             ed3_s0:20000 ed3_s1:20000 ed3_s2:20000 \
-             ef3_s0:20000 ef3_s1:20000 ef3_s2:20000 \
-             e03_s0:20000 e03_s1:20000 e03_s2:20000 \
-             v3_s0:26000 v3_s1:26000 v3_s2:26000; do
+  # 2026-08-24, tarde: la lista pasa a ser SOLO lo que esta vivo. El escalonado (ed3/ef3/e03) quedo
+  # frenado por el cambio de foco y sus checkpoints estan en disco reanudables, asi que vigilarlos
+  # era mandar ruido sobre unidades que nadie va a mover.
+  for par in v3_s0:26000 v3_s1:26000 v3_s2:26000 \
+             y3_s0:26000 y3_s1:26000 y3_s2:26000; do
     u="${par%%:*}"; meta="${par##*:}"
     p="$(paso_de "$AQUI/ckpts/$u.pkl")"
     total=$((total+1))

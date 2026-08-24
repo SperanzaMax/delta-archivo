@@ -1,0 +1,13 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rotS_v_s0.log (rotador 2871415)
+== rotador2 · familia 'v' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:0 · cuentas: C D E F J A G H K M N I L
+-- vuelta 1 · cuenta C · faltan: 3:0 · 18:26:40
+   >> OTORGADA en C (T4): [tr2_c_1826] gpu-t4-s-kkb-usw4a2-1qhbge6hxabe6 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en C (desde el paso 5000)
+== tramo · cuenta C · sesion tr2_c_1826 · v3_s0 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.pO7lACfxDD/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/v3_s0.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2482
+== polling cada 2 min (presupuesto ~100 min)

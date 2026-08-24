@@ -1,0 +1,8 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rotS_v_s2.log (rotador 2873092)
+== rotador2 · familia 'v' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:2 · cuentas: E C D A F G J H I M N K L
+-- vuelta 1 · cuenta E · faltan: 3:2 · 18:26:44
+   >> OTORGADA en E (T4): [tr2_e_1826] gpu-t4-s-kkb-ass1a2-2u6yw82ckk5r3 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en E (desde el paso 3750)
+== tramo · cuenta E · sesion tr2_e_1826 · v3_s2 · +8000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.hkM4LFnklI/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
