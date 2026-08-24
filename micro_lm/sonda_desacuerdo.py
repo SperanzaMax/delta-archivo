@@ -28,8 +28,16 @@ SEM_PRUEBA = 77000
 K, F = 16, 0.25          # PREREG §1-§2, fijados antes de correr
 
 
+# `donde` se lee DEL CHECKPOINT (2026-08-24). Esta sonda es del 20-ago, anterior a que existieran
+# las condiciones `lat` y `lat2`, asi que llamaba a `responder_con_abst` sin `donde` y se quedaba con
+# el default "pre". Aplicada tal cual a las unidades `lat` habria medido la arquitectura equivocada —
+# el mismo bug de arquitectura cruzada contra el que `analizar_query_conjunta.py` puso una guarda
+# explicita el 22-ago. Para las unidades `pre` no cambia nada: el default era y sigue siendo "pre".
+_DONDE = "pre"
+
+
 def responder(params, archivo, turnos, mask, cons, pos):
-    lg, _ = M.responder_con_abst(params, archivo, turnos, cons, mask)
+    lg, _ = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE)
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     return lg.at[:, NOSE].set(-jnp.inf).argmax(-1)
 
@@ -86,6 +94,9 @@ ap.add_argument("--ckpt-alt", action="append", default=[], metavar="UNIDAD=RUTA"
                 help="fija el checkpoint de una unidad. Las tres de nivel 4 se leen de su copia "
                      ".p14000: el prereg pide las 8 a 14000 pasos, y ademas c4_s0/c4_s1 se estan "
                      "entrenando ahora mismo — leer el .pkl vivo es exactamente la D-1 del dia.")
+ap.add_argument("--prefijo", default="c",
+                help="prefijo de la familia: c = campania de abstencion (el default historico), "
+                     "w = lat, p = pre. Antes estaba escrito a mano en la ruta del checkpoint.")
 ap.add_argument("--salida", default=os.path.join(AQUI, "desacuerdo_20260820.json"))
 a_ = ap.parse_args()
 UNI = a_.unidades.split(",") if a_.unidades else UNIDADES
@@ -100,15 +111,17 @@ print("-" * 78)
 
 res, n1, n2, n3, n4 = {}, 0, 0, 0, 0
 for u in UNI:
-    ck = ALT.get(u, os.path.join(AQUI, "ckpts", f"c{u}.pkl"))
+    ck = ALT.get(u, os.path.join(AQUI, "ckpts", f"{a_.prefijo}{u}.pkl"))
     if not os.path.isabs(ck):
         ck = os.path.join(AQUI, ck)
     if not os.path.exists(ck):
-        print(f"c{u}: sin checkpoint")
+        print(f"{a_.prefijo}{u}: sin checkpoint")
         continue
     with open(ck, "rb") as f:
         _d = pickle.load(f)
-    print(f"c{u}: {os.path.basename(ck)} · paso {_d.get('paso','?')}", flush=True)
+    _DONDE = _d.get("config", {}).get("donde", "pre")
+    print(f"{a_.prefijo}{u}: {os.path.basename(ck)} · paso {_d.get('paso','?')} · donde {_DONDE}",
+          flush=True)
     params = jax.tree_util.tree_map(jnp.asarray, _d["params"])
     if "abst" not in params:
         continue
