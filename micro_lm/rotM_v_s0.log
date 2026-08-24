@@ -1,0 +1,24 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rotM_v_s0.log (rotador 1121986)
+== rotador2 · familia 'v' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:0 · cuentas: C D E F J A G H K M N I L
+-- vuelta 1 · cuenta C · faltan: 3:0 · 08:01:53
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- D la esta usando otro proceso, se saltea
+-- E la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta F · faltan: 3:0 · 08:01:58
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta J · faltan: 3:0 · 08:02:05
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- A la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta G · faltan: 3:0 · 08:02:11
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta H · faltan: 3:0 · 08:02:19
+   503 en H (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta K · faltan: 3:0 · 08:02:25
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- M la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta N · faltan: 3:0 · 08:02:32
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- I la esta usando otro proceso, se saltea
+-- vuelta 1 · cuenta L · faltan: 3:0 · 08:02:38
+   503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 7 min

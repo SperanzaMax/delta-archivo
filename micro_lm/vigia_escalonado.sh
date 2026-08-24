@@ -38,7 +38,8 @@ while true; do
   for par in w3_s0:26000 w3_s1:26000 w3_s2:26000 \
              ed3_s0:20000 ed3_s1:20000 ed3_s2:20000 \
              ef3_s0:20000 ef3_s1:20000 ef3_s2:20000 \
-             e03_s0:20000 e03_s1:20000 e03_s2:20000; do
+             e03_s0:20000 e03_s1:20000 e03_s2:20000 \
+             v3_s0:26000 v3_s1:26000 v3_s2:26000; do
     u="${par%%:*}"; meta="${par##*:}"
     p="$(paso_de "$AQUI/ckpts/$u.pkl")"
     total=$((total+1))
