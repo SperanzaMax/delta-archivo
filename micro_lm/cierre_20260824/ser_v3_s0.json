@@ -1,0 +1,42 @@
+{
+ "pesos": "/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/v3_s0.pkl",
+ "nivel": 3,
+ "semilla": 0,
+ "paso": 26000,
+ "donde": "lat2",
+ "abst": "cabeza",
+ "p_nose": 0.4,
+ "n": 2048,
+ "acierto": 0.9983593109105825,
+ "nose": 0.7744270205066345,
+ "falsa_abst": 0.0016406890894175555,
+ "invento_sobre_sin_resp": 0.2255729794933655,
+ "SER": 0.09130859375,
+ "err_version": 0.0,
+ "err_identidad": 0.0,
+ "err_fuera": 0.0,
+ "invento": 0.09130859375,
+ "por_tipo": {
+  "vigente": {
+   "acierto": 0.9980217606330366,
+   "abstencion": 0.0019782393669634025
+  },
+  "nose_rel": {
+   "acierto_nose": 0.5841836734693877,
+   "invento": 0.41581632653061223
+  },
+  "nose_ent": {
+   "acierto_nose": 0.9450800915331807,
+   "invento": 0.05491990846681922
+  },
+  "anterior": {
+   "acierto": 1.0
+  }
+ },
+ "n_por_tipo": {
+  "vigente": 1011,
+  "nose_rel": 392,
+  "nose_ent": 437,
+  "anterior": 208
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "pesos": "/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/y3_s2.pkl",
+ "nivel": 3,
+ "semilla": 2,
+ "paso": 26000,
+ "donde": "pre",
+ "abst": "slot",
+ "p_nose": 0.4,
+ "n": 2048,
+ "acierto": 0.7744052502050861,
+ "nose": 0.0,
+ "falsa_abst": 0.0,
+ "invento_sobre_sin_resp": 1.0,
+ "SER": 0.5390625,
+ "err_version": 0.04248046875,
+ "err_identidad": 0.091796875,
+ "err_fuera": 0.0,
+ "invento": 0.40478515625,
+ "por_tipo": {
+  "vigente": {
+   "acierto": 0.8150346191889218,
+   "err_version": 0.04154302670623145,
+   "err_identidad": 0.1434223541048467
+  },
+  "nose_rel": {
+   "invento": 1.0
+  },
+  "nose_ent": {
+   "invento": 1.0
+  },
+  "anterior": {
+   "err_version": 0.21634615384615385,
+   "acierto": 0.5769230769230769,
+   "err_identidad": 0.20673076923076922
+  }
+ },
+ "n_por_tipo": {
+  "vigente": 1011,
+  "nose_rel": 392,
+  "nose_ent": 437,
+  "anterior": 208
+ }
+}
