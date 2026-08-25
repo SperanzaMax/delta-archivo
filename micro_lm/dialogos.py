@@ -41,8 +41,14 @@ def main():
     # un ckpt de `cabeza` se mostraria con el argmax plano, que le da a NOSE una ruta que en el
     # entrenamiento no tuvo. Es la leccion del 12-ago —10 de 11 «abstenciones» eran el parser— con
     # otra cara: aca el que puede mentir es el instrumento, no el parser.
+    # 2026-08-25: `slot` entrena por el MISMO camino binario que `cabeza` (`entrenar.py:337`) y con
+    # `NOSE` en −1e9, asi que un `== "cabeza"` lo deja afuera y lo mide con el argmax plano, que no
+    # puede emitir abstencion. Es el bug que dio `nose = 0,0000` en el cierre del slot; se arregla
+    # aca antes de que muerda. Y hay que fijar `_ABST`, si no el logit binario sale de la cabeza
+    # lineal, que en esas unidades nunca se entreno.
     E._DONDE = cfg.get("donde", "pre")
-    predecir = E.predecir_cabeza if cfg.get("abst", "token") == "cabeza" else E.predecir
+    E._ABST = cfg.get("abst", "token")
+    predecir = E.predecir_cabeza if E._ABST in ("cabeza", "slot") else E.predecir
     print(f"pesos: {a.pesos}\nnivel {nivel} · semilla de entrenamiento {cfg['semilla']} · "
           f"{cfg['pasos']} pasos · p_nose {p_nose} · lectura {E._DONDE} · "
           f"abstencion {cfg.get('abst', 'token')}\n")

@@ -1,0 +1,20 @@
+
+== y3_s0 ==
+   AUC de la masa (no depende del umbral) : 0.5190
+   umbral 0,5 heredado de `cabeza`        : nose 0.0000 · falsa_abst 0.0000
+   mejor umbral (Youden J=+0.0463)   : th=0.3920 · nose 0.7961 · falsa_abst 0.7498
+   NINGÚN umbral pasa S-1 (nose>=0,50 y falsa_abst<=0,10) -> lectura (a)
+
+== y3_s1 ==
+   AUC de la masa (no depende del umbral) : 0.5313
+   umbral 0,5 heredado de `cabeza`        : nose 0.0000 · falsa_abst 0.0000
+   mejor umbral (Youden J=+0.0779)   : th=0.3971 · nose 0.7153 · falsa_abst 0.6374
+   NINGÚN umbral pasa S-1 (nose>=0,50 y falsa_abst<=0,10) -> lectura (a)
+
+== y3_s2 ==
+   AUC de la masa (no depende del umbral) : 0.5182
+   umbral 0,5 heredado de `cabeza`        : nose 0.0000 · falsa_abst 0.0000
+   mejor umbral (Youden J=+0.0380)   : th=0.3830 · nose 0.8215 · falsa_abst 0.7834
+   NINGÚN umbral pasa S-1 (nose>=0,50 y falsa_abst<=0,10) -> lectura (a)
+
+-> /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/reanalisis_20260825/umbral_slot.json

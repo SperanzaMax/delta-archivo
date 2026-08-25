@@ -1,0 +1,47 @@
+{
+ "instrumento": "entrenar.evaluar, regla por condicion",
+ "rng": 77000,
+ "n": 1024,
+ "p_nose": 0.4,
+ "unidades": {
+  "p3_s0.pkl": {
+   "vigente": 0.9591638210927005,
+   "anterior": 0.968576388888889,
+   "nose": 0.9007111155668581,
+   "nose_ent": 0.9198194881099293,
+   "nose_rel": 0.875042578948829,
+   "falsa_abst": 0.010105219137231333,
+   "abstencion": 0.376953125,
+   "paso": 26000,
+   "cond": "cabeza",
+   "ckpt": "p3_s0.pkl",
+   "pasa": true
+  },
+  "y3_s0.pkl": {
+   "vigente": 0.8873541293476638,
+   "anterior": 0.9243055555555556,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 26000,
+   "cond": "slot",
+   "ckpt": "y3_s0.pkl",
+   "pasa": false
+  },
+  "v3_s0.pkl": {
+   "vigente": 1.0,
+   "anterior": 1.0,
+   "nose": 0.7785471029802442,
+   "nose_ent": 0.9709429204374057,
+   "nose_rel": 0.5982697857697857,
+   "falsa_abst": 0.0,
+   "abstencion": 0.3212890625,
+   "paso": 26000,
+   "cond": "cabeza",
+   "ckpt": "v3_s0.pkl",
+   "pasa": true
+  }
+ }
+}

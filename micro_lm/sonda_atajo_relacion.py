@@ -66,7 +66,8 @@ def main():
         params = jax.tree_util.tree_map(jnp.asarray, d["params"])
         cfg = d["config"]
         E._DONDE = cfg.get("donde", "pre")          # antes del primer trace
-        predecir = E.predecir_cabeza if cfg.get("abst", "token") == "cabeza" else E.predecir
+        E._ABST = cfg.get("abst", "token")          # ver la nota de `ser.py` (2026-08-25)
+        predecir = E.predecir_cabeza if E._ABST in ("cabeza", "slot") else E.predecir
         rng = np.random.default_rng(RT.SEM_PRUEBA + cfg["semilla"])
 
         iguales, total, aciertos = 0, 0, 0

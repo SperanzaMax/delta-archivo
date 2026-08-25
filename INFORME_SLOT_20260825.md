@@ -62,6 +62,41 @@ siquiera de forma que no llegue a la salida.
 de escribir las predicciones: en un modelo que no lo entrenó, el slot no detecta ausencia. Ahora
 sabemos que entrenarlo 26000 pasos con supervisión densa tampoco alcanza.
 
+## 2.bis El control del umbral: la objeción se levantó, se probó y NO sobrevivió
+
+Al revisar contra `DISENO_ATRIBUCION.md` apareció una contradicción entre el diseño y la
+implementación. El §3 del diseño dice, textual y por adelantado:
+
+> *«"Que gane el slot nulo" NO puede ser el criterio de abstención... El nulo tiene que competir por
+> masa relativa, no por victoria.»*
+
+Y la implementación hace exactamente eso: el logit binario es `log(m/(1−m))` (`modelo.py:306`) y la
+decisión es `a > 0` (`entrenar.py:123`), o sea **masa > 0,5** — con 41 entradas, que el nulo se lleve
+más atención que las otras cuarenta juntas. Más exigente todavía que «ganar». Eso abría una objeción
+seria al veredicto: `cabeza` decide con un escalar libre y `slot` con un número atado a un softmax
+que suma 1, así que podrían no haber competido en igualdad de condiciones.
+
+**Se probó** (`umbral_slot.py`, post-hoc y sin estatus de prereg), barriendo 400 umbrales sobre la
+masa:
+
+| | AUC de la masa | umbral 0,5 heredado | mejor umbral posible (Youden) |
+|---|---|---|---|
+| `y3_s0` | 0,5190 | `nose` 0,0000 · `falsa_abst` 0,0000 | th 0,392 → `nose` 0,7961 · **`falsa_abst` 0,7498** |
+| `y3_s1` | 0,5313 | 0,0000 · 0,0000 | th 0,397 → 0,7153 · **0,6374** |
+| `y3_s2` | 0,5182 | 0,0000 · 0,0000 | th 0,383 → 0,8215 · **0,7834** |
+
+**Ningún umbral pasa la compuerta S-1 en ninguna semilla.** El mejor punto alcanzable abstiene ~80 %
+de las veces cuando no hay respuesta y ~75 % de las veces cuando **sí** la hay: J entre +0,038 y
++0,078, que es ruido. La masa no separa las dos poblaciones, y por eso ningún corte puede.
+
+**Lectura, declarada antes de correr:** es la (a). La restricción `masa > 0,5` contradice al §3 del
+diseño y hay que arreglarla si esta condición se vuelve a tocar, pero **no explica el resultado**. El
+negativo es del mecanismo. La objeción queda como nota al pie y el trípode cierra limpio.
+
+Vale registrar el orden: la contradicción se encontró leyendo el diseño **después** de haber
+reportado el veredicto, se declaró como objeción propia al resultado que ya se había dado por bueno,
+y se corrió el control que podía darla vuelta. No la dio vuelta.
+
 ## 3. El §5 decide, y estaba comprometido por adelantado
 
 > **S-1 falla con S-0 pasando** → la memoria **no** es mejor lugar que la cabeza. El trípode queda

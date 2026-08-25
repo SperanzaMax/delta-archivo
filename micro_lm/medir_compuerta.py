@@ -56,7 +56,14 @@ def main():
         # la semilla sale del nombre: <fam><nivel>_s<semilla>[.pkl[.pXXXXX]]
         sem = int(base.split("_s")[1].split(".")[0].split("_")[0])
         params = jax.tree_util.tree_map(jnp.asarray, d["params"])
-        fn = E.predecir_cabeza if cond == "cabeza" else E.predecir
+        # 2026-08-25 · DOS arreglos, y el primero era el mas grave de los tres scripts auditados:
+        #  · `_DONDE` NO se fijaba, asi que una unidad `lat`/`lat2` se media con la lectura `pre` y
+        #    devolvia un numero invalido EN SILENCIO. `donde` existe desde el 22-ago, este script es
+        #    anterior.
+        #  · `slot` comparte el camino binario de `cabeza`, asi que el `==` lo dejaba afuera.
+        E._DONDE = cfg.get("donde", "pre")
+        E._ABST = cond
+        fn = E.predecir_cabeza if cond in ("cabeza", "slot") else E.predecir
         rng = np.random.default_rng(SEM_PRUEBA + sem)
         m = E.evaluar(params, rng, n=a.n, B=a.batch, nivel=nivel, p_vieja=0.35,
                       p_nose=a.p_nose, pred_fn=fn)

@@ -1,0 +1,48 @@
+{
+ "post_hoc": true,
+ "no_cambia_veredicto_S1": true,
+ "unidades": {
+  "y3_s0": {
+   "AUC_masa": 0.5189822186114308,
+   "umbral_heredado_0.5": {
+    "nose": 0.0,
+    "falsa_abst": 0.0
+   },
+   "mejor_youden": {
+    "umbral": 0.39195573938109524,
+    "nose": 0.7961399276236429,
+    "falsa_abst": 0.7497949138638228,
+    "J": 0.04634501375982014
+   },
+   "pasa_compuerta_S1": null
+  },
+  "y3_s1": {
+   "AUC_masa": 0.5312814494270948,
+   "umbral_heredado_0.5": {
+    "nose": 0.0,
+    "falsa_abst": 0.0
+   },
+   "mejor_youden": {
+    "umbral": 0.3971072167998418,
+    "nose": 0.715319662243667,
+    "falsa_abst": 0.6374077112387203,
+    "J": 0.07791195100494674
+   },
+   "pasa_compuerta_S1": null
+  },
+  "y3_s2": {
+   "AUC_masa": 0.5181737487766575,
+   "umbral_heredado_0.5": {
+    "nose": 0.0,
+    "falsa_abst": 0.0
+   },
+   "mejor_youden": {
+    "umbral": 0.3830150665461569,
+    "nose": 0.8214716525934861,
+    "falsa_abst": 0.7834290401968826,
+    "J": 0.03804261239660345
+   },
+   "pasa_compuerta_S1": null
+  }
+ }
+}
