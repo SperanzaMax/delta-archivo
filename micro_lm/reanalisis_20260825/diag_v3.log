@@ -1,0 +1,12 @@
+¿ES LA RELACION EL ATAJO? · acierto y err_identidad segun relacion unica o repetida
+2048 muestras por unidad · p_nose=0.0
+
+unidad  | n_unica  ac_unica  ident_unica |  n_rep  ac_rep  ident_rep |  P(rep)
+----------------------------------------------------------------------------------
+v3_s0   |    1179    1.0000       0.0000 |    869  1.0000     0.0000 |  0.4243
+v3_s1   |    1211    1.0000       0.0000 |    837  1.0000     0.0000 |  0.4087
+v3_s2   |    1174    1.0000       0.0000 |    874  1.0000     0.0000 |  0.4268
+
+-> reanalisis_20260825/diag_v3.json
+Si (A') gobierna: `ident_unica` ~ 0 y `ident_rep` ~ 0,5. Si el error esta repartido parejo,
+la relacion NO es el atajo y la lectura de la marginalizacion sigue en pie.

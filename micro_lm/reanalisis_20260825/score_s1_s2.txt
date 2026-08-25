@@ -1,0 +1,8 @@
+### y3_s1
+  s_max          0.5078      0.5208    0.4942  <- archivo
+  P-1  AUC(s_max) >= 0,60                    0.5078            NO CUMPLE
+  P-2  AUC(s_max) > AUC(c_prob) + 0,03       0.5078 vs 0.5382   NO CUMPLE
+### y3_s2
+  s_max          0.5235      0.5266    0.5203  <- archivo
+  P-1  AUC(s_max) >= 0,60                    0.5235            NO CUMPLE
+  P-2  AUC(s_max) > AUC(c_prob) + 0,03       0.5235 vs 0.6120   NO CUMPLE

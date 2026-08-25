@@ -85,8 +85,17 @@ def main():
     #    este script hacia— le da a `NOSE` una ruta que en el entrenamiento no tuvo, y desvia
     #    justamente el reparto de categorias que el SER existe para medir. `ser.py` es del 15-ago y
     #    la cabeza es del 18: la incompatibilidad venia de la diferencia de fechas.
+    #  · `slot` (2026-08-25): MISMO desfase de fechas, repetido. `--abst slot` entrena con el camino
+    #    binario de `cabeza` (`entrenar.py:337`, `_bin = a.abst in ("cabeza", "slot")`) y con `NOSE`
+    #    en −1e9 dentro del softmax de valores; lo unico que cambia es de donde sale el logit binario
+    #    (la masa del slot nulo en vez de la cabeza lineal). Este script preguntaba `== "cabeza"`, asi
+    #    que media las unidades `slot` con el argmax plano, que NO PUEDE emitir `NOSE` — de ahi el
+    #    `nose = 0,0000` y el `falsa_abst = 0,0000` EXACTOS en las tres semillas del cierre del 24.
+    #    Era el instrumento, no el modelo. Y hacian falta las dos mitades: sin fijar `_ABST` el logit
+    #    binario saldria de la cabeza lineal, que en estas unidades nunca se entreno.
     E._DONDE = cfg.get("donde", "pre")          # antes del primer trace de jax
-    usa_cabeza = cfg.get("abst", "token") == "cabeza"
+    E._ABST = cfg.get("abst", "token")
+    usa_cabeza = E._ABST in ("cabeza", "slot")
     predecir = E.predecir_cabeza if usa_cabeza else E.predecir
     print(f"checkpoint: nivel {nivel} · lectura {E._DONDE} · abstencion {cfg.get('abst', 'token')}")
 

@@ -1,0 +1,42 @@
+{
+ "pesos": "ckpts/y3_s1.pkl",
+ "nivel": 3,
+ "semilla": 1,
+ "paso": 26000,
+ "donde": "pre",
+ "abst": "slot",
+ "p_nose": 0.4,
+ "n": 2048,
+ "acierto": 0.7858900738310091,
+ "nose": 0.0,
+ "falsa_abst": 0.0,
+ "invento_sobre_sin_resp": 1.0,
+ "SER": 0.5322265625,
+ "err_version": 0.00048828125,
+ "err_identidad": 0.126953125,
+ "err_fuera": 0.0,
+ "invento": 0.40478515625,
+ "por_tipo": {
+  "vigente": {
+   "err_identidad": 0.2215628090999011,
+   "acierto": 0.7774480712166172,
+   "err_version": 0.0009891196834817012
+  },
+  "nose_rel": {
+   "invento": 1.0
+  },
+  "nose_ent": {
+   "invento": 1.0
+  },
+  "anterior": {
+   "acierto": 0.8269230769230769,
+   "err_identidad": 0.17307692307692307
+  }
+ },
+ "n_por_tipo": {
+  "vigente": 1011,
+  "nose_rel": 392,
+  "nose_ent": 437,
+  "anterior": 208
+ }
+}

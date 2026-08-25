@@ -1,0 +1,57 @@
+{
+ "post_hoc": true,
+ "prereg": null,
+ "unidades": {
+  "y3_s0": {
+   "abst": "slot",
+   "donde": "pre",
+   "paso": null,
+   "masa_media_con_respuesta": 0.4073720585136163,
+   "masa_media_sin_respuesta": 0.408563967493101,
+   "masa_max_global": 0.4679108262062073,
+   "masa_p99_sin_respuesta": 0.45358923077583313,
+   "frac_masa_mayor_0.5": 0.0,
+   "AUC_masa_sin_vs_con": 0.5189822186114308,
+   "por_tipo": {
+    "vigente": 0.4089620116320609,
+    "anterior": 0.39964396907733035,
+    "nose_ent": 0.40871542542149875,
+    "nose_rel": 0.4083951228127188
+   }
+  },
+  "y3_s1": {
+   "abst": "slot",
+   "donde": "pre",
+   "paso": null,
+   "masa_media_con_respuesta": 0.40463143809590796,
+   "masa_media_sin_respuesta": 0.4065007182024644,
+   "masa_max_global": 0.4597121775150299,
+   "masa_p99_sin_respuesta": 0.4491073286533356,
+   "frac_masa_mayor_0.5": 0.0,
+   "AUC_masa_sin_vs_con": 0.5312814494270948,
+   "por_tipo": {
+    "vigente": 0.4060124790279377,
+    "anterior": 0.3979187824118596,
+    "nose_ent": 0.4065484868989111,
+    "nose_rel": 0.4064474658546399
+   }
+  },
+  "y3_s2": {
+   "abst": "slot",
+   "donde": "pre",
+   "paso": null,
+   "masa_media_con_respuesta": 0.4019586967336437,
+   "masa_media_sin_respuesta": 0.40367986917927123,
+   "masa_max_global": 0.4753522574901581,
+   "masa_p99_sin_respuesta": 0.4584126591682434,
+   "frac_masa_mayor_0.5": 0.0,
+   "AUC_masa_sin_vs_con": 0.5181737487766575,
+   "por_tipo": {
+    "vigente": 0.40390978038723696,
+    "anterior": 0.3924753045519957,
+    "nose_ent": 0.40460611937793495,
+    "nose_rel": 0.402647289238414
+   }
+  }
+ }
+}
