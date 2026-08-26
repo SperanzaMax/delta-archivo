@@ -1,0 +1,117 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_ef3b_20260825.log (rotador 477531)
+== rotador2 · familia 'ef' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:1,3:2 · cuentas: N K M L H I G C D E F J A
+-- vuelta 1 · cuenta N · faltan: 3:1 3:2 · 19:42:50
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta K · faltan: 3:1 3:2 · 19:43:43
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta M · faltan: 3:1 3:2 · 19:44:25
+./rotar_abst3.sh: línea 175: 481798 Violación de segmento  timeout -k 30 420 "${CL[@]}" new -s "$SESION" --tpu v5e1 > /dev/null 2>&1
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta L · faltan: 3:1 3:2 · 19:45:01
+   >> OTORGADA en L (T4): [tr2_l_1945] gpu-t4-s-kkb-use1c0-1zfd6vadnictj | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en L (desde el paso 11000)
+== tramo · cuenta L · sesion tr2_l_1945 · ef3_s1 · +2500 de 20000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.grafpJeFLh/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ef3_s1.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1747
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 13000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.7510 · anterior 0.7981 · abstencion 0.2480 · truncados 0.0000 · nose 0.5593 (ent 0.5038/rel 0.6063) · falsa_abst 0.0358 
+VIVO= True ULTIMO= ── eval: vigente 0.7510 · anterior 0.7981 · abstencion 0.2480 · truncados 0.0000 · nose 0.5593 (ent 0.5038/rel 0.6063) · falsa_abst 0.0358 
+   [checkpoint parcial guardado: paso 11000]
+VIVO= True ULTIMO= ── eval: vigente 0.7579 · anterior 0.8346 · abstencion 0.2109 · truncados 0.0000 · nose 0.5178 (ent 0.4678/rel 0.5574) · falsa_abst 0.0034 
+VIVO= True ULTIMO= ── eval: vigente 0.7579 · anterior 0.8346 · abstencion 0.2109 · truncados 0.0000 · nose 0.5178 (ent 0.4678/rel 0.5574) · falsa_abst 0.0034 
+VIVO= True ULTIMO= ── eval: vigente 0.7408 · anterior 0.8762 · abstencion 0.2070 · truncados 0.0000 · nose 0.5078 (ent 0.4678/rel 0.5401) · falsa_abst 0.0034 
+VIVO= True ULTIMO= ── eval: vigente 0.7408 · anterior 0.8762 · abstencion 0.2070 · truncados 0.0000 · nose 0.5078 (ent 0.4678/rel 0.5401) · falsa_abst 0.0034 
+   [checkpoint parcial guardado: paso 12000]
+VIVO= True ULTIMO= ── eval: vigente 0.7657 · anterior 0.8011 · abstencion 0.2031 · truncados 0.0000 · nose 0.4952 (ent 0.4656/rel 0.5148) · falsa_abst 0.0033 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+   [checkpoint parcial guardado: paso 13000]
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+   [checkpoint parcial guardado: paso 13000]
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+   [checkpoint parcial guardado: paso 13000]
+VIVO= True ULTIMO= listo: {'paso': 13000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7651724440517544, 'anterior': 0.8514384920634921, 'nose': 0.4975598324503509, 'nose_ent': 0.4582159262306321, 'nose_rel': 0.5306186868686869, 'falsa_abst': 0.013102323436084667, 'abstencion': 0.208984375} 
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_1945)
+   tramo de 3:1 cerrado en el paso 13000 de 20000
+   -> tramo 3:2 en L (desde el paso 15750)
+== tramo · cuenta L · sesion tr2_l_1945 · ef3_s2 · +2500 de 20000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.LsGIib4IqB/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ef3_s2.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 12185
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 18250 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.7450 · anterior 0.9509 · abstencion 0.2246 · truncados 0.0000 · nose 0.5663 (ent 0.5096/rel 0.6405) · falsa_abst 0.0197 
+VIVO= True ULTIMO= ── eval: vigente 0.7440 · anterior 0.9415 · abstencion 0.2090 · truncados 0.0000 · nose 0.5230 (ent 0.4505/rel 0.6099) · falsa_abst 0.0184 
+   [checkpoint parcial guardado: paso 16500]
+VIVO= True ULTIMO= ── eval: vigente 0.7440 · anterior 0.9415 · abstencion 0.2090 · truncados 0.0000 · nose 0.5230 (ent 0.4505/rel 0.6099) · falsa_abst 0.0184 
+VIVO= True ULTIMO= ── eval: vigente 0.7740 · anterior 0.9750 · abstencion 0.2109 · truncados 0.0000 · nose 0.5347 (ent 0.4822/rel 0.6021) · falsa_abst 0.0154 
+VIVO= True ULTIMO= ── eval: vigente 0.7740 · anterior 0.9750 · abstencion 0.2109 · truncados 0.0000 · nose 0.5347 (ent 0.4822/rel 0.6021) · falsa_abst 0.0154 
+VIVO= True ULTIMO= ── eval: vigente 0.7568 · anterior 0.9393 · abstencion 0.2012 · truncados 0.0000 · nose 0.5230 (ent 0.4618/rel 0.6021) · falsa_abst 0.0063 
+VIVO= True ULTIMO= ── eval: vigente 0.7630 · anterior 0.9487 · abstencion 0.2168 · truncados 0.0000 · nose 0.5407 (ent 0.4797/rel 0.6213) · falsa_abst 0.0213 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_1945)
+   tramo de 3:2 cerrado en el paso 18000 de 20000
+   tr2_l_1945 parada; pendientes ahora: 3:1 3:2
+-- vuelta 1 · cuenta H · faltan: 3:1 3:2 · 20:47:26
+   503 en H (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:1 3:2 · 20:47:35
+   503 en I (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta G · faltan: 3:1 3:2 · 20:47:45
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta C · faltan: 3:1 3:2 · 20:47:56
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta D · faltan: 3:1 3:2 · 20:48:06
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta E · faltan: 3:1 3:2 · 20:48:15
+   >> OTORGADA en E (T4): [tr2_e_2048] gpu-t4-s-kkb-usw1b0-26zkb2a9agcw | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en E (desde el paso 13000)
+== tramo · cuenta E · sesion tr2_e_2048 · ef3_s1 · +2500 de 20000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35
+[colab] Uploaded '/tmp/tmp.yE65gon7o6/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ef3_s1.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 943
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 15500 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.7401 · anterior 0.8328 · abstencion 0.2148 · truncados 0.0000 · nose 0.5145 (ent 0.4582/rel 0.5677) · falsa_abst 0.0101 
+VIVO= True ULTIMO= ── eval: vigente 0.7401 · anterior 0.8328 · abstencion 0.2148 · truncados 0.0000 · nose 0.5145 (ent 0.4582/rel 0.5677) · falsa_abst 0.0101 
+   [checkpoint parcial guardado: paso 13500]
+VIVO= True ULTIMO= ── eval: vigente 0.7610 · anterior 0.8150 · abstencion 0.2051 · truncados 0.0000 · nose 0.4918 (ent 0.4469/rel 0.5262) · falsa_abst 0.0100 
+VIVO= True ULTIMO= ── eval: vigente 0.7610 · anterior 0.8150 · abstencion 0.2051 · truncados 0.0000 · nose 0.4918 (ent 0.4469/rel 0.5262) · falsa_abst 0.0100 
+VIVO= True ULTIMO= ── eval: vigente 0.7673 · anterior 0.8566 · abstencion 0.2012 · truncados 0.0000 · nose 0.4918 (ent 0.4565/rel 0.5193) · falsa_abst 0.0035 
+VIVO= True ULTIMO= ── eval: vigente 0.7673 · anterior 0.8566 · abstencion 0.2012 · truncados 0.0000 · nose 0.4918 (ent 0.4565/rel 0.5193) · falsa_abst 0.0035 
+   [checkpoint parcial guardado: paso 14500]
+VIVO= True ULTIMO= ── eval: vigente 0.7396 · anterior 0.8502 · abstencion 0.2031 · truncados 0.0000 · nose 0.4918 (ent 0.4469/rel 0.5262) · falsa_abst 0.0060 
+VIVO= True ULTIMO= ── eval: vigente 0.7396 · anterior 0.8502 · abstencion 0.2031 · truncados 0.0000 · nose 0.4918 (ent 0.4469/rel 0.5262) · falsa_abst 0.0060 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+   [checkpoint parcial guardado: paso 15500]
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+   [checkpoint parcial guardado: paso 15500]
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+   [checkpoint parcial guardado: paso 15500]
+VIVO= True ULTIMO= listo: {'paso': 15500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.7450973925111857, 'anterior': 0.8953373015873016, 'nose': 0.4918469630785852, 'nose_ent': 0.44685228986699577, 'nose_rel': 0.5261994949494949, 'falsa_abst': 0.0063791989664082685, 'abstencion': 0.203125} 
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_e_2048)

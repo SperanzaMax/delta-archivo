@@ -35,11 +35,13 @@ except Exception: print(-1)
 ultimo_latido=0
 while true; do
   listas=0; total=0; detalle=""
-  # 2026-08-24, tarde: la lista pasa a ser SOLO lo que esta vivo. El escalonado (ed3/ef3/e03) quedo
-  # frenado por el cambio de foco y sus checkpoints estan en disco reanudables, asi que vigilarlos
-  # era mandar ruido sobre unidades que nadie va a mover.
-  for par in v3_s0:26000 v3_s1:26000 v3_s2:26000 \
-             y3_s0:26000 y3_s1:26000 y3_s2:26000; do
+  # 2026-08-25: la lista vuelve al ESCALONADO, que es lo unico vivo. `v3`/`y3` llegaron a 26000 y ya
+  # estan analizadas (INFORME_LAT2 / INFORME_SLOT), asi que vigilarlas seria ruido. Las seis del
+  # escalonado se estan completando a 20000 en T4 con los dos rotadores del 25-ago; `ef3_s0` ya
+  # estaba en 20000 desde el 23 y el rotador la saltea. Meta unica 20000 para las seis: comparar
+  # dinamica contra fija a distinto presupuesto es el error que ya costo caro tres veces.
+  for par in ed3_s0:20000 ed3_s1:20000 ed3_s2:20000 \
+             ef3_s0:20000 ef3_s1:20000 ef3_s2:20000; do
     u="${par%%:*}"; meta="${par##*:}"
     p="$(paso_de "$AQUI/ckpts/$u.pkl")"
     total=$((total+1))
