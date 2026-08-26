@@ -1,0 +1,613 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[round]{natbib}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\title{\bfseries Dónde vive la abstención\\
+Comparación pre-registrada de cuatro interfaces de abstención\\
+en un modelo de lenguaje chico con memoria versionada}
+
+\author{Maximiliano Speranza\\
+\small Investigador independiente, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID 0009-0005-0413-8554}\\
+\small \texttt{maximiliano.speranza@gmail.com}}
+
+\date{Agosto de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\small
+\textbf{Nota.} Esta es la versión completa en español del trabajo, provista como material
+suplementario. El manuscrito principal está en inglés.}}
+\end{center}
+
+\begin{abstract}
+\noindent
+Enseñarle a un modelo de lenguaje a decir «no sé» tiene al menos tres implementaciones publicadas, y
+nunca se comparan entre ellas. La incertidumbre puede ser un token del vocabulario
+(\texttt{[IDK]}), una cabeza binaria separada (SelectiveNet), o una entrada de la memoria que el
+modelo consulta (pointer sentinel, el puntaje de no-respuesta de SQuAD~2.0). Cada una nació en otra
+arquitectura, sobre otra tarea y contra otra línea de base. Nadie hizo la pregunta obvia, que es si
+manteniendo fijos el modelo, los datos, las semillas y el presupuesto de entrenamiento,
+\emph{importa dónde vive la decisión de abstenerse}.
+
+La contestamos en un modelo de lenguaje de $863{.}730$ parámetros entrenado desde cero, con un
+archivo persistente co-entrenado y hechos versionados, donde la respuesta es un solo token y la
+métrica es por lo tanto exacta. Se comparan cuatro interfaces de a pares en 27 unidades de
+entrenamiento, con cada predicción congelada por hash antes de que existieran los datos
+correspondientes.
+
+Importa, y el orden es estable. Una cabeza binaria separada, de \textbf{129 parámetros, el
+$0{,}015\%$ del modelo}, reduce la tasa de falsa abstención en un factor de $2$ a $2{,}8\times$
+contra el token del vocabulario a presupuesto igualado en las tres semillas, y corre hacia abajo en
+$\approx 0{,}10$ de margen de acierto la frontera donde la abstención se vuelve aprendible. O sea que
+con una cabeza propia, un modelo que recupera $10$ puntos peor todavía puede aprender a callarse.
+Renormalizar el vector del token, que es la explicación que el propio paper de \texttt{[IDK]} da para
+su fallo en modelos chicos, \textbf{no ayuda}, y deja una brecha de $+0{,}1465$ de falsa abstención
+contra la cabeza. El mecanismo no es la norma del vector sino que dos decisiones de naturaleza
+distinta compiten por un mismo softmax.
+
+El slot de memoria falla, y falla de forma informativa. Su masa de atención converge a $0{,}4074$,
+$0{,}4046$ y $0{,}4020$ contra una tasa base empírica de preguntas sin respuesta de $0{,}4048$, o
+sea que aprendió el prior y no la pertenencia. Un barrido de $400$ umbrales no rescata nada, con
+$J$ de Youden entre $+0{,}038$ y $+0{,}078$. Leído junto con un puntaje de matcheo del archivo que
+queda en el azar ($\mathrm{AUC}$ $0{,}4984$), esto dice algo más filoso que «el slot no funcionó», y
+es que \textbf{en una memoria co-entrenada leída por softmax la ausencia no tiene representación, y
+darle un lugar donde vivir no alcanza para crearla}.
+
+Decimos explícitamente qué \emph{no} habilitan estos resultados. Lo que se sostiene es que
+\emph{separar la cabeza hace aprendible la abstención en este régimen}, no que \emph{el modelo sabe
+cuándo no sabe}. El techo que queda es de calibración y no de capacidad ($\mathrm{AUC}$ $0{,}777$ a
+$0{,}998$), y siete intentos pre-registrados de obtener la decisión sin etiquetas cayeron todos en
+$\mathrm{AUC}$ $0{,}50$ a $0{,}67$.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Palabras clave.} Predicción selectiva; abstención; alucinación; memoria en modelos
+de lenguaje; conocimiento versionado; pre-registro; resultados negativos
+
+\section{La pregunta que nadie hizo}
+
+Un modelo que contesta todo es un modelo que contesta mal cuando tendría que haberse callado. Las
+respuestas del campo a este problema caen en tres familias arquitectónicas, cada una con su cita
+canónica.
+
+\begin{itemize}
+\item \textbf{En el vocabulario.} Se agrega un token que significa «no sé» y la propia entropía
+cruzada empuja masa de probabilidad hacia él. Es el token \texttt{[IDK]} \citep{cohen2024idk}, que
+hereda gratis toda la maquinaria de entrenamiento.
+\item \textbf{En una cabeza separada.} Se agrega una salida cuyo único trabajo es decidir si se
+contesta. Es la predicción selectiva. SelectiveNet \citep{geifman2019selectivenet} entrena de punta
+a punta tres cabezas, la de predicción, la de selección y la auxiliar.
+\item \textbf{En la memoria.} Si el modelo lee de un almacén recuperable, se le da al almacén una
+entrada que significa «acá no hay nada». Son el pointer sentinel \citep{merity2016pointer} y el
+puntaje de no-respuesta de SQuAD~2.0 \citep{rajpurkar2018squad2}.
+\end{itemize}
+
+No son tres versiones de un mismo experimento. Viven en arquitecturas distintas, atacan tareas
+distintas, y cada una se compara contra una línea de base sin abstención en vez de compararse entre
+sí. La comparación que le diría a alguien \emph{cuál construir} no se corrió nunca.
+
+Hay una razón por la que es difícil correrla en un modelo grande. Para atribuirle una diferencia a la
+interfaz hay que dejar todo lo demás fijo, o sea los mismos pesos preentrenados, el mismo orden de
+datos, el mismo estado del optimizador, el mismo presupuesto y varias semillas, y en un modelo donde
+una sola corrida es cara esa grilla no se puede pagar. Nosotros la corremos en un modelo lo bastante
+chico como para que la grilla se pague y las tripas se puedan mirar, y decimos con todas las letras
+qué compra eso y qué cuesta (§\ref{sec:limites}).
+
+\paragraph{Aportes.}
+\begin{enumerate}
+\item La comparación pareada de cuatro vías en sí misma, con semillas y presupuesto igualados, sobre
+27 unidades de entrenamiento, y con todos los veredictos emitidos por scripts congelados antes de que
+existieran los datos.
+\item Una refutación \emph{medida} de la explicación que \citet{cohen2024idk} da para su propio
+fallo en modelos chicos. Ellos lo atribuyen a la inicialización del embedding de \texttt{[IDK]}, y
+nosotros implementamos la versión más generosa de esa hipótesis y falla exactamente igual que el
+token sin tocar.
+\item La ubicación de la frontera de entrenamiento donde la abstención se vuelve aprendible, y cuánto
+la corre la arquitectura, que son $\approx 0{,}10$ de margen de acierto.
+\item Un negativo sobre el slot de memoria con mecanismo identificado, la convergencia al prior, y la
+observación que lo acompaña, que es que el puntaje de matcheo del archivo no codifica presencia en
+absoluto.
+\item Una declaración explícita del techo. Lo que queda es calibración y no capacidad, y siete vías
+sin etiquetas están cerradas.
+\end{enumerate}
+
+\section{Trabajo relacionado}
+
+\paragraph{Predicción selectiva.} La opción de rechazo es vieja \citep{chow1970} y su forma profunda
+moderna es SelectiveNet \citep{geifman2019selectivenet}, que separa «¿contesto?» de «¿qué contesto?»
+en cabezas distintas entrenadas juntas. \textbf{La separación en sí no es nueva y este trabajo no la
+reclama.} Lo que SelectiveNet no es, es un modelo de lenguaje, ni tiene softmax de vocabulario, ni
+tiene memoria.
+
+\paragraph{Abstención dentro del vocabulario.} \citet{cohen2024idk} agregan un token \texttt{[IDK]} y
+desplazan masa de probabilidad hacia él dentro de la misma entropía cruzada. Tres propiedades de ese
+trabajo importan acá. Nunca compara contra una cabeza binaria separada. No discute la competencia por
+la masa de probabilidad, aunque la mitiga de refilón con un hiperparámetro $\Pi$ que capa en $0{,}5$
+la masa desplazable a \texttt{[IDK]} para que el token de oro «siga siendo competitivo», o sea que la
+competencia está pero se parchea sin nombrarla. Y reporta que el método \emph{falla} en modelos muy
+chicos (pythia-70m, pythia-160m), y lo atribuye a «problemas de precisión numérica con la
+inicialización de \texttt{[IDK]}». Nuestro modelo vive justo en ese régimen, lo que vuelve
+contrastable la atribución (§\ref{sec:escala}).
+
+\paragraph{Abstención dentro de una interfaz de recuperación.} El pointer sentinel
+\citep{merity2016pointer} agrega un centinela que compite con la distribución de copia, SQuAD~2.0
+\citep{rajpurkar2018squad2} puntúa la no-respuesta contra los spans, y la detección de fuera de
+distribución por energía \citep{liu2020energy} pone umbral sobre el puntaje. \textbf{El slot nulo no
+es una invención de este trabajo.} Lo nuevo es correrlo como tercer brazo de un contraste controlado
+dentro de un modelo cuya memoria es co-entrenada en vez de externa.
+
+\paragraph{Por qué la memoria lo hace más difícil y no más fácil.} \citet{joren2024sufficient}
+reportan que la recuperación aumentada \emph{empeora} la abstención, porque el contexto agregado sube
+la confianza del modelo y produce más alucinación en vez de más «no sé». Un modelo con archivo más
+abstención trabaja contra ese efecto, no a favor.
+
+\paragraph{Hechos versionados.} \citet{wang2025unable} documentan interferencia proactiva cuando una
+clave se actualiza varias veces en el contexto, y el atajo de recencia que aparece. No proponen
+ningún arreglo arquitectónico, evalúan sólo modelos grandes preentrenados y, lo que más nos importa,
+nunca piden el valor \emph{superado}. Un banco que pide sólo el valor vigente no puede separar
+«prefiere lo último» de «usa el orden», porque el atajo contesta las dos.
+
+\section{El banco}
+\label{sec:banco}
+
+\paragraph{Modelo.} Un modelo de lenguaje entrenado \emph{desde cero}, sin ningún componente
+preentrenado, de $863{.}730$ parámetros, $3{,}5$~MB, con un vocabulario cerrado de $242$ tokens
+legibles por humanos. La arquitectura es una recurrencia con regla delta más un \textbf{archivo
+persistente co-entrenado} con sello de orden aprendido en la clave, leído por softmax e inyectado en
+el bloque~0. El archivo persiste entre sesiones mientras el estado recurrente se resetea, así que es
+el único puente posible de una sesión a otra.
+
+\paragraph{Tarea.} Los hechos se dicen en una sesión, se corrigen en otra, incluso con correcciones
+elípticas del tipo «no, es beto» que no nombran la entidad, y se preguntan en una tercera.
+
+\begin{center}
+\begin{tabular}{ll}
+\texttt{sesión 1} & \texttt{USUARIO\ el director de norte es ana}\\
+\texttt{sesión 2} & \texttt{USUARIO\ no , el director de norte es beto}\\
+\texttt{sesión 7} & \texttt{USUARIO\ quien dirige norte ?}\\
+                  & \texttt{MODELO\ \ beto}\\
+\end{tabular}
+\end{center}
+
+La respuesta es un \textbf{solo token}, lo que hace la métrica exacta y determinista, sin juez LLM ni
+parser interpretativo. Al modelo se le pide el valor vigente, el valor superado (\texttt{anterior}) y
+hechos que no están en el archivo, caso en el cual la conducta correcta es abstenerse. Durante el
+entrenamiento de abstención, el $40\%$ de las preguntas no tienen respuesta
+($p_{\mathrm{nose}} = 0{,}4$).
+
+\paragraph{Métricas y compuerta.} \texttt{vigente} es el acierto sobre el valor actual,
+\texttt{nose} es la tasa de abstención en preguntas sin respuesta, y \texttt{falsa\_abst} es la tasa
+de abstención en preguntas que \emph{sí} la tienen. La compuerta pre-registrada, fijada antes de
+cualquiera de las campañas que se reportan acá y nunca ajustada, es la siguiente.
+
+\begin{center}
+\fbox{\parbox{0.72\textwidth}{\centering
+\textbf{Compuerta.}\quad $\texttt{nose} \geq 0{,}50$\quad\textbf{y}\quad
+$\texttt{falsa\_abst} \leq 0{,}10$}}
+\end{center}
+
+Las dos mitades se piden juntas, porque un modelo que contesta \texttt{NOSE} a todo saca
+$\texttt{nose} = 1{,}000$ y tiene que verse como el fracaso que es.
+
+\paragraph{El atajo, y el margen sobre él.} Con $p_{\mathrm{nose}} = 0{,}4$, la política de
+\emph{no abstenerse nunca} vale $0{,}5906$ en este banco. Reportamos entonces el \textbf{margen sobre
+el atajo}, que es el \texttt{vigente} del modelo al cerrar la fase base menos $0{,}5906$. Esa
+variable resulta gobernar si la abstención es aprendible siquiera (§\ref{sec:frontera}).
+
+\paragraph{Protocolo.} Cada campaña tiene un pre-registro congelado con su SHA antes de implementar,
+un archivo de desviaciones, y reporte por unidad. \textbf{Los resultados nunca se reportan sólo como
+media}, porque la bimodalidad entre semillas es una propiedad medida de este banco y un promedio
+taparía justamente lo que interesa.
+
+\section{Las cuatro interfaces}
+
+Las cuatro parten del \emph{mismo} checkpoint base y reinicializan Adam, así que la fase de
+abstención está pareada.
+
+\begin{center}
+\small\begin{tabular}{lll}
+\toprule
+condición & dónde vive la abstención & contraparte publicada \\
+\midrule
+\texttt{token} & una entrada del softmax de valores & \texttt{[IDK]} \citep{cohen2024idk} \\
+\texttt{escala} & ídem, con el vector renormalizado & la explicación del propio paper de \texttt{[IDK]} \\
+\texttt{cabeza} & salida binaria separada ($+129$ params) & SelectiveNet \citep{geifman2019selectivenet} \\
+\texttt{slot} & entrada de la memoria ($+256$ params) & pointer sentinel \citep{merity2016pointer} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\texttt{escala} merece una aclaración, porque es el control que podía ahorrar la arquitectura entera.
+Una inspección de pesos mostró a \texttt{NOSE} con una norma de embedding de entrada de $0{,}367$
+contra $1{,}011$ y $1{,}028$ de los tokens de valor, o sea compitiendo en el mismo softmax con un
+vector tres veces más corto. \texttt{escala} lo renormaliza a la norma media de los vectores de valor
+en entrada y en salida. \textbf{Si el problema fuera la norma, \texttt{escala} lo arreglaría y no
+haría falta arquitectura nueva.}
+
+Una asimetría declarada. \texttt{slot} estrena $256$ parámetros y \texttt{cabeza} estrena $129$. La
+diferencia es de $127$ parámetros sobre $863{.}730$, el $0{,}015\%$, y se declara acá en vez de
+descubrirse después, aunque como \texttt{slot} pierde, la objeción de que ganó por tener más
+parámetros nunca llega a plantearse.
+
+\section{Resultados}
+
+\subsection{Vocabulario contra cabeza}
+
+Veintiuna unidades, 7 configuraciones por 3 condiciones, a $14{.}000$ pasos. Sobre las cinco unidades
+\emph{difíciles}, que son aquellas donde el modelo base tiene margen bajo sobre el atajo.
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+condición & pasa la compuerta \\
+\midrule
+\texttt{token}  & \textbf{0 de 5} \\
+\texttt{escala} & \textbf{0 de 5} \\
+\texttt{cabeza} & \textbf{4 de 5} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La única que falla, la de margen más bajo de la serie, se queda en
+$\texttt{falsa\_abst} = 0{,}1189$ contra el $0{,}10$ exigido. \textbf{\texttt{nose} nunca fue el
+problema} en ninguna condición, con valores de $0{,}54$ a $0{,}93$, o sea que todas detectan la
+ausencia. Lo que falla siempre es \texttt{falsa\_abst}, que es callarse de más.
+
+Un control de sanidad pre-registrado como prueba de no inferioridad \emph{falló hacia arriba}. Se le
+pedía a \texttt{cabeza} mantener \texttt{vigente} dentro de $\pm 0{,}05$ de \texttt{token} y se pasa
+en 3 de 7 unidades ($+0{,}0633$, $+0{,}0668$, $+0{,}0928$), siempre recuperando \emph{mejor}.
+Registramos el fallo como tal en vez de mover el umbral después de ver el número.
+
+\subsection{La norma no es el mecanismo}
+\label{sec:escala}
+
+\texttt{escala} promedia $0{,}2394$ de falsa abstención en las cinco unidades difíciles contra
+$0{,}0929$ de \texttt{cabeza}, o sea una brecha de $\mathbf{+0{,}1465}$, casi tres veces el $0{,}05$
+que pedía el pre-registro.
+
+El negativo es limpio y no un fallo de implementación. La renormalización sobrevive al entrenamiento,
+porque entra en $1{,}000$ por construcción y cierra en $0{,}899$ de entrada y $1{,}131$ de salida. La
+norma se quedó donde se la puso y aun así no alcanzó. Y una sonda de pesos explica \emph{por qué} la
+premisa estaba mal de entrada. El $0{,}367$ que motivó la condición es de la matriz de
+\textbf{entrada}, mientras que el softmax que decide la respuesta usa la de \textbf{salida}, y ahí
+\texttt{NOSE} ya era $1{,}77$ a $2{,}05$ veces \emph{más largo} que un valor promedio en las cinco
+unidades difíciles, y $0{,}825$ veces en las fáciles. \texttt{escala} entonces \emph{subía} la norma
+en las unidades fáciles y la \emph{bajaba} en las difíciles, o sea la misma intervención haciendo
+cosas opuestas según la unidad.
+
+\begin{quote}
+\textbf{Esto es un desacuerdo directo y medido con \citet{cohen2024idk}.} Ellos atribuyen el fallo de
+\texttt{[IDK]} en modelos chicos a la inicialización de su embedding. En este banco la inicialización
+sí explica de dónde \emph{sale} la asimetría, porque \texttt{NOSE} nunca se entrena durante la fase
+base y queda donde lo pusieron, pero no explica el \emph{fallo}, porque corregirla explícitamente no
+cambia nada. Lo que queda es que dos decisiones comparten un mismo softmax.
+\end{quote}
+
+\subsection{Presupuesto, o qué estaba midiendo la compuerta y qué sobrevive}
+\label{sec:presupuesto}
+
+El resultado anterior se midió con todas las unidades a $14{.}000$ pasos, y un seguimiento
+pre-registrado preguntó si \texttt{token} simplemente llega más tarde. En parte llega. Extendidas a
+$20{.}000$ pasos, dentro del horizonte original de la tasa de aprendizaje y por lo tanto sin tocar el
+schedule, cuatro de las cinco unidades que fallaban cruzan la compuerta. La falsa abstención baja en
+las 5 de 5 y el Spearman contra el paso es negativo en las 5 de 5.
+
+\textbf{Retiramos entonces la formulación, con las palabras del propio pre-registro.} La frase
+«\texttt{cabeza} pasa la compuerta donde las otras fallan» deja de ser cierta apenas las otras reciben
+$6{.}000$ pasos más. Lo que sobrevive es la comparación pareada a presupuesto igualado.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\texttt{falsa\_abst} a 20{.}000 & \texttt{cabeza} & \texttt{token} & razón \\
+\midrule
+semilla 0 & \textbf{0,0633} & 0,1296 & $2{,}0\times$ \\
+semilla 1 & \textbf{0,0421} & 0,0713 & $1{,}7\times$ \\
+semilla 2 & \textbf{0,0166} & 0,0458 & $2{,}8\times$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{quote}
+\textbf{El presupuesto explica el cruce de la compuerta, no la ventaja.} Una compuerta es un umbral,
+y un umbral convierte una diferencia continua en un sí o no que depende de dónde esté puesto. Lo que
+no depende del umbral es que la diferencia sigue ahí, con el mismo signo, en las 3 de 3 semillas.
+\end{quote}
+
+No hubo intercambio. \texttt{vigente} sube en las cinco unidades durante la misma extensión, hasta
+$+0{,}32$. El modelo no compró abstención a costa de contestar peor.
+
+\subsection{La frontera, y cuánto la corre la arquitectura}
+\label{sec:frontera}
+
+Que la abstención sea aprendible o no lo gobierna el margen sobre el atajo, y esto importa en la
+práctica, porque \textbf{si hay que entrenar un modelo casi hasta la perfección antes de poder
+enseñarle a decir «no sé», el método no sirve para nada real}, ya que ningún modelo útil llega a
+acierto $1{,}0$ en su dominio.
+
+Trece unidades por condición, que cubren el rango de margen cortando corridas base \emph{por valor de
+\texttt{vigente}} en vez de por número de paso, y entrenando $2{.}000$ pasos de abstención desde cada
+corte.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & el corte cae entre & Spearman(margen, \texttt{falsa\_abst}) \\
+\midrule
+\texttt{token}  & $+0{,}2358$ y $+0{,}2826$ & $-0{,}8033$ \\
+\texttt{cabeza} & $+0{,}1489$ y $+0{,}1672$ & $-0{,}8886$ \\
+\midrule
+\multicolumn{3}{c}{\textbf{la cabeza corre la frontera $\approx 0{,}10$ de margen hacia abajo}}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Trece unidades ordenadas por margen \textbf{sin una sola inversión}, y la transición es un salto y no
+una pendiente. Entre dos puntos separados por $0{,}047$ de margen, \texttt{falsa\_abst} cae de
+$0{,}2237$ a $0{,}0855$, un factor de $2{,}6\times$. En la banda de $+0{,}1672$ a $+0{,}2358$,
+\texttt{token} falla en 4 de 4 y \texttt{cabeza} pasa en 4 de 4.
+
+\paragraph{El número operativo.} Con cabeza propia alcanza con entrenar hasta un margen de
+$\approx +0{,}17$, y con el token del vocabulario hay que llegar a $\approx +0{,}26$. \textbf{Con
+$129$ parámetros se le puede enseñar a callarse a un modelo que recupera $10$ puntos peor.}
+
+\paragraph{Un confound, y la celda que lo resolvió.} Margen y grado de entrenamiento quedan
+entrelazados en el rango muestreado, porque todos los puntos de margen alto vienen de corridas
+truncadas y todos los de margen bajo de corridas completas. La celda que falta es un modelo entrenado
+a fondo que igual quede trabado en margen bajo. Una semilla no llegó a producir cortes y entregó
+exactamente esa celda, o sea una corrida de tarea fácil, entrenada a fondo, con margen $+0{,}2124$, y
+un pre-registro congeló dos predicciones excluyentes antes de medirla. \texttt{token} falló
+($0{,}1885$) y \texttt{cabeza} pasó ($0{,}0902$), así que \textbf{el margen no era un proxy de la
+dificultad de la tarea}. Con una salvedad que decimos en vez de enterrar, y es que el veredicto
+binario de \texttt{cabeza} depende del último tick. Lo robusto no es ese binario sino el contraste
+pareado, con 7 de 7 puntos válidos en la misma dirección (prueba de signos, $p = 0{,}0078$, medias
+$0{,}2718$ contra $0{,}1430$).
+
+\subsection{El slot de memoria converge al prior}
+\label{sec:slot}
+
+Se agregan dos vectores al archivo, $k_{\varnothing}$ y $v_{\varnothing}$, que compiten como una
+columna más de la lectura. Siguiendo el diseño, al nulo \emph{nunca} se le exige ganar la lectura,
+porque está medido que el modelo contesta bien con la entrada correcta en el puesto 2, sino sólo
+llevar masa relativa. Tres semillas, $26{.}000$ pasos, pareadas contra controles con \texttt{cabeza}.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & semilla 0 & semilla 1 & semilla 2 \\
+\midrule
+acierto (\texttt{cabeza} $\rightarrow$ \texttt{slot}) & $0{,}9705 \rightarrow 0{,}8991$ & $0{,}7769 \rightarrow 0{,}7859$ & $0{,}8351 \rightarrow 0{,}8999$ \\
+\texttt{nose} (\texttt{cabeza} $\rightarrow$ \texttt{slot}) & $0{,}9119 \rightarrow \mathbf{0{,}0000}$ & $0{,}5416 \rightarrow \mathbf{0{,}0000}$ & $0{,}7298 \rightarrow \mathbf{0{,}0000}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El modelo entrena, porque el criterio bloqueante de sanidad pasa 3 de 3, y después no se abstiene
+nunca, en ninguna semilla. Un cero limpio es la firma de un artefacto, y acá lo fue la primera vez,
+porque un script de evaluación probaba \texttt{==} donde necesitaba \texttt{in} y no podía emitir
+abstención en absoluto. El arreglo \emph{sube} el acierto en las tres unidades ($0{,}7572$ a
+$0{,}8991$, $0{,}4307$ a $0{,}7859$, $0{,}7744$ a $0{,}8999$), o sea favorece al slot, y
+\texttt{nose} sigue dando cero. Un control de regresión reprodujo bit a bit todas las unidades ya
+publicadas.
+
+El mecanismo se ve en la propia masa de atención.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+masa sobre el slot nulo & semilla 0 & semilla 1 & semilla 2 \\
+\midrule
+preguntas \emph{con} respuesta & $0{,}4074$ & $0{,}4046$ & $0{,}4020$ \\
+preguntas \emph{sin} respuesta & $0{,}4086$ & $0{,}4065$ & $0{,}4037$ \\
+AUC (sin contra con) & $0{,}5190$ & $0{,}5313$ & $0{,}5182$ \\
+\midrule
+\multicolumn{4}{c}{tasa base empírica de preguntas sin respuesta, $829/2048 = \mathbf{0{,}4048}$}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{quote}
+\textbf{El slot aprendió el prior.} $0{,}4074$, $0{,}4046$ y $0{,}4020$ contra una tasa base de
+$0{,}4048$ es el óptimo exacto de la entropía cruzada binaria para un predictor sin señal utilizable.
+Y como el prior queda por debajo de cualquier umbral de decisión razonable, que nunca se abstenga no
+es un corte mal elegido sino la \emph{consecuencia necesaria} de haber aprendido la tasa base en vez
+de la pertenencia.
+\end{quote}
+
+Probamos igual la objeción del umbral, barriendo $400$ cortes sobre la masa. Ningún umbral pasa la
+compuerta en ninguna semilla, y el mejor punto alcanzable abstiene en $\approx 80\%$ de las preguntas
+sin respuesta y en $\approx 75\%$ de las que sí la tienen, con $J$ de Youden entre $+0{,}038$ y
+$+0{,}078$, que es ruido. Las dos poblaciones no se separan, y por eso ningún corte puede separarlas.
+
+\paragraph{Dos observaciones que vale registrar.} La primera es un riesgo declarado que \emph{no} se
+materializó. El slot se lleva $\approx 40\%$ de la masa de lectura en todas las consultas y el
+acierto se sostiene en $0{,}90$, $0{,}79$ y $0{,}90$, sin que el acierto sobre el valor superado se
+caiga, e incluso subiendo $+0{,}111$ en una semilla. La lectura tolera perder cuatro décimos de su
+masa a un vector constante. La segunda es que $v_{\varnothing}$ partió de cero exacto y terminó con
+norma $1{,}34$ a $1{,}71$, o sea que el modelo no lo usó como compuerta pura sino que le aprendió un
+valor, inyectando un vector fijo en toda respuesta, lo que funciona como un sesgo aprendido de la
+lectura y no como una señal de ausencia.
+
+\subsection{El resultado que enmarca el fallo del slot}
+
+El negativo del slot no es una decepción aislada. De forma independiente y anterior, el propio
+puntaje de matcheo del archivo, que es el máximo del match de la consulta contra las claves
+guardadas, separa «la respuesta está» de «la respuesta no está» con $\mathrm{AUC}$ $0{,}4984$ y
+$0{,}5022$, o sea el azar exacto a dos decimales. El margen top-2 y el logsumexp dan lo mismo. Tres
+controles capaces de fallar no fallaron, ya que los logits reconstruidos con el puntaje extraído
+coinciden bit a bit con los del modelo, el puntaje varía, y el archivo se usa. Re-medido en la
+posición de \emph{máximo foco}, donde la lectura concentra hasta el $65\%$ de su masa en una sola
+entrada, sigue en el azar ($0{,}5007$ y $0{,}5077$).
+
+\begin{quote}
+\textbf{El modelo selecciona una entrada con fuerza, y la fuerza de la selección no codifica si lo
+que buscaba está. Siempre encuentra algo, y encuentra con la misma convicción cuando no hay nada que
+encontrar.}
+\end{quote}
+
+Es la consecuencia esperable del mecanismo. Una lectura por softmax suma uno, así que la mejor
+entrada gana con masa comparable haya o no haya un buen candidato, y nada en el entrenamiento
+presionó jamás para que la magnitud del match signifique «está». \textbf{Un recuperador externo tiene
+gratis el conjunto vacío, y meter el índice adentro de la red lo destruye}, y como muestra la
+§\ref{sec:slot}, darle a la ausencia un lugar donde vivir no alcanza para restituirlo.
+
+\section{Lo que no afirmamos}
+\label{sec:noafirma}
+
+Tres frenos, escritos porque los resultados invitan a excederse.
+
+\paragraph{Esto es calibración, no conocimiento.} Lo que se sostiene es que \emph{separar la cabeza
+hace aprendible la abstención en este régimen}. El techo que queda es de calibración, ya que la AUC
+del logit de la cabeza va de $0{,}777$ a $0{,}998$, o sea que la información para decidir está y lo
+que está mal puesto es el corte. En la única unidad que falla la compuerta, un umbral elegido en una
+mitad de los datos y juzgado en la otra la pasa. La frase \emph{«el modelo sabe cuándo no sabe»} no
+la sostiene nada de lo que hay acá.
+
+\paragraph{Todo lo utilizable pasa por etiquetas.} Siete intentos pre-registrados de obtener el corte
+sin supervisión, entre ellos una mezcla de gaussianas sobre el logit, un umbral de dispersión sin
+calibrar, un monitor de desacuerdo interno bajo enmascarado y un detector de empate de claves,
+cayeron todos en $\mathrm{AUC}$ $0{,}50$ a $0{,}67$, contra $0{,}777$ a $0{,}998$ de la cabeza
+supervisada. Dos de ellos fallaron por una razón que vale reportar, porque acota lo que un detector
+futuro tiene que medir. En este banco el modelo \textbf{nunca fabrica contenido}, ya que las
+respuestas fuera del archivo ocurren con tasa $0{,}0000$ en los cuatro niveles de dificultad, y toda
+respuesta errada es un valor real del archivo puesto en la entidad equivocada. Entonces, cuando una
+pregunta no tiene respuesta, el modelo no adivina en el vacío sino que se ancla en \emph{otra entrada
+real}, y su respuesta es tan estable ante el enmascarado como una correcta. El monitor de desacuerdo
+confirmó que el modelo lee el archivo, porque el $98$ a $99\%$ de las respuestas correctas cambian al
+tapar las entradas que las sostienen, y aun así no pudo discriminar, porque \textbf{el desacuerdo
+mide si la respuesta vino del archivo, no si vino de la entrada \emph{correcta}}. Cualquier detector
+sin etiquetas futuro tiene que separar esas dos cosas.
+
+\paragraph{Acá la alucinación es mala atribución, no invención.} El párrafo anterior tiene una
+consecuencia general para la detección. En un modelo con archivo, el modo de fallo es un valor
+verdadero puesto en la entidad equivocada. Eso es \emph{más} difícil de cazar que la invención,
+porque cualquier verificación del tipo «¿este dato existe?» lo da por bueno. Declaramos el alcance,
+ya que con vocabulario cerrado la fabricación libre está excluida por construcción, así que lo que se
+mide es que la salida queda confinada al contenido archivado.
+
+\section{Límites}
+\label{sec:limites}
+
+\begin{itemize}
+\item \textbf{Escala.} Son $863{.}730$ parámetros y un idioma sintético de $242$ tokens. Nada de esto
+transfiere solo. \citet{cohen2024idk} funciona en modelos grandes y \emph{falla} en pythia-70m y
+pythia-160m, que es justamente la asimetría que hace que un resultado en modelos chicos no prediga
+uno grande. La pregunta de la transferencia queda abierta en las dos direcciones.
+\item \textbf{El idioma es la interfaz de la prueba, no el objeto de estudio.} Una respuesta de un
+token es lo que hace la métrica exacta sin juez LLM. No se afirma nada sobre lenguaje natural
+abierto.
+\item \textbf{Semillas y bimodalidad.} La bimodalidad entre semillas es una propiedad medida de este
+banco. Reportamos por unidad y nunca sólo como media, y con dos unidades en una celda no se puede
+separar dificultad de no convergencia. Dos condiciones tienen una sola semilla por celda.
+\item \textbf{El presupuesto de la fase de abstención lo eligió el autor}, y la §\ref{sec:presupuesto}
+muestra que importó, ya que una formulación del resultado principal no sobrevivió a extenderlo. La
+comparación pareada a presupuesto igualado sí.
+\item \textbf{Un detalle de implementación contradice a su propio diseño.} El umbral de decisión del
+slot se heredó como masa mayor a $0{,}5$, que es más estricto que lo que el diseño estipulaba, que
+era masa relativa. El barrido de umbrales muestra que esto no explica el resultado, pero hay que
+arreglarlo si se vuelve a tocar la condición.
+\item \textbf{Búsqueda dirigida de literatura, no revisión sistemática.} Un trabajo que use otro
+vocabulario para la misma idea, como «rejection head», «versioned memory» o «fact supersession»,
+puede habérsenos pasado.
+\end{itemize}
+
+\section{Conclusión}
+
+Dónde vive la decisión de abstenerse cambia si se puede aprender siquiera, y el orden es estable
+entre semillas, presupuestos y regímenes de margen. Una cabeza binaria separada que cuesta el
+$0{,}015\%$ de los parámetros reduce a la mitad, y casi a un tercio, la tasa de falsa abstención
+contra un token del vocabulario a presupuesto igualado, y baja en $\approx 0{,}10$ de margen de
+acierto el punto en el que un modelo se vuelve enseñable para callarse. La explicación no es la norma
+del vector del token, ya que se implementó la versión más generosa de esa hipótesis y falló, sino que
+dos decisiones de naturaleza distinta competían por un mismo softmax.
+
+El slot de memoria, que sobre el papel es el más elegante de los tres porque vuelve «de ningún lado»
+una respuesta expresable en el mismo espacio donde el modelo ya opera, converge a la tasa base y no
+se abstiene nunca. Junto con un puntaje de matcheo del archivo clavado en el azar, esto ubica una
+propiedad estructural de la memoria co-entrenada, y es que \textbf{ahí la ausencia no tiene
+representación, y darle un lugar no alcanza para crearla}. Un recuperador externo puede devolver el
+conjunto vacío, un índice interno leído por softmax no puede, y la diferencia no se repara agregando
+una entrada nula.
+
+Lo que queda abierto es la parte que más importa y que ninguno de estos resultados alcanza. Toda vía
+hacia la decisión que no pase por etiquetas ha fallado, y ha fallado por una razón específica y
+medida, que es que el modelo, cuando no sabe, se ancla en otro recuerdo real, y eso desde afuera es
+indistinguible de saber.
+
+\section*{Disponibilidad de datos y código}
+
+Todos los pre-registros con sus hashes SHA, los archivos de desviaciones, los scripts de análisis,
+los resultados crudos por semilla y los informes generados por máquina están archivados en el
+repositorio del proyecto. Cada veredicto que se reporta acá lo emite un script congelado antes de que
+existieran los datos correspondientes.
+
+\section*{Declaraciones}
+
+\textbf{Financiamiento.} Ninguno. \textbf{Conflictos de interés.} El autor declara no tener
+conflictos de interés. \textbf{Contribuciones.} Autor único, responsable del diseño, la
+implementación, el análisis y la escritura. \textbf{Ética.} No aplica, ya que no hay sujetos humanos
+ni animales y todos los datos son sintéticos. \textbf{Nota del autor.} Este trabajo se hizo sin
+auspicio, supervisión ni financiamiento institucional, y se reporta a título personal.
+
+\begin{thebibliography}{9}
+
+\bibitem[Chow(1970)]{chow1970}
+C.~K. Chow.
+\newblock On optimum recognition error and reject tradeoff.
+\newblock \emph{IEEE Transactions on Information Theory}, 16(1), 41--46, 1970.
+
+\bibitem[Cohen et al.(2024)]{cohen2024idk}
+Roi Cohen, Konstantin Dobler, Eden Biran y Gerard de Melo.
+\newblock I don't know. Explicit modeling of uncertainty with an [IDK] token.
+\newblock \emph{Advances in Neural Information Processing Systems (NeurIPS)}, 2024.
+\newblock arXiv 2412.06676.
+
+\bibitem[Geifman y El-Yaniv(2019)]{geifman2019selectivenet}
+Yonatan Geifman y Ran El-Yaniv.
+\newblock SelectiveNet. A deep neural network with an integrated reject option.
+\newblock \emph{International Conference on Machine Learning (ICML)}, 2019.
+\newblock arXiv 1901.09192.
+
+\bibitem[Joren et al.(2024)]{joren2024sufficient}
+Hailey Joren et al.
+\newblock Sufficient context. A new lens on retrieval augmented generation systems.
+\newblock arXiv 2411.06037, 2024.
+
+\bibitem[Liu et al.(2020)]{liu2020energy}
+Weitang Liu, Xiaoyun Wang, John Owens y Yixuan Li.
+\newblock Energy-based out-of-distribution detection.
+\newblock \emph{Advances in Neural Information Processing Systems (NeurIPS)}, 2020.
+
+\bibitem[Merity et al.(2016)]{merity2016pointer}
+Stephen Merity, Caiming Xiong, James Bradbury y Richard Socher.
+\newblock Pointer sentinel mixture models.
+\newblock arXiv 1609.07843, 2016.
+
+\bibitem[Rajpurkar et al.(2018)]{rajpurkar2018squad2}
+Pranav Rajpurkar, Robin Jia y Percy Liang.
+\newblock Know what you don't know. Unanswerable questions for SQuAD.
+\newblock \emph{Association for Computational Linguistics (ACL)}, 2018.
+
+\bibitem[Wang et al.(2025)]{wang2025unable}
+Chupei Wang et al.
+\newblock Unable to forget. Proactive interference reveals working memory limits in LLMs beyond
+context length.
+\newblock arXiv 2506.08184, 2025.
+
+\end{thebibliography}
+
+\end{document}

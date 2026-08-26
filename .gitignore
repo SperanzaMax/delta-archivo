@@ -39,3 +39,7 @@ micro_lm/gasto/
 micro_lm/jax
 micro_lm/logs_fases_*/
 micro_lm/logs_celda_dificil_*/
+# Intermedios de LaTeX del preprint: regenerables con pdflatex.
+preprint/**/*.aux
+preprint/**/*.log
+preprint/**/*.out
