@@ -39,6 +39,7 @@ export SEMBRAR="${SEMBRAR:-1}"
 # 2026-08-23 · escalonado (DISENO_ESCALONADO.md). Viajan hasta `entrenar.py` por el tramo, igual que
 # DONDE. Sin exportarlos, el tramo usaria sus defaults y la campania dinamica correria fija.
 export MEZCLA="${MEZCLA:-fija}"
+export BLANCO="${BLANCO:-ausencia}"   # 2026-08-26, A5. Viaja hasta entrenar.py por el tramo.
 export P_VIEJA="${P_VIEJA:-0.35}"
 export MEZCLA_PISO="${MEZCLA_PISO:-0.10}"
 # El horizonte de la curva de lr NO se exportaba, asi que `tramo_abst.sh` usaba su default de 20000

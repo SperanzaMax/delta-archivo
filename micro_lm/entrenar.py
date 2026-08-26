@@ -426,9 +426,16 @@ def main():
                      f"y se pidio donde={a.donde}. Es otra arquitectura, no la misma corrida.")
         # `blanco` (2026-08-26, A5): MISMA familia que `donde` y `mezcla`. Sin esta guarda, un tramo
         # al que se le olvida el flag continuaria una corrida con blanco `error` como `ausencia` sin
-        # decir nada, y el JSON mostraria una curva sola. Los checkpoints anteriores a hoy no traen
-        # la clave y todos ellos son `ausencia`, que es el default.
-        if ck["config"].get("blanco", "ausencia") != a.blanco:
+        # decir nada, y el JSON mostraria una curva sola.
+        #
+        # La guarda se aplica SOLO si el checkpoint ya trae la clave, y eso NO es aflojarla: la fase
+        # de abstencion arranca SEMBRANDO desde una base (`tramo_abst.sh` copia `n3_sX.pkl`), y esas
+        # bases son anteriores a hoy y no tienen `blanco`. Con `.get(..., "ausencia")` la comparacion
+        # daria "ausencia" != "error" y la campania abortaria en su PRIMER tramo, antes de entrenar
+        # un solo paso. Lo que la guarda tiene que impedir es que un tramo POSTERIOR cambie el
+        # blanco, y eso sigue cubierto: todo checkpoint escrito desde hoy lleva la clave, porque la
+        # config se vuelca con `vars(a)` completo.
+        if "blanco" in ck["config"] and ck["config"]["blanco"] != a.blanco:
             sys.exit(f"ABORTA: el checkpoint se entreno con blanco="
                      f"{ck['config'].get('blanco', 'ausencia')} y se pidio blanco={a.blanco}. "
                      f"La cabeza aprende otra cosa, no es la misma corrida.")

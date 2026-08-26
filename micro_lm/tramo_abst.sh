@@ -63,6 +63,11 @@ DONDE="${DONDE:-pre}"
 # valor: es `fija` corrida con el promedio que la dinamica termino usando. Los defaults dejan el
 # comportamiento de siempre.
 MEZCLA="${MEZCLA:-fija}"
+# 2026-08-26 · A5 (PREREG_BLANCO_ERROR.md). Que aprende la BCE de la cabeza. Viaja hasta
+# `entrenar.py` igual que DONDE y MEZCLA. Sin exportarlo, el tramo usaria su default y una campania
+# con blanco `error` correria como `ausencia` sin decir nada — exactamente el modo de falla que
+# `donde` y `mezcla` ya documentan, y que `entrenar.py` ahora ademas bloquea al reanudar.
+BLANCO="${BLANCO:-ausencia}"
 P_VIEJA="${P_VIEJA:-0.35}"
 # `MEZCLA_PISO=0.0` es la celda `e0`: un tipo resuelto deja de entrenarse en vez de bajar al piso
 # (pregunta de Maxi del 23-ago). Tiene que viajar hasta aca o la celda correria con el piso normal
@@ -92,13 +97,30 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
 if [ -f "$CK" ]; then
   echo "== subiendo checkpoint previo ($(du -h "$CK" | cut -f1))"
   timeout -k 30 420 "${CL[@]}" upload -s "$SESION" "$CK" /content/ck.pkl || exit 1
+else
+  # 2026-08-26 · LA SESION SE REUSA ENTRE UNIDADES DISTINTAS y queda VIVA entre tramos, asi que
+  # /content/ck.pkl puede tener los pesos de OTRA unidad. Sin checkpoint local no se sube nada y el
+  # viejo sobrevive: `entrenar.py` lo carga y aborta con «el checkpoint tiene semilla=0 y se pidio
+  # semilla=1». Con SEMBRAR=1 esto nunca se veia, porque la siembra garantiza que SIEMPRE haya un
+  # checkpoint local que suba y lo pise. Con SEMBRAR=0 y primer tramo de una unidad, no lo hay.
+  cat > "$TMP/limpiar.py" <<'PYLIMPIA'
+import os
+p = "/content/ck.pkl"
+if os.path.exists(p):
+    os.remove(p)
+    print("ck.pkl de otra unidad borrado")
+else:
+    print("no habia ck.pkl")
+PYLIMPIA
+  echo "== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad"
+  timeout -k 30 120 "${CL[@]}" exec -s "$SESION" -f "$TMP/limpiar.py" 2>&1 | tail -1
 fi
 timeout -k 30 420 "${CL[@]}" install -s "$SESION" optax >/dev/null 2>&1
 
@@ -125,7 +147,7 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--pasos', '$PASOS', '--tramo', '$TRAMO', '--cada', '$CADA', '--d', '128', '--capas', '4',
        '--lr', '1e-3', '--p-vieja', '$P_VIEJA', '--idioma', '2', '--horizonte', '$HORIZONTE',
        '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
-       '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO',
+       '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO', '--blanco', '$BLANCO',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$REINIT' == '1' and '$SEMBRADO' == '1':
     # Adam se reinicia SOLO al entrar en la fase (primer tramo, sembrado desde la base), nunca al
