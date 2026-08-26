@@ -63,7 +63,7 @@ def pasada(ck, n, B, semilla):
 
     jfn = jax.jit(fn)
     rng = np.random.default_rng(semilla)
-    P = {k: [] for k in ("pred", "cab", "conf", "cat", "tgt_nose")}
+    P = {k: [] for k in ("pred", "cab", "conf", "cat", "tgt_nose", "arg", "tgt")}
     vistos = 0
     while vistos < n:
         bb = min(B, n - vistos)
@@ -81,6 +81,10 @@ def pasada(ck, n, B, semilla):
             P["conf"].append(float(sm.max()))
             P["cat"].append(clasificar(I.ITOS[pred], I.ITOS[int(tgt[i])], meta[i]))
             P["tgt_nose"].append(int(tgt[i]) == NOSE)
+            # el argmax SIN mirar la cabeza y el target crudo: son lo unico con lo que se puede
+            # armar el blanco no contaminado («si contestara, ¿estaria mal?»). Guardarlos aca evita
+            # repetir el error D-D3, que fue juzgar un detector contra un blanco que el ya modifico.
+            P["arg"].append(int(v.argmax())); P["tgt"].append(int(tgt[i]))
         vistos += bb
     return {k: np.array(v) for k, v in P.items()}, donde, nivel
 
@@ -177,16 +181,25 @@ def main():
         preds = np.stack([ds[u]["P_pred"] for u in us])          # (U, n)
         cat0 = ds[us[0]]["P_cat"]
         # el desacuerdo: cuantas de las U unidades coinciden con la moda
-        moda = np.array([np.bincount(preds[:, i]).argmax() for i in range(preds.shape[1])])
-        acuerdo = (preds == moda).mean(0)
-        err = np.isin(cat0, ["invento", "err_identidad", "err_version", "err_fuera"])
+        # el acuerdo se mide sobre el ARGMAX de cada unidad, no sobre `pred`: `pred` ya incorpora
+        # la decision de la cabeza, y meterla aca haria que el ensamble estuviera midiendo en parte
+        # su propio detector.
+        args = np.stack([ds[u]["P_arg"] for u in us])
+        moda = np.array([np.bincount(args[:, i]).argmax() for i in range(args.shape[1])])
+        acuerdo = (args == moda).mean(0)
+        tgt = ds[us[0]]["P_tgt"]
+        mal0 = ds[us[0]]["P_arg"] != tgt          # BLANCO LIMPIO: «si u0 contestara, estaria mal»
+        mal_moda = moda != tgt
         res["A4_ensamble"] = {
             "unidades": us,
-            "AUC_acuerdo_vs_error_de_u0": auc(err, -acuerdo),
-            "acierto_moda": float((moda == ds[us[0]]["P_pred"]).mean()),
+            "blanco": "argmax != tgt, sin mirar la cabeza (no contaminado)",
+            "tasa_mal_u0": float(mal0.mean()),
+            "AUC_acuerdo_vs_error_de_u0": auc(mal0, -acuerdo),
+            "contraste_conf_u0": auc(mal0, -ds[us[0]]["P_conf"]),
+            "contraste_cab_u0": auc(mal0, ds[us[0]]["P_cab"]),
             "acuerdo_medio": float(acuerdo.mean()),
-            "contraste_conf_u0": auc(err, -ds[us[0]]["P_conf"]),
-            "contraste_cab_u0": auc(err, ds[us[0]]["P_cab"]),
+            "acierto_argmax_u0": float((~mal0).mean()),
+            "acierto_argmax_moda": float((~mal_moda).mean()),
         }
     print(json.dumps(res, indent=2, ensure_ascii=False, default=float), flush=True)
     json.dump(res, open(f"{AQUI}/dos_detectores/calibra_ensamble.json", "w"),
