@@ -122,3 +122,23 @@ buscable). La nota al Rector está redactada desde el 19-ago y sin enviar.
 
 **Perfil de Google Académico creado hoy:** <https://scholar.google.com/citations?user=36xqH_8AAAAJ>
 Y su preprint de Research Square **ya está indexado en Scholar**.
+
+
+---
+
+## 5. Estado EXACTO al apagar (26-ago 16:55)
+
+| unidad | paso | de |
+|---|---:|---:|
+| `b3_s0` | **8000** | 26000 |
+| `b3_s1` | **3000** | 26000 |
+| `b3_s2` | **0** (nunca arrancó) | 26000 |
+
+**Nada quedó corriendo y ninguna sesión de Colab quedó abierta** — se verificaron las cuentas
+H, K, L, M y N y todas dan cero sesiones vivas. El último tramo alcanzó a cerrar y su checkpoint
+está bajado, así que **no se perdió progreso**.
+
+Las evals del último tramo de `b3_s0`, cerca de los 8000 pasos, daban `vigente` 0,9497-0,9688 ·
+`anterior` 0,8589-0,9542 · `nose` 0,9009-0,9187 · `falsa_abst` 0,0126-0,0364. El control `p3_s0`
+llega a `acierto` 0,9705 · `nose` 0,9119 · `falsa_abst` 0,0082 **a 26000 pasos**, o sea más de tres
+veces el presupuesto. Son evals de tramo (512 muestras) y sirven para la tendencia, no para el nivel.
