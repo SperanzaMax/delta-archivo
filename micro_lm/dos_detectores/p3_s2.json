@@ -1,0 +1,64 @@
+{
+  "unidad": "p3_s2",
+  "donde": "pre",
+  "nivel": 3,
+  "semilla": 2,
+  "n": 6000,
+  "censo_ajuste": {
+    "n": 6000,
+    "por_categoria": {
+      "abstencion": 104,
+      "acierto": 3060,
+      "acierto_nose": 1738,
+      "err_identidad": 387,
+      "err_version": 5,
+      "invento": 706
+    },
+    "n_con_respuesta": 3556,
+    "n_sin_respuesta": 2444,
+    "acierto": 0.8605174353205849,
+    "nose": 0.7111292962356792,
+    "falsa_abst": 0.02924634420697413,
+    "err_identidad": 0.10883014623172103,
+    "invento": 0.2888707037643208,
+    "foco_igual_posq": 0.0,
+    "foco_medio": 3.6061666666666667,
+    "pos_media": 7.1065
+  },
+  "censo_prueba": {
+    "n": 6000,
+    "por_categoria": {
+      "abstencion": 95,
+      "acierto": 3084,
+      "acierto_nose": 1709,
+      "err_identidad": 421,
+      "err_version": 5,
+      "invento": 686
+    },
+    "n_con_respuesta": 3605,
+    "n_sin_respuesta": 2395,
+    "acierto": 0.8554785020804438,
+    "nose": 0.7135699373695198,
+    "falsa_abst": 0.026352288488210817,
+    "err_identidad": 0.11678224687933426,
+    "invento": 0.28643006263048015,
+    "foco_igual_posq": 0.0,
+    "foco_medio": 3.5901666666666667,
+    "pos_media": 7.106
+  },
+  "resultados": {
+    "D1_unico": 0.7546055013599595,
+    "D1_compuesto": 0.4317996502961297,
+    "D1_solo_ausencia": 0.3569479727183883,
+    "D1_delta": -0.3228058510638298,
+    "D1_auc_ausencia": 0.8991852536056683,
+    "D2_foco": 0.6496123730290407,
+    "D2_posq": 0.7706219637379296,
+    "D2_delta": -0.12100959070888884,
+    "D3_nulo_medio": 0.49512923110774876,
+    "D3_nulo_sd": 0.014923848049489371,
+    "D5_cabeza_sola_error": 0.33860397361325345,
+    "D5_cabeza_sola_ausencia": 0.9054760408734099,
+    "D5_salida_sola_error": 0.5217357108584818
+  }
+}

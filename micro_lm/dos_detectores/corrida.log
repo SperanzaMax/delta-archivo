@@ -1,0 +1,226 @@
+=== p3_s1  12:30:28 ===
+# p3_s1 · nivel 3 · donde=pre · abst=cabeza · pasos 26000
+{
+  "n": 6000,
+  "por_categoria": {
+    "abstencion": 8,
+    "acierto": 2838,
+    "acierto_nose": 1256,
+    "err_identidad": 734,
+    "err_version": 5,
+    "invento": 1159
+  },
+  "n_con_respuesta": 3585,
+  "n_sin_respuesta": 2415,
+  "acierto": 0.7916317991631799,
+  "nose": 0.5200828157349896,
+  "falsa_abst": 0.0022315202231520223,
+  "err_identidad": 0.20474198047419806,
+  "invento": 0.47991718426501034,
+  "foco_igual_posq": 0.0,
+  "foco_medio": 2.5613333333333332,
+  "pos_media": 7.1075
+}
+{
+  "D1_unico": 0.7559126281365555,
+  "D1_compuesto": 0.4385424914294859,
+  "D1_solo_ausencia": 0.3452864278434312,
+  "D1_delta": -0.31737013670706954,
+  "D1_auc_ausencia": 0.8403087478757512,
+  "D2_foco": 0.7598040507500359,
+  "D2_posq": 0.7660609379132908,
+  "D2_delta": -0.006256887163254898,
+  "D3_nulo_medio": 0.5002427369104876,
+  "D3_nulo_sd": 0.015093948442357506,
+  "D5_cabeza_sola_error": 0.34116805367205466,
+  "D5_cabeza_sola_ausencia": 0.8532372818818292,
+  "D5_salida_sola_error": 0.44046914614937543
+}
+=== p3_s2  12:43:42 ===
+# p3_s2 · nivel 3 · donde=pre · abst=cabeza · pasos 26000
+{
+  "n": 6000,
+  "por_categoria": {
+    "abstencion": 104,
+    "acierto": 3060,
+    "acierto_nose": 1738,
+    "err_identidad": 387,
+    "err_version": 5,
+    "invento": 706
+  },
+  "n_con_respuesta": 3556,
+  "n_sin_respuesta": 2444,
+  "acierto": 0.8605174353205849,
+  "nose": 0.7111292962356792,
+  "falsa_abst": 0.02924634420697413,
+  "err_identidad": 0.10883014623172103,
+  "invento": 0.2888707037643208,
+  "foco_igual_posq": 0.0,
+  "foco_medio": 3.6061666666666667,
+  "pos_media": 7.1065
+}
+{
+  "D1_unico": 0.7546055013599595,
+  "D1_compuesto": 0.4317996502961297,
+  "D1_solo_ausencia": 0.3569479727183883,
+  "D1_delta": -0.3228058510638298,
+  "D1_auc_ausencia": 0.8991852536056683,
+  "D2_foco": 0.6496123730290407,
+  "D2_posq": 0.7706219637379296,
+  "D2_delta": -0.12100959070888884,
+  "D3_nulo_medio": 0.49512923110774876,
+  "D3_nulo_sd": 0.014923848049489371,
+  "D5_cabeza_sola_error": 0.33860397361325345,
+  "D5_cabeza_sola_ausencia": 0.9054760408734099,
+  "D5_salida_sola_error": 0.5217357108584818
+}
+=== p3_s0  12:56:50 ===
+# p3_s0 · nivel 3 · donde=pre · abst=cabeza · pasos 26000
+{
+  "n": 6000,
+  "por_categoria": {
+    "abstencion": 43,
+    "acierto": 3493,
+    "acierto_nose": 2191,
+    "err_identidad": 60,
+    "err_version": 7,
+    "invento": 206
+  },
+  "n_con_respuesta": 3603,
+  "n_sin_respuesta": 2397,
+  "acierto": 0.9694698862059395,
+  "nose": 0.9140592407175636,
+  "falsa_abst": 0.011934499028587288,
+  "err_identidad": 0.01665278934221482,
+  "invento": 0.08594075928243639,
+  "foco_igual_posq": 0.0,
+  "foco_medio": 2.091666666666667,
+  "pos_media": 7.106333333333334
+}
+{
+  "D1_unico": 0.7247168206814445,
+  "D1_compuesto": 0.4738403537615511,
+  "D1_solo_ausencia": 0.43587221497817336,
+  "D1_delta": -0.2508764669198934,
+  "D1_auc_ausencia": 0.977617376959718,
+  "D2_foco": 0.6287184721035476,
+  "D2_posq": 0.6785143517199912,
+  "D2_delta": -0.049795879616443606,
+  "D3_nulo_medio": 0.4884519530585634,
+  "D3_nulo_sd": 0.029874557317848344,
+  "D5_cabeza_sola_error": 0.41924088667158005,
+  "D5_cabeza_sola_ausencia": 0.9811874235792127,
+  "D5_salida_sola_error": 0.5498959691592494
+}
+=== v3_s0  13:09:58 ===
+# v3_s0 · nivel 3 · donde=lat2 · abst=cabeza · pasos 26000
+{
+  "n": 6000,
+  "por_categoria": {
+    "abstencion": 1,
+    "acierto": 3602,
+    "acierto_nose": 1864,
+    "invento": 533
+  },
+  "n_con_respuesta": 3603,
+  "n_sin_respuesta": 2397,
+  "acierto": 0.9997224535109631,
+  "nose": 0.7776387150604923,
+  "falsa_abst": 0.0002775464890369137,
+  "err_identidad": 0.0,
+  "invento": 0.22236128493950771,
+  "foco_igual_posq": 0.0005,
+  "foco_medio": 5.0775,
+  "pos_media": 7.106333333333334
+}
+{
+  "D1_unico": 0.7697840709185609,
+  "D1_compuesto": 0.42938774102307614,
+  "D1_solo_ausencia": 0.42938774102307614,
+  "D1_delta": -0.3403963298954848,
+  "D1_auc_ausencia": 0.9244353796388984,
+  "D2_foco": null,
+  "D2_posq": null,
+  "D2_delta": null,
+  "D2_motivo": "casos insuficientes: ajuste 0, prueba 0",
+  "D3_nulo_medio": 0.5055312165844572,
+  "D3_nulo_sd": 0.023721510654458638,
+  "D5_cabeza_sola_error": 0.40523231347659616,
+  "D5_cabeza_sola_ausencia": 0.9163773997815964,
+  "D5_salida_sola_error": 0.2958959677141182
+}
+=== v3_s1  13:26:00 ===
+# v3_s1 · nivel 3 · donde=lat2 · abst=cabeza · pasos 26000
+{
+  "n": 6000,
+  "por_categoria": {
+    "abstencion": 2,
+    "acierto": 3583,
+    "acierto_nose": 1897,
+    "invento": 518
+  },
+  "n_con_respuesta": 3585,
+  "n_sin_respuesta": 2415,
+  "acierto": 0.999442119944212,
+  "nose": 0.7855072463768116,
+  "falsa_abst": 0.0005578800557880056,
+  "err_identidad": 0.0,
+  "invento": 0.2144927536231884,
+  "foco_igual_posq": 0.0,
+  "foco_medio": 5.301,
+  "pos_media": 7.1075
+}
+{
+  "D1_unico": 0.734587408235858,
+  "D1_compuesto": 0.39624080256308913,
+  "D1_solo_ausencia": 0.39624080256308913,
+  "D1_delta": -0.33834660567276886,
+  "D1_auc_ausencia": 0.9097846514323944,
+  "D2_foco": null,
+  "D2_posq": null,
+  "D2_delta": null,
+  "D2_motivo": "casos insuficientes: ajuste 0, prueba 0",
+  "D3_nulo_medio": 0.5069032030205434,
+  "D3_nulo_sd": 0.021705216978532362,
+  "D5_cabeza_sola_error": 0.4199487045804287,
+  "D5_cabeza_sola_ausencia": 0.9179358007092913,
+  "D5_salida_sola_error": 0.3089921711417015
+}
+=== v3_s2  13:49:12 ===
+# v3_s2 · nivel 3 · donde=lat2 · abst=cabeza · pasos 26000
+{
+  "n": 6000,
+  "por_categoria": {
+    "abstencion": 8,
+    "acierto": 3548,
+    "acierto_nose": 2089,
+    "invento": 355
+  },
+  "n_con_respuesta": 3556,
+  "n_sin_respuesta": 2444,
+  "acierto": 0.9977502812148481,
+  "nose": 0.8547463175122749,
+  "falsa_abst": 0.0022497187851518562,
+  "err_identidad": 0.0,
+  "invento": 0.14525368248772505,
+  "foco_igual_posq": 0.0003333333333333333,
+  "foco_medio": 5.619166666666667,
+  "pos_media": 7.1065
+}
+{
+  "D1_unico": 0.7967088959930995,
+  "D1_compuesto": 0.4440645374086647,
+  "D1_solo_ausencia": 0.4440645374086647,
+  "D1_delta": -0.35264435858443477,
+  "D1_auc_ausencia": 0.95595041681265,
+  "D2_foco": null,
+  "D2_posq": null,
+  "D2_delta": null,
+  "D2_motivo": "casos insuficientes: ajuste 0, prueba 0",
+  "D3_nulo_medio": 0.5059334744092934,
+  "D3_nulo_sd": 0.02410919327783552,
+  "D5_cabeza_sola_error": 0.47036563687333394,
+  "D5_cabeza_sola_ausencia": 0.9619777680616403,
+  "D5_salida_sola_error": 0.29942047042426273
+}
+=== fin 14:09:55 ===

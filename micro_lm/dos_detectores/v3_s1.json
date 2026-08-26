@@ -1,0 +1,61 @@
+{
+  "unidad": "v3_s1",
+  "donde": "lat2",
+  "nivel": 3,
+  "semilla": 1,
+  "n": 6000,
+  "censo_ajuste": {
+    "n": 6000,
+    "por_categoria": {
+      "abstencion": 2,
+      "acierto": 3583,
+      "acierto_nose": 1897,
+      "invento": 518
+    },
+    "n_con_respuesta": 3585,
+    "n_sin_respuesta": 2415,
+    "acierto": 0.999442119944212,
+    "nose": 0.7855072463768116,
+    "falsa_abst": 0.0005578800557880056,
+    "err_identidad": 0.0,
+    "invento": 0.2144927536231884,
+    "foco_igual_posq": 0.0,
+    "foco_medio": 5.301,
+    "pos_media": 7.1075
+  },
+  "censo_prueba": {
+    "n": 6000,
+    "por_categoria": {
+      "abstencion": 5,
+      "acierto": 3588,
+      "acierto_nose": 1862,
+      "invento": 545
+    },
+    "n_con_respuesta": 3593,
+    "n_sin_respuesta": 2407,
+    "acierto": 0.9986084052323964,
+    "nose": 0.7735770668882426,
+    "falsa_abst": 0.0013915947676036739,
+    "err_identidad": 0.0,
+    "invento": 0.22642293311175737,
+    "foco_igual_posq": 0.0,
+    "foco_medio": 5.300833333333333,
+    "pos_media": 7.100833333333333
+  },
+  "resultados": {
+    "D1_unico": 0.734587408235858,
+    "D1_compuesto": 0.39624080256308913,
+    "D1_solo_ausencia": 0.39624080256308913,
+    "D1_delta": -0.33834660567276886,
+    "D1_auc_ausencia": 0.9097846514323944,
+    "D2_foco": null,
+    "D2_posq": null,
+    "D2_delta": null,
+    "D2_motivo": "casos insuficientes: ajuste 0, prueba 0",
+    "D3_nulo_medio": 0.5069032030205434,
+    "D3_nulo_sd": 0.021705216978532362,
+    "D5_cabeza_sola_error": 0.4199487045804287,
+    "D5_cabeza_sola_ausencia": 0.9179358007092913,
+    "D5_salida_sola_error": 0.3089921711417015
+  }
+}

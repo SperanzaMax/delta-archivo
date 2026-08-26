@@ -54,6 +54,7 @@ NOSE = I.STOI["NOSE"]
 # alguna vez una corrida sale con el valor que no era, el JSON es donde se ve.
 _DONDE = "pre"
 _ABST = "token"
+_BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
 
 
 def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None):
@@ -126,7 +127,24 @@ def predecir_cabeza(params, ses, cortes, turnos, mask, cons, pos):
 def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt):
     lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos)
     es_nose = (tgt == NOSE).astype(jnp.float32)
-    bce = optax.sigmoid_binary_cross_entropy(a, es_nose).mean()
+
+    # --- BLANCO DE LA CABEZA (2026-08-26, `ALTERNATIVAS_DETECCION_20260826.md` A5) --------------
+    # `ausencia` es lo que se venia haciendo: la BCE aprende «¿hay respuesta?».
+    # `error` cambia el blanco por «¿me voy a equivocar SI contesto?», que es lo que un detector de
+    # alucinacion tiene que anticipar. Los dos no son lo mismo: el modelo puede no tener la respuesta
+    # y aun asi acertar por otra via, y puede tenerla y errarle igual — que es exactamente el
+    # `err_identidad` que la cabeza de hoy no ve porque su blanco no lo contiene.
+    #
+    # El blanco sale del ARGMAX del propio modelo, con `stop_gradient` explicito: la etiqueta es una
+    # medicion del estado actual, no algo por donde deba fluir gradiente. Y por eso se MUEVE mientras
+    # entrena, que es el riesgo declarado por adelantado — si colapsa al prior va a ser por esto, no
+    # por falta de capacidad, igual que le paso al slot nulo el 25-ago.
+    if _BLANCO == "error":
+        lg_arg = jax.lax.stop_gradient(lg.at[:, NOSE].set(-1e9).argmax(-1))
+        blanco = (lg_arg != tgt).astype(jnp.float32)      # con tgt==NOSE da 1 siempre, por definicion
+    else:
+        blanco = es_nose
+    bce = optax.sigmoid_binary_cross_entropy(a, blanco).mean()
     lg_v = lg.at[:, NOSE].set(-1e9)
     ce = optax.softmax_cross_entropy_with_integer_labels(lg_v, tgt)
     # la CE del valor sólo cuenta donde HAY respuesta, y se normaliza por esa fraccion para que la
@@ -220,6 +238,11 @@ def main():
                          "escala = idem pero renormalizando el vector de NOSE a la norma media de "
                          "los tokens de valor al arrancar la fase; "
                          "cabeza = salida binaria separada, con NOSE excluido del softmax de valores")
+    ap.add_argument("--blanco", default="ausencia", choices=("ausencia", "error"),
+                    help="que aprende la BCE de la cabeza (A5, ALTERNATIVAS_DETECCION_20260826.md). "
+                         "«ausencia» = ¿hay respuesta?, que es lo de siempre. «error» = ¿me voy a "
+                         "equivocar si contesto?, con el blanco tomado del argmax del propio modelo "
+                         "y stop_gradient. Solo tiene efecto con --abst cabeza o slot.")
     ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2"),
                     help="en que punto del bloque 0 entra la lectura del archivo "
                          "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
@@ -305,9 +328,10 @@ def main():
     # asignacion crea una LOCAL y la global se queda en "token": `--abst slot` no tendria efecto y
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
-    global _DONDE, _ABST
+    global _DONDE, _ABST, _BLANCO
     _DONDE = a.donde
     _ABST = a.abst
+    _BLANCO = a.blanco
 
     print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
           f"· lectura {a.donde}", flush=True)
@@ -400,6 +424,14 @@ def main():
         if ck["config"].get("donde", "pre") != a.donde:
             sys.exit(f"ABORTA: el checkpoint se entreno con donde={ck['config'].get('donde', 'pre')} "
                      f"y se pidio donde={a.donde}. Es otra arquitectura, no la misma corrida.")
+        # `blanco` (2026-08-26, A5): MISMA familia que `donde` y `mezcla`. Sin esta guarda, un tramo
+        # al que se le olvida el flag continuaria una corrida con blanco `error` como `ausencia` sin
+        # decir nada, y el JSON mostraria una curva sola. Los checkpoints anteriores a hoy no traen
+        # la clave y todos ellos son `ausencia`, que es el default.
+        if ck["config"].get("blanco", "ausencia") != a.blanco:
+            sys.exit(f"ABORTA: el checkpoint se entreno con blanco="
+                     f"{ck['config'].get('blanco', 'ausencia')} y se pidio blanco={a.blanco}. "
+                     f"La cabeza aprende otra cosa, no es la misma corrida.")
         hor_ck = ck["config"].get("horizonte") or ck["config"].get("pasos")
         if hor_ck != HOR:
             sys.exit(f"ABORTA: el checkpoint se entreno con horizonte de lr {hor_ck} y se pidio "

@@ -1,0 +1,61 @@
+{
+  "unidad": "v3_s2",
+  "donde": "lat2",
+  "nivel": 3,
+  "semilla": 2,
+  "n": 6000,
+  "censo_ajuste": {
+    "n": 6000,
+    "por_categoria": {
+      "abstencion": 8,
+      "acierto": 3548,
+      "acierto_nose": 2089,
+      "invento": 355
+    },
+    "n_con_respuesta": 3556,
+    "n_sin_respuesta": 2444,
+    "acierto": 0.9977502812148481,
+    "nose": 0.8547463175122749,
+    "falsa_abst": 0.0022497187851518562,
+    "err_identidad": 0.0,
+    "invento": 0.14525368248772505,
+    "foco_igual_posq": 0.0003333333333333333,
+    "foco_medio": 5.619166666666667,
+    "pos_media": 7.1065
+  },
+  "censo_prueba": {
+    "n": 6000,
+    "por_categoria": {
+      "abstencion": 2,
+      "acierto": 3603,
+      "acierto_nose": 2048,
+      "invento": 347
+    },
+    "n_con_respuesta": 3605,
+    "n_sin_respuesta": 2395,
+    "acierto": 0.9994452149791956,
+    "nose": 0.8551148225469729,
+    "falsa_abst": 0.0005547850208044383,
+    "err_identidad": 0.0,
+    "invento": 0.14488517745302715,
+    "foco_igual_posq": 0.0006666666666666666,
+    "foco_medio": 5.637333333333333,
+    "pos_media": 7.106
+  },
+  "resultados": {
+    "D1_unico": 0.7967088959930995,
+    "D1_compuesto": 0.4440645374086647,
+    "D1_solo_ausencia": 0.4440645374086647,
+    "D1_delta": -0.35264435858443477,
+    "D1_auc_ausencia": 0.95595041681265,
+    "D2_foco": null,
+    "D2_posq": null,
+    "D2_delta": null,
+    "D2_motivo": "casos insuficientes: ajuste 0, prueba 0",
+    "D3_nulo_medio": 0.5059334744092934,
+    "D3_nulo_sd": 0.02410919327783552,
+    "D5_cabeza_sola_error": 0.47036563687333394,
+    "D5_cabeza_sola_ausencia": 0.9619777680616403,
+    "D5_salida_sola_error": 0.29942047042426273
+  }
+}

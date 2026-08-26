@@ -1,0 +1,19 @@
+{
+  "unidad": "p3_s2",
+  "donde": "pre",
+  "semilla": 2,
+  "n": 6000,
+  "tasa_mal_si_contesta": 0.4705,
+  "tasa_mal_entre_con_respuesta": 0.11872399445214979,
+  "tasa_abstencion_del_modelo": 0.3006666666666667,
+  "D1_unico": 0.858950673962731,
+  "D1_compuesto": 0.8561879457948675,
+  "D1_delta": -0.002762728167863493,
+  "auc_ausencia": 0.8991852536056683,
+  "auc_atribucion_solo_con_respuesta": 0.88121545336075,
+  "cabeza_sola": 0.8105453974172985,
+  "confianza_sola": 0.7849159591203646,
+  "cabeza_mas_confianza": 0.872219752514057,
+  "nulo_medio": 0.5070617541885526,
+  "nulo_sd": 0.018658526487719897
+}

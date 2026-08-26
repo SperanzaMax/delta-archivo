@@ -1,0 +1,64 @@
+=== D1 p3_s1  13:26:14 ===
+# p3_s1 · donde=pre · nivel 3 · BLANCO SIN CONTAMINAR
+{
+  "unidad": "p3_s1",
+  "donde": "pre",
+  "semilla": 1,
+  "n": 6000,
+  "tasa_mal_si_contesta": 0.5203333333333333,
+  "tasa_mal_entre_con_respuesta": 0.19899805176732535,
+  "tasa_abstencion_del_modelo": 0.218,
+  "D1_unico": 0.7986261946979872,
+  "D1_compuesto": 0.7885325019732633,
+  "D1_delta": -0.010093692724723935,
+  "auc_ausencia": 0.8403087478757512,
+  "auc_atribucion_solo_con_respuesta": 0.8785913877644246,
+  "cabeza_sola": 0.7068254878401125,
+  "confianza_sola": 0.7842123574141948,
+  "cabeza_mas_confianza": 0.8154875240341917,
+  "nulo_medio": 0.49770598954982886,
+  "nulo_sd": 0.025934840971702847
+}
+=== D1 p3_s2  13:49:44 ===
+# p3_s2 · donde=pre · nivel 3 · BLANCO SIN CONTAMINAR
+{
+  "unidad": "p3_s2",
+  "donde": "pre",
+  "semilla": 2,
+  "n": 6000,
+  "tasa_mal_si_contesta": 0.4705,
+  "tasa_mal_entre_con_respuesta": 0.11872399445214979,
+  "tasa_abstencion_del_modelo": 0.3006666666666667,
+  "D1_unico": 0.858950673962731,
+  "D1_compuesto": 0.8561879457948675,
+  "D1_delta": -0.002762728167863493,
+  "auc_ausencia": 0.8991852536056683,
+  "auc_atribucion_solo_con_respuesta": 0.88121545336075,
+  "cabeza_sola": 0.8105453974172985,
+  "confianza_sola": 0.7849159591203646,
+  "cabeza_mas_confianza": 0.872219752514057,
+  "nulo_medio": 0.5070617541885526,
+  "nulo_sd": 0.018658526487719897
+}
+=== D1 p3_s0  14:10:29 ===
+# p3_s0 · donde=pre · nivel 3 · BLANCO SIN CONTAMINAR
+{
+  "unidad": "p3_s0",
+  "donde": "pre",
+  "semilla": 0,
+  "n": 6000,
+  "tasa_mal_si_contesta": 0.4155,
+  "tasa_mal_entre_con_respuesta": 0.021211275467485347,
+  "tasa_abstencion_del_modelo": 0.37033333333333335,
+  "D1_unico": 0.9695786925947544,
+  "D1_compuesto": 0.9693499368805796,
+  "D1_delta": -0.00022875571417479978,
+  "auc_ausencia": 0.977617376959718,
+  "auc_atribucion_solo_con_respuesta": 0.8905684870859785,
+  "cabeza_sola": 0.959838731796621,
+  "confianza_sola": 0.9044964909445334,
+  "cabeza_mas_confianza": 0.9760947991130225,
+  "nulo_medio": 0.5000728987272145,
+  "nulo_sd": 0.03629554205205845
+}
+=== fin D1 14:23:31 ===

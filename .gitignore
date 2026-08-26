@@ -43,3 +43,5 @@ micro_lm/logs_celda_dificil_*/
 preprint/**/*.aux
 preprint/**/*.log
 preprint/**/*.out
+# Dumps intermedios de las sondas de deteccion: regenerables con sonda_calibra_ensamble.py --dump.
+micro_lm/dump/
