@@ -1,0 +1,13 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_b3s2_tpu2_20260827.log (rotador 1782980)
+== rotador2 · familia 'b' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:2 · cuentas: A J F E D C G I N M K H
+-- vuelta 1 · cuenta A · faltan: 3:2 · 08:22:37
+   >> OTORGADA en A (TPU v5e1): [tr2_a_0822] tpu-v5e1-s-kkb-usw1c0-mwjx79a71zxb | Hardware: V5E1 | Variant: TPU | Status: IDLE
+   -> tramo 3:2 en A (desde el paso 0)
+== tramo · cuenta A · sesion tr2_a_0822 · b3_s2 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.JJ6EvzjL7l/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck.pkl
+jax 0.7.2 | [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0)]
+compuerta de padding OK
+lanzado pid 4148
+== polling cada 2 min (presupuesto ~40 min)

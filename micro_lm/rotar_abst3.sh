@@ -123,7 +123,10 @@ bloqueada() {
   local lk="$CKPTS/${u}.local.lock"
   [ -f "$lk" ] || return 1
   local pid; pid="$(cat "$lk" 2>/dev/null)"
-  if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then return 0; fi
+  # `!= $$` (2026-08-27): el lock existe para que OTRO proceso no tome la unidad, pero el rotador
+  # tambien lee el suyo. Sin esta condicion, marcarle su propia unidad lo deja esperando para
+  # siempre a que se libere a si mismo — que es exactamente lo que paso hoy con b3_s2 en TPU.
+  if [ -n "$pid" ] && [ "$pid" != "$$" ] && kill -0 "$pid" 2>/dev/null; then return 0; fi
   rm -f "$lk"; return 1
 }
 

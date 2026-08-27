@@ -120,7 +120,7 @@ else:
     print("no habia ck.pkl")
 PYLIMPIA
   echo "== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad"
-  timeout -k 30 120 "${CL[@]}" exec -s "$SESION" -f "$TMP/limpiar.py" 2>&1 | tail -1
+  timeout -k 30 180 "${CL[@]}" exec -s "$SESION" --timeout 120 -f "$TMP/limpiar.py" 2>&1 | tail -1
 fi
 timeout -k 30 420 "${CL[@]}" install -s "$SESION" optax >/dev/null 2>&1
 
@@ -159,7 +159,7 @@ p = subprocess.Popen(cmd, cwd='/content/micro', stdout=log, stderr=subprocess.ST
 open('/content/micro.pid', 'w').write(str(p.pid))
 print('lanzado pid', p.pid, flush=True)
 PY
-timeout -k 30 300 "${CL[@]}" exec -s "$SESION" -f "$TMP/lanzar.py" || exit 1
+timeout -k 30 300 "${CL[@]}" exec -s "$SESION" --timeout 240 -f "$TMP/lanzar.py" || exit 1
 
 cat > "$TMP/ver.py" <<'PY'
 import json, os
@@ -187,7 +187,7 @@ TICK=0
 for _ in $(seq 1 $(( MIN / 2 ))); do
   sleep 120
   TICK=$((TICK + 1))
-  OUT="$(timeout -k 30 240 "${CL[@]}" exec -s "$SESION" -f "$TMP/ver.py" 2>&1 || true)"
+  OUT="$(timeout -k 30 240 "${CL[@]}" exec -s "$SESION" --timeout 180 -f "$TMP/ver.py" 2>&1 || true)"
 
   # El checkpoint se BAJA cada ~8 min, no sólo al final del tramo. El 14-ago la VM murio a mitad
   # del tramo 2 y se perdieron 2000 pasos de computo: el JSON habia llegado por streaming al paso

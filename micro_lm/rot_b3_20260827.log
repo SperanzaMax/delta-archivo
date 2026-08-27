@@ -53,3 +53,33 @@ lanzado pid 11231
 == polling cada 2 min (presupuesto ~40 min)
 VIVO= True ULTIMO= tramo: se corre hasta el paso 5000 y se guarda para continuar despues 
 VIVO= True ULTIMO= ── eval: vigente 0.3027 · anterior 0.3708 · abstencion 0.6719 · truncados 0.0000 · nose 0.7685 (ent 0.7535/rel 0.7700) · falsa_abst 0.6065 
+VIVO= True ULTIMO= ── eval: vigente 0.2612 · anterior 0.0821 · abstencion 0.7832 · truncados 0.0000 · nose 0.9017 (ent 0.8941/rel 0.9018) · falsa_abst 0.7006 
+   [checkpoint parcial guardado: paso 3750]
+VIVO= True ULTIMO= ── eval: vigente 0.4003 · anterior 0.2150 · abstencion 0.6719 · truncados 0.0000 · nose 0.8408 (ent 0.8206/rel 0.8492) · falsa_abst 0.5557 
+VIVO= True ULTIMO= ── eval: vigente 0.5870 · anterior 0.3934 · abstencion 0.5703 · truncados 0.0000 · nose 0.8513 (ent 0.8252/rel 0.8684) · falsa_abst 0.3789 
+VIVO= True ULTIMO= ── eval: vigente 0.7564 · anterior 0.5593 · abstencion 0.4043 · truncados 0.0000 · nose 0.7364 (ent 0.7387/rel 0.7323) · falsa_abst 0.1792 
+VIVO= True ULTIMO= ── eval: vigente 0.8316 · anterior 0.7143 · abstencion 0.3555 · truncados 0.0000 · nose 0.7209 (ent 0.6725/rel 0.7545) · falsa_abst 0.1085 
+   [checkpoint parcial guardado: paso 4750]
+VIVO= True ULTIMO= listo: {'paso': 5000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.93065002138278, 'anterior': 0.7824900793650793, 'nose': 0.7505671043131144, 'nose_ent': 0.7523184332007862, 'nose_rel': 0.7607954545454546, 'falsa_abst': 0.0532093446973884, 'abstencion': 0.333984375} 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_0716)
+   tramo de 3:1 cerrado en el paso 5000 de 26000
+   -> tramo 3:2 en L (desde el paso 0)
+== tramo · cuenta L · sesion tr2_l_0716 · b3_s2 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Session 'tr2_l_0716' not found.
+   tramo de 3:2 cerrado en el paso 0 de 26000
+   tr2_l_0716 parada; pendientes ahora: 3:0 3:1
+-- vuelta 1 · cuenta M · faltan: 3:0 3:1 · 08:17:36
+   >> OTORGADA en M (T4): [tr2_m_0817] gpu-t4-s-kkb-euw4c2-34d4u144pos5f | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en M (desde el paso 10000)
+== tramo · cuenta M · sesion tr2_m_0817 · b3_s0 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.SqikxJnBow/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s0.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2670
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 12000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.9829 · anterior 0.9444 · abstencion 0.4023 · truncados 0.0000 · nose 0.9555 (ent 0.9722/rel 0.9441) · falsa_abst 0.0000 
