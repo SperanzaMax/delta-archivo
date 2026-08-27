@@ -62,6 +62,32 @@ pasó es que la condición **aumentó la dispersión entre semillas**:
 **`--blanco error` no es mejor ni peor que su control. Es más inestable.** Y una condición con esa
 varianza no se adopta aunque su mejor semilla sea espectacular.
 
+### 3.1 · Por qué la media no autoriza nada, acotado con Chebyshev
+
+«No promediar» es una regla del proyecto, pero acá se puede **medir cuánto** no alcanza. Sobre los
+tres Δ SER: $E[X] = -0{,}0398$ y $\mathrm{Var}(X) = 0{,}009621$ (desvío 0,0981).
+
+La desigualdad de Chebyshev, $P\{|X - E[X]| \geq \lambda\} \leq \mathrm{Var}(X)/\lambda^{2}$:
+
+| $\lambda$ | cota | |
+|---:|---:|---|
+| 0,02 | 24,05 | **vacía** |
+| 0,04 | 6,01 | **vacía** |
+| 0,10 | 0,96 | apenas informativa |
+| 0,15 | 0,43 | informativa |
+
+**A la escala del efecto que la campaña fue a medir —E-1 pedía 0,02— la cota supera 1 y no dice
+nada.** Para acotar con probabilidad 0,05 haría falta $\lambda = 0{,}4386$, **once veces el tamaño de
+la propia media**.
+
+**Y Chebyshev es la herramienta correcta acá justamente por ser débil.** Lo habitual sería una $t$ de
+Student, pero ésa supone normalidad, y la bimodalidad entre semillas es una propiedad **medida** de
+este banco —está en el paper del trípode— o sea exactamente el supuesto que no se cumple. Chebyshev
+no supone ninguna distribución: es una cota peor, y es la que se puede defender.
+
+Esto convierte «no reportamos la media sola» de convención metodológica en **consecuencia
+aritmética**: con esta varianza y n=3, la media de A5 no soporta ninguna afirmación.
+
 ---
 
 ## 4. Un defecto del propio pre-registro, declarado
