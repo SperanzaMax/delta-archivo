@@ -1,0 +1,25 @@
+{
+ "pesos": "ckpts/v3_s0.pkl",
+ "nivel": 3,
+ "semilla_modelo": 0,
+ "paso": 26000,
+ "donde": "lat2",
+ "abst": "cabeza",
+ "p_nose_medicion": 0.4,
+ "n_casos": 6215,
+ "tasa_base": 0.7063555913113435,
+ "auc_bloque": 0.8053858549369599,
+ "auc_permutada": 0.47897532307062696,
+ "auc_ciega": 0.5164885056114338,
+ "auc_por_señal": {
+  "s_max": 0.5029695148824983,
+  "s_margen": 0.5595356499189372,
+  "s_ent": 0.5563966803607687,
+  "leido": 0.5126699957501063,
+  "estado": 0.8070853205521714,
+  "c_prob": 0.8073511848546379
+ },
+ "R0_cumple": true,
+ "R1_cumple": true,
+ "fuga": false
+}

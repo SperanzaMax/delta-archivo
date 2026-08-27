@@ -1,0 +1,25 @@
+{
+ "tratamiento": {
+  "pesos": "ckpts/b3_s0.pkl",
+  "blanco": "error",
+  "auc": 0.9999945565831517,
+  "tasa_base_error": 0.40575,
+  "logit_tasa_base": -0.3815628998456026,
+  "media_logit": -0.22153261303901672,
+  "desvio_logit": 11.317769050598145,
+  "frac_cruza": 0.40525
+ },
+ "control": {
+  "pesos": "ckpts/p3_s0.pkl",
+  "blanco": "ausencia",
+  "auc": 0.957165178594344,
+  "tasa_base_error": 0.4195,
+  "logit_tasa_base": -0.32482627523068536,
+  "media_logit": 0.9139276146888733,
+  "desvio_logit": 7.240513801574707,
+  "frac_cruza": 0.37225
+ },
+ "E2_delta": 0.042829377988807704,
+ "E2_cumple": false,
+ "E4_colapso": false
+}
