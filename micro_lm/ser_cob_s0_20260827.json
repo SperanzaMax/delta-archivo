@@ -1,0 +1,165 @@
+{
+ "n": 4000,
+ "semilla_datos": 54321,
+ "coberturas": [
+  0.6,
+  0.7,
+  0.8
+ ],
+ "tratamiento": {
+  "cfg": {
+   "pesos": "ckpts/b3_s0.pkl",
+   "nivel": 3,
+   "semilla": 0,
+   "paso": 26000,
+   "donde": "pre",
+   "abst": "cabeza",
+   "blanco": "error",
+   "p_nose": 0.4
+  },
+  "propio": {
+   "cobertura_pedida": 0.59475,
+   "cobertura_real": 0.59475,
+   "tau": -0.8654948472976685,
+   "n": 4000,
+   "dadas": 2379,
+   "SER": 0.0005,
+   "riesgo": 0.0008406893652795292,
+   "err_version": 0.00025,
+   "err_identidad": 0.0,
+   "err_fuera": 0.0,
+   "invento": 0.00025,
+   "acierto": 0.9995794785534062,
+   "nose": 0.9993834771886559,
+   "falsa_abst": 0.0
+  },
+  "curva": [
+   {
+    "cobertura_pedida": 0.6,
+    "cobertura_real": 0.6,
+    "tau": 8.296515464782715,
+    "n": 4000,
+    "dadas": 2400,
+    "SER": 0.00575,
+    "riesgo": 0.009583333333333333,
+    "err_version": 0.00025,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0,
+    "invento": 0.0055,
+    "acierto": 0.9995794785534062,
+    "nose": 0.9864364981504316,
+    "falsa_abst": 0.0
+   },
+   {
+    "cobertura_pedida": 0.7,
+    "cobertura_real": 0.7,
+    "tau": 12.528799057006836,
+    "n": 4000,
+    "dadas": 2800,
+    "SER": 0.10575,
+    "riesgo": 0.15107142857142858,
+    "err_version": 0.00025,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0,
+    "invento": 0.1055,
+    "acierto": 0.9995794785534062,
+    "nose": 0.7398273736128237,
+    "falsa_abst": 0.0
+   },
+   {
+    "cobertura_pedida": 0.8,
+    "cobertura_real": 0.8,
+    "tau": 13.620647430419922,
+    "n": 4000,
+    "dadas": 3200,
+    "SER": 0.20575,
+    "riesgo": 0.2571875,
+    "err_version": 0.00025,
+    "err_identidad": 0.0,
+    "err_fuera": 0.0,
+    "invento": 0.2055,
+    "acierto": 0.9995794785534062,
+    "nose": 0.4932182490752158,
+    "falsa_abst": 0.0
+   }
+  ]
+ },
+ "control": {
+  "cfg": {
+   "pesos": "ckpts/p3_s0.pkl",
+   "nivel": 3,
+   "semilla": 0,
+   "paso": 26000,
+   "donde": "pre",
+   "abst": "cabeza",
+   "blanco": "ausencia",
+   "p_nose": 0.4
+  },
+  "propio": {
+   "cobertura_pedida": 0.62775,
+   "cobertura_real": 0.62775,
+   "tau": -0.0008625388145446777,
+   "n": 4000,
+   "dadas": 2511,
+   "SER": 0.05175,
+   "riesgo": 0.08243727598566308,
+   "err_version": 0.0005,
+   "err_identidad": 0.01325,
+   "err_fuera": 0.00025,
+   "invento": 0.03775,
+   "acierto": 0.9688814129520605,
+   "nose": 0.906905055487053,
+   "falsa_abst": 0.007569386038687973
+  },
+  "curva": [
+   {
+    "cobertura_pedida": 0.6,
+    "cobertura_real": 0.6,
+    "tau": -1.215287685394287,
+    "n": 4000,
+    "dadas": 2400,
+    "SER": 0.041,
+    "riesgo": 0.06833333333333333,
+    "err_version": 0.0005,
+    "err_identidad": 0.013,
+    "err_fuera": 0.00025,
+    "invento": 0.02725,
+    "acierto": 0.9402859545836838,
+    "nose": 0.9327990135635018,
+    "falsa_abst": 0.036585365853658534
+   },
+   {
+    "cobertura_pedida": 0.7,
+    "cobertura_real": 0.7,
+    "tau": 5.218265056610107,
+    "n": 4000,
+    "dadas": 2800,
+    "SER": 0.1195,
+    "riesgo": 0.1707142857142857,
+    "err_version": 0.0005,
+    "err_identidad": 0.01325,
+    "err_fuera": 0.00025,
+    "invento": 0.1055,
+    "acierto": 0.9764507989907485,
+    "nose": 0.7398273736128237,
+    "falsa_abst": 0.0
+   },
+   {
+    "cobertura_pedida": 0.8,
+    "cobertura_real": 0.8,
+    "tau": 9.887690544128418,
+    "n": 4000,
+    "dadas": 3200,
+    "SER": 0.2195,
+    "riesgo": 0.274375,
+    "err_version": 0.0005,
+    "err_identidad": 0.01325,
+    "err_fuera": 0.00025,
+    "invento": 0.2055,
+    "acierto": 0.9764507989907485,
+    "nose": 0.4932182490752158,
+    "falsa_abst": 0.0
+   }
+  ]
+ }
+}
