@@ -1,0 +1,18 @@
+{
+ "pesos": "ckpts/p3_s2.pkl",
+ "nivel": 3,
+ "semilla_modelo": 2,
+ "paso": 26000,
+ "donde": "pre",
+ "abst": "cabeza",
+ "blanco": "ausencia",
+ "p_nose": 0.4,
+ "n_sondeadas": 1803,
+ "tasa_base": 0.8374930671103716,
+ "auc_real": 0.5275497562323413,
+ "auc_permutada": 0.5436820948866725,
+ "auc_ciega": 0.584427391106714,
+ "E0_cumple": true,
+ "E1_cumple": false,
+ "fuga_de_etiqueta": false
+}
