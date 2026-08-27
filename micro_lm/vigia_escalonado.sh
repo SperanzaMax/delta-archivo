@@ -10,8 +10,7 @@
 #   · un latido cada media hora con la foto entera, para no tener que preguntar.
 set -uo pipefail
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 PY=/home/maxi/.venv-ligamento/bin/python3
 MARCAS="$AQUI/.avisadas_escalonado"
 LATIDO="${LATIDO:-1800}"

@@ -16,8 +16,7 @@ LOG_SONDA="${1:?falta el log de la sonda}"
 LOG_ROT="${2:?falta el log del rotador}"
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 PY=/home/maxi/.venv-ligamento/bin/python
 JS="$AQUI/corridas_20260820/c4_s2.json"
 LIMITE=720          # 720 x 30 s = 6 h de guardia, de sobra para los dos

@@ -42,7 +42,7 @@ LOG="$AQUI/logs_campania_$(date +%Y%m%d)/local_${UNI}.log"
 mkdir -p "$(dirname "$LOG")"
 PY=/home/maxi/.venv-ligamento/bin/python
 
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"; CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 mandar() { curl -s -m 20 -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
              -d chat_id="$CHAT" --data-urlencode "text=$1" >/dev/null 2>&1; }
 

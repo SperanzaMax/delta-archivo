@@ -16,8 +16,7 @@ set -uo pipefail
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG="${1:?falta el log del rotador}"
 LIMITE="${LIMITE:-720}"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 
 while pgrep -f rotar_abst.sh >/dev/null; do
   sleep 60

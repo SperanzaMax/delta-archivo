@@ -15,7 +15,7 @@
 set -uo pipefail
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"; CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 ATAJO=0.5906   # acierto de "no abstenerse nunca" con p_nose = 0,4
 
 panel() {

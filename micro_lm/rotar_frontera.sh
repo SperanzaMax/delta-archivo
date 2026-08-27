@@ -41,8 +41,7 @@ SALIDA="$AQUI/corridas_$(date +%Y%m%d)"
 CKPTS="$AQUI/ckpts"
 COLAB=/home/maxi/.venv-colab-cli/bin/colab
 POOL="$HOME/.colab-pool"; mkdir -p "$POOL"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 VUELTAS="${VUELTAS:-8}"
 ESPERA_VUELTA="${ESPERA_VUELTA:-600}"
 mkdir -p "$SALIDA" "$CKPTS"

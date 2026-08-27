@@ -12,7 +12,7 @@ set -uo pipefail
 MAX_MIN="${1:-150}"
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SALIDA="$AQUI/corridas_$(date +%Y%m%d)"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"; CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 
 # unidad:paso_objetivo
 PENDIENTES=(x3_s0:14000 x2_s0:14000 x1_s1:13000)

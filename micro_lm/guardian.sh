@@ -22,7 +22,7 @@ CADA_VUELTA="${CADA_VUELTA:-300}"
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SALIDA="$AQUI/corridas_$(date +%Y%m%d)"
 LOGS="$AQUI/logs_campania_$(date +%Y%m%d)"; mkdir -p "$LOGS"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"; CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 CUENTAS_ROT="H K L M N I G C D E F J A"
 
 mandar() {

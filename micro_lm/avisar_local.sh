@@ -14,8 +14,7 @@ LOG="${3:?falta el log}"
 NIVEL="${UNIDAD%%:*}"; SEM="${UNIDAD##*:}"
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 TOPE="${TOPE:-12000}"
 JS="$AQUI/corridas_$(date +%Y%m%d)/n${NIVEL}_s${SEM}.json"
 

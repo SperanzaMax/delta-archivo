@@ -21,8 +21,7 @@ AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$AQUI/.." && pwd)"
 PY=/home/maxi/.venv-ligamento/bin/python3
 COLAB=/home/maxi/.venv-colab-cli/bin/colab
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 LOG="$AQUI/cierre_nocturno.log"
 LIMITE_MIN="${LIMITE_MIN:-360}"          # 6 horas
 UNIDADES=(v3_s0 v3_s1 v3_s2 y3_s0 y3_s1 y3_s2)

@@ -31,8 +31,7 @@ ROT="${2:?falta el pid del rotador}"
 # 5400 s (90 min) queda por encima de un tramo completo de 8000 pasos y muy por debajo del episodio
 # que motivo este watchdog (3h47 el 19-ago), asi que sigue cubriendo el caso para el que se escribio.
 LIMITE="${LIMITE:-5400}"
-TOKEN="8723956710:AAE_v0u5y3hDVWePCtKCuGnuY2yDCkRHicw"
-CHAT=7985522502
+. "$(dirname "${BASH_SOURCE[0]}")/tg_token.sh"   # TOKEN y CHAT salen de fuera del repo
 
 echo "$(date +%H:%M:%S) watchdog2 sobre el rotador $ROT · log $(basename "$LOG") · limite ${LIMITE}s"
 while kill -0 "$ROT" 2>/dev/null; do
