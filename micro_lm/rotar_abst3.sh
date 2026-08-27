@@ -201,12 +201,25 @@ for v in $(seq 1 "$VUELTAS"); do
     # acelerador va en un subproceso justamente porque en TPU el kernel se quedaba con el chip
     # tomado (lo que costo las 5 TPU del 15-ago). Ese bug esta arreglado.
     ACC=""
-    if timeout -k 30 420 "${CL[@]}" new -s "$SESION" --gpu T4 >/dev/null 2>&1; then
-      ACC="T4"
+    # 2026-08-27 · ACEL elige a CUAL se le pide primero, sin cambiar nada mas. `ACEL=tpu` invierte el
+    # orden: TPU primero, T4 de respaldo. Pedido de Maxi hoy —«corre alguna de las pruebas en una tpu
+    # que a esta hora hay»— y hace falta para lo que de verdad importa: con DOS rotadores en paralelo,
+    # el que se lanza segundo NO debe competirle las T4 al que ya viene corriendo. Como los dos
+    # aceleradores se racionan por separado, dos rotadores pidiendo cosas distintas se estorban poco;
+    # dos pidiendo lo mismo se sacan las sesiones entre si.
+    # El default `t4` deja el comportamiento anterior EXACTAMENTE igual: sin ACEL, esto es el mismo
+    # if de antes.
+    if [ "${ACEL:-t4}" = "tpu" ]; then
+      PRIMERO=(--tpu v5e1); SEGUNDO=(--gpu T4); N1="TPU v5e1"; N2="T4"
+    else
+      PRIMERO=(--gpu T4); SEGUNDO=(--tpu v5e1); N1="T4"; N2="TPU v5e1"
+    fi
+    if timeout -k 30 420 "${CL[@]}" new -s "$SESION" "${PRIMERO[@]}" >/dev/null 2>&1; then
+      ACC="$N1"
     elif [ "${TPU_RESPALDO:-1}" = "1" ] && \
-         timeout -k 30 420 "${CL[@]}" new -s "$SESION" --tpu v5e1 >/dev/null 2>&1; then
-      ACC="TPU v5e1"
-      echo "   (sin T4 en $c, pero SI hubo TPU v5e1)"
+         timeout -k 30 420 "${CL[@]}" new -s "$SESION" "${SEGUNDO[@]}" >/dev/null 2>&1; then
+      ACC="$N2"
+      echo "   (sin $N1 en $c, pero SI hubo $N2)"
     else
       echo "   503 en $c (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)"
       soltar_cuenta "$c"; continue

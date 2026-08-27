@@ -51,3 +51,5 @@ jax 0.7.2 | [CudaDevice(id=0)]
 compuerta de padding OK
 lanzado pid 11231
 == polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 5000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.3027 · anterior 0.3708 · abstencion 0.6719 · truncados 0.0000 · nose 0.7685 (ent 0.7535/rel 0.7700) · falsa_abst 0.6065 

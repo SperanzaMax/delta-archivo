@@ -1,0 +1,60 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_b3s2_tpu_20260827.log (rotador 1273867)
+== rotador2 · familia 'b' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:2 · cuentas: A J F E D C G I N M K H
+-- vuelta 1 · cuenta A · faltan: 3:2 · 08:02:28
+   >> OTORGADA en A (TPU v5e1): [tr2_a_0802] tpu-v5e1-s-kkb-usw1c2-2m7yq9g8wjaau | Hardware: V5E1 | Variant: TPU | Status: IDLE
+   -> tramo 3:2 en A (desde el paso 0)
+== tramo · cuenta A · sesion tr2_a_0802 · b3_s2 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.wGqOcBJOmx/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck.pkl
+jax 0.7.2 | [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0)]
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/maxi/.venv-colab-cli/lib/python3.12/site-packages/colab_cli/commands/e │
+│ xecution.py:216 in exec_command                                              │
+│                                                                              │
+│   213 │   │   │   )                                                          │
+│   214 │   │   │   state.store.add(s)                                         │
+│   215 │   │   │                                                              │
+│ ❱ 216 │   │   │   outputs = runtime.execute_code(                            │
+│   217 │   │   │   │   code,                                                  │
+│   218 │   │   │   │   output_hook=lambda o: display_output(o, output_image), │
+│   219 │   │   │   │   timeout=timeout,                                       │
+│                                                                              │
+│ /home/maxi/.venv-colab-cli/lib/python3.12/site-packages/colab_cli/runtime.py │
+│ :221 in execute_code                                                         │
+│                                                                              │
+│   218 │   │   │   │   │   │   if idx < len(outputs):                         │
+│   219 │   │   │   │   │   │   │   output_hook(outputs[idx])                  │
+│   220 │   │   │                                                              │
+│ ❱ 221 │   │   │   reply = self.kernel_client.execute_interactive(            │
+│   222 │   │   │   │   code, output_hook=wrapped_output_hook, **kwargs        │
+│   223 │   │   │   )                                                          │
+│   224 │   │   │   # execute_interactive returns the raw reply message        │
+│                                                                              │
+│ /home/maxi/.venv-colab-cli/lib/python3.12/site-packages/jupyter_kernel_clien │
+│ t/client.py:364 in execute_interactive                                       │
+│                                                                              │
+│   361 │   │   │   The reply message for this request                         │
+│   362 │   │   """                                                            │
+│   363 │   │   self._set_variables(variables)                                 │
+│ ❱ 364 │   │   return self._manager.client.execute_interactive(               │
+│   365 │   │   │   code,                                                      │
+│   366 │   │   │   silent=silent,                                             │
+│   367 │   │   │   store_history=store_history,                               │
+│                                                                              │
+│ /home/maxi/.venv-colab-cli/lib/python3.12/site-packages/jupyter_kernel_clien │
+│ t/wsclient.py:1097 in execute_interactive                                    │
+│                                                                              │
+│   1094 │   │   │   │   │   self.iopub_channel.msg_ready()                    │
+│   1095 │   │   │   │   │   or (allow_stdin and                               │
+│        self.stdin_channel.msg_ready())                                       │
+│   1096 │   │   │   │   ):                                                    │
+│ ❱ 1097 │   │   │   │   │   raise TimeoutError("Timeout waiting for output")  │
+│   1098 │   │   │   │                                                         │
+│   1099 │   │   │   │   if allow_stdin:                                       │
+│   1100 │   │   │   │   │   try:                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+TimeoutError: Timeout waiting for output
+   tramo de 3:2 cerrado en el paso 0 de 26000
+   tr2_a_0802 parada; pendientes ahora: 
+-- lo pendiente corre en la PC; se revisa en 5 min
