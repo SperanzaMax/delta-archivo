@@ -1,0 +1,7 @@
+2be4a610ffdd0e4d003792c0e579f29c1b34dcbcc7e4fc51b8e2c5cd2ba338d3  PREREG_ATRACTOR_MUDO.md
+congelado 2026-08-29 10:40:59
+73f0f2972c1f5bb15a4cb80a2dd6e2a906d91b9bba2c3e4869d69ac645953ab3  PRECISION_ATRACTOR_MUDO_N.md
+precision congelada 2026-08-29 10:55:25
+-- CORRECCION del encabezado (la version 73f0f297 afirmaba que no habia trazas nuevas; era falsa)
+5e413fef2edfd8dd8c2a27e8a168d144399bf8d5b00fb6dce59d49759abeaf07  PRECISION_ATRACTOR_MUDO_N.md
+precision v2 congelada 2026-08-29 10:55:50
