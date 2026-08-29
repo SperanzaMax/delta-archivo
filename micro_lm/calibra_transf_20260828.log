@@ -1,0 +1,15 @@
+C-1 · el barrido rapido coincide con `medir` en 3 coberturas.
+b3_s0    sondeado · blanco error     paso 26000
+b3_s1    sondeado · blanco error     paso 26000
+b3_s2    sondeado · blanco error     paso 26000
+p3_s0    sondeado · blanco ausencia  paso 26000
+p3_s1    sondeado · blanco ausencia  paso 26000
+p3_s2    sondeado · blanco ausencia  paso 26000
+b3_s0    base 0.9992 → cal 1.0000 (Δ+0.0008) · f_abst 0.0762 · orac 1.0000 · z* -0.5636 · nulo 0/20
+b3_s1    base 0.9988 → cal 1.0000 (Δ+0.0012) · f_abst 0.0627 · orac 1.0000 · z* -0.6378 · nulo 0/20
+b3_s2    base 0.5912 → cal 0.5359 (Δ-0.0553) · f_abst 0.0587 · orac 0.5470 · z* -0.0956 · nulo 0/20
+p3_s0    base 0.9130 → cal 0.9538 (Δ+0.0409) · f_abst 0.0691 · orac 0.9587 · z* -0.3670 · nulo 0/20
+p3_s1    base 0.5284 → cal 0.5898 (Δ+0.0614) · f_abst 0.0708 · orac 0.6087 · z* -0.2750 · nulo 0/20
+p3_s2    base 0.7054 → cal 0.7426 (Δ+0.0371) · f_abst 0.0663 · orac 0.7607 · z* -0.1041 · nulo 0/20
+
+→ calibra_transf_20260828.json

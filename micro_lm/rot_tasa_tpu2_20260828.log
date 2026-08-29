@@ -1,0 +1,139 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_tasa_tpu2_20260828.log (rotador 3325829)
+== rotador2 · familia 'b' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:3,3:4 · cuentas: A J F D C
+-- vuelta 1 · cuenta A · faltan: 3:3 3:4 · 19:17:21
+   (sin TPU v5e1 en A, pero SI hubo T4)
+   >> OTORGADA en A (T4): [tr2_a_1917] gpu-t4-s-kkb-ass1c2-dxp9z3baffgd | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:3 en A (desde el paso 20000)
+== tramo · cuenta A · sesion tr2_a_1917 · b3_s3 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.vqUs2Qv5El/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s3.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 5904
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 20000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+   [checkpoint parcial guardado: paso 20000]
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 20000]
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 20000]
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 20000]
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 20000]
+VIVO= True ULTIMO= listo: {'paso': 20000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_a_1917)
+   tramo de 3:3 cerrado en el paso 20000 de 26000
+   -> tramo 3:4 en A (desde el paso 17000)
+== tramo · cuenta A · sesion tr2_a_1917 · b3_s4 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.ws1dgqGbm0/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s4.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 18056
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 19000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.6308 · anterior 0.8290 · abstencion 0.3945 · truncados 0.0000 · nose 0.6220 (ent 0.5674/rel 0.6666) · falsa_abst 0.2424 
+VIVO= True ULTIMO= ── eval: vigente 0.6685 · anterior 0.9187 · abstencion 0.3652 · truncados 0.0000 · nose 0.6078 (ent 0.5386/rel 0.6702) · falsa_abst 0.2037 
+   [checkpoint parcial guardado: paso 17750]
+VIVO= True ULTIMO= ── eval: vigente 0.6559 · anterior 0.9281 · abstencion 0.3711 · truncados 0.0000 · nose 0.5859 (ent 0.5054/rel 0.6577) · falsa_abst 0.2294 
+VIVO= True ULTIMO= ── eval: vigente 0.6710 · anterior 0.9103 · abstencion 0.3691 · truncados 0.0000 · nose 0.6104 (ent 0.5360/rel 0.6756) · falsa_abst 0.2073 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_a_1917)
+   tramo de 3:4 cerrado en el paso 18250 de 26000
+   tr2_a_1917 parada; pendientes ahora: 3:3 3:4
+-- vuelta 1 · cuenta J · faltan: 3:3 3:4 · 20:18:43
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta F · faltan: 3:3 3:4 · 20:18:50
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta D · faltan: 3:3 3:4 · 20:18:57
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta C · faltan: 3:3 3:4 · 20:19:05
+   (sin TPU v5e1 en C, pero SI hubo T4)
+   >> OTORGADA en C (T4): [tr2_c_2019] gpu-t4-s-kkb-ass1b1-2tx44rk56cl | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:3 en C (desde el paso 20000)
+== tramo · cuenta C · sesion tr2_c_2019 · b3_s3 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.87NX0oxJrb/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s3.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1578
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 22000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+   [checkpoint parcial guardado: paso 20750]
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0000 · anterior 0.0000 · abstencion 1.0000 · truncados 0.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa_abst 1.0000 
+   [checkpoint parcial guardado: paso 21750]
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 22000]
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 22000]
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+   [checkpoint parcial guardado: paso 22000]
+VIVO= True ULTIMO= listo: {'paso': 22000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.0, 'anterior': 0.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 1.0, 'abstencion': 1.0} 
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_c_2019)
+   tramo de 3:3 cerrado en el paso 22000 de 26000
+   -> tramo 3:4 en C (desde el paso 18250)
+== tramo · cuenta C · sesion tr2_c_2019 · b3_s4 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error
+[colab] Uploaded '/tmp/tmp.2IUlRnPW0H/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s4.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 13105
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 20000 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.6710 · anterior 0.9103 · abstencion 0.3691 · truncados 0.0000 · nose 0.6104 (ent 0.5360/rel 0.6756) · falsa_abst 0.2073 
+VIVO= True ULTIMO= ── eval: vigente 0.6433 · anterior 0.8938 · abstencion 0.3945 · truncados 0.0000 · nose 0.6213 (ent 0.5482/rel 0.6845) · falsa_abst 0.2426 
+   [checkpoint parcial guardado: paso 18750]
+VIVO= True ULTIMO= ── eval: vigente 0.6649 · anterior 0.9281 · abstencion 0.3730 · truncados 0.0000 · nose 0.6336 (ent 0.5676/rel 0.6895) · falsa_abst 0.1967 
+VIVO= True ULTIMO= ── eval: vigente 0.6023 · anterior 0.9031 · abstencion 0.4355 · truncados 0.0000 · nose 0.6693 (ent 0.6220/rel 0.7117) · falsa_abst 0.2786 
+VIVO= True ULTIMO= ── eval: vigente 0.6827 · anterior 0.9281 · abstencion 0.3418 · truncados 0.0000 · nose 0.5964 (ent 0.5119/rel 0.6760) · falsa_abst 0.1696 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_c_2019)
+   tramo de 3:4 cerrado en el paso 19500 de 26000
+   tr2_c_2019 parada; pendientes ahora: 3:3 3:4
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta A · faltan: 3:3 3:4 · 21:30:51
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta J · faltan: 3:3 3:4 · 21:30:57
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta F · faltan: 3:3 3:4 · 21:31:05
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta D · faltan: 3:3 3:4 · 21:31:11
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta C · faltan: 3:3 3:4 · 21:31:18
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min

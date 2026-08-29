@@ -1,0 +1,281 @@
+{
+ "n": 6000,
+ "sem_ajuste": 31000,
+ "sem_prueba": 42000,
+ "margen_elegir": 0.07,
+ "criterio": 0.1,
+ "n_cortes": 400,
+ "prereg_sha": "5fdab03defc023f4bd706aa5ed71b61586f7dd315ac93fef14362245002917ea",
+ "unidades": {
+  "b3_s0": {
+   "cfg": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s0.pkl",
+    "nivel": 3,
+    "semilla": 0,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "blanco": "error",
+    "p_nose": 0.4
+   },
+   "base_sigma05": {
+    "tau": 0.0,
+    "nose": 0.9991902834008097,
+    "falsa_abst": 0.0005665722379603399,
+    "SER": 0.0006666666666666666,
+    "cobertura": 0.5883333333333334
+   },
+   "calibrado": {
+    "tau": -6.880079874119961,
+    "nose": 1.0,
+    "falsa_abst": 0.07620396600566572,
+    "SER": 0.0003333333333333333,
+    "cobertura": 0.5435
+   },
+   "oraculo": {
+    "tau": -7.077967230239906,
+    "nose": 1.0,
+    "falsa_abst": 0.0971671388101983,
+    "SER": 0.0003333333333333333,
+    "cobertura": 0.5311666666666667
+   },
+   "tau_ajuste": -6.880079874119961,
+   "z_ajuste": -0.5636322860860115,
+   "nulo_pasa": 0,
+   "nulo_reps": 20,
+   "transferido": {
+    "tau": -3.227447908450358,
+    "nose": 0.9995951417004049,
+    "falsa_abst": 0.00198300283286119,
+    "SER": 0.0005,
+    "cobertura": 0.5873333333333334
+   },
+   "z_loo": -0.27499166902845584
+  },
+  "b3_s1": {
+   "cfg": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s1.pkl",
+    "nivel": 3,
+    "semilla": 1,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "blanco": "error",
+    "p_nose": 0.4
+   },
+   "base_sigma05": {
+    "tau": 0.0,
+    "nose": 0.9987720016373312,
+    "falsa_abst": 0.000281135788585887,
+    "SER": 0.0008333333333333334,
+    "cobertura": 0.5931666666666666
+   },
+   "calibrado": {
+    "tau": -6.839921406337194,
+    "nose": 1.0,
+    "falsa_abst": 0.0626932808546528,
+    "SER": 0.00016666666666666666,
+    "cobertura": 0.5556666666666666
+   },
+   "oraculo": {
+    "tau": -7.18312606715917,
+    "nose": 1.0,
+    "falsa_abst": 0.09474276075344391,
+    "SER": 0.00016666666666666666,
+    "cobertura": 0.5366666666666666
+   },
+   "tau_ajuste": -6.839921406337194,
+   "z_ajuste": -0.6377664124062484,
+   "nulo_pasa": 0,
+   "nulo_reps": 20,
+   "transferido": {
+    "tau": -2.41906143987073,
+    "nose": 0.9991813344248874,
+    "falsa_abst": 0.0008434073657576609,
+    "SER": 0.0006666666666666666,
+    "cobertura": 0.5926666666666667
+   },
+   "z_loo": -0.27499166902845584
+  },
+  "b3_s2": {
+   "cfg": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/b3_s2.pkl",
+    "nivel": 3,
+    "semilla": 2,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "blanco": "error",
+    "p_nose": 0.4
+   },
+   "base_sigma05": {
+    "tau": 0.0,
+    "nose": 0.5911716171617162,
+    "falsa_abst": 0.22818791946308725,
+    "SER": 0.21283333333333335,
+    "cobertura": 0.6251666666666666
+   },
+   "calibrado": {
+    "tau": 0.4873301857396175,
+    "nose": 0.5358910891089109,
+    "falsa_abst": 0.0587248322147651,
+    "SER": 0.2821666666666667,
+    "cobertura": 0.7485
+   },
+   "oraculo": {
+    "tau": 0.30952202646355875,
+    "nose": 0.5470297029702971,
+    "falsa_abst": 0.09060402684563758,
+    "SER": 0.2663333333333333,
+    "cobertura": 0.725
+   },
+   "tau_ajuste": 0.4873301857396175,
+   "z_ajuste": -0.09558396746951875,
+   "nulo_pasa": 0,
+   "nulo_reps": 20,
+   "transferido": {
+    "tau": -0.35385761953652106,
+    "nose": 0.7017326732673267,
+    "falsa_abst": 0.4423937360178971,
+    "SER": 0.1315,
+    "cobertura": 0.4528333333333333
+   },
+   "z_loo": -0.3669925755007189
+  },
+  "p3_s0": {
+   "cfg": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/p3_s0.pkl",
+    "nivel": 3,
+    "semilla": 0,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "blanco": "ausencia",
+    "p_nose": 0.4
+   },
+   "base_sigma05": {
+    "tau": 0.0,
+    "nose": 0.9129554655870445,
+    "falsa_abst": 0.01189801699716714,
+    "SER": 0.04716666666666667,
+    "cobertura": 0.6171666666666666
+   },
+   "calibrado": {
+    "tau": -1.9046173095703125,
+    "nose": 0.9538461538461539,
+    "falsa_abst": 0.06912181303116147,
+    "SER": 0.030333333333333334,
+    "cobertura": 0.5666666666666667
+   },
+   "oraculo": {
+    "tau": -2.1289335886637364,
+    "nose": 0.9587044534412955,
+    "falsa_abst": 0.09518413597733712,
+    "SER": 0.028166666666666666,
+    "cobertura": 0.5493333333333333
+   },
+   "tau_ajuste": -1.9046173095703125,
+   "z_ajuste": -0.3669925755007189,
+   "nulo_pasa": 0,
+   "nulo_reps": 20,
+   "transferido": {
+    "tau": -1.0329122919889306,
+    "nose": 0.9352226720647774,
+    "falsa_abst": 0.027762039660056657,
+    "SER": 0.038,
+    "cobertura": 0.5986666666666667
+   },
+   "z_loo": -0.27499166902845584
+  },
+  "p3_s1": {
+   "cfg": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/p3_s1.pkl",
+    "nivel": 3,
+    "semilla": 1,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "blanco": "ausencia",
+    "p_nose": 0.4
+   },
+   "base_sigma05": {
+    "tau": 0.0,
+    "nose": 0.5284486287351617,
+    "falsa_abst": 0.002249086308687096,
+    "SER": 0.3055,
+    "cobertura": 0.7835
+   },
+   "calibrado": {
+    "tau": -0.4650107218806907,
+    "nose": 0.5898485468686042,
+    "falsa_abst": 0.07084621872364352,
+    "SER": 0.2803333333333333,
+    "cobertura": 0.7178333333333333
+   },
+   "oraculo": {
+    "tau": -0.5110791739365812,
+    "nose": 0.6086778550961932,
+    "falsa_abst": 0.08743323025021085,
+    "SER": 0.27266666666666667,
+    "cobertura": 0.7003333333333334
+   },
+   "tau_ajuste": -0.4650107218806907,
+   "z_ajuste": -0.27499166902845584,
+   "nulo_pasa": 0,
+   "nulo_reps": 20,
+   "transferido": {
+    "tau": -0.876335068802341,
+    "nose": 0.7576749897666804,
+    "falsa_abst": 0.2608940118077031,
+    "SER": 0.21,
+    "cobertura": 0.5368333333333334
+   },
+   "z_loo": -0.3669925755007189
+  },
+  "p3_s2": {
+   "cfg": {
+    "pesos": "/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/p3_s2.pkl",
+    "nivel": 3,
+    "semilla": 2,
+    "paso": 26000,
+    "donde": "pre",
+    "abst": "cabeza",
+    "blanco": "ausencia",
+    "p_nose": 0.4
+   },
+   "base_sigma05": {
+    "tau": 0.0,
+    "nose": 0.7054455445544554,
+    "falsa_abst": 0.0296420581655481,
+    "SER": 0.18316666666666667,
+    "cobertura": 0.6973333333333334
+   },
+   "calibrado": {
+    "tau": -0.38921266570127067,
+    "nose": 0.7425742574257426,
+    "falsa_abst": 0.0662751677852349,
+    "SER": 0.16766666666666666,
+    "cobertura": 0.6605
+   },
+   "oraculo": {
+    "tau": -0.5871446007176448,
+    "nose": 0.7607260726072608,
+    "falsa_abst": 0.0964765100671141,
+    "SER": 0.16,
+    "cobertura": 0.6351666666666667
+   },
+   "tau_ajuste": -0.38921266570127067,
+   "z_ajuste": -0.10408277164354685,
+   "nulo_pasa": 0,
+   "nulo_reps": 20,
+   "transferido": {
+    "tau": -1.5135352595123848,
+    "nose": 0.8811881188118812,
+    "falsa_abst": 0.3783557046979866,
+    "SER": 0.10633333333333334,
+    "cobertura": 0.4185
+   },
+   "z_loo": -0.3669925755007189
+  }
+ }
+}

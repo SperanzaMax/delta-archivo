@@ -1,0 +1,470 @@
+<title>El modelo que se calla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --ground:#FBFBFD;
+    --surface:#F1F2F6;
+    --surface-2:#E6E8EF;
+    --ink:#14161D;
+    --ink-soft:#3D4354;
+    --muted:#666D82;
+    --line:#D8DBE4;
+    --cold:#1F5E5B;
+    --cold-soft:#E2EEEC;
+    --warm:#A8501B;
+    --warm-soft:#F6E9DF;
+    --shadow:0 1px 2px rgba(20,22,29,.05), 0 8px 24px -12px rgba(20,22,29,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#111319;
+      --surface:#191C24;
+      --surface-2:#222630;
+      --ink:#E9EBF2;
+      --ink-soft:#BFC5D4;
+      --muted:#8E96AB;
+      --line:#2C313D;
+      --cold:#69B6AF;
+      --cold-soft:#16302E;
+      --warm:#D9884C;
+      --warm-soft:#2E211A;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#111319;
+    --surface:#191C24;
+    --surface-2:#222630;
+    --ink:#E9EBF2;
+    --ink-soft:#BFC5D4;
+    --muted:#8E96AB;
+    --line:#2C313D;
+    --cold:#69B6AF;
+    --cold-soft:#16302E;
+    --warm:#D9884C;
+    --warm-soft:#2E211A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px 96px}
+  .col{max-width:660px}
+
+  /* ---------- encabezado ---------- */
+  header.top{padding:72px 0 40px;border-bottom:1px solid var(--line);margin-bottom:52px}
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 20px;
+  }
+  h1{
+    font-family:Spectral,Georgia,serif;
+    font-weight:700;font-size:clamp(2.4rem,6vw,3.9rem);
+    line-height:1.04;letter-spacing:-.02em;margin:0 0 22px;
+    text-wrap:balance;
+  }
+  .standfirst{
+    font-family:Spectral,Georgia,serif;
+    font-size:clamp(1.12rem,2.4vw,1.35rem);line-height:1.55;
+    color:var(--ink-soft);margin:0;max-width:640px;
+  }
+  .stamp{
+    display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px;
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;color:var(--muted);
+  }
+  .stamp span strong{color:var(--ink-soft);font-weight:500}
+
+  /* ---------- secciones ---------- */
+  section{margin-bottom:60px;scroll-margin-top:20px}
+  h2{
+    font-family:Spectral,Georgia,serif;
+    font-weight:600;font-size:clamp(1.5rem,3.2vw,1.95rem);
+    line-height:1.2;letter-spacing:-.012em;margin:0 0 6px;text-wrap:balance;
+  }
+  .kicker{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--cold);margin:0 0 12px;font-weight:500;
+  }
+  p{margin:0 0 18px}
+  .col p:last-child{margin-bottom:0}
+  strong{font-weight:600}
+  em{font-style:italic}
+
+  /* ---------- destacado ---------- */
+  .thesis{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:32px 34px;
+    margin:0 0 8px;
+  }
+  .thesis p{
+    font-family:Spectral,Georgia,serif;
+    font-size:clamp(1.22rem,2.7vw,1.5rem);line-height:1.42;
+    margin:0;text-wrap:balance;
+  }
+  .aside{
+    border-left:2px solid var(--cold);
+    padding:2px 0 2px 20px;
+    margin:24px 0;
+    color:var(--ink-soft);
+    font-size:16px;
+  }
+  .aside p{margin:0}
+
+  /* ---------- fichas de dato ---------- */
+  .figs{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:14px;margin:28px 0;
+  }
+  .fig{
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:3px;padding:20px;
+  }
+  .fig .n{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:clamp(1.6rem,4vw,2.05rem);font-weight:500;
+    color:var(--cold);line-height:1;display:block;margin-bottom:9px;
+    font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  }
+  .fig .n.warm{color:var(--warm)}
+  .fig .lab{font-size:14px;color:var(--muted);line-height:1.4;display:block}
+
+  /* ---------- tablas ---------- */
+  .scroller{overflow-x:auto;margin:26px 0;border:1px solid var(--line);border-radius:3px}
+  table{border-collapse:collapse;width:100%;font-size:15px;min-width:520px}
+  caption{
+    caption-side:top;text-align:left;padding:16px 18px 4px;
+    font-size:14px;color:var(--muted);
+  }
+  th,td{padding:11px 18px;text-align:left;border-bottom:1px solid var(--line)}
+  thead th{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;background:var(--surface);
+    border-bottom:1px solid var(--line);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+  td.unit{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:14px;color:var(--ink-soft)}
+  tr.good td{background:var(--cold-soft)}
+  tr.good td.num{color:var(--cold);font-weight:500}
+
+  .pill{
+    display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 9px;border-radius:2px;white-space:nowrap;
+  }
+  .pill.ok{background:var(--cold-soft);color:var(--cold)}
+  .pill.run{background:var(--warm-soft);color:var(--warm)}
+  .pill.off{background:var(--surface-2);color:var(--muted)}
+
+  /* ---------- barras de progreso ---------- */
+  .bar{
+    position:relative;height:7px;background:var(--surface-2);
+    border-radius:1px;overflow:hidden;min-width:110px;
+  }
+  .bar i{position:absolute;inset:0 auto 0 0;background:var(--warm);border-radius:1px;display:block}
+
+  /* ---------- lista de pasos ---------- */
+  ol.steps{list-style:none;margin:26px 0;padding:0;counter-reset:s}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:0 0 26px 46px;
+    border-left:1px solid var(--line);margin-left:11px;
+  }
+  ol.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:-11px;top:0;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--ground);border:1px solid var(--line);color:var(--muted);
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+    display:grid;place-items:center;
+  }
+  ol.steps h3{
+    font-family:"IBM Plex Sans",sans-serif;font-size:16px;font-weight:600;
+    margin:0 0 5px;line-height:1.35;
+  }
+  ol.steps p{font-size:15.5px;color:var(--ink-soft);margin:0}
+
+  /* ---------- glosario ---------- */
+  dl.glos{margin:24px 0 0;display:grid;gap:2px}
+  dl.glos div{
+    display:grid;grid-template-columns:170px 1fr;gap:20px;
+    padding:13px 0;border-bottom:1px solid var(--line);
+  }
+  dl.glos div:last-child{border-bottom:none}
+  dt{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13.5px;
+    color:var(--cold);font-weight:500;
+  }
+  dd{margin:0;font-size:15.5px;color:var(--ink-soft)}
+
+  footer.end{
+    border-top:1px solid var(--line);margin-top:72px;padding-top:26px;
+    font-size:14px;color:var(--muted);
+  }
+  a{color:var(--cold);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--cold);outline-offset:3px;border-radius:2px}
+
+  @media (max-width:620px){
+    body{font-size:16px}
+    .wrap{padding:0 20px 72px}
+    dl.glos div{grid-template-columns:1fr;gap:3px}
+    header.top{padding:48px 0 32px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Informe de avance &middot; 28 de agosto de 2026</p>
+  <h1>El modelo que se calla</h1>
+  <p class="standfirst">Un programa de inteligencia artificial de tres megabytes y medio, construido desde cero, para responder una pregunta que los modelos grandes todavía no resuelven. Cómo hacer que una máquina admita que no sabe algo, en vez de inventarlo.</p>
+  <div class="stamp">
+    <span>Investigador <strong>Maximiliano Speranza</strong></span>
+    <span>Estado <strong>en marcha</strong></span>
+    <span>Publicado hoy <strong>1 preprint con DOI</strong></span>
+  </div>
+</header>
+
+<section>
+  <div class="col">
+    <p class="kicker">El problema</p>
+    <h2>Una máquina que nunca dice «no sé»</h2>
+  </div>
+  <div class="col">
+    <p>Cuando le preguntás algo a un sistema de inteligencia artificial y el sistema no tiene la respuesta, casi nunca te lo dice. Te contesta igual, con una respuesta inventada y perfectamente redactada. En la jerga eso se llama alucinación, y es hoy uno de los obstáculos más serios para poder confiar en estas herramientas.</p>
+  </div>
+  <div class="thesis col">
+    <p>La pregunta de esta investigación es si un modelo puede darse cuenta por sí mismo de que no sabe algo, y quedarse callado.</p>
+  </div>
+  <div class="col">
+    <p style="margin-top:24px">Parece simple y no lo es. El modelo tiene que distinguir entre dos situaciones que por dentro se le parecen mucho, tener la respuesta guardada y no encontrarla, o directamente no tenerla nunca.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">El método</p>
+    <h2>Un modelo diminuto, a propósito</h2>
+    <p>Los sistemas comerciales tienen cientos de miles de millones de piezas internas. Este tiene <strong>863.730</strong>, ocupa unos tres megabytes y medio y se entrenó desde cero, sin partir de ningún modelo ajeno.</p>
+    <p>Eso no es una limitación, es la decisión central del proyecto. Un modelo así de chico se puede mirar entero por dentro y se puede entrenar muchas veces para ver qué cambia. En uno grande nadie puede aislar una variable y saber qué la causó.</p>
+    <p>El modelo tiene además un archivo de memoria, con datos que cambian de versión con el tiempo, y aprende a consultarlo. Se le puede preguntar por algo que está guardado, por algo que cambió, o por algo que nunca estuvo.</p>
+  </div>
+
+  <div class="figs col">
+    <div class="fig"><span class="n">863.730</span><span class="lab">piezas internas del modelo</span></div>
+    <div class="fig"><span class="n">3,5 MB</span><span class="lab">lo que ocupa entero</span></div>
+    <div class="fig"><span class="n">27</span><span class="lab">entrenamientos completos hasta hoy</span></div>
+  </div>
+
+  <div class="col">
+    <div class="aside">
+      <p>Cada predicción se escribe y se sella con una firma digital <em>antes</em> de mirar los datos. Así no se puede acomodar la conclusión después de ver el resultado, que es la trampa más común y más difícil de detectar en este tipo de trabajo.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">Publicado hoy</p>
+    <h2>Dónde conviene poner la duda</h2>
+    <p>Hay al menos tres maneras publicadas de enseñarle a un modelo a decir «no sé», y hasta ahora nadie las había comparado entre sí. Cada una se presentó en un sistema distinto, con una tarea distinta, así que no había forma de saber cuál era mejor.</p>
+    <p>Este trabajo las puso a competir dejando todo lo demás fijo. El resultado es que <strong>sí importa</strong> dónde vive la decisión de callarse, y el orden se repite.</p>
+  </div>
+
+  <div class="scroller col">
+    <table>
+      <caption>Las tres maneras, comparadas en igualdad de condiciones</caption>
+      <thead>
+        <tr><th>Manera</th><th>Cómo funciona</th><th>Resultado</th></tr>
+      </thead>
+      <tbody>
+        <tr class="good">
+          <td><strong>Pieza aparte</strong></td>
+          <td>Un módulo separado que solo decide si hablar o callar</td>
+          <td>Gana, con 129 piezas</td>
+        </tr>
+        <tr>
+          <td>Palabra nueva</td>
+          <td>Se le enseña «no sé» como una palabra más de su vocabulario</td>
+          <td>De 2 a 2,8 veces peor</td>
+        </tr>
+        <tr>
+          <td>Casilla en la memoria</td>
+          <td>Una entrada vacía en el archivo que compite con las demás</td>
+          <td>Falla</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <p>La ganadora es una pieza separada de <strong>129 parámetros</strong>, que es el 0,015 por ciento del modelo. Una fracción minúscula dedicada solo a esa decisión rinde mucho más que repartir el trabajo dentro de lo que ya existe.</p>
+    <p>La casilla en la memoria falla de una manera que además enseña algo. En vez de aprender a distinguir, aprende la frecuencia. Se activa el 40,74 por ciento de las veces cuando la respuesta correcta sería 40,48 por ciento. Acertó el promedio sin entender ni un caso.</p>
+    <p>El trabajo se publicó esta mañana con identificador permanente, así que ya es citable. <a href="https://doi.org/10.21203/rs.3.rs-10839567/v1">Está acá</a>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">El hallazgo de hoy</p>
+    <h2>El modelo ya se calla, y nadie lo había mirado</h2>
+    <p>Hasta anoche la conclusión del proyecto era pesimista y decía que el modelo sabe cuándo no sabe, pero no logra convertir eso en la decisión de quedarse callado.</p>
+    <p>Hoy se revisaron mediciones que ya estaban guardadas, mirando algo que no se había mirado. Qué hace el modelo <em>cuando decide solo</em>, sin que nadie le mueva ninguna perilla.</p>
+  </div>
+
+  <div class="scroller col">
+    <table>
+      <caption>Tres entrenamientos idénticos que solo difieren en el número de arranque</caption>
+      <thead>
+        <tr><th>Entrenamiento</th><th>Detecta lo que no sabe</th><th>Se calla sin motivo</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr class="good"><td class="unit">primero</td><td class="num">99,94 %</td><td class="num">0,00 %</td><td><span class="pill ok">casi perfecto</span></td></tr>
+        <tr class="good"><td class="unit">segundo</td><td class="num">100,00 %</td><td class="num">0,08 %</td><td><span class="pill ok">perfecto</span></td></tr>
+        <tr><td class="unit">tercero</td><td class="num">60,97 %</td><td class="num">24,73 %</td><td><span class="pill off">roto</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <p>Dos de los tres <strong>ya hacen exactamente lo que se buscaba</strong>. Uno detecta el cien por ciento de las preguntas que no tienen respuesta, y casi nunca se calla cuando en realidad sabía. La frase pesimista de anoche no los describe.</p>
+    <p>Lo más interesante está en el tercero, el que falla. No falla por callarse mal. Falla porque <strong>no encuentra lo que tiene guardado</strong> en su propio archivo, y entonces se calla de más, en una de cada cuatro preguntas que sí podía contestar.</p>
+  </div>
+
+  <div class="thesis col">
+    <p>Cuando la memoria funciona, callarse sale casi gratis. Cuando la memoria falla, el silencio se rompe con ella.</p>
+  </div>
+
+  <div class="col">
+    <p style="margin-top:24px">Eso cambia hacia dónde mirar. El problema deja de ser «cómo enseñarle a callarse» y pasa a ser «por qué a veces no encuentra lo que guardó».</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">Lo que se descartó hoy</p>
+    <h2>Un atajo que no funciona</h2>
+    <p>El modelo produce internamente un número que indica cuánta confianza tiene. Para decidir si habla o se calla hay que fijar un punto de corte en ese número, y elegirlo bien importa mucho.</p>
+    <p>Se probaron dos cosas al mismo tiempo, con seis modelos entrenados.</p>
+  </div>
+
+  <ol class="steps col">
+    <li>
+      <h3>Ajustar el corte con datos propios, confirmado</h3>
+      <p>Funciona y mejora la detección entre 3,7 y 6,1 puntos sin costo alguno. Un resultado que hasta ayer era preliminar quedó confirmado en las tres pruebas donde se había visto.</p>
+    </li>
+    <li>
+      <h3>Prestarle el corte de otro modelo, descartado</h3>
+      <p>Falla en las seis. En tres de ellas el corte prestado deja al modelo callándose en más del veinte por ciento de las preguntas que sí sabía contestar. Cada modelo tiene su propio punto y no se puede compartir.</p>
+    </li>
+  </ol>
+
+  <div class="col">
+    <p>El segundo resultado es negativo, y sirve igual. Cierra una vía barata que parecía prometedora y evita gastar meses en ella. La prueba de control salió limpia, así que el resultado no es un accidente del método.</p>
+    <p>El informe también deja anotado un error propio. El criterio de éxito le pedía a dos de los modelos una mejora imposible, porque ya estaban tan cerca del máximo que no les quedaba margen. Queda escrito para no repetirlo.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">Ahora mismo</p>
+    <h2>Seis entrenamientos en marcha</h2>
+    <p>Dos de tres es un resultado alentador y también un número muy chico. Con tres intentos no hay manera de distinguir entre «esto funciona casi siempre» y «tuvimos suerte dos veces».</p>
+    <p>Por eso están corriendo seis entrenamientos nuevos, idénticos a los anteriores salvo por el número de arranque, repartidos entre placas de video y procesadores en la nube. La predicción está escrita y sellada desde antes de lanzarlos. Si al menos tres de los seis alcanzan el mismo nivel, el hallazgo se sostiene. Si no, se retira.</p>
+  </div>
+
+  <div class="scroller col">
+    <table>
+      <caption>Progreso al momento de escribir este informe, sobre 26.000 pasos cada uno</caption>
+      <thead>
+        <tr><th>Entrenamiento</th><th>Avance</th><th style="width:36%"></th><th>Dónde corre</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="unit">cuarto</td><td class="num">12.000</td><td><div class="bar"><i style="width:46%"></i></div></td><td>procesador de nube</td></tr>
+        <tr><td class="unit">quinto</td><td class="num">10.000</td><td><div class="bar"><i style="width:38%"></i></div></td><td>procesador de nube</td></tr>
+        <tr><td class="unit">sexto</td><td class="num">0</td><td><div class="bar"><i style="width:2%"></i></div></td><td>en espera</td></tr>
+        <tr><td class="unit">séptimo</td><td class="num">12.000</td><td><div class="bar"><i style="width:46%"></i></div></td><td>placa de video</td></tr>
+        <tr><td class="unit">octavo</td><td class="num">8.500</td><td><div class="bar"><i style="width:33%"></i></div></td><td>placa de video</td></tr>
+        <tr><td class="unit">noveno</td><td class="num">0</td><td><div class="bar"><i style="width:2%"></i></div></td><td>arrancando</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <div class="aside">
+      <p>Durante los primeros tres mil pasos estos modelos se callan ante absolutamente todo. No es una falla, es el comportamiento conocido de esta configuración y se corrige solo. Apagarlos antes de tiempo sería tirar el entrenamiento a la basura.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">Los límites</p>
+    <h2>Lo que este trabajo todavía no puede decir</h2>
+    <p>Conviene ser explícito, porque es la parte que más fácil se exagera al contarla.</p>
+    <p>Todo lo logrado hasta acá es <strong>supervisado</strong>. Al modelo se le enseñó con ejemplos etiquetados cuáles preguntas tenían respuesta y cuáles no. Eso no es lo mismo que decir que el modelo sabe por su cuenta cuándo no sabe.</p>
+    <p>Esa versión más ambiciosa, la de lograrlo sin etiquetas, se intentó siete veces con predicciones registradas de antemano y las siete quedaron apenas por encima del azar. En agosto se decidió cerrar esa línea por seis meses en lugar de seguir probando ideas nuevas. Es una decisión incómoda y es la correcta, porque probar variantes hasta que una funcione por casualidad es la manera más eficiente de engañarse.</p>
+    <p>Y nada de esto dice todavía qué pasa en un modelo grande. La escala es la prueba final, no la promesa inicial.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">Pendiente</p>
+    <h2>El trámite que destraba tres cosas</h2>
+    <p>El cuello de botella más grande del proyecto hoy no es técnico. Es una casilla de correo institucional.</p>
+    <p>Sin una dirección de correo de una universidad, quedan cerradas tres puertas al mismo tiempo. El acceso a las revistas científicas más serias del área, el repositorio donde se publican la mayoría de los trabajos de inteligencia artificial, y que el perfil académico del investigador aparezca en las búsquedas. Esta mañana llegó otro aviso automático recordando exactamente eso.</p>
+    <p>La nota pidiéndola está redactada desde el 19 de agosto y todavía no se envió. Es, con diferencia, lo que más destraba por unidad de esfuerzo, y lo único importante que no depende de que ninguna computadora termine de calcular.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <p class="kicker">Para leer las tablas</p>
+    <h2>Cuatro palabras del oficio</h2>
+  </div>
+  <div class="col">
+    <dl class="glos">
+      <div>
+        <dt>alucinación</dt>
+        <dd>Cuando el sistema inventa una respuesta con total seguridad en vez de admitir que no la tiene.</dd>
+      </div>
+      <div>
+        <dt>abstención</dt>
+        <dd>La decisión de callarse. Es lo que este proyecto intenta que el modelo haga bien.</dd>
+      </div>
+      <div>
+        <dt>callarse sin motivo</dt>
+        <dd>El costo del silencio. El modelo tenía la respuesta y se calló igual. Un sistema que se calla siempre acierta en no mentir y es inútil.</dd>
+      </div>
+      <div>
+        <dt>semilla</dt>
+        <dd>El número con el que arranca un entrenamiento. Cambiarlo da un modelo distinto aunque todo lo demás sea idéntico, y por eso cada experimento se repite varias veces.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="col">
+    <p>Informe preparado el 28 de agosto de 2026 con las mediciones disponibles a esa fecha. Los seis entrenamientos en curso todavía pueden cambiar la conclusión del hallazgo del día, y ese resultado se va a reportar tal como salga.</p>
+  </div>
+</footer>
+
+</div>
