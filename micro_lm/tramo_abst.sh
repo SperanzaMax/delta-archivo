@@ -172,7 +172,22 @@ timeout -k 30 300 "${CL[@]}" exec -s "$SESION" --timeout 240 -f "$TMP/lanzar.py"
 cat > "$TMP/ver.py" <<'PY'
 import json, os
 try:
-    pid = int(open('/content/micro.pid').read()); print('VIVO=', os.path.exists('/proc/%d' % pid))
+    pid = int(open('/content/micro.pid').read())
+    # `os.path.exists('/proc/PID')` NO alcanza, y ese era el bug (2026-08-30, reproducido). El
+    # entrenamiento se lanza con Popen y NADIE le hace wait(): cuando termina queda ZOMBIE, y un
+    # zombie conserva su entrada en /proc. Asi que VIVO= daba True para siempre y el polling gastaba
+    # el presupuesto entero — el 29, `s6` necesito 12 min y ocupo la VM 40.
+    # Se lee el estado en /proc/PID/stat (campo 3, despues del `)` que cierra el comm) y 'Z' cuenta
+    # como terminado. Si el stat no se puede leer se cae al comportamiento viejo a proposito: ante la
+    # duda conviene esperar de mas y no cortar un tramo vivo perdiendo el checkpoint.
+    vivo = os.path.exists('/proc/%d' % pid)
+    if vivo:
+        try:
+            if open('/proc/%d/stat' % pid).read().split(')')[-1].split()[0] == 'Z':
+                vivo = False
+        except Exception:
+            pass
+    print('VIVO=', vivo)
 except Exception as e:
     print('VIVO= ?', e)
 try:

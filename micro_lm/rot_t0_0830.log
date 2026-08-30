@@ -1,0 +1,15 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_t0_0830.log (rotador 1762831)
+== rotador2 · familia 't0' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:3,3:6 · cuentas: A J F D C L K
+-- vuelta 1 · cuenta A · faltan: 3:3 3:6 · 12:45:54
+   >> OTORGADA en A (T4): [tr2_a_1245] gpu-t4-s-kkb-ass1c1-8gjmcedellpu | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:3 en A (desde el paso 0)
+== tramo · cuenta A · sesion tr2_a_1245 · t03_s3 · +3000 de 3000 pasos · p_nose 0.4 · abst token · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error · perdida recompensa · sembrar 0 · rec L=0.0 M=0.5 F=0.2 CE=1.0
+[colab] Uploaded '/tmp/tmp.dH67tfg89g/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/t03_s3.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2616
+== polling cada 2 min (presupuesto ~50 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 3000 (0 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.4404 · anterior 0.0878 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
