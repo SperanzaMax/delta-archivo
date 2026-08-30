@@ -1,0 +1,16 @@
+NOTA DE ATRIBUCION (2026-08-30)
+
+El bug del proceso ZOMBIE que hace que `VIVO=` nunca pase a False NO se descubrio hoy. Esta
+diagnosticado desde el 18-ago con la misma causa ("un proceso ZOMBIE conserva su entrada en /proc"),
+y en `tramo_frontera.sh:193-197` esta el arreglo canonico del proyecto: cortar por el JSON en el paso
+pedido, que es mas robusto que mirar el estado del proceso.
+
+Lo que paso es peor y vale registrarlo: **el arreglo se aplico a UN script y no a sus hermanos.**
+`tramo_abst.sh` --el que usan TODAS las campanias de abstencion, incluida la de hoy-- quedo con el
+bug intacto, y por eso volvio a morder el 29-ago (s6 necesito 12 min de T4 y ocupo la VM 40).
+
+Lo aportado hoy es la reproduccion local de la causa y el arreglo aplicado a este script. La
+propagacion pendiente es adoptar tambien el corte por JSON de `tramo_frontera.sh`, que no se hizo hoy
+para no cambiar el instrumento con la campania en curso.
+
+REGLA: cuando se arregle un bug de infraestructura, revisar los scripts HERMANOS en el mismo commit.
