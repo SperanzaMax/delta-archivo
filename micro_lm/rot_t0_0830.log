@@ -53,3 +53,40 @@ jax 0.11.1 | [CudaDevice(id=0)]
 compuerta de padding OK
 lanzado pid 16772
 == polling cada 2 min (presupuesto ~50 min)
+VIVO= True ULTIMO= W0830 16:42:26.070080   16792 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_a_1245)
+   tramo de 3:6 cerrado en el paso 0 de 3000
+   tr2_a_1245 parada; pendientes ahora: 3:6
+-- vuelta 1 · cuenta J · faltan: 3:6 · 13:46:25
+   >> OTORGADA en J (T4): [tr2_j_1346] gpu-t4-s-kkb-ass1c0-jwtwokfjdzwq | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:6 en J (desde el paso 0)
+== tramo · cuenta J · sesion tr2_j_1346 · t03_s6 · +3000 de 3000 pasos · p_nose 0.4 · abst token · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error · perdida recompensa · sembrar 0 · rec L=0.0 M=0.5 F=0.2 CE=1.0
+[colab] Uploaded '/tmp/tmp.rB96GIPz9S/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/t03_s6.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 641
+== polling cada 2 min (presupuesto ~50 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 3000 (0 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.2573 · anterior 0.0365 · abstencion 0.4316 · truncados 0.0000 · nose 0.4653 (ent 0.4440/rel 0.4832) · falsa_abst 0.4128 
+VIVO= True ULTIMO= ── eval: vigente 0.1882 · anterior 0.0000 · abstencion 0.5195 · truncados 0.0000 · nose 0.5600 (ent 0.5175/rel 0.5878) · falsa_abst 0.4991 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.2150 · anterior 0.0521 · abstencion 0.5117 · truncados 0.0000 · nose 0.5537 (ent 0.5158/rel 0.5774) · falsa_abst 0.4881 
+
+VIVO= True ULTIMO= ── eval: vigente 0.2172 · anterior 0.0312 · abstencion 0.5215 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.4993 
+VIVO= True ULTIMO= ── eval: vigente 0.2067 · anterior 0.0312 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+   [checkpoint parcial guardado: paso 2250]
+VIVO= True ULTIMO= ── eval: vigente 0.1922 · anterior 0.0156 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+VIVO= True ULTIMO= ── eval: vigente 0.2110 · anterior 0.0156 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+VIVO= False ULTIMO= listo: {'paso': 3000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.21915861915861917, 'anterior': 0.0, 'nose': 0.5647762575108113, 'nose_ent': 0.5271606865356865, 'nose_rel': 0.5878331646423751, 'falsa_abst': 0.5025791991372863, 'abstencion': 0.5234375} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/t03_s6.pkl (10M)
+   ultimo paso registrado: "paso": 3000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_j_1346)
+   tramo de 3:6 cerrado en el paso 3000 de 3000
+   tr2_j_1346 parada; pendientes ahora: 
+== todo completo

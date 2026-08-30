@@ -54,3 +54,43 @@ compuerta de padding OK
 lanzado pid 16542
 == polling cada 2 min (presupuesto ~50 min)
 VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 3000 (0 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.2209 · anterior 0.0365 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1246)
+   tramo de 3:6 cerrado en el paso 500 de 3000
+   tr2_h_1246 parada; pendientes ahora: 3:6
+-- vuelta 1 · cuenta M · faltan: 3:6 · 13:48:07
+   >> OTORGADA en M (T4): [tr2_m_1348] gpu-t4-s-kkb-usw1b2-3jj9lw5qxe8lt | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:6 en M (desde el paso 500)
+== tramo · cuenta M · sesion tr2_m_1348 · t53_s6 · +3000 de 3000 pasos · p_nose 0.4 · abst token · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error · perdida recompensa · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0
+[colab] Uploaded '/tmp/tmp.RKmQdmpPy0/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/t53_s6.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2260
+== polling cada 2 min (presupuesto ~50 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 3000 (0 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.4910 · anterior 0.0156 · abstencion 0.0469 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0779 
+VIVO= True ULTIMO= ── eval: vigente 0.2289 · anterior 0.0365 · abstencion 0.5215 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.4993 
+   [checkpoint parcial guardado: paso 500]
+VIVO= True ULTIMO= ── eval: vigente 0.2263 · anterior 0.0312 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+VIVO= True ULTIMO= ── eval: vigente 0.2071 · anterior 0.0469 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+VIVO= True ULTIMO= ── eval: vigente 0.2328 · anterior 0.0469 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+VIVO= True ULTIMO= ── eval: vigente 0.2262 · anterior 0.0719 · abstencion 0.5215 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.4998 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= ── eval: vigente 0.1940 · anterior 0.0156 · abstencion 0.5215 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.4995 
+VIVO= True ULTIMO= ── eval: vigente 0.2319 · anterior 0.0312 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+VIVO= True ULTIMO= ── eval: vigente 0.2054 · anterior 0.0365 · abstencion 0.5215 · truncados 0.0000 · nose 0.5600 (ent 0.5272/rel 0.5782) · falsa_abst 0.5026 
+VIVO= True ULTIMO= ── eval: vigente 0.2124 · anterior 0.0156 · abstencion 0.5234 · truncados 0.0000 · nose 0.5648 (ent 0.5272/rel 0.5878) · falsa_abst 0.5026 
+   [checkpoint parcial guardado: paso 2750]
+VIVO= False ULTIMO= listo: {'paso': 3000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.20316072816072817, 'anterior': 0.03125, 'nose': 0.5647762575108113, 'nose_ent': 0.5271606865356865, 'nose_rel': 0.5878331646423751, 'falsa_abst': 0.5025791991372863, 'abstencion': 0.5234375} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/t53_s6.pkl (10M)
+   ultimo paso registrado: "paso": 3000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_m_1348)
+   tramo de 3:6 cerrado en el paso 3000 de 3000
+   tr2_m_1348 parada; pendientes ahora: 
+== todo completo
