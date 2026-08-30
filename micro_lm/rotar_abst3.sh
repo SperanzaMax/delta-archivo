@@ -40,6 +40,9 @@ export SEMBRAR="${SEMBRAR:-1}"
 # DONDE. Sin exportarlos, el tramo usaria sus defaults y la campania dinamica correria fija.
 export MEZCLA="${MEZCLA:-fija}"
 export BLANCO="${BLANCO:-ausencia}"   # 2026-08-26, A5. Viaja hasta entrenar.py por el tramo.
+# 2026-08-29, PREREG_PERDIDA_CABEZA. Misma familia que BLANCO y por la misma razon: sin
+# exportarla, el tramo usaria su default y las tres condiciones correrian IGUAL sin avisar.
+export PERDIDA_CABEZA="${PERDIDA_CABEZA:-bce}"
 export P_VIEJA="${P_VIEJA:-0.35}"
 export MEZCLA_PISO="${MEZCLA_PISO:-0.10}"
 # El horizonte de la curva de lr NO se exportaba, asi que `tramo_abst.sh` usaba su default de 20000

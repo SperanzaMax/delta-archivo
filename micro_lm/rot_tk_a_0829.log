@@ -1,0 +1,39 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_tk_a_0829.log (rotador 3152336)
+== rotador2 · familia 'tk' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:3,3:6 · cuentas: A J F
+-- vuelta 1 · cuenta A · faltan: 3:3 3:6 · 20:25:38
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta J · faltan: 3:3 3:6 · 20:25:46
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta A · faltan: 3:3 3:6 · 20:35:54
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta J · faltan: 3:3 3:6 · 20:35:59
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta F · faltan: 3:3 3:6 · 20:36:05
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta A · faltan: 3:3 3:6 · 20:46:10
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta J · faltan: 3:3 3:6 · 20:46:15
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 4 · cuenta A · faltan: 3:3 3:6 · 20:56:21
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta J · faltan: 3:3 3:6 · 20:56:27
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 4 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 5 · cuenta A · faltan: 3:3 3:6 · 21:06:33
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta J · faltan: 3:3 3:6 · 21:06:38
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 5 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 6 · cuenta A · faltan: 3:3 3:6 · 21:16:44
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta J · faltan: 3:3 3:6 · 21:16:50
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- F la esta usando otro proceso, se saltea
+-- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min

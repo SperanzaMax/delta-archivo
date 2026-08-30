@@ -1,0 +1,665 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[round]{natbib}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\title{\bfseries Perfect Abstention Is Zero Knowledge:\\
+Two Stable Fixed Points of a Self-Referential Abstention Objective\\
+in a Small Language Model with Versioned Memory}
+
+\author{Maximiliano Speranza\\
+\small Independent Researcher, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID: 0009-0005-0413-8554}\\
+\small \texttt{maximiliano.speranza@gmail.com}}
+
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+A hallucination detector should predict its own model's errors, so the natural training target is
+self-referential: label each example by whether the model \emph{would be wrong if it answered}. We
+train that target in a $863{,}730$-parameter language model with a co-trained versioned archive,
+holding architecture, data and budget fixed, and find that the objective has \textbf{two stable fixed
+points}. Nine units split $5$--$4$ between them, and the split is governed by \textbf{how much
+retrieval the model already had when abstention training began}: six units that started from scratch
+split $2$--$4$, while three that inherited $12{,}000$ steps of retrieval pre-training (RECUP
+$0.77$--$0.80$) reached the useful point $3$ of $3$.
+
+The degenerate one is the finding. Four of nine units converge to a state that scores
+$\texttt{nose} = 1.0000$ and $\texttt{invento} = 0.0000$---\emph{perfect} on both metrics the
+abstention literature reports---while their global accuracy sits at $0.4065$, which is exactly the
+trivial floor obtained by abstaining on everything. They are not detectors that fail. They are
+\textbf{perfectly calibrated detectors of a generator that knows nothing}, and the calibration is
+honest: the model does not recover, and it correctly reports that it does not. Their binary head has
+collapsed to a constant with $\mathrm{AUC}\ 0.522$--$0.578$ on its own target, and that constant sits
+where the prior predicts it: for the youngest unit, $\mathrm{logit}$ of the base error rate is
+$1.513$ against a measured median of $1.507$.
+
+The bifurcation is decided early and is sharply legible. At step $2500$, on the $512$-sample
+evaluation batch the training loop already computes, the five surviving units had emitted
+$2$, $4$, $4$, $8$ and $1$ answers; the four degenerate ones had emitted \textbf{zero}. The rule
+``zero versus non-zero at step $2500$'' separates \textbf{40 of 40} runs with a binary head across
+twelve families in this repository, and one unit survived on a \emph{single} sample out of $512$.
+The early mute phase itself belongs to the self-referential target: on the paired control that
+shares seed \emph{and} initialization, three units with a fixed, model-independent target read
+$0.06$--$0.20$ against $0.98$--$0.99$ for their self-referential twins.
+
+The degenerate point is \textbf{absorbing}, not merely slow. Measuring recovery inside one unit with
+paired samples across $4000$ further steps gives $-0.0021$, or $0.4\sigma$: it does not move. We
+also report a correction to our own first reading, in which a between-unit trend that survives a
+noise control ($r = 0.986$) was nonetheless not extrapolable, because the curve is concave and a
+linear fit hid a saturation.
+
+The practical consequence is a metric claim, not an architectural one: \textbf{any success criterion
+that reads abstention rate and fabrication rate without reading global accuracy is maximized by a
+model that has learned nothing}, and a self-referential objective supplies a training dynamic that
+reaches that maximum on its own, in a substantial fraction of runs, with no warning from either
+metric.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:} abstention; hallucination detection; selective prediction; self-referential
+objectives; training dynamics; degenerate solutions; small language models; persistent memory
+
+\section{The metric a silent model wins}
+\label{sec:intro}
+
+The literature on abstention reports two numbers. One is the rate at which a model correctly declines
+to answer questions it cannot answer; the other is the rate at which it fabricates. Both are
+desirable, both are bounded, and a system that improves on both is normally taken to have improved.
+
+A model that abstains on every question scores perfectly on both.
+
+This is not a subtle observation, and it is not new as an abstract point: the selective-prediction
+literature has always paired risk with coverage precisely because risk alone is trivially minimized
+\citep{elyaniv2010selective, geifman2017selective}. What we report is that the degenerate corner is
+not only reachable in principle but is an \textbf{attractor of a natural training objective}, that a
+substantial fraction of runs land in it, and that once landed the state is stable under further
+training.
+
+The objective in question is the one a hallucination detector actually wants. A detector is useful if
+it predicts \emph{this model's} errors, so the target should not be ``does the answer exist?'' but
+``will this model be wrong if it answers?''. That target is available for free during training: take
+the model's own \texttt{argmax}, compare it against the label, and use the comparison as a binary
+target with the gradient stopped. It is the natural thing to do and, in this bench, it is what
+produced the units this paper is about.
+
+Its defect is structural rather than incidental. The label is a function of the model's own state, so
+it moves as the model learns, and the map has more than one consistent solution. At initialization
+the model is wrong on nearly everything, so the target is the constant~$1$ and the head learns to
+predict ``I will be wrong''---which is \emph{true}. Escaping requires the generator to start being
+right before the head has finished settling on the constant. It is a race between two learning
+timescales, and \S\ref{sec:mudas} shows that both the seed and the amount of retrieval the model
+already has when the race starts decide which one wins.
+
+Both outcomes are self-consistent, and that is what makes the degenerate one stable:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+fixed point & what the model asserts, and whether it is true \\
+\midrule
+useful & ``I retrieve well, and I know when I will fail'' --- true \\
+\textbf{degenerate} & ``I retrieve almost nothing, and I know that I retrieve almost nothing'' --- \textbf{also true} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The degenerate model is not miscalibrated. It is honest, useless, and invisible to the two metrics
+the field reports.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item We characterize the degenerate fixed point of a self-referential abstention objective and show
+it is reached by $4$ of the $6$ units trained from scratch, and by none of the $3$ that inherited
+retrieval pre-training (\S\ref{sec:mudas}).
+\item We show the degenerate units are \emph{not} broken detectors: their heads have collapsed to the
+prior, and we verify this quantitatively against the closed-form constant, not just qualitatively
+(\S\ref{sec:prior}).
+\item We show the bifurcation is decided by step $2500$ and is separable by a zero/non-zero rule on
+data the training loop already produces, validated on $40$ runs (\S\ref{sec:bifurcacion}).
+\item We show the degenerate point is absorbing rather than slow, using the first within-unit
+measurement of retrieval in this line of work (\S\ref{sec:absorbente}).
+\item We correct a first reading of our own data in which a real between-unit trend was extrapolated
+with the wrong functional form (\S\ref{sec:correccion}).
+\end{enumerate}
+
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Selective prediction.} The risk--coverage framing
+\citep{elyaniv2010selective, geifman2017selective} exists because abstention trades against
+usefulness, and SelectiveNet \citep{geifman2019selectivenet} makes the trade explicit by training a
+selection head against a coverage constraint. Our degenerate units are the coverage constraint's
+reason for existing, observed as a training outcome rather than as an argument.
+
+\paragraph{Learning to say ``I don't know''.} Adding an \texttt{[IDK]} token to the vocabulary
+\citep{cohen2024idk} and adding a separate binary head are the two dominant interfaces; we compared
+four of them under matched budget in prior work \citep{speranza2026abstention} and found the head
+superior in this regime. That comparison used a \emph{fixed} target---``does the answer exist?''---
+and none of its units entered the state described here. The present paper is what happens when the
+target is made self-referential instead.
+
+\paragraph{Self-referential and bootstrapped targets.} Training a predictor against labels derived
+from the current model is standard in self-training and pseudo-labelling, and the confirmation-bias
+failure mode is well documented \citep{arazo2020pseudo}. Our contribution is not that
+self-referential targets can collapse, which is expected, but the specific shape of the collapse in
+the abstention setting: the collapsed state is \emph{correct}, scores perfectly on the standard
+metrics, and is therefore not detectable as a failure by them.
+
+\paragraph{Degenerate solutions and collapse.} Representation-learning methods that predict their own
+outputs collapse to constants without an explicit remedy \citep{grill2020byol, chen2021simsiam}. The
+mechanism here is the same family---a target that the model can satisfy by moving the target---but
+the collapsed solution is not a constant representation, it is a constant \emph{decision}, and its
+constancy is exactly what makes it score well.
+
+\section{The bench}
+\label{sec:bench}
+
+The bench is the one described in \citet{speranza2026abstention}; we restate what is needed to read
+the results and refer there for the rest.
+
+\paragraph{Model.} A language model trained \emph{from scratch}, no pretrained component:
+$863{,}730$ parameters, $3.5$~MB, closed vocabulary of $242$ human-readable tokens. A delta rule
+recurrence plus a \textbf{co-trained persistent archive} with a learned order stamp in the key, read
+by softmax and injected at block~0. The archive persists across sessions while the recurrent state is
+reset between them.
+
+\paragraph{Task.} Facts are stated in one session, corrected in another, and queried in a third. The
+answer is a \textbf{single token}, so the metric is exact and deterministic: no LLM judge, no
+interpretive parser. $40\%$ of questions have no answer ($p_{\mathrm{nose}} = 0.4$); the empirical
+fraction on the evaluation sample is $0.4065$.
+
+\paragraph{Interface.} All units in this paper use the separate binary head, which the prior
+comparison selected: a scalar $a$ projected from the same final state that feeds the vocabulary
+softmax, $+129$ parameters. The model abstains when $a > 0$. Reporting the collapse on the
+\emph{winning} interface is deliberate---it is not an artifact of a weak abstention mechanism.
+
+\paragraph{Metrics.} \texttt{vigente} is accuracy on the current value \emph{as emitted}, i.e.\ after
+the head's decision; \texttt{nose} is the abstention rate on questions without an answer;
+\texttt{falsa\_abst} is the abstention rate on questions that do have one; \texttt{invento} is the
+rate of answers naming content absent from the archive. We add two instruments:
+
+\begin{itemize}
+\item \textbf{Global accuracy} $= (\text{correct answers} + \text{correct abstentions}) / n$. Its
+trivial floor on this bench is $\mathbf{0.4065}$, obtained by abstaining on everything.
+\item \textbf{RECUP}, retrieval accuracy \emph{ignoring the head}: the \texttt{argmax} over values on
+questions that do have an answer, with the abstention decision not applied. \texttt{vigente} is a
+composite of retrieval and decision and is $0.0000$ whenever $a > 0$ everywhere, regardless of what
+the model retrieved; RECUP separates the two.
+\end{itemize}
+
+\paragraph{Measurement protocol.} RECUP is measured with $n = 8000$ and a fixed data seed
+($54321$) across every checkpoint, so comparisons are \textbf{paired}: the questions are identical
+and only the model differs. This matters. Measured across six data seeds at $n=2000$, RECUP has
+$\sigma = 0.0135$, so an unpaired difference carries $\sigma \approx 0.0191$---larger than the
+effects of interest. We report $p_{\mathrm{flip}}$, the fraction of questions on which two
+checkpoints disagree, and derive the paired standard deviation from it rather than assuming a value.
+
+\paragraph{Protocol.} Every campaign has a pre-registration frozen with its SHA before implementation,
+a deviations file, and per-unit reporting. \textbf{Results are never reported as a mean alone.}
+Bimodality across seeds is a measured property of this bench, and \S\ref{sec:mudas} is a direct
+consequence of it.
+
+\paragraph{Use of a language model.} All experiment code, training campaigns and report generation in
+this work were carried out with the assistance of a large language model. The study design, the
+pre-registrations and their frozen hashes, the choice of controls and the verification of every
+reported number are the author's own. The model is not an author and bears no accountability for the
+work.
+
+\section{The objective}
+\label{sec:objetivo}
+
+Write $\ell$ for the value logits, $y$ for the label, $a$ for the head's scalar. The self-referential
+target is
+\[
+b \;=\; \mathbb{1}\!\left[\operatorname{sg}\!\big(\arg\max\nolimits_{v \neq \texttt{NOSE}} \ell_v\big) \neq y\right],
+\qquad
+\mathcal{L} \;=\; \mathrm{BCE}(a, b) \;+\; \mathrm{CE}_{\text{value}},
+\]
+with $\operatorname{sg}$ the stop-gradient. On questions with no answer, $b = 1$ by construction.
+The value cross-entropy is computed only where an answer exists and normalized by that fraction, so
+that the loss scale does not depend on $p_{\mathrm{nose}}$.
+
+Two properties follow directly and are worth stating before any measurement, because they are what
+the results confirm.
+
+\paragraph{The value gradient is never gated by the head.} $\mathrm{CE}_{\text{value}}$ does not
+depend on $a$. Whatever happens to the head, retrieval keeps receiving gradient. The collapse
+reported below is therefore \emph{not} an instance of ``the model stops learning because it stopped
+answering''---a hypothesis we held and disproved (\S\ref{sec:mudas}).
+
+\paragraph{If the head ignores its input, its optimum is the prior.} A constant $a$ minimizing
+$\mathrm{BCE}$ against $b$ is $\mathrm{logit}\,\mathbb{E}[b]$, and $\mathbb{E}[b]$ is computable in
+closed form from RECUP:
+\begin{equation}
+\mathbb{E}[b] \;=\; p_{\mathrm{nose}} + (1 - p_{\mathrm{nose}})\,(1 - \mathrm{RECUP}),
+\qquad p_{\mathrm{nose}} = 0.4065 .
+\label{eq:prior}
+\end{equation}
+This is a prediction with no free parameters, and \S\ref{sec:prior} tests it.
+
+\section{Results}
+
+Nine units, seeds $0$--$8$, identical flags. Five reach a useful state; four do not. We report per
+unit throughout.
+
+\paragraph{A confound in the starting point, found late and reported in full.} The nine units are
+\emph{not} homogeneous, and we discovered this after the analysis below was written. The training
+harness seeds the abstention phase from a base checkpoint when one exists for that seed. Only three
+such bases existed (\texttt{n3\_s0}, \texttt{n3\_s1}, \texttt{n3\_s2}, each carrying $12{,}000$
+steps of retrieval-only training), so seeds $0$--$2$ entered the abstention phase already retrieving
+at RECUP $0.7734$, $0.7970$ and $0.7725$, while seeds $3$--$8$ started from scratch. The campaign's
+pre-registration asserted that only the seed varied; the check performed at the time compared the
+saved \emph{configs}, which do not record whether seeding occurred.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+group & seeds & starting RECUP & outcome \\
+\midrule
+pre-trained & 0, 1, 2 & $\approx 0.78$ & \textbf{3 of 3 useful} \\
+from scratch & 3--8 & $0$ & 2 useful, \textbf{4 degenerate} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+We state plainly what this costs and what it does not. \textbf{It costs the rate.} ``Four of nine
+seeds'' is not a rate for a homogeneous population; the honest statement is $0$ of $3$ with
+pre-training and $4$ of $6$ without. \textbf{It does not cost the phenomenon}, which is measured per
+unit and does not depend on the grouping: the degenerate fixed point exists, four units are in it,
+their heads sit at the prior, and the state is absorbing.
+
+And it \emph{strengthens} the mechanism of \S\ref{sec:objetivo} rather than weakening it. If the
+outcome is a race between retrieval learning and head settling, then a model that arrives already
+retrieving has won the race before it starts---which is exactly the pattern observed. That two of the
+six from-scratch units reach the useful point anyway shows pre-training is not necessary, only
+strongly favourable.
+
+\textbf{Where this does bite, and where it does not, is spelled out in the two affected sections}:
+\S\ref{sec:exclusiva} rests on a paired control that shares both seed \emph{and} base and is
+therefore unaffected, while the wider $31$-versus-$9$ tabulation is confounded and we do not rely on
+it.
+
+\subsection{Four of nine units end mute}
+\label{sec:mudas}
+
+\begin{table}[h]
+\centering
+\caption{The nine units at their own operating point. RECUP is retrieval ignoring the head; the last
+three columns are the head's behaviour. Degenerate units in bold.}
+\begin{tabular}{lrrrrrr}
+\toprule
+unit & step & RECUP & $\mathrm{AUC}(a)$ & $a > 0$ & median $a$ & range of $a$ \\
+\midrule
+b3\_s0 & 26000 & 0.9996 & 0.9997 & 0.407 & $-7.634$ & 29.17 \\
+b3\_s1 & 26000 & 0.9992 & 0.9999 & 0.407 & $-7.563$ & 29.86 \\
+b3\_s4 & 19000 & 0.7984 & 0.8084 & 0.413 & $-0.157$ & 14.17 \\
+b3\_s2 & 26000 & 0.7946 & 0.8163 & 0.392 & $-0.233$ & 14.23 \\
+b3\_s5 & 6000  & 0.7314 & 0.7550 & 0.529 & $+0.069$ & 5.66 \\
+\midrule
+\textbf{b3\_s6} & 26000 & \textbf{0.3964} & \textbf{0.5734} & \textbf{1.000} & $+1.006$ & \textbf{3.12} \\
+\textbf{b3\_s3} & 26000 & \textbf{0.3820} & \textbf{0.5784} & \textbf{1.000} & $+1.045$ & \textbf{2.83} \\
+\textbf{b3\_s7} & 13500 & \textbf{0.3432} & \textbf{0.5220} & \textbf{1.000} & $+1.251$ & \textbf{1.06} \\
+\textbf{b3\_s8} & 8000  & \textbf{0.3040} & \textbf{0.5458} & \textbf{1.000} & $+1.507$ & \textbf{0.85} \\
+\bottomrule
+\end{tabular}
+\label{tab:nueve}
+\end{table}
+
+\paragraph{What the standard metrics say about the bold rows.} All four abstain on every question.
+Therefore \texttt{nose} $=1.0000$: they correctly decline every unanswerable question. And
+\texttt{invento} $=0.0000$: they never name content absent from the archive, because they never name
+anything. On the two numbers the abstention literature reports, these are the best units in the
+table---strictly better than \texttt{b3\_s0}, which answers and therefore occasionally errs.
+
+Their global accuracy is $0.4065$: the trivial floor, to four decimals, in all four.
+
+\paragraph{A hypothesis we held and disproved.} \texttt{vigente} is composite, so
+$\texttt{vigente} = 0.0000$ is compatible with \emph{perfect} retrieval hidden behind a stuck head.
+We expected that. It is false: RECUP is $0.30$--$0.40$ in the degenerate units against $0.73$--$1.00$
+in the rest. Retrieval is genuinely impaired.
+
+But it is not zero, and that matters for the interpretation. At $\approx 0.35$ against a chance rate
+below $0.01$, these models have learned a substantial part of the task and stopped short. The
+degenerate state is not an untrained model; it is a partially trained model whose head correctly
+reports that partial training as insufficient.
+
+\subsection{The head has collapsed to the prior, and the constant is where theory puts it}
+\label{sec:prior}
+
+The four degenerate heads do not discriminate: $\mathrm{AUC}$ on their own target is
+$0.522$--$0.578$, against $0.9997$ for \texttt{b3\_s0}. Nor are they saturated at $+\infty$: the
+entire $1$--$99$ percentile range of their logits spans $0.85$--$3.24$, against $29.17$. They are
+constants sitting just above the decision threshold.
+
+Equation~\eqref{eq:prior} predicts \emph{which} constant, with no fitted parameter:
+
+\begin{table}[h]
+\centering
+\caption{Closed-form prior against measured median logit. No parameters are fitted.}
+\begin{tabular}{lrrrrr}
+\toprule
+unit & RECUP & $\mathbb{E}[b]$ & predicted $\mathrm{logit}$ & measured median $a$ & difference \\
+\midrule
+b3\_s8 & 0.3040 & 0.8196 & $1.513$ & $1.507$ & $\mathbf{0.006}$ \\
+b3\_s7 & 0.3432 & 0.7963 & $1.363$ & $1.251$ & $0.112$ \\
+b3\_s3 & 0.3820 & 0.7733 & $1.227$ & $1.045$ & $0.182$ \\
+b3\_s6 & 0.3964 & 0.7647 & $1.179$ & $1.006$ & $0.173$ \\
+\bottomrule
+\end{tabular}
+\label{tab:prior}
+\end{table}
+
+The ordering is reproduced in all four and the youngest unit falls within $0.006$ of the
+parameter-free prediction. The older units sit slightly below their prior, which is what a head
+beginning to discriminate would do; consistent with this, the range of $a$ grows monotonically with
+step across the four ($0.85 \to 1.06 \to 2.83 \to 3.12$). \textbf{The head is not broken. It is
+optimal for a generator that is wrong $80\%$ of the time.}
+
+\subsection{The bifurcation is decided at step 2500}
+\label{sec:bifurcacion}
+
+Every unit with this target passes through an initial mute phase, which is expected: at
+initialization the target is the constant~$1$. What differs is whether it ends.
+
+The training loop already evaluates on $8$ batches of $64$, i.e.\ $512$ samples. At step $2500$:
+
+\begin{table}[h]
+\centering
+\caption{Answers emitted out of $512$ at step $2500$, against the eventual outcome.}
+\begin{tabular}{lrrl}
+\toprule
+unit & \texttt{abstencion} @2500 & answers emitted & outcome \\
+\midrule
+b3\_s2 & 0.9844 & 8 & useful \\
+b3\_s0 & 0.9922 & 4 & useful \\
+b3\_s5 & 0.9922 & 4 & useful \\
+b3\_s1 & 0.9961 & 2 & useful \\
+b3\_s4 & 0.9980 & \textbf{1} & useful \\
+\midrule
+b3\_s3 & 1.0000 & \textbf{0} & degenerate \\
+b3\_s6 & 1.0000 & \textbf{0} & degenerate \\
+b3\_s7 & 1.0000 & \textbf{0} & degenerate \\
+b3\_s8 & 1.0000 & \textbf{0} & degenerate \\
+\bottomrule
+\end{tabular}
+\label{tab:bifurcacion}
+\end{table}
+
+The separation is zero versus non-zero, and \texttt{b3\_s4} survives on a \textbf{single sample out
+of $512$} and reaches $\texttt{vigente} = 0.68$. Breaking the silence once appears to be the event
+that matters, which is what the race in \S\ref{sec:objetivo} predicts: one sample on which the
+\texttt{argmax} is right is one sample whose target is $0$, and that is what a constant head has no
+gradient to produce.
+
+\paragraph{Validation on the repository.} Applied to \textbf{every} run in this repository with a
+binary abstention head that reached $\geq 6000$ steps and has a step-$2500$ checkpoint---$40$ runs,
+twelve families, two decision rules, both targets---the rule separates \textbf{40 of 40}: $36$
+predicted useful and useful, $4$ predicted degenerate and degenerate.
+
+\paragraph{The hardest available test, run after the rule was formulated.} The rule was derived
+post-hoc. We then took the two \emph{oldest} degenerate units to full horizon under the original
+flags, pre-registering the prediction that neither would leave total abstention. Neither did:
+\texttt{b3\_s3} and \texttt{b3\_s6} reached step $26000$ with $\texttt{abstencion} \geq 0.999$ at
+every logged milestone. This is not a prospective validation---the properly prospective test would
+have been a screening design we did not run---but it is the strongest test the existing units
+permitted, and the rule survived it.
+
+\paragraph{A caveat on the margin.} One sample in $512$ is a margin of $0.2\%$. As an operational
+criterion the abstention \emph{rate} is too fragile; the robust form of the same quantity is
+$\min_i a_i$ over a large batch, which is continuous and independent of batch size.
+
+\subsection{The mute phase belongs to the self-referential target}
+\label{sec:exclusiva}
+
+\textbf{This is the section the seeding confound touches most, so we state the limit first.} Every
+run with a fixed target in this repository uses seeds $0$--$2$, and those are exactly the seeds for
+which a pre-trained base exists. The wide tabulation below is therefore confounded with
+initialization, and we report it as description rather than as evidence:
+
+\begin{center}
+\begin{tabular}{lrl}
+\toprule
+target & runs & \texttt{abstencion} at step 2500 \\
+\midrule
+fixed (``does the answer exist?'') & 31 & $0.02$--$0.32$ \\
+\textbf{self-referential (``will I be wrong?'')} & 9 & $\mathbf{0.98}$--$\mathbf{1.00}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{The claim rests instead on the paired control, which the confound does not reach.} The three
+\texttt{p3} units share seed, architecture, budget \emph{and} pre-trained base with
+\texttt{b3\_s0/s1/s2}, and differ only in the target:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+seed & \texttt{abstencion} @2500, fixed target & \texttt{abstencion} @2500, self-referential \\
+\midrule
+0 & 0.086 & \textbf{0.992} \\
+1 & 0.201 & \textbf{0.996} \\
+2 & 0.063 & \textbf{0.984} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Three of three, with the confounding variable held fixed by construction. The self-referential target
+drives the model into the mute phase \emph{even when it arrives already retrieving} at RECUP
+$\approx 0.78$; the fixed target never does. The \texttt{p3} units end at RECUP $0.80$--$0.97$ and
+none falls in the degenerate band.
+
+The mechanism is the one \S\ref{sec:objetivo} names: a fixed target is observable from step~$1$ and
+discriminative immediately, so its head never passes through the constant phase in which the
+degenerate solution is available.
+
+\subsection{The degenerate point is absorbing, not slow}
+\label{sec:absorbente}
+
+Whether the state is a fixed point or a slow bottleneck changes what follows from it entirely, and
+the two are distinguishable by measuring retrieval \emph{inside one unit}---which this line of work
+had never done, because intermediate checkpoints are overwritten and the logged
+\texttt{vigente} is $0.0000$ at every milestone regardless of retrieval.
+
+We archived every partial checkpoint of \texttt{b3\_s3} from $22000$ to $26000$ and measured RECUP on
+each with paired samples ($n=8000$, seed $54321$), under a pre-registration frozen beforehand that
+asked for $\geq +0.0100$ and monotonicity in $\geq 3$ of $4$ intervals:
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+step & 22000 & 23000 & 24000 & 25000 \quad 26000 \\
+\midrule
+RECUP & 0.3841 & 0.3778 & 0.3844 & 0.3812 \quad 0.3820 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The total is $\mathbf{-0.0021}$ over $4000$ steps. With $p_{\mathrm{flip}} = 0.1526$ measured, the
+paired standard deviation is $0.0057$, so the total is $0.4\sigma$ and each interval is $0.1$--$1.2\sigma$:
+\textbf{noise around a flat line}. Monotonicity was $2$ of $4$. The pre-registration's risk criterion
+fired and its abandonment clause applied; a planned follow-up campaign of $70000$ steps was
+cancelled.
+
+\paragraph{What this does not separate, declared in advance.} The final $4000$ steps run with the
+learning rate at the floor of its cosine schedule. ``The attractor is absorbing'' and ``nothing moves
+at floor learning rate'' are both consistent with a flat curve, and the cancelled campaign was what
+would have separated them. We therefore state the result as \emph{absorbing under this budget and
+this schedule}, not as absorbing in general. This is the principal open question left by the paper.
+
+\paragraph{One interval points the other way.} \texttt{b3\_s6}, which had only $1000$ steps
+remaining, gives $+0.0080$ ($1.6\sigma$). The pre-registration had already ruled that a single
+interval does not constitute a trend, and it does not, but it is the one measurement in this paper
+pushing in the opposite direction and we report it as such.
+
+\subsection{A correction to our own first reading}
+\label{sec:correccion}
+
+Our first analysis fitted a line through the four degenerate units ordered by step and extrapolated
+that RECUP would reach $0.70$ at $\approx 84000$ steps---i.e.\ that the state was slow rather than
+absorbing. Two checks were run before publishing that reading, and the second overturned it.
+
+\paragraph{The check that passed.} The initial measurement used $n=2000$, whose $\sigma = 0.0135$ is
+comparable to the between-unit spread, so we suspected the trend was measurement noise. Re-measuring
+all four at $n=8000$ gives $r = 0.9864$ with a range of $12.5\sigma$. \textbf{The trend is real and
+the suspicion was wrong.}
+
+\paragraph{The check that failed.} The trend is real but not linear. Per-interval slopes decrease
+monotonically---$+0.0071$, $+0.0048$, $+0.0014$ per $1000$ steps between successive units, and
+$-0.0005$ within \texttt{b3\_s3}---and a saturating fit gives residual sum of squares $12.6\times$
+smaller than the linear one. The extrapolation was an artifact of fitting a straight line to a
+concave curve.
+
+\paragraph{What we do \emph{not} conclude from the saturating fit.} It has three parameters for four
+points, and its own prediction at step $26000$ ($0.4535$) misses the measured value ($0.3820$) by
+$0.07$. It is not evidence. The claim in \S\ref{sec:absorbente} rests on the within-unit measurement,
+which has no between-seed confound, and the saturating fit only explains why the earlier
+extrapolation was wrong.
+
+\section{What we do not claim}
+\label{sec:noclaim}
+
+\paragraph{This is not evidence that the self-referential target is useless.} Five of nine units
+reach a useful state, two of them with $\mathrm{RECUP} \geq 0.999$ and $\mathrm{AUC} \geq 0.9999$.
+The claim is that the objective admits a second stable solution and that a substantial minority of
+seeds find it---not that the objective fails.
+
+\paragraph{The degenerate units are not miscalibrated.} It would be convenient to call them broken.
+They are not: their heads are optimal for their generators, to within $0.006$ of the parameter-free
+prediction in the cleanest case. The failure is that being well calibrated about knowing nothing is
+worth nothing, which is a statement about the objective and the metrics, not about calibration.
+
+\paragraph{We do not claim the model knows when it does not know.} Everything here is supervised: the
+head is trained against labels, and in the self-referential case against labels derived from
+supervised comparison. The degenerate units in particular are a caution against that reading, since
+they exhibit the outward signature of knowing when they do not know while knowing nothing at all.
+
+\paragraph{The step-2500 rule is post-hoc.} It was formulated after observing outcomes, validated on
+$40$ existing runs and tested on two units taken to full horizon under pre-registration. That is
+strong retrospective evidence and one hard confirmation; it is not a prospective validation, and we
+do not report it as one.
+
+\section{Limitations}
+\label{sec:limits}
+
+\begin{itemize}
+\item \textbf{The starting point was not controlled, and we found it late.} Seeds $0$--$2$ inherited
+$12{,}000$ steps of retrieval pre-training and seeds $3$--$8$ did not, so the headline split is not a
+rate over a homogeneous population (\S\ref{sec:mudas}). The per-unit phenomena are unaffected and the
+paired control of \S\ref{sec:exclusiva} is clean, but any future campaign on this question must fix
+the initialization across all units, and the harness must record whether seeding occurred---the saved
+config does not, which is why the original check missed it.
+\item \textbf{Scale.} $863{,}730$ parameters, a synthetic $242$-token language, one difficulty level,
+$p_{\mathrm{nose}}$ fixed at $0.4$. Nothing here transfers automatically. We note only that the
+degenerate fixed point is a property of the objective's algebra rather than of the model's size,
+which makes the transfer question worth asking rather than answered.
+\item \textbf{Budget and schedule are confounded with the absorbing claim}, as declared in
+\S\ref{sec:absorbente}. This is the single largest gap in the paper.
+\item \textbf{Nine units.} The $5$--$4$ split is a count, not a rate estimate; we report it as
+observed and do not attach a confidence interval to a proportion from nine seeds.
+\item \textbf{Two units are incomplete.} \texttt{b3\_s7} and \texttt{b3\_s8} were stopped at $13500$
+and $8000$ steps after the campaign's blocking criterion became arithmetically unreachable. Their
+degenerate status at those steps is measured, not extrapolated, but they did not run to horizon, and
+the deviation is declared in the repository.
+\item \textbf{One decision rule.} All units use the separate binary head. Whether the token or slot
+interfaces admit the same fixed point under a self-referential target is untested.
+\item \textbf{Directed literature search, not a systematic review.}
+\end{itemize}
+
+\section{Conclusion}
+
+A hallucination detector wants to predict its own model's errors, so the natural target is
+self-referential. That target has two stable fixed points, and the degenerate one is not a
+pathology to be engineered away but a correct solution: a model that retrieves almost nothing and
+reports, accurately, that it retrieves almost nothing. Four of the six units that began from scratch
+found it; none of the three that began already retrieving did.
+
+What makes this more than a curiosity is that the degenerate solution is \textbf{invisible to the
+metrics the field reports}. It scores $\texttt{nose} = 1.0000$ and $\texttt{invento} = 0.0000$,
+better than the units that work, while its global accuracy sits at the trivial floor to four decimals.
+Any criterion built from abstention rate and fabrication rate is maximized by it. The remedy is not
+subtle---report global accuracy against its trivial floor, and require it alongside any abstention
+metric---but it has to be applied, and in this project it was applied only after a campaign had
+already been designed around criteria that a mute model would have won.
+
+The bifurcation is legible early and cheaply. Zero answers emitted at step $2500$ separated $40$ of
+$40$ runs, and one unit survived on one sample out of $512$. If that rule generalizes---which this
+paper does not establish---then the relevant question for a self-referential abstention objective is
+not how to make a model abstain well. Abstaining well is trivial, and a model can do it by knowing
+nothing. The question is how to leave silence without beginning to invent, and that is decided in the
+first few thousand steps.
+
+\section*{Data and code availability}
+
+All pre-registrations with their SHA hashes, deviation files, analysis scripts, per-seed raw results
+and machine-generated reports are archived in the project repository,
+\url{https://github.com/SperanzaMax/delta-archivo}, whose commit history carries the timestamps that
+establish the order of pre-registration and result.
+
+\section*{Declarations}
+
+\textbf{Funding.} None. \textbf{Competing interests.} None. \textbf{Ethics approval.} Not applicable;
+no human or animal subjects. \textbf{Data availability.} See above. \textbf{Author contributions.}
+Sole author.
+
+\bibliographystyle{plainnat}
+\begin{thebibliography}{9}
+
+\bibitem[Arazo et~al.(2020)]{arazo2020pseudo}
+Arazo, E., Ortego, D., Albert, P., O'Connor, N.~E., and McGuinness, K. (2020).
+Pseudo-labeling and confirmation bias in deep semi-supervised learning.
+\emph{IJCNN}.
+
+\bibitem[Chen and He(2021)]{chen2021simsiam}
+Chen, X. and He, K. (2021).
+Exploring simple Siamese representation learning.
+\emph{CVPR}.
+
+\bibitem[Cohen et~al.(2024)]{cohen2024idk}
+Cohen, R., Dobler, K., Biran, E., and de~Melo, G. (2024).
+I don't know: Explicit modeling of uncertainty with an [IDK] token.
+\emph{NeurIPS}.
+
+\bibitem[El-Yaniv and Wiener(2010)]{elyaniv2010selective}
+El-Yaniv, R. and Wiener, Y. (2010).
+On the foundations of noise-free selective classification.
+\emph{JMLR}, 11:1605--1641.
+
+\bibitem[Geifman and El-Yaniv(2017)]{geifman2017selective}
+Geifman, Y. and El-Yaniv, R. (2017).
+Selective classification for deep neural networks.
+\emph{NeurIPS}.
+
+\bibitem[Geifman and El-Yaniv(2019)]{geifman2019selectivenet}
+Geifman, Y. and El-Yaniv, R. (2019).
+SelectiveNet: A deep neural network with an integrated reject option.
+\emph{ICML}.
+
+\bibitem[Grill et~al.(2020)]{grill2020byol}
+Grill, J.-B. et~al. (2020).
+Bootstrap your own latent: A new approach to self-supervised learning.
+\emph{NeurIPS}.
+
+\bibitem[Speranza(2026)]{speranza2026abstention}
+Speranza, M. (2026).
+Where abstention lives: A pre-registered four-way comparison of abstention interfaces in a small
+language model with versioned memory.
+\emph{Research Square}, DOI 10.21203/rs.3.rs-10839567/v1.
+
+\end{thebibliography}
+
+\end{document}

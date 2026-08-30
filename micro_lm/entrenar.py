@@ -55,6 +55,7 @@ NOSE = I.STOI["NOSE"]
 _DONDE = "pre"
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
+_PERDIDA_CABEZA = "bce"   # 2026-08-29: forma de la perdida de la cabeza — bce/balance/ranking
 
 
 def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None):
@@ -99,8 +100,61 @@ def predecir(params, ses, cortes, turnos, mask, cons, pos):
 
 def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
     lg = logits_de(params, ses, cortes, turnos, mask, cons, pos)
+    if _PERDIDA_CABEZA == "recompensa":
+        return _recompensa(lg, tgt, q=jax.nn.softmax(lg, -1)[:, NOSE])
     ce = optax.softmax_cross_entropy_with_integer_labels(lg, tgt).mean()
     return ce, (lg.argmax(-1) == tgt).mean()
+
+
+# --- RECOMPENSA ESPERADA (2026-08-29, `PREREG_RECOMPENSA.md`, SHA f1f7bb66) ---------------------
+# Idea de Maxi: «premio para que los aciertos [...] lo incentiven a querer siempre dar su mejor
+# esfuerzo en saber, y resta cuando miente o da una respuesta incorrecta».
+#
+# Lo que esto arregla, y es el fracaso medido el 29 con `balance` y `ranking`: aquellas dos tocan
+# SOLO al vigilante, asi que la perdida del valor y la de la cabeza nunca se hablan y nada le dice al
+# modelo que equivocarse sea PEOR que callarse. Les sacamos el pago al silencio y las seis unidades
+# se fueron a inventar (exactitud 0,2361-0,3536 contra un piso de 0,4065, invento hasta 0,1966).
+#
+# Aca la perdida es UNA SOLA y mira el resultado final. Cuatro casos, con el acierto normalizado a 1:
+#
+#     +1     acerto la respuesta
+#     +L     dijo NOSE y de verdad no estaba
+#     -M     contesto y erro (inventar incluido)
+#     -F     dijo NOSE pero la respuesta SI estaba
+#
+# El corte «si NOSE gana, abstenerse» no es derivable, asi que NO se decide: se usa la MASA `q` que el
+# modelo ya le da a NOSE como probabilidad de abstenerse, y se escribe la recompensa ESPERADA. Con la
+# interfaz `token` esa masa sale del propio softmax de vocabulario —sin cabeza, sin parametro nuevo,
+# que es lo que la hace escalable—; con `cabeza` sale de sigmoid(a).
+#
+# Los pesos estan FIJADOS en el pre-registro (L=M=0,5, F=1,5) y salen de la condicion derivada alli:
+#     F > [ pi*(L+M) + (1-pi)*((1-c)*M - c) ] / (1-pi)
+# que en este banco (pi=0,4065) da un minimo de 1,185 en c=0. El 1,5 deja 27 % de margen.
+_REC_L = 0.5
+_REC_M = 0.5
+_REC_F = 1.5
+
+
+def _recompensa(lg, tgt, q):
+    """Perdida = -E[recompensa]. `q` es la probabilidad de abstenerse, derivable."""
+    es_nose = (tgt == NOSE).astype(jnp.float32)
+    hay = 1.0 - es_nose
+
+    # P(acertar | contesta). Se usa la probabilidad NORMALIZADA sobre los valores, no el argmax: el
+    # argmax no es derivable y ademas descarta la informacion de cuanta confianza tenia el modelo,
+    # que es justamente lo que la recompensa esperada necesita para poder moverse.
+    lg_v = lg.at[:, NOSE].set(-1e9)
+    p_val = jax.nn.softmax(lg_v, -1)
+    c = jnp.take_along_axis(p_val, tgt[:, None], axis=1)[:, 0] * hay   # 0 donde tgt es NOSE
+
+    # con respuesta: q*(-F) + (1-q)*(c*1 + (1-c)*(-M))
+    r_hay = q * (-_REC_F) + (1.0 - q) * (c - (1.0 - c) * _REC_M)
+    # sin respuesta: q*(+L) + (1-q)*(-M)   — contestar cuando no hay respuesta es siempre error
+    r_no = q * _REC_L + (1.0 - q) * (-_REC_M)
+
+    rec = hay * r_hay + es_nose * r_no
+    pred = jnp.where(q > 0.5, NOSE, lg_v.argmax(-1))
+    return -rec.mean(), (pred == tgt).mean()
 
 
 # --- cabeza de abstencion separada (2026-08-18, `PREREG_CABEZA_ABSTENCION.md`) -------------------
@@ -144,7 +198,47 @@ def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt):
         blanco = (lg_arg != tgt).astype(jnp.float32)      # con tgt==NOSE da 1 siempre, por definicion
     else:
         blanco = es_nose
-    bce = optax.sigmoid_binary_cross_entropy(a, blanco).mean()
+    # --- PERDIDA DE LA CABEZA (2026-08-29, `PREREG_PERDIDA_CABEZA.md`, SHA 0f57609d) -------------
+    # Idea de Maxi: «estudiar tiene que tener una retribucion mucho mayor que no estudiar [...] para
+    # descubrir tiene que saber y eso lo lleva a saber».
+    #
+    # El informe del 29 midio que con `bce` la cabeza de 4 de 9 unidades colapsa al prior, y que ese
+    # colapso NO es una meseta: la constante `logit E[b]` es el MINIMO de la BCE. El modelo se queda
+    # ahi porque ahi esta el optimo de lo que se le pide. Peor todavia, cuanto menos recupera mas
+    # facil le queda a la cabeza, porque el blanco se vuelve casi constante.
+    #
+    # Las dos condiciones nuevas le sacan a la cabeza el pago por la constante, con distinta fuerza:
+    #
+    #   `balance`  pesa cada muestra por el inverso de la frecuencia de su clase EN EL LOTE. La mejor
+    #              constante pasa a valer log 2 sea cual sea el prior: cobrarlo deja de pagar. Los
+    #              pesos se renormalizan a media 1 para no cambiar la escala frente a la CE del valor;
+    #              sin eso, `balance` estaria ademas subiendo el peso relativo de la cabeza y el
+    #              contraste mediria dos cosas a la vez.
+    #
+    #   `ranking`  sustituto del AUC por pares. TODA constante da el mismo valor y es el PEOR
+    #              alcanzable, asi que no hay prior que cobrar en absoluto y el unico modo de bajar la
+    #              perdida es ordenar. Es la version literal de la idea.
+    #              Con un lote sin pares validos (todo blanco 1, que es lo que pasa al principio) el
+    #              denominador seria 0: se protege con `maximum(...,1)`, y en ese caso la perdida da 0
+    #              y la cabeza simplemente no recibe gradiente en ese paso. Es lo correcto — no hay
+    #              informacion de orden que aprender — y no un caso que haya que rellenar.
+    if _PERDIDA_CABEZA == "recompensa":
+        # interfaz H del PREREG_RECOMPENSA: la misma recompensa, pero la probabilidad de abstenerse
+        # sale de la cabeza binaria en vez del softmax de vocabulario. Es el CONTRASTE de la campania,
+        # no la condicion principal — la principal no tiene cabeza justamente porque escala.
+        return _recompensa(lg, tgt, q=jax.nn.sigmoid(a))
+    if _PERDIDA_CABEZA == "balance":
+        f1 = jnp.mean(blanco)                       # fraccion de la clase «me equivoco»
+        f0 = 1.0 - f1
+        w = blanco / jnp.maximum(f1, 1e-6) + (1.0 - blanco) / jnp.maximum(f0, 1e-6)
+        w = w / jnp.maximum(jnp.mean(w), 1e-6)      # media 1: no cambia la escala de la perdida
+        bce = (optax.sigmoid_binary_cross_entropy(a, blanco) * w).mean()
+    elif _PERDIDA_CABEZA == "ranking":
+        dif = a[:, None] - a[None, :]               # (B, B)
+        par = blanco[:, None] * (1.0 - blanco)[None, :]   # i con blanco 1, j con blanco 0
+        bce = (jax.nn.softplus(-dif) * par).sum() / jnp.maximum(par.sum(), 1.0)
+    else:
+        bce = optax.sigmoid_binary_cross_entropy(a, blanco).mean()
     lg_v = lg.at[:, NOSE].set(-1e9)
     ce = optax.softmax_cross_entropy_with_integer_labels(lg_v, tgt)
     # la CE del valor sólo cuenta donde HAY respuesta, y se normaliza por esa fraccion para que la
@@ -238,6 +332,17 @@ def main():
                          "escala = idem pero renormalizando el vector de NOSE a la norma media de "
                          "los tokens de valor al arrancar la fase; "
                          "cabeza = salida binaria separada, con NOSE excluido del softmax de valores")
+    ap.add_argument("--perdida-cabeza", default="bce",
+                    choices=("bce", "balance", "ranking", "recompensa"),
+                    help="forma de la perdida de la cabeza (PREREG_PERDIDA_CABEZA.md, SHA 0f57609d). "
+                         "`bce` es lo que se venia haciendo y tiene un minimo en la constante del "
+                         "prior, que es el atractor mudo del 29-ago. `balance` pesa por el inverso "
+                         "de la frecuencia de clase, con lo que la mejor constante vale log 2 sea "
+                         "cual sea el prior. `ranking` es el sustituto del AUC por pares, donde toda "
+                         "constante da el PEOR valor posible. `recompensa` (PREREG_RECOMPENSA.md, "
+                         "SHA f1f7bb66) es otra cosa: reemplaza las DOS perdidas por una sola "
+                         "recompensa esperada sobre el resultado final, y es la unica que "
+                         "funciona tambien con --abst token, sin cabeza.")
     ap.add_argument("--blanco", default="ausencia", choices=("ausencia", "error"),
                     help="que aprende la BCE de la cabeza (A5, ALTERNATIVAS_DETECCION_20260826.md). "
                          "«ausencia» = ¿hay respuesta?, que es lo de siempre. «error» = ¿me voy a "
@@ -328,10 +433,11 @@ def main():
     # asignacion crea una LOCAL y la global se queda en "token": `--abst slot` no tendria efecto y
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
-    global _DONDE, _ABST, _BLANCO
+    global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA
     _DONDE = a.donde
     _ABST = a.abst
     _BLANCO = a.blanco
+    _PERDIDA_CABEZA = a.perdida_cabeza
 
     print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
           f"· lectura {a.donde}", flush=True)
@@ -439,6 +545,15 @@ def main():
             sys.exit(f"ABORTA: el checkpoint se entreno con blanco="
                      f"{ck['config'].get('blanco', 'ausencia')} y se pidio blanco={a.blanco}. "
                      f"La cabeza aprende otra cosa, no es la misma corrida.")
+        # `perdida_cabeza` (2026-08-29): MISMA familia que `blanco` y por la misma razon. Un tramo que
+        # se reanuda con otra forma de perdida no continua la corrida, la bifurca — y el 29-ago se
+        # midio que esta eleccion decide a cual de los dos puntos fijos cae la unidad, asi que
+        # mezclarla a mitad de camino seria el confound mas caro posible en esta campania.
+        if ("perdida_cabeza" in ck["config"]
+                and ck["config"]["perdida_cabeza"] != a.perdida_cabeza):
+            sys.exit(f"ABORTA: el checkpoint se entreno con perdida_cabeza="
+                     f"{ck['config']['perdida_cabeza']} y se pidio {a.perdida_cabeza}. "
+                     f"No es la misma corrida.")
         hor_ck = ck["config"].get("horizonte") or ck["config"].get("pasos")
         if hor_ck != HOR:
             sys.exit(f"ABORTA: el checkpoint se entreno con horizonte de lr {hor_ck} y se pidio "

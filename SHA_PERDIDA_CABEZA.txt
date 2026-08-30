@@ -1,0 +1,4 @@
+0f57609dc20f4eb1f96016c8307b9c8ac753757338c6db7bfa64d5fb427ae362  PREREG_PERDIDA_CABEZA.md
+congelado 2026-08-29 16:02:21 (antes de escribir el instrumento)
+fe05815129429476326e138d454dba3bf54b939808469f323e9fec91eda18ae1  ENMIENDA_PERDIDA_CABEZA.md
+enmienda congelada 2026-08-29 16:37:07 (antes del primer tramo)
