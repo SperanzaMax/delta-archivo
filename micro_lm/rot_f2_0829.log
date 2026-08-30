@@ -1,0 +1,27 @@
+== watchdog2 armado sobre /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_f2_0829.log (rotador 2986591)
+== rotador2 · familia 'f2' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:3,3:6 · cuentas: A J F D C L K H M N I G E
+-- vuelta 1 · cuenta A · faltan: 3:3 3:6 · 22:54:03
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta J · faltan: 3:3 3:6 · 22:54:09
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta F · faltan: 3:3 3:6 · 22:54:15
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta D · faltan: 3:3 3:6 · 22:54:21
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta C · faltan: 3:3 3:6 · 22:54:26
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta L · faltan: 3:3 3:6 · 22:54:32
+   503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta K · faltan: 3:3 3:6 · 22:54:38
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta H · faltan: 3:3 3:6 · 22:54:44
+   >> OTORGADA en H (T4): [tr2_h_2254] gpu-t4-s-kkb-usw4b1-3fkfruxcl0bs9 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:3 en H (desde el paso 0)
+== tramo · cuenta H · sesion tr2_h_2254 · f23_s3 · +3000 de 3000 pasos · p_nose 0.4 · abst token · donde pre · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco error · perdida recompensa · sembrar 0
+[colab] Uploaded '/tmp/tmp.FA0cHMx16z/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck.pkl
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 5335
+== polling cada 2 min (presupuesto ~50 min)

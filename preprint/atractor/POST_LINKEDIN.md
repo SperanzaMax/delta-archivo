@@ -1,10 +1,16 @@
 # Post de LinkedIn — la abstención perfecta
 
+**⚠ NO PUBLICAR TODAVIA.** Dos razones. (1) El preprint no está enviado y el post necesita el DOI.
+(2) La primera versión de este texto decía «nueve modelos exactamente iguales, cambiando sólo el
+número de arranque», y eso **es falso**: el confound de la siembra encontrado el 29 mostró que las
+semillas 0 a 2 arrancaron con 12000 pasos de entrenamiento previo y las 3 a 8 desde cero. Ya está
+corregido acá, pero **si el texto se copió antes de las 18 h del 29, hay que volver a copiarlo**.
+
 **Estado.** El preprint todavía no está enviado, así que el texto está escrito para funcionar **sin
 link**. Cuando salga el DOI se agrega al final, donde está la marca.
 
-Imagen sugerida, la tabla de las nueve unidades con las cuatro degeneradas resaltadas, o la curva de
-abstención al paso 2500.
+Imagen sugerida, la tabla de las seis unidades entrenadas desde cero con las cuatro degeneradas
+resaltadas, o la curva de abstención al paso 2500.
 
 **Estilo verificado**, sin raya larga y sin dos puntos, según la regla de escritura de Maxi.
 
@@ -12,8 +18,8 @@ abstención al paso 2500.
 
 ## Texto
 
-Entrené nueve modelos exactamente iguales, cambiando solamente el número de arranque. Cuatro
-terminaron siendo detectores de alucinación perfectos. Y son completamente inútiles.
+Entrené seis modelos desde cero con la misma receta. Cuatro terminaron siendo detectores de
+alucinación perfectos. Y son completamente inútiles.
 
 Quiero contar por qué, porque me parece que dice algo incómodo sobre cómo medimos esto.
 
@@ -32,7 +38,7 @@ todos los exámenes. Acierta el cien por ciento de las veces.
 El segundo estudiante no está mintiendo ni fallando. Tiene razón. Es un predictor perfecto de su
 propio rendimiento, y su rendimiento es cero.
 
-Eso es lo que hicieron cuatro de mis nueve modelos. Se abstienen de todo. Su tasa de acierto al
+Eso es lo que hicieron cuatro de esos seis modelos. Se abstienen de todo. Su tasa de acierto al
 callarse es 1,0000 y su tasa de invención es 0,0000. Perfectos en las dos únicas cifras que este
 campo suele reportar, y mejores que los modelos que sí funcionan.
 
@@ -71,8 +77,8 @@ https://github.com/SperanzaMax/delta-archivo
 
 ## Texto alternativo de la imagen
 
-Tabla de nueve modelos entrenados en condiciones idénticas. Cinco alcanzan una recuperación de entre
-0,73 y 1,00. Los otros cuatro quedan entre 0,30 y 0,40 y se abstienen en el cien por ciento de las
+Tabla de seis modelos entrenados desde cero con la misma receta. Dos alcanzan una recuperación de
+0,73 y 0,80. Los otros cuatro quedan entre 0,30 y 0,40 y se abstienen en el cien por ciento de las
 preguntas, con una exactitud global de 0,4065 que coincide con el piso trivial.
 
 ---

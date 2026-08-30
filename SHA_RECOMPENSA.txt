@@ -1,2 +1,4 @@
 f1f7bb661205d973b9402f77a0c4f06701c98152b4937dfc860e1a209e2f6454  PREREG_RECOMPENSA.md
 congelado 2026-08-29 20:09:11 (antes de escribir el instrumento)
+e4273b5debfaa550f859dbefa2ca0a6564dde63afefe0e03ee355aa50210c92e  ENMIENDA_RECOMPENSA_F.md
+enmienda F congelada 2026-08-29 22:52:47

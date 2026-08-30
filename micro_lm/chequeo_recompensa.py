@@ -55,30 +55,30 @@ for c in np.linspace(0, 1, 21):
 check("la derivada numerica coincide con la analitica", not malos,
       f"maximo desvio en {len(malos)} de 21 puntos" if malos else "en los 21 puntos de c")
 
-print("\nR-2 · con estos pesos, abstenerse de todo NO es el optimo (ni con c=0)")
-for c in (0.0, 0.1, 0.35):
+print("\nR-2 · el optimo GLOBAL con c=0 ES callarse, y eso ahora es lo CORRECTO")
+# Version corregida (ENMIENDA_RECOMPENSA_F). La primera version pedia lo contrario, y ese pedido es
+# lo que llevo a F=1,5 y a que las 8 unidades contestaran TODO. Un modelo que no sabe nada DEBE
+# callarse; lo que no debe es quedarse ahi, y de eso se encarga R-8 (la CE sigue viva).
+# OJO, y aca me equivoque una vez: el umbral GLOBAL no es el mismo que el por muestra. El global
+# pesa tambien la mezcla de preguntas, porque un q unico se aplica tambien a las que NO tienen
+# respuesta, donde callarse siempre paga. Sale de resolver dE/dq = 0:
+c_glob = ((1 - PI) * (M - F) + PI * (L + M)) / ((1 - PI) * (1 + M))
+print(f"  umbral por muestra c* = {(M-F)/(1+M):.3f}   ·   umbral GLOBAL = {c_glob:.3f}")
+for c in (0.0, 0.35, 0.9):
     qs = np.linspace(0, 1, 1001)
-    v = E_R(qs, c)
-    q_opt = qs[int(np.argmax(v))]
-    check(f"c={c}: el optimo no es q=1", q_opt < 0.999,
-          f"q optimo = {q_opt:.3f}, E[R] en q=1 vale {E_R(1.0, c):+.4f} vs {v.max():+.4f} en el optimo")
+    q_opt = qs[int(np.argmax(E_R(qs, c)))]
+    esperado = "callarse" if c < c_glob else "contestar"
+    real = "callarse" if q_opt > 0.5 else "contestar"
+    check(f"c={c}: el optimo global es {esperado}", real == esperado,
+          f"q optimo = {q_opt:.3f} -> {real}")
 
-print("\n  y el minimo de F que la formula del prereg exige, para contrastar:")
-for c in (0.0, 0.1, 0.35):
-    f_min = (PI * (L + M) + (1 - PI) * ((1 - c) * M - c)) / (1 - PI)
-    check(f"c={c}: F={F} supera el minimo {f_min:.3f}", F > f_min,
-          f"margen {100*(F-f_min)/f_min:.0f} %")
-
-print("\nR-3 · el c a partir del cual conviene contestar, resuelto numericamente")
-raiz = None
-for c in np.linspace(0, 1, 100001):
-    if dEdq(0.0, c) < 0:
-        raiz = c
-        break
-check("existe un c donde deja de convenir callarse", raiz is not None,
-      f"c* = {raiz:.5f}" if raiz is not None else "no existe en [0,1]")
-check("y ese c* es 0, o sea vale desde el arranque", raiz is not None and raiz < 1e-4,
-      f"c* = {raiz:.5f}")
+print("\nR-3 · el umbral por muestra separa los dos regimenes")
+cs = (M - F) / (1 + M)
+for c, quiero in ((cs - 0.1, "callarse"), (cs + 0.1, "contestar")):
+    contestar, callarse = c - (1 - c) * M, -F
+    real = "contestar" if contestar > callarse else "callarse"
+    check(f"con c={c:.3f} conviene {quiero}", real == quiero,
+          f"contestar {contestar:+.3f} vs callarse {callarse:+.3f}")
 
 print("\nR-4 · finito y derivable en los bordes")
 bordes = [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0), (0.5, 0.5)]
@@ -95,23 +95,13 @@ for nom, q in (("token", jax.nn.softmax(lg, -1)[:, E.NOSE]),
           bool(np.isfinite(float(val))) and bool(np.all(np.isfinite(np.asarray(g)))),
           f"perdida {float(val):+.4f}, |grad| max {float(np.abs(np.asarray(g)).max()):.3e}")
 
-print("\nR-6 · el optimo POR MUESTRA, que es lo que el modelo puede elegir de verdad")
-# R-2 mira un q GLOBAL unico, y con estos pesos su optimo es 0. Eso NO es el fracaso que parece:
-# el modelo elige q por muestra, no uno solo para todas. Lo que hay que verificar es que el optimo
-# por muestra sea el comportamiento deseado, y ese es este chequeo.
-for c in (0.0, 0.5, 0.9):
-    contestar, callarse = c - (1 - c) * M, -F
-    check(f"con respuesta y c={c}: conviene CONTESTAR", contestar > callarse,
-          f"{contestar:+.3f} vs {callarse:+.3f}")
-check("sin respuesta: conviene CALLARSE", L > -M, f"{L:+.3f} vs {-M:+.3f}")
-umbral = (M - F) / (1 + M)
-check("el umbral c* es negativo, o sea conviene contestar desde el arranque", umbral < 0,
-      f"c* = {umbral:+.3f}")
-print(f"  -> optimo por muestra = contestar donde hay respuesta, callarse donde no. El deseado.")
-print(f"  -> PRECIO, y define que fracaso vigilar: con F={F} > M={M}, callarse teniendo la")
-print(f"     respuesta ({-F:+.1f}) es peor que errar ({-M:+.1f}). Si el modelo no logra distinguir,")
-print(f"     su mejor politica es contestar TODO. El riesgo de esta campania es la locuacidad,")
-print(f"     no la mudez. Es W-6, y W-4 (invento < 0,05) es lo que lo detecta.")
+print("\nR-6 · el optimo POR MUESTRA no es ninguno de los dos extremos")
+alto = [c for c in (0.5, 0.9) if (c - (1 - c) * M) > -F]
+bajo = [c for c in (0.0, 0.1) if (c - (1 - c) * M) < -F]
+check("con confianza ALTA conviene contestar", len(alto) == 2, f"c en {alto}")
+check("con confianza BAJA conviene callarse", len(bajo) == 2, f"c en {bajo}")
+check("sin respuesta conviene callarse", L > -M, f"{L:+.3f} vs {-M:+.3f}")
+print("  -> optimo por muestra = contestar donde sabe, callarse donde no. NO es un extremo.")
 
 print("\nR-5 · el cableado (el bug de --abst slot del 24-ago)")
 src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "entrenar.py")).read()

@@ -130,9 +130,19 @@ def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
 # Los pesos estan FIJADOS en el pre-registro (L=M=0,5, F=1,5) y salen de la condicion derivada alli:
 #     F > [ pi*(L+M) + (1-pi)*((1-c)*M - c) ] / (1-pi)
 # que en este banco (pi=0,4065) da un minimo de 1,185 en c=0. El 1,5 deja 27 % de margen.
+# 2026-08-29 22:40 · ENMIENDA_RECOMPENSA_F.md. La primera corrida (F=1,5) dio abstencion 0,0000 en
+# las 8 unidades: contestaron TODO. La causa es un error de MI derivacion, no del diseno: la condicion
+# se dedujo sobre un q GLOBAL, y el modelo elige q POR MUESTRA. Con q por muestra, en una pregunta con
+# respuesta conviene contestar si  c > c* = (M - F) / (1 + M),  asi que para que EXISTA un umbral hace
+# falta  F < M.  Con F=1,5 y M=0,5 el umbral daba -0,667: nunca convenia callarse.
 _REC_L = 0.5
 _REC_M = 0.5
-_REC_F = 1.5
+_REC_F = 0.2      # F < M  ->  umbral de confianza c* = (0.5-0.2)/1.5 = 0.200
+# Peso de la CE del valor, que se SUMA a la recompensa y no la reemplaza. Es necesario, no cosmetico:
+# en la recompensa el termino que empuja a acertar va multiplicado por (1-q), asi que un modelo que se
+# calla (q->1) deja de recibir gradiente hacia la recuperacion y el atractor mudo volveria, ahora sin
+# nada que lo saque. La CE no depende de q y mantiene el aprendizaje del valor siempre vivo.
+_REC_CE = 1.0
 
 
 def _recompensa(lg, tgt, q):
@@ -153,8 +163,14 @@ def _recompensa(lg, tgt, q):
     r_no = q * _REC_L + (1.0 - q) * (-_REC_M)
 
     rec = hay * r_hay + es_nose * r_no
+
+    # CE del valor, SIEMPRE activa y sin depender de q (ver el comentario de _REC_CE). Se normaliza
+    # por la fraccion con respuesta para que su escala no dependa de p_nose, igual que en las otras.
+    ce = optax.softmax_cross_entropy_with_integer_labels(lg_v, tgt)
+    ce = (ce * hay).sum() / jnp.maximum(hay.sum(), 1.0)
+
     pred = jnp.where(q > 0.5, NOSE, lg_v.argmax(-1))
-    return -rec.mean(), (pred == tgt).mean()
+    return -rec.mean() + _REC_CE * ce, (pred == tgt).mean()
 
 
 # --- cabeza de abstencion separada (2026-08-18, `PREREG_CABEZA_ABSTENCION.md`) -------------------

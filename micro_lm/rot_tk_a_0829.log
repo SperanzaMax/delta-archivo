@@ -37,3 +37,18 @@
    503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
 -- F la esta usando otro proceso, se saltea
 -- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta A · faltan: 3:3 3:6 · 21:26:56
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta J · faltan: 3:3 3:6 · 21:27:03
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta F · faltan: 3:3 3:6 · 21:27:09
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta A · faltan: 3:3 3:6 · 21:37:15
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta J · faltan: 3:3 3:6 · 21:37:21
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta F · faltan: 3:3 3:6 · 21:37:27
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+== fin · pendientes: 3:3 3:6
