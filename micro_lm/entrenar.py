@@ -359,6 +359,25 @@ def main():
                          "SHA f1f7bb66) es otra cosa: reemplaza las DOS perdidas por una sola "
                          "recompensa esperada sobre el resultado final, y es la unica que "
                          "funciona tambien con --abst token, sin cabeza.")
+    # Pesos de `recompensa`. Dejan de ser constantes de modulo el 2026-08-30 (`PREREG_RECOMPENSA_L`):
+    # editarlos a mano no queda en la config del checkpoint, asi que la guarda de identidad no puede
+    # ver el cambio y dos tramos con pesos distintos se leerian como una sola curva. Es la misma razon
+    # por la que `blanco` y `perdida_cabeza` son flags y no constantes.
+    ap.add_argument("--rec-l", type=float, default=0.5,
+                    help="premio por decir NOSE cuando de verdad no estaba. OJO: es el subsidio al "
+                         "atractor mudo — con L=0,5 una unidad que se calla SIEMPRE cobra +0,0845 de "
+                         "recompensa neta, que es el piso trivial 0,4065 metido adentro de la "
+                         "perdida como premio. Con L=0 el mudo cobra negativo y c* no cambia, porque "
+                         "L no entra en (M-F)/(1+M). Ver `mapa_recompensa.py`.")
+    ap.add_argument("--rec-m", type=float, default=0.5,
+                    help="castigo por contestar y errar (inventar incluido).")
+    ap.add_argument("--rec-f", type=float, default=0.2,
+                    help="castigo por decir NOSE cuando la respuesta SI estaba. Hace falta F < M para "
+                         "que exista un umbral por muestra; con F >= M nunca conviene callarse y el "
+                         "optimo es el extremo locuaz (ENMIENDA_RECOMPENSA_F.md).")
+    ap.add_argument("--rec-ce", type=float, default=1.0,
+                    help="peso de la CE del valor, que se SUMA a la recompensa. No es cosmetico: sin "
+                         "el, un modelo que se calla deja de recibir gradiente hacia la recuperacion.")
     ap.add_argument("--blanco", default="ausencia", choices=("ausencia", "error"),
                     help="que aprende la BCE de la cabeza (A5, ALTERNATIVAS_DETECCION_20260826.md). "
                          "«ausencia» = ¿hay respuesta?, que es lo de siempre. «error» = ¿me voy a "
@@ -449,7 +468,20 @@ def main():
     # asignacion crea una LOCAL y la global se queda en "token": `--abst slot` no tendria efecto y
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
-    global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA
+    global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE
+    _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
+    # Compuerta de la ENMIENDA, ahora ejecutable y no solo escrita: si el optimo de la perdida es un
+    # extremo, eso no es un riesgo a vigilar sino un defecto, y se cierra ANTES de gastar GPU.
+    if a.perdida_cabeza == "recompensa":
+        c_est = (a.rec_m - a.rec_f) / (1.0 + a.rec_m)
+        if not 0.0 < c_est < 1.0:
+            sys.exit(f"ABORTA: con M={a.rec_m} y F={a.rec_f} el umbral por muestra es c*={c_est:.4f}, "
+                     f"fuera de (0,1). Hace falta F < M para que EXISTA un punto en el que convenga "
+                     f"callarse; si no, el optimo es un extremo. Ver ENMIENDA_RECOMPENSA_F.md.")
+        r_mudo = 0.4065 * a.rec_l - (1.0 - 0.4065) * a.rec_f
+        print(f"recompensa: L={a.rec_l} M={a.rec_m} F={a.rec_f} CE={a.rec_ce}  ->  "
+              f"c*={c_est:.4f}   recompensa neta del modelo MUDO = {r_mudo:+.4f}"
+              f"{'  <== POSITIVA: el silencio cobra premio' if r_mudo > 0 else ''}\n", flush=True)
     _DONDE = a.donde
     _ABST = a.abst
     _BLANCO = a.blanco
@@ -570,6 +602,17 @@ def main():
             sys.exit(f"ABORTA: el checkpoint se entreno con perdida_cabeza="
                      f"{ck['config']['perdida_cabeza']} y se pidio {a.perdida_cabeza}. "
                      f"No es la misma corrida.")
+        # Pesos de la recompensa (2026-08-30): MISMA familia que `perdida_cabeza`. Cambiar L a mitad
+        # de camino no continua la corrida, la bifurca — L decide si el atractor mudo cobra premio, o
+        # sea a cual de los dos puntos fijos del 29-ago cae la unidad. Se compara SOLO si el ckpt trae
+        # la clave, por lo mismo que `blanco`: las bases de siembra son anteriores y no la tienen.
+        if a.perdida_cabeza == "recompensa":
+            for k, v in (("rec_l", a.rec_l), ("rec_m", a.rec_m), ("rec_f", a.rec_f),
+                         ("rec_ce", a.rec_ce)):
+                if k in ck["config"] and abs(float(ck["config"][k]) - v) > 1e-9:
+                    sys.exit(f"ABORTA: el checkpoint se entreno con {k}={ck['config'][k]} y se pidio "
+                             f"{v}. Los pesos de la recompensa definen donde esta el optimo, asi que "
+                             f"no es la misma corrida.")
         hor_ck = ck["config"].get("horizonte") or ck["config"].get("pasos")
         if hor_ck != HOR:
             sys.exit(f"ABORTA: el checkpoint se entreno con horizonte de lr {hor_ck} y se pidio "
@@ -602,6 +645,17 @@ def main():
         elif a.reinit_adam:
             state = opt.init(params)
             print("Adam reiniciado por pedido explicito (--reinit-adam)\n", flush=True)
+        elif "opt_state" not in ck:
+            # Un checkpoint escrito por `sembrar.py` no trae estado de Adam a proposito: es una BASE
+            # de siembra, no la continuacion de la corrida de la que salio. Se reinicia avisando, y
+            # solo si la procedencia esta declarada; si falta el opt_state sin que nadie haya
+            # sembrado, eso es un checkpoint roto y no algo que haya que adivinar en silencio.
+            if "sembrado_de" not in ck:
+                sys.exit("ABORTA: el checkpoint no trae `opt_state` ni `sembrado_de`. Es un archivo "
+                         "incompleto, no una siembra declarada.")
+            state = opt.init(params)
+            print(f"siembra declarada desde {ck['sembrado_de']['ruta']} "
+                  f"(paso {ck['sembrado_de']['paso']}): Adam arranca de cero\n", flush=True)
         else:
             state = jax.tree_util.tree_map(jnp.asarray, ck["opt_state"])
         if a.abst == "escala" and ck["config"].get("abst", "token") != "escala":
@@ -620,8 +674,12 @@ def main():
                     params["emb"] = mat.at[NOSE, :].set(col * escala)
                 print(f"escala: {clave}[NOSE] x{escala:.3f} -> norma {objetivo:.4f}", flush=True)
             state = opt.init(params)
-        rng.bit_generator.state = ck["rng"]
-        hist, paso0 = ck["historia"], ck["paso"]
+        # En una siembra el `rng` y la `historia` tampoco viajan: el flujo de datos arranca de la
+        # semilla y la curva es NUEVA. Mezclar la historia de la corrida de origen dibujaria una sola
+        # curva donde hubo dos regimenes, que es exactamente lo que la guarda de identidad impide.
+        if "rng" in ck:
+            rng.bit_generator.state = ck["rng"]
+        hist, paso0 = ck.get("historia", []), ck["paso"]
         # La EMA del error y el acumulado de la mezcla son ESTADO del entrenamiento, igual que Adam.
         # Esta campania corre por tramos de 8000 pasos entre cuentas de Colab: sin esto, cada tramo
         # reiniciaria la EMA en 1,0 y la mezcla volveria a uniforme tres veces en una corrida, con lo

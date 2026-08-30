@@ -69,6 +69,11 @@ MEZCLA="${MEZCLA:-fija}"
 # `donde` y `mezcla` ya documentan, y que `entrenar.py` ahora ademas bloquea al reanudar.
 BLANCO="${BLANCO:-ausencia}"
 PERDIDA_CABEZA="${PERDIDA_CABEZA:-bce}"
+# 2026-08-30 · PREREG_RECOMPENSA_L. Los pesos de `recompensa` dejaron de ser constantes de modulo y
+# tienen que VIAJAR hasta la VM: editarlos a mano en la PC no cambiaba lo que corria en Colab, porque
+# `tramo_colab.sh` sube el .py pero el rotador arma la linea de comandos aca. REC_L es el que decide
+# la campania —es el subsidio al atractor mudo— y por eso va en el echo del tramo.
+REC_L="${REC_L:-0.5}"; REC_M="${REC_M:-0.5}"; REC_F="${REC_F:-0.2}"; REC_CE="${REC_CE:-1.0}"
 P_VIEJA="${P_VIEJA:-0.35}"
 # `MEZCLA_PISO=0.0` es la celda `e0`: un tipo resuelto deja de entrenarse en vez de bajar al piso
 # (pregunta de Maxi del 23-ago). Tiene que viajar hasta aca o la celda correria con el piso normal
@@ -98,7 +103,7 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -150,6 +155,7 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
        '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO', '--blanco', '$BLANCO',
        '--perdida-cabeza', '$PERDIDA_CABEZA',
+       '--rec-l', '$REC_L', '--rec-m', '$REC_M', '--rec-f', '$REC_F', '--rec-ce', '$REC_CE',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$REINIT' == '1' and '$SEMBRADO' == '1':
     # Adam se reinicia SOLO al entrar en la fase (primer tramo, sembrado desde la base), nunca al
