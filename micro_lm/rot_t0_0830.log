@@ -13,3 +13,12 @@ lanzado pid 2616
 == polling cada 2 min (presupuesto ~50 min)
 VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 3000 (0 evaluaciones ya hechas) 
 VIVO= True ULTIMO= ── eval: vigente 0.4404 · anterior 0.0878 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.1983 · anterior 0.0312 · abstencion 0.4688 · truncados 0.0000 · nose 0.4511 (ent 0.4535/rel 0.4518) · falsa_abst 0.4739 
+   [checkpoint parcial guardado: paso 750]
+VIVO= True ULTIMO= ── eval: vigente 0.2134 · anterior 0.0357 · abstencion 0.4746 · truncados 0.0000 · nose 0.4608 (ent 0.4535/rel 0.4684) · falsa_abst 0.4767 
+VIVO= True ULTIMO= ── eval: vigente 0.2135 · anterior 0.0357 · abstencion 0.4746 · truncados 0.0000 · nose 0.4658 (ent 0.4535/rel 0.4768) · falsa_abst 0.4740 
+VIVO= True ULTIMO= ── eval: vigente 0.1823 · anterior 0.0179 · abstencion 0.4766 · truncados 0.0000 · nose 0.4618 (ent 0.4535/rel 0.4698) · falsa_abst 0.4804 
+VIVO= True ULTIMO= ── eval: vigente 0.1973 · anterior 0.0670 · abstencion 0.4785 · truncados 0.0000 · nose 0.4616 (ent 0.4535/rel 0.4672) · falsa_abst 0.4836 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= ── eval: vigente 0.1846 · anterior 0.0179 · abstencion 0.4805 · truncados 0.0000 · nose 0.4658 (ent 0.4535/rel 0.4768) · falsa_abst 0.4836 
+VIVO= True ULTIMO= ── eval: vigente 0.2217 · anterior 0.0179 · abstencion 0.4668 · truncados 0.0000 · nose 0.4566 (ent 0.4445/rel 0.4672) · falsa_abst 0.4671 

@@ -112,7 +112,14 @@ def informar(ruta, c, q, hay, aci, cfg, paso, c_est):
         linea += f"{u:.3f}:{(ch > u).mean():.3f}   "
     print(linea)
     print(f"  q  media  (con respuesta / sin)         {qh.mean():.4f} / {qn.mean():.4f}")
-    print(f"  q  separacion (sin - con)               {qn.mean()-qh.mean():+.4f}")
+    # OJO CON EL SIGNO, y se escribe antes de mirar ninguna corrida nueva (2026-08-30). Esta
+    # separacion mide alineacion con el blanco `ausencia` («¿hay respuesta?»), asi que un valor
+    # POSITIVO es lo bueno solo ahi. Una unidad de blanco `error` predice «¿me voy a equivocar?», y
+    # el modelo se equivoca mas donde tiene que RECUPERAR que donde solo tiene que decir NOSE: para
+    # esa familia lo esperable es negativo, y leerlo como «esta al reves» seria el error. Se reporta
+    # crudo y con el blanco al lado, sin convertirlo en veredicto.
+    print(f"  q  separacion (sin - con)               {qn.mean()-qh.mean():+.4f}"
+          f"   [blanco={cfg.get('blanco','ausencia')}: en `error` lo esperable es NEGATIVO]")
     print(f"  fraccion con q > 0,5 (se callaria)      {(q > 0.5).mean():.4f}")
 
 
