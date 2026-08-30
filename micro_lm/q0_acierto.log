@@ -1,0 +1,24 @@
+
+--- v3_s0.pkl · RECUP con clave continua = 1.0000 ---
+    k   RECUP cuantizada   razon vs continua  Q-0 (>= 0,90)
+----------------------------------------------------------------
+    4             0.8703              0.8703  NO PASA
+   16             0.9781              0.9781  PASA
+   64             0.9983              0.9983  PASA
+  256             1.0000              1.0000  PASA
+
+--- v3_s1.pkl · RECUP con clave continua = 1.0000 ---
+    k   RECUP cuantizada   razon vs continua  Q-0 (>= 0,90)
+----------------------------------------------------------------
+    4             0.8863              0.8863  NO PASA
+   16             0.9975              0.9975  PASA
+   64             1.0000              1.0000  PASA
+  256             1.0000              1.0000  PASA
+
+--- v3_s2.pkl · RECUP con clave continua = 1.0000 ---
+    k   RECUP cuantizada   razon vs continua  Q-0 (>= 0,90)
+----------------------------------------------------------------
+    4             0.8492              0.8492  NO PASA
+   16             0.9553              0.9553  PASA
+   64             0.9983              0.9983  PASA
+  256             1.0000              1.0000  PASA
