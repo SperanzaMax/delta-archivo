@@ -1,0 +1,5 @@
+PREREG_SLOT_ORDEN.md
+SHA (git hash-object) b7471e0268efd10958580ff636817d5a7a415bb2
+congelado 2026-08-31, despues de la compuerta W-0 (CPU) y ANTES de lanzar GPU
+compuerta: INFORME_COMPUERTA_SLOT_20260831.md · commit aeaf059
+peso POR SEMILLA: rec_rank 1,56 en s3 y 5,45 en s6 (dispersion 3,49x, ver 3.1)
