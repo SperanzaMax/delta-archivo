@@ -76,6 +76,9 @@ def evaluar(nombre, F, no, es_nom, tr, te, rng):
 def cosechar(params, cfg, n, B, semilla, p_nose):
     """Junta logits, estado final, salida por bloque y resumen de la busqueda. Un solo barrido."""
     nivel = cfg["nivel"]
+    # Del pickle los params salen en numpy, y bajo `jit` indexar `ord[turnos]` con un array TRACEADO
+    # revienta. Sin `jit` funcionaba en eager, y por eso la version lenta no lo delataba.
+    params = jax.tree_util.tree_map(jnp.asarray, params)
     a_p = params["arch"]
 
     def partes(params, ses, cortes, turnos, mask, cons, pos):
@@ -103,10 +106,12 @@ def cosechar(params, cfg, n, B, semilla, p_nose):
             pk["blocks"] = params["blocks"][:k]
             hs.append(M.tronco(pk, cons, lectura, 0, cfg.get("donde", "pre")))
 
-        h = M.tronco(params, cons, lectura, 0, cfg.get("donde", "pre"))
-        hn = M.ln(params["ln_f"], h)
+        # `hs[-1]` ES el tronco completo (el recorte con k = NB), asi que no se corre otra vez.
+        hn = M.ln(params["ln_f"], hs[-1])
         lg = hn @ params["head"]["w"] + params["head"]["b"]
         return lg, hn, guard, hs
+
+    partes = jax.jit(partes)
 
     rng = np.random.default_rng(semilla)
     LG, HN, TGT, BUS = [], [], [], []
