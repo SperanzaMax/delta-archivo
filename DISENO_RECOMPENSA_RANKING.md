@@ -4,6 +4,28 @@
 No es un pre-registro todavía: es el diseño que se deriva del diagnóstico, para que quede fechado
 antes del dato que lo habilita o lo tumba.
 
+> ## ✅ LA PRUEBA CONFIRMA · la pérdida es PLANA, y el control tenía potencia de sobra
+>
+> `prueba_perdida_plana.py`, `n=3072`, 200 barajadas, sobre el `q` real de cada modelo:
+>
+> | | `t03_s3` | `t03_s6` |
+> |---|---:|---:|
+> | pérdida con el `q` REAL | +0,182406 | +0,191432 |
+> | pérdida con el `q` **BARAJADO** | +0,186155 ± 0,004170 | +0,189159 ± 0,004349 |
+> | **distancia** | **0,90 σ** | **0,52 σ** |
+> | pérdida con el `q` ORÁCULO, misma tasa | +0,024874 | +0,029466 |
+> | **el oráculo baja la pérdida** | **78,6 σ** | **73,7 σ** |
+> | margen aprovechado | **51,96 %** | **49,45 %** |
+>
+> **Barajar a qué preguntas se calla no cambia la pérdida** (0,5-0,9 σ) mientras el oráculo la baja
+> **74-79 σ con la misma tasa de abstención**. El control puede distinguir y no distingue: los dos
+> modelos aprovechan **~50 % del margen, que es exactamente lo que daría el azar**.
+>
+> **La degeneración está probada, y el margen es enorme:** hay **0,158** de pérdida recuperable sin
+> tocar la tasa, sólo ordenando. En exactitud son los **0,6234** que el §L-1 de `PREREG_RECOMPENSA_L`
+> había calculado como alcanzable «sin aprender nada nuevo, sólo repartiendo», contra el 0,3020 que
+> las unidades dieron. **El cálculo del 30 y la medición del 31 coinciden por vías independientes.**
+
 ---
 
 ## 1. Los dos negativos que ya están medidos, y son complementarios
