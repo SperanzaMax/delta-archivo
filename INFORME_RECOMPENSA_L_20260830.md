@@ -46,10 +46,23 @@ pérdida y el logit de `NOSE` recibe **3,5× menos gradiente** que un token de v
 
 ## 3. `cabeza` · las cuatro terminan MUDAS, y eso NO se lee como fracaso
 
-`abstencion` = **1,0000 exacta en todos los hitos** de las cuatro unidades. Por definición eso da
-exactitud global **0,4065** —el piso trivial— y el §4 del pre-registro ya lo declaraba: *«el control
-de la exactitud a 3000 pasos es exacto y no hace falta medirlo: una unidad muda da 0,4065 por
-definición»*.
+| unidad | exactitud | abstención | acierto | invento | **RECUP** |
+|---|---:|---:|---:|---:|---:|
+| `h03_s3` (L=0) | 0,4055 | 1,0000 | 0,0000 | 0,0000 | **0,3541** |
+| `h53_s3` (L=0,5) | 0,4055 | 1,0000 | 0,0000 | 0,0000 | **0,3583** |
+| `h03_s6` (L=0) | 0,4055 | 1,0000 | 0,0000 | 0,0000 | **0,3549** |
+| `h53_s6` (L=0,5) | 0,4055 | 1,0000 | 0,0000 | 0,0000 | **0,3553** |
+
+`abstencion` = **1,0000 exacta** en las cuatro → exactitud clavada en **0,4055**, que es el piso
+**muestral** de este lote (la fracción de preguntas sin respuesta en las 4000 muestras; el piso
+poblacional declarado es 0,4065). El §4 del pre-registro ya lo anticipaba: *«el control de la
+exactitud a 3000 pasos es exacto y no hace falta medirlo: una unidad muda da 0,4065 por definición»*.
+Las cuatro dan **idéntico a cuatro decimales**, y `L` no las mueve ni una milésima — consistente con
+que la salida no depende de la entrada.
+
+> **★ Y el dato que importa: RECUP se mantiene en 0,354-0,358**, contra 0,3654 y 0,3835 de los
+> orígenes `b3_s3`/`b3_s6`. **La recuperación NO se rompió: la mudez está en la cabeza, no en el
+> generador.** Es la misma conclusión que la medición de `c` de la mañana, ahora por otra vía.
 
 **La lectura estaba comprometida ANTES del dato** en `NOTA_LECTURA_FASE_H_20260830.md` (SHA
 `4a0900bf`), congelada con la campaña ya corriendo:
@@ -59,14 +72,19 @@ definición»*.
 > impaciencia.»*
 
 **Las dos interfaces no parten del mismo lugar.** `token` arrancó **locuaz** (0,0000, el logit de
-`NOSE` nunca se entrenó bajo `cabeza`) y `cabeza` arranca **muda** (0,9999+, hereda la cabeza
-colapsada al prior). Con 3000 pasos para las dos, no recorren la misma distancia — y el aviso del
-26-ago dice textual que unidades así **se abstienen del 100 % durante ~3000 pasos y después aflojan
-solas**.
+`NOSE` nunca se entrenó bajo `cabeza`) y `cabeza` arranca **muda** (hereda la cabeza colapsada al
+prior). Con 3000 pasos para las dos, no recorren la misma distancia — y el aviso del 26-ago dice
+textual que unidades así **se abstienen del 100 % durante ~3000 pasos y después aflojan solas**.
 
-> **Conclusión: L-1 en `cabeza` queda NO EVALUABLE por presupuesto, y con ella L-4.** El criterio de
-> abandono del §7 **no se aplica**, porque exige las dos interfaces y una no fue medida en
-> condiciones comparables.
+> **Conclusión: L-1 en `cabeza` queda NO EVALUABLE por presupuesto, y con ella L-4** (que da
+> \|d\| = 0,5082 y 0,5040, pero mide la distancia entre un punto medido y uno no evaluable, así que
+> no informa sobre convergencia). **El criterio de abandono del §7 NO se aplica**, porque exige las
+> dos interfaces y una no fue medida en condiciones comparables.
+
+**Y L-2 pasa a 1 de 4** al sumar las celdas de `cabeza`, pero **esas dos aportan 0,0000 exacto de
+diferencia** —las dos mudas dan el mismo número— así que no son un contraste, son un empate
+estructural. El pareado sigue decidido por las dos celdas de `token`, que ya estaban declaradas NO
+DECIDIBLES por magnitud de gradiente.
 
 ## 4. Qué haría falta para cerrarlo
 
