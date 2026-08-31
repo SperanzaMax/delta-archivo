@@ -114,6 +114,28 @@ CONTROL = ["BOS", "SEP", "EOS", "USUARIO", "MODELO", "NOSE", "?", ",", "."]
 
 NUMEROS = [str(i) for i in range(100)]          # los "100 numeros" que pidio Maxi
 
+# --- pool efectivo de valores numericos (2026-08-31, `PREREG_CONTEO_SOFTMAX.md`) -----------------
+# Por que existe. El 31 se midio que las unidades `token` se callan EXACTAMENTE en las relaciones
+# cuyo valor es un numero y contestan en las de nombre, con pureza 0,98 y replica en dos semillas, y
+# que ese corte no sigue ni la ausencia (+0,0000 de ganancia) ni la dificultad (-0,0200, al reves).
+# La hipotesis mecanica es aritmetica del softmax: con `--abst token`,
+#     q > 0,5  <=>  l_NOSE > logsumexp(logits de los valores)
+# o sea que NOSE compite contra la SUMA de los candidatos, no contra el mejor. Y hay 100 numeros
+# contra 58 nombres, asi que del lado numerico la suma tiene 1,72x mas terminos.
+#
+# `POOL_NUM` permite igualar la CANTIDAD DE VALORES EFECTIVOS sin tocar el vocabulario: V sigue
+# siendo 242 y el modelo es identico, asi que la comparacion es limpia y la guarda de identidad del
+# checkpoint no ve un idioma distinto. Los 42 numeros que quedan afuera siguen existiendo como
+# tokens; simplemente no aparecen nunca como valor, y el modelo les aprende un logit bajo.
+POOL_NUM = NUMEROS
+
+
+def fijar_pool_numeros(k=None):
+    """Limita a `k` los valores numericos que el generador puede sortear. `None` restaura los 100."""
+    global POOL_NUM
+    POOL_NUM = NUMEROS if k is None else NUMEROS[:k]
+    return len(POOL_NUM)
+
 
 def construir_vocab():
     """Devuelve (itos, stoi). Orden estable: control, numeros, nombres, entidades, palabras."""
@@ -236,7 +258,7 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
     # la semilla no cambia.
     origen = [[] for _ in range(n_sesiones)]
     for i, (ent, rel) in enumerate(zip(ents, rels)):
-        pool = NOMBRES if rel in PERSONALES else NUMEROS
+        pool = NOMBRES if rel in PERSONALES else POOL_NUM
         v1 = rng.choice(pool)
         s = 0 if nivel < 4 else int(rng.integers(0, max(1, n_sesiones - 1)))
         sesiones[s].append(rng.choice(formas(rel, ent, v1, nivel)))
