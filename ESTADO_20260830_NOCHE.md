@@ -74,6 +74,34 @@ Sigue siendo calibración.
   número dígito por dígito en todos los niveles de ruido. **El cuello de botella es inferir el tema, y
   la codificación de la clave no lo toca.**
 
+## 4.bis · La fase H se corrió al cierre (21:12) y quedó NO EVALUABLE
+
+Las cuatro unidades de `cabeza` (`h03_s3` `h53_s3` `h03_s6` `h53_s6`) llegaron a 3000 pasos con
+`abstencion` **1,0000 exacta** y exactitud **0,4055 idéntica a cuatro decimales** en las cuatro. `L`
+no las mueve ni una milésima.
+
+**★ Pero su RECUP se mantiene en 0,3541-0,3583** contra 0,3654 y 0,3835 de los orígenes: **la
+recuperación no se rompió, la mudez está en la cabeza y no en el generador** — la misma conclusión
+que la medición de `c` de la mañana, por otra vía.
+
+**NO se cuenta como fracaso.** `NOTA_LECTURA_FASE_H_20260830.md` (SHA `4a0900bf`), congelada **antes
+del dato**, dejó declarado que en esta celda el desenlace es indistinguible de falta de presupuesto:
+`token` arrancó locuaz, `cabeza` arranca muda, y 3000 pasos no son la misma distancia para cada una.
+→ **L-1 en `cabeza` NO EVALUABLE, y el criterio de abandono del §7 NO se aplica.**
+**Para cerrarlo:** extender esas cuatro; el horizonte ya está en 12000, así que no toca la curva de lr.
+
+Informe completo: `INFORME_RECOMPENSA_L_20260830.md`.
+
+## 4.ter · Dictamen sobre la devolución de Gemini
+
+`DICTAMEN_GEMINI_20260830.md`. **Se rescata** el `F` con schedule creciente (idea nueva, dirección
+correcta, converge con el criterio del 15-ago). **Se corrigen dos hechos**: el horizonte 60000 no
+existe (Fase 2 cancelada, 0 checkpoints) y el paso 2500 está fuera de su régimen validado.
+**La objeción de fondo:** un `F(t)` mueve el umbral en el tiempo pero sigue siendo global; no
+convierte una constante en función de la entrada.
+**★ Lo más valioso es lo que menos desarrolla:** el castigo severo al error **con alta confianza** es
+**por muestra**, y es la primera candidata escrita que puede romper la constante.
+
 ## 5. Lo primero que hay que hacer mañana
 
 1. **★ LUNES 31 · CORREO INSTITUCIONAL.** Nico Censabella (`nicocensabella@frba.utn.edu.ar`) dijo el
