@@ -108,9 +108,11 @@ convierte una constante en función de la entrada.
    jueves 27 «espero mañana tener alguna novedad» y no escribió. **Es el trámite de mayor palanca del
    proyecto** — destraba OpenReview (y con él TMLR/ARR/TACL), arXiv y el Scholar buscable.
 2. **Decidir dirección**, porque el proyecto **no tiene campaña obligada**:
-   - (a) **Cerrar la línea de la pérdida.** Falta la interfaz `cabeza` (`./lanzar_recompensa_L.sh H`,
-     4 unidades sembradas y listas en `ckpts/h03_s*.pkl` y `h53_s*.pkl`). El criterio de abandono del
-     §6 **pide las dos interfaces**, así que sin esto la línea queda abierta a medias.
+   - (a) **Cerrar la línea de la pérdida.** La interfaz `cabeza` YA SE CORRIÓ (§4.bis) y quedó **NO
+     EVALUABLE por presupuesto**: las cuatro terminaron mudas a 3000 pasos. Lo que falta es
+     **extenderlas** —el horizonte ya está en 12000, así que extender no toca la curva de lr— para
+     que la comparación sea a distancia recorrida y no a pasos iguales. Sin eso el criterio de
+     abandono del §7 sigue sin poder aplicarse.
    - (b) **Bajar `--rec-ce`** para que la recompensa deje de ser el 7 % de la pérdida. El valor sale
      del **ratio de gradientes medido** (≈3,5), no del desenlace de la corrida de hoy. **Necesita
      pre-registro propio**; elegirlo mirando resultados sería ajustar sobre la marcha.
@@ -120,13 +122,13 @@ convierte una constante en función de la entrada.
 
 ## 6. Estado al cerrar
 
-- **Repo pusheado, `5471b70`.** Working tree limpio, `main` == `origin/main`.
-  8 commits hoy: `ad30cb0` · `5206195` · `83518a9` · `766cbce` · `f6c7dc9` · `fdf067b` · `90b68d2` ·
-  `5471b70`. `telar-ligamento` también está sincronizado.
-- **Nada corriendo**: cero procesos, **cero sesiones de Colab** (verificado en A/J/H/M), sin locks.
-  CPU 52 °C.
+- **Repo pusheado.** Working tree limpio, `main` == `origin/main`. **13 commits hoy.**
+  `telar-ligamento` también está sincronizado.
+- **Nada corriendo al apagar**: rotadores parados, **cero sesiones de Colab** (verificadas en las 13
+  cuentas), sin locks.
 - **Los `ckpts/` NO están en git** (1,6 GB) pero sí en disco. **Sin ellos se pierde el avance.**
-  Los del día: `t03_s3` · `t53_s3` · `t03_s6` · `t53_s6`, más las 4 siembras de `cabeza` sin correr.
+  Los del día: `t03_s3` · `t53_s3` · `t03_s6` · `t53_s6` y `h03_s3` · `h53_s3` · `h03_s6` · `h53_s6`,
+  **las ocho a 3000 pasos**.
 - **Bitácora completa en Drive**, 7 archivos, **167.545 bytes verificados byte a byte** contra el
   original: https://drive.google.com/drive/folders/137_f6OtL_NQQj3XDQZ2cghPUGeRF1zoq
 
