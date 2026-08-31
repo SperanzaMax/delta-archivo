@@ -170,3 +170,43 @@ otros tres criterios y sólo uno lo declaraba.**
 - **No arregla la recuperación**, que el informe de hoy dejó como el techo real (ausencia
   decodificable a 0,70 del estado final).
 - **3000 pasos**, semillas sin base, comparables sólo contra sí mismas.
+
+---
+
+## 7. ENMIENDA W-8 · el brazo que decide si el culpable fue el PESO o la INTERFAZ
+
+**Se agrega el 31-ago a la noche, DESPUÉS de ver el resultado de las cuatro unidades y ANTES de
+lanzar las dos nuevas.** Se declara así, sin disimularlo: es una enmienda post-resultado, y lo que la
+hace legítima es que **no reinterpreta ningún criterio ya escrito** —el veredicto de las cuatro queda
+tal como salió— sino que agrega el control que falta para poder atribuir la causa.
+
+**El problema.** Los dos tratamientos colapsaron el logit a una constante corriendo con `--rec-rank`
+**1,56** y **5,45**. Con la interfaz `token`, el mismo criterio de derivación había dado **0,008**:
+entre **200× y 680× menos**. Un gradiente de esa magnitud sobre `k_nulo` explica el colapso por sí
+solo, así que **el experimento no puede distinguir «la interfaz `slot` no sirve» de «el peso que
+derivé la mató»**.
+
+**Y el CONTROL B dice que la sospecha es seria, no retórica:** con `--rec-rank 0` el logit NO colapsó
+(12 y 8 valores distintos, una unidad ni siquiera en el clip). **El colapso lo produjo el término de
+orden con estos pesos.**
+
+| | `--abst` | `--rec-rank` | prefijo |
+|---|---|---:|---|
+| **W-8** | `slot` | **0,008**, el de `token`, NO derivado de nuevo | `v03_s3` · `v03_s6` |
+
+**W-8-a.** El logit **no colapsa**: toma más de 10 valores distintos y la saturación queda por debajo
+de 0,95 en las dos semillas. **Si el logit no colapsa, lo que falló fue la DERIVACIÓN DEL PESO**, y
+el criterio de igualar gradientes en la siembra queda desacreditado para esta interfaz.
+
+**W-8-b.** Si además la abstención cae dentro de (0,05 · 0,95), W-1 y W-2 pasan a ser evaluables y se
+juzgan con los umbrales originales, sin tocarlos.
+
+**W-8-c · Y SI COLAPSA IGUAL, entonces sí.** Con el peso chico y el mismo colapso, la causa es la
+**interfaz**: la masa del slot en un modelo entrenado sin él no es un lugar donde la abstención pueda
+vivir. Eso, junto con W-3 fallando en las cuatro unidades, **sí cierra la vía de la búsqueda** —y con
+evidencia mucho más fuerte que la del 25-ago, porque acá el gradiente entró directo al mecanismo, con
+dos pesos separados por un factor de 680, y no alcanzó.
+
+**Se declara antes: el peso 0,008 NO se re-deriva.** Derivarlo otra vez con el criterio que ya falló
+sería el mismo error una segunda vez. Se toma prestado el de `token`, que es el único que produjo un
+resultado legible en este proyecto.

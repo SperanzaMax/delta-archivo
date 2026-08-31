@@ -1,0 +1,4 @@
+PREREG_SLOT_ORDEN.md · ENMIENDA W-8
+SHA (git hash-object) 05e15659f89bc8009cd1b75dac7a56ed8070a1b5
+congelado 2026-08-31 noche, DESPUES del resultado de las 4 unidades y ANTES de lanzar v03_s3/v03_s6
+el peso 0,008 se toma prestado de `token`, NO se re-deriva
