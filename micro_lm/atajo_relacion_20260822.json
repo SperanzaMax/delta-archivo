@@ -1,23 +1,4 @@
 {
  "que_es": "prueba directa del atajo de la relacion",
- "unidades": {
-  "p3_s0": {
-   "donde": "pre",
-   "n_pares": 651,
-   "misma_respuesta": 0.09831029185867896,
-   "acierto": 0.9308755760368663
-  },
-  "p3_s1": {
-   "donde": "pre",
-   "n_pares": 620,
-   "misma_respuesta": 0.9741935483870968,
-   "acierto": 0.5258064516129032
-  },
-  "p3_s2": {
-   "donde": "pre",
-   "n_pares": 657,
-   "misma_respuesta": 0.54337899543379,
-   "acierto": 0.7397260273972602
-  }
- }
+ "unidades": {}
 }
