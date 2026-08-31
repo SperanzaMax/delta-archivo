@@ -2,6 +2,42 @@
 
 **2026-08-31.** Se congela **antes de correr la intervención** y **antes** de mirar el resultado de la
 prueba algebraica de `prueba_conteo_softmax.py`, que está corriendo mientras se escribe esto.
+Congelado en `e68b5cc`, SHA del archivo **`3100da79`**.
+
+---
+
+> ## ⛔ ANULADO EL MISMO DÍA, ANTES DE CORRER LA INTERVENCIÓN Y SIN GASTAR GPU
+>
+> `prueba_conteo_softmax.py` terminó minutos después de congelar esto y **refuta la hipótesis del §2**.
+> Se deja el documento entero y sin retocar, porque el valor de un pre-registro es justamente que se
+> pueda leer lo que se predijo cuando todavía no se sabía.
+>
+> **Lo medido, `n=3072`, las dos semillas:**
+>
+> | | `l_NOSE` | LSE de los valores | LSE truncado a k=58 | `q` |
+> |---|---:|---:|---:|---:|
+> | `t03_s3` nombres | **−18,436** | 11,728 | 11,717 | 0,0000 |
+> | `t03_s3` números | **+19,598** | 10,348 | 10,325 | 0,9924 |
+> | `t03_s6` nombres | **−18,535** | 12,283 | 12,281 | 0,0000 |
+> | `t03_s6` números | **+22,275** | 10,736 | 10,717 | 0,9989 |
+>
+> **Tres cosas, y las tres van contra el §2:**
+>
+> 1. **La brecha está en `l_NOSE`, no en el `logsumexp`:** 38 nats de diferencia entre clases contra
+>    1,4 del `logsumexp`.
+> 2. **El `logsumexp` va del lado CONTRARIO al que predije:** es más alto en los **nombres** (11,7)
+>    que en los números (10,3). Si el conteo mandara, los mudos serían los nombres.
+> 3. **Truncar a 58 términos no mueve nada:** la brecha queda en +0,9924 y +0,9989, idéntica. K-5
+>    predecía una caída de 0,545 nats en el `logsumexp` numérico; la caída medida es de **0,023**.
+>
+> **Conclusión: el corte es APRENDIDO y está saturado (±18-22), no es aritmética de la interfaz.**
+> La intervención `c58` **no se corre**: probaría una hipótesis ya refutada por una vía más barata y
+> más directa. `I.fijar_pool_numeros()` queda en el código como instrumento, sin uso.
+>
+> **Y lo que el negativo deja, que vale más que lo que buscaba:** el modelo **SÍ puede** condicionar
+> la abstención por muestra —lo está haciendo, con la relación, y de forma tajante—. Lo que no
+> aprende es a condicionarla en la **evidencia**. Eso descarta de una vez «falta capacidad de la
+> interfaz» y «falta gradiente», que eran las dos explicaciones vivas.
 
 ---
 

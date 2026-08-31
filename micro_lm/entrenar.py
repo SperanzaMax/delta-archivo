@@ -101,7 +101,9 @@ def predecir(params, ses, cortes, turnos, mask, cons, pos):
 def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
     lg = logits_de(params, ses, cortes, turnos, mask, cons, pos)
     if _PERDIDA_CABEZA == "recompensa":
-        return _recompensa(lg, tgt, q=jax.nn.softmax(lg, -1)[:, NOSE])
+        return _recompensa(lg, tgt, q=jax.nn.softmax(lg, -1)[:, NOSE],
+                           s=lg[:, NOSE] - jax.nn.logsumexp(
+                               lg.at[:, NOSE].set(-1e9), axis=-1))
     ce = optax.softmax_cross_entropy_with_integer_labels(lg, tgt).mean()
     return ce, (lg.argmax(-1) == tgt).mean()
 
@@ -143,10 +145,45 @@ _REC_F = 0.2      # F < M  ->  umbral de confianza c* = (0.5-0.2)/1.5 = 0.200
 # calla (q->1) deja de recibir gradiente hacia la recuperacion y el atractor mudo volveria, ahora sin
 # nada que lo saque. La CE no depende de q y mantiene el aprendizaje del valor siempre vivo.
 _REC_CE = 1.0
+# Termino de ORDEN sobre la decision de callarse (2026-08-31, `DISENO_RECOMPENSA_RANKING.md`).
+# Por que hace falta, y es un defecto de la recompensa que se midio hoy y no estaba visto:
+# `rec` es LINEAL en `q`, asi que si `q` resulta independiente de (hay, c), E[rec] depende de `q`
+# SOLO a traves de su MEDIA. Dos modelos con la misma tasa de abstencion y particiones distintas de
+# las preguntas valen exactamente lo mismo -> hay una VARIEDAD de optimos equivalentes y ningun
+# gradiente que elija entre ellos. Medido el 31: las unidades `t*` se callan segun la RELACION
+# preguntada (pureza 0,98, nulo 0,52), lo que no correlaciona ni con la ausencia (+0,0000 de
+# ganancia), ni con la dificultad (-0,0200, al reves), ni con su confianza (+0,024 y -0,003, con
+# signos opuestos entre semillas), y con el logit saturado entre -18,4 y +22,3.
+#
+# `ranking` (29-ago) ya premiaba discriminar —«toda constante da el PEOR valor, el unico modo de
+# bajar la perdida es ordenar»— pero tocaba SOLO al vigilante y las seis unidades se fueron a
+# inventar. `recompensa` arreglo el acople y perdio la discriminacion. Este termino es la sintesis:
+# el acople de una y el orden de la otra.
+#
+# Va sobre el LOGIT y no sobre `q` a proposito: `q` esta saturado (86-99 % de la masa en 0 y 1) y la
+# diferencia de dos probabilidades saturadas no tiene gradiente. El logit si lo tiene.
+_REC_RANK = 0.0
 
 
-def _recompensa(lg, tgt, q):
-    """Perdida = -E[recompensa]. `q` es la probabilidad de abstenerse, derivable."""
+def _orden_nose(s, es_nose, hay):
+    """Sustituto del AUC por pares sobre el logit de `NOSE`: s_i (sin respuesta) > s_j (con).
+
+    Toda constante da el mismo valor y es el PEOR alcanzable, asi que no hay tasa que cobrar: el
+    unico modo de bajarlo es ORDENAR. Con un lote sin pares validos el denominador seria 0 y se
+    protege con `maximum(...,1)`, igual que en `perdida_cabeza`; ahi el termino da 0 y no hay
+    informacion de orden que aprender, que es lo correcto y no un caso a rellenar.
+    """
+    dif = s[:, None] - s[None, :]
+    par = es_nose[:, None] * hay[None, :]
+    return (jax.nn.softplus(-dif) * par).sum() / jnp.maximum(par.sum(), 1.0)
+
+
+def _recompensa(lg, tgt, q, s=None):
+    """Perdida = -E[recompensa]. `q` es la probabilidad de abstenerse, derivable.
+
+    `s` es el logit crudo del que sale `q`, y sólo lo usa el término de orden. Se pasa aparte porque
+    con la interfaz `token` sale del softmax de vocabulario y con `cabeza` de la salida binaria.
+    """
     es_nose = (tgt == NOSE).astype(jnp.float32)
     hay = 1.0 - es_nose
 
@@ -169,8 +206,16 @@ def _recompensa(lg, tgt, q):
     ce = optax.softmax_cross_entropy_with_integer_labels(lg_v, tgt)
     ce = (ce * hay).sum() / jnp.maximum(hay.sum(), 1.0)
 
+    perdida = -rec.mean() + _REC_CE * ce
+    # El termino de orden es OPCIONAL y por defecto vale 0, asi que con `--rec-rank 0` (el default)
+    # la perdida es BIT A BIT la de antes y las campanias anteriores siguen siendo reproducibles.
+    if _REC_RANK != 0.0:
+        perdida = perdida + _REC_RANK * _orden_nose(
+            jnp.log(jnp.clip(q, 1e-7, 1 - 1e-7)) - jnp.log(jnp.clip(1 - q, 1e-7, 1 - 1e-7))
+            if s is None else s, es_nose, hay)
+
     pred = jnp.where(q > 0.5, NOSE, lg_v.argmax(-1))
-    return -rec.mean() + _REC_CE * ce, (pred == tgt).mean()
+    return perdida, (pred == tgt).mean()
 
 
 # --- cabeza de abstencion separada (2026-08-18, `PREREG_CABEZA_ABSTENCION.md`) -------------------
@@ -242,7 +287,7 @@ def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt):
         # interfaz H del PREREG_RECOMPENSA: la misma recompensa, pero la probabilidad de abstenerse
         # sale de la cabeza binaria en vez del softmax de vocabulario. Es el CONTRASTE de la campania,
         # no la condicion principal — la principal no tiene cabeza justamente porque escala.
-        return _recompensa(lg, tgt, q=jax.nn.sigmoid(a))
+        return _recompensa(lg, tgt, q=jax.nn.sigmoid(a), s=a)
     if _PERDIDA_CABEZA == "balance":
         f1 = jnp.mean(blanco)                       # fraccion de la clase «me equivoco»
         f0 = 1.0 - f1
@@ -378,6 +423,14 @@ def main():
     ap.add_argument("--rec-ce", type=float, default=1.0,
                     help="peso de la CE del valor, que se SUMA a la recompensa. No es cosmetico: sin "
                          "el, un modelo que se calla deja de recibir gradiente hacia la recuperacion.")
+    ap.add_argument("--rec-rank", type=float, default=0.0,
+                    help="peso del termino de ORDEN sobre el logit de NOSE (DISENO_RECOMPENSA_RANKING"
+                         ".md). Arregla un defecto medido el 31-ago: la recompensa es LINEAL en q, "
+                         "asi que si la decision resulta independiente de la evidencia la perdida "
+                         "depende solo de la TASA de abstencion y NO de cuales preguntas se callan. "
+                         "Con 0,0 (el default) la perdida es bit a bit la de las campanias "
+                         "anteriores. El valor se deriva del ratio de gradientes medido en el "
+                         "checkpoint DE SIEMBRA con `medir_ratio_ce.py`, nunca a mitad de corrida.")
     ap.add_argument("--blanco", default="ausencia", choices=("ausencia", "error"),
                     help="que aprende la BCE de la cabeza (A5, ALTERNATIVAS_DETECCION_20260826.md). "
                          "«ausencia» = ¿hay respuesta?, que es lo de siempre. «error» = ¿me voy a "
@@ -468,8 +521,9 @@ def main():
     # asignacion crea una LOCAL y la global se queda en "token": `--abst slot` no tendria efecto y
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
-    global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE
+    global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
+    _REC_RANK = a.rec_rank
     # Compuerta de la ENMIENDA, ahora ejecutable y no solo escrita: si el optimo de la perdida es un
     # extremo, eso no es un riesgo a vigilar sino un defecto, y se cierra ANTES de gastar GPU.
     if a.perdida_cabeza == "recompensa":
@@ -608,7 +662,7 @@ def main():
         # la clave, por lo mismo que `blanco`: las bases de siembra son anteriores y no la tienen.
         if a.perdida_cabeza == "recompensa":
             for k, v in (("rec_l", a.rec_l), ("rec_m", a.rec_m), ("rec_f", a.rec_f),
-                         ("rec_ce", a.rec_ce)):
+                         ("rec_ce", a.rec_ce), ("rec_rank", a.rec_rank)):
                 if k in ck["config"] and abs(float(ck["config"][k]) - v) > 1e-9:
                     sys.exit(f"ABORTA: el checkpoint se entreno con {k}={ck['config'][k]} y se pidio "
                              f"{v}. Los pesos de la recompensa definen donde esta el optimo, asi que "
