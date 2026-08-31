@@ -210,11 +210,24 @@ def main():
                all(res[u]["recup"] >= ORIGEN_RECUP.get(u.split("_")[-1], 0) - 0.05 for u in trat),
                dep_w6=False)
 
-    bajo = all(res[u]["orden"] < LOG2 for u in trat)
-    print(f"  W-7 · presupuesto: el termino de orden "
-          f"{'BAJO de log 2 en las dos' if bajo else 'NO bajo de log 2'}"
-          f"   ({' · '.join('%.4f' % res[u]['orden'] for u in trat)})")
-    if w1 is False and bajo:
+    # W-7 · ⚠ TRAMPA, y por poco no se cae en ella. «El termino bajo de log 2» sólo significa
+    # «ordeno» si el logit NO es constante: TODA constante da EXACTAMENTE log 2, asi que un logit
+    # colapsado da 0,6931 y un `< LOG2` ingenuo lo lee como orden por una diferencia en el quinto
+    # decimal. Es el mismo modo de falla que el juez de esta tarde, un escalon mas abajo.
+    # La guarda es la degeneracion, no el numero: si el logit toma menos de 10 valores distintos o
+    # la saturacion pasa de 0,95, el termino vale log 2 POR CONSTANTE y W-7 NO se puede activar.
+    const = {u: (res[u]["distintos"] < 10 or res[u]["pegadas"] > 0.95) for u in trat}
+    bajo = all(res[u]["orden"] < LOG2 - 1e-3 for u in trat)
+    print(f"  W-7 · termino de orden: "
+          f"{' · '.join('%.4f' % res[u]['orden'] for u in trat)}   (constante = {LOG2:.4f})")
+    for u in trat:
+        if const[u]:
+            print(f"        {u}: el logit toma {res[u]['distintos']} valores distintos de "
+                  f"{res[u]['n']} y {res[u]['pegadas']:.4f} esta en el clip -> el termino vale "
+                  f"log 2 POR CONSTANTE, no porque haya ordenado")
+    if any(const.values()):
+        print(f"        ** W-7 {NE}: con el logit colapsado, «bajo de log 2» no significa orden. **")
+    elif w1 is False and bajo:
         print(f"        ** W-7 SE ACTIVA: W-1 falla pero el termino ordeno -> es PRESUPUESTO, "
               f"no un negativo. **")
 
