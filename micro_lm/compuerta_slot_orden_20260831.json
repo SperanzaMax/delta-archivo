@@ -1,0 +1,91 @@
+{
+ "b3_s3": {
+  "a": {
+   "presentes": true,
+   "coseno": 1.0000001192092896,
+   "razon_normas": 0.8669716715812683,
+   "v_nulo": 0.0,
+   "cumple": true
+  },
+  "b": {
+   "masa_media": 0.16273990273475647,
+   "masa_desvio": 0.3639511466026306,
+   "logit_media": -9.289702415466309,
+   "logit_desvio": 10.076325416564941,
+   "pegadas_al_clip": 0.828125,
+   "valores_distintos": 3,
+   "cumple": true,
+   "no_saturado": false
+  },
+  "orden_siembra": 3.405628204345703,
+  "auc_siembra": 0.5294117647058824,
+  "c": {
+   "kw": 0.017368586733937263,
+   "qr": 0.00655546598136425,
+   "k_nulo": 0.006496129557490349,
+   "v_nulo": 0.0,
+   "head.w": 0.0,
+   "cumple": true
+  },
+  "d": {
+   "base_kw": 0.010145104490220547,
+   "base_qr": 0.004752805456519127,
+   "base_busqueda": 0.0074489545077085495,
+   "orden_k_nulo": 0.006496129557490349,
+   "orden_busqueda": 0.011962026357650757,
+   "rec_rank_principal": 1.5617152337306381,
+   "ref_qr": 0.73163649438594,
+   "ref_busqueda": 0.6227167776590206
+  }
+ },
+ "b3_s6": {
+  "a": {
+   "presentes": true,
+   "coseno": 1.0000001192092896,
+   "razon_normas": 0.8669722676277161,
+   "v_nulo": 0.0,
+   "cumple": true
+  },
+  "b": {
+   "masa_media": 0.31465721130371094,
+   "masa_desvio": 0.46220049262046814,
+   "logit_media": -4.717400550842285,
+   "logit_desvio": 12.503819465637207,
+   "pegadas_al_clip": 0.625,
+   "valores_distintos": 8,
+   "cumple": true,
+   "no_saturado": false
+  },
+  "orden_siembra": 5.646844387054443,
+  "auc_siembra": 0.5450980392156863,
+  "c": {
+   "kw": 0.02476210705935955,
+   "qr": 0.003819403937086463,
+   "k_nulo": 0.00030065898317843676,
+   "v_nulo": 0.0,
+   "head.w": 0.0,
+   "cumple": true
+  },
+  "d": {
+   "base_kw": 0.0016373717226088047,
+   "base_qr": 0.000724980840459466,
+   "base_busqueda": 0.0011811762815341353,
+   "orden_k_nulo": 0.00030065898317843676,
+   "orden_busqueda": 0.014290756545960903,
+   "rec_rank_principal": 5.445943125660903,
+   "ref_qr": 2.4113061010028107,
+   "ref_busqueda": 0.08265316659305763
+  }
+ },
+ "peso": {
+  "por_semilla": [
+   1.5617152337306381,
+   5.445943125660903
+  ],
+  "media": 3.5038291796957703,
+  "media_redondeada": 3.5,
+  "dispersion": 3.4871550254725947,
+  "determinado": false
+ },
+ "veredicto": "COMPUERTA ABIERTA"
+}
