@@ -39,6 +39,21 @@ monótona** (RECUP 0,9979 tiene MENOS techo que 0,8812) · `q3` y `v3` **no info
 RECUP < 0,10, tal como el riesgo declarado en la nota anticipaba. `b3`, analizada aparte por entrenar
 con `blanco=error`, es la de rango más grande (0,3666→0,9996) y da **+0,5838 con r = +0,9831**.
 
+**★ Y haberla dejado aparte resultó más importante de lo que decía la razón que se dio.** `b3` **no es
+una familia homogénea**: `ENMIENDA_PERDIDA_CABEZA.md` (29-ago) ya había establecido que **`b3_s0/s1/s2`
+arrancaron desde un modelo con RECUP ≈ 0,78 y `b3_s3`…`b3_s8` arrancaron de cero** — dos poblaciones,
+no nueve semillas. Su pendiente de +0,5838 mezcla «la semilla» con «el punto de partida», así que **no
+habría podido usarse** aunque no tuviera el `blanco=error`. La homogeneidad de `p3`, en cambio, está
+documentada desde el `INFORME_BIMODALIDAD_20260822.md`: son «las tres unidades `pre` de la campaña de
+la mañana, a igual presupuesto y con todo lo demás igual», y su dispersión entre semillas tiene causa
+identificada (el **atajo de la relación**, `ac_repetida` 0,9425 · 0,5317 · 0,7471).
+
+**Pero ese contraste de poblaciones aporta algo que la curva sola no puede dar, y va en la misma
+dirección: es una INTERVENCIÓN, no una correlación.** Lo que se manipuló fue el punto de partida, y
+el desenlace se alineó casi perfecto — **arrancar con RECUP ≈ 0,78 dio 3 de 3 unidades útiles; arrancar
+de cero dio 2 útiles y 4 mudas**. Es evidencia causal, y del único tipo que hay en todo esto, a favor
+de que **la recuperación previa decide si la abstención llega a existir**.
+
 ## 3. ⚠ El veredicto automático, otra vez, no se puede leer como salió
 
 El juez imprimió **«m = +0,4555 ≥ 0,40 → SE REFUERZA»**, y el criterio pre-registrado se cumple
@@ -76,9 +91,19 @@ entrenado— y sugiere que ese residuo se cierra **entrenando la detección**, n
 
 - **No reinterpreta el techo de 0,7003 del 31-ago.** Es tentador leer «`n3_s0` da 0,70 porque recupera
   0,785, y con RECUP 1,0 daría 0,93», pero **`n3_s0` tiene `p_nose`=0,0** (entrenado sin una sola
-  pregunta sin respuesta) contra 0,4 de todas las de hoy. La diferencia confunde RECUP con `p_nose`.
-  Queda como **hipótesis para medir**, no como resultado: es barato: bastan unidades de `p_nose`=0,4
-  con RECUP ≈ 0,78.
+  pregunta sin respuesta) contra 0,4 de todas las de hoy, así que la comparación confunde RECUP con
+  `p_nose` —y además con el presupuesto (12000 contra 26000) y con la interfaz (`token` contra
+  `cabeza`)—.
+
+  **★ Corrección a este mismo informe, sobre su primera versión:** decía que la comparación «queda
+  como hipótesis barata de medir, bastan unidades de `p_nose`=0,4 con RECUP ≈ 0,78». **Ese dato ya
+  está en la tabla de arriba y no lo vi: `p3_s1` tiene RECUP 0,7945**, a nueve milésimas del 0,7850
+  de `n3_s0`, **y su techo es 0,8441 contra 0,7003**. O sea, **a recuperación prácticamente idéntica
+  el techo difiere en +0,1438**. Eso NO se puede atribuir a `p_nose` porque los tres confounds viajan
+  juntos, pero sí deja algo que no depende de cuál sea la causa: **RECUP no determina el techo por sí
+  sola**, y el mismo punto del eje x admite techos muy distintos. Es evidencia independiente del
+  hallazgo de `v3` en el §4, y por el otro lado: allá la recuperación estaba saturada y acá está en
+  el medio. **Para separar las tres causas hace falta una corrida nueva variando una sola.**
 - **La variación de RECUP viene de la semilla**, o sea de la biestabilidad ya documentada, no de una
   intervención. Es correlacional: nadie movió RECUP a propósito.
 - `q3` y `v3` no informaron la pendiente, y `w3` es no monótona. La evidencia intra-familia limpia
