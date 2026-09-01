@@ -68,6 +68,9 @@ MEZCLA="${MEZCLA:-fija}"
 # con blanco `error` correria como `ausencia` sin decir nada — exactamente el modo de falla que
 # `donde` y `mezcla` ya documentan, y que `entrenar.py` ahora ademas bloquea al reanudar.
 BLANCO="${BLANCO:-ausencia}"
+# 2026-09-01 · INFORME_QUERY_CIEGA. Kernel de `convq` en --donde lat2: con 3 la RELACION cae
+# un token afuera de la ventana y la busqueda no la puede ver. Viaja igual que BLANCO.
+KERNEL_Q="${KERNEL_Q:-3}"
 PERDIDA_CABEZA="${PERDIDA_CABEZA:-bce}"
 # 2026-08-30 · PREREG_RECOMPENSA_L. Los pesos de `recompensa` dejaron de ser constantes de modulo y
 # tienen que VIAJAR hasta la VM: editarlos a mano en la PC no cambiaba lo que corria en Colab, porque
@@ -107,7 +110,7 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -158,6 +161,7 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--lr', '1e-3', '--p-vieja', '$P_VIEJA', '--idioma', '2', '--horizonte', '$HORIZONTE',
        '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
        '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO', '--blanco', '$BLANCO',
+       '--kernel-q', '$KERNEL_Q',
        '--perdida-cabeza', '$PERDIDA_CABEZA',
        '--rec-l', '$REC_L', '--rec-m', '$REC_M', '--rec-f', '$REC_F', '--rec-ce', '$REC_CE',
        '--rec-rank', '$REC_RANK',

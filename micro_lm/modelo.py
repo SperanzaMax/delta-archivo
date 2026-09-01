@@ -87,7 +87,11 @@ def init_params(seed, V, D=192, NB=6, N_TURNOS=64):
             # declarado en el §7 del prereg —«lat2 puede quedarse en pre»—, porque el atractor sin
             # gradiente no es [1,0,0] sino [0,0,0], y sin este control un convq atenuado se leeria
             # como aprendizaje cuando podria ser decay.
-            "convq": jnp.stack([jnp.ones(D), jnp.zeros(D), jnp.zeros(D)]),
+            # 2026-09-01: el kernel pasa a ser configurable (`KQ`). Sigue arrancando en
+            # [1, 0, ..., 0], asi que `convk(convq, z) == z` exactamente y `lat2` sigue conteniendo a
+            # `pre` como caso particular sea cual sea el kernel. Con KQ=3 el arbol es identico al de
+            # antes, bit a bit, y los checkpoints viejos siguen cargando.
+            "convq": jnp.stack([jnp.ones(D)] + [jnp.zeros(D)] * (KQ - 1)),
             "wq": glorot(ks[b + 1], (D, D)), "wk": glorot(ks[b + 2], (D, D)),
             "wv": glorot(ks[b + 3], (D, D)), "beta": jnp.zeros(D) + 0.5,
             "m1": {"w": glorot(ks[b + 4], (D, 4 * D)), "b": jnp.zeros(4 * D)},
@@ -102,12 +106,30 @@ def ln(p, x):
     return (x - m) / jnp.sqrt(v + 1e-5) * p["g"] + p["b"]
 
 
+KQ = 3          # kernel de `convq` (lat2). 2026-09-01: 5 hace que la query vea la RELACION.
+
+
 def conv3(w, x):
     """Depthwise causal, kernel 3."""
     x0 = x
     x1 = jnp.pad(x, ((0, 0), (1, 0), (0, 0)))[:, :-1, :]
     x2 = jnp.pad(x, ((0, 0), (2, 0), (0, 0)))[:, :-2, :]
     return x0 * w[0] + x1 * w[1] + x2 * w[2]
+
+
+def convk(w, x):
+    """Depthwise causal de kernel `len(w)`. Generaliza `conv3` sin cambiarla.
+
+    2026-09-01. Nace de `INFORME_QUERY_CIEGA_20260901.md`: en «cual es <art> <sust> de <ent> ?» la
+    ENTIDAD queda a distancia 1 de la posicion de lectura y la RELACION a distancia 3, las dos de
+    forma determinista. Con kernel 3 (alcance 2) la relacion cae UN TOKEN afuera de la ventana en el
+    100 % de las consultas, y por eso la sensibilidad de la busqueda a la relacion es 0,0000 EXACTO:
+    no es que el modelo la ignore, no la puede ver. Con kernel 5 (alcance 4) queda cubierta siempre.
+    """
+    y = x * w[0]
+    for i in range(1, w.shape[0]):
+        y = y + jnp.pad(x, ((0, 0), (i, 0), (0, 0)))[:, :-i, :] * w[i]
+    return y
 
 
 def delta_mixer(blk, x):
@@ -197,7 +219,7 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
             #
             # Con `convq` propia e inicializada en [1,0,0], `lat2` arranca siendo EXACTAMENTE `pre` y
             # el modelo decide por gradiente cuanto contexto quiere. 3 x D = 384 params, 0,044 %.
-            h = h + lectura(conv3(blk["convq"], ln(blk["ln1"], h)))
+            h = h + lectura(convk(blk["convq"], ln(blk["ln1"], h)))
         h = h + jax.vmap(delta_mixer, in_axes=(None, 0))(blk, conv3(blk["conv"], ln(blk["ln1"], h)))
         if lectura is not None and i == bloque and donde == "post":
             h = h + lectura(ln(blk["ln2"], h))

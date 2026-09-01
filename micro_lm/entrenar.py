@@ -436,6 +436,15 @@ def main():
                          "«ausencia» = ¿hay respuesta?, que es lo de siempre. «error» = ¿me voy a "
                          "equivocar si contesto?, con el blanco tomado del argmax del propio modelo "
                          "y stop_gradient. Solo tiene efecto con --abst cabeza o slot.")
+    ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7),
+                    help="kernel de `convq`, la conv que forma la query en `--donde lat2` "
+                         "(INFORME_QUERY_CIEGA_20260901.md). Con 3 la ENTIDAD entra en la ventana "
+                         "(distancia 1) y la RELACION queda AFUERA (distancia 3) en el 100 % de las "
+                         "consultas, medido: la sensibilidad de la busqueda a la relacion es 0,0000 "
+                         "exacto. Con 5 la relacion queda cubierta siempre. Arranca en [1,0,...,0] "
+                         "sea cual sea el kernel, asi que `lat2` sigue conteniendo a `pre` como caso "
+                         "particular. CAMBIA LA FORMA de `convq`: los checkpoints de kernel distinto "
+                         "no son compatibles y la guarda de identidad lo aborta.")
     ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2"),
                     help="en que punto del bloque 0 entra la lectura del archivo "
                          "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
@@ -539,6 +548,7 @@ def main():
     _DONDE = a.donde
     _ABST = a.abst
     _BLANCO = a.blanco
+    M.KQ = a.kernel_q          # antes de init_params: decide la forma de `convq`
     _PERDIDA_CABEZA = a.perdida_cabeza
 
     print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
@@ -643,6 +653,14 @@ def main():
         # un solo paso. Lo que la guarda tiene que impedir es que un tramo POSTERIOR cambie el
         # blanco, y eso sigue cubierto: todo checkpoint escrito desde hoy lleva la clave, porque la
         # config se vuelca con `vars(a)` completo.
+        # `kernel_q` (2026-09-01): misma familia que `blanco` y `perdida_cabeza`, pero ademas
+        # CAMBIA LA FORMA de `convq`, asi que sin esta guarda el error seria un shape mismatch
+        # cripitico en medio del primer paso en vez de un mensaje. Las corridas anteriores a hoy no
+        # tienen la clave y son todas kernel 3, de ahi el default en el `.get`.
+        if ck["config"].get("kernel_q", 3) != a.kernel_q:
+            sys.exit(f"ABORTA: el checkpoint se entreno con kernel_q="
+                     f"{ck['config'].get('kernel_q', 3)} y se pidio kernel_q={a.kernel_q}. "
+                     f"`convq` tiene otra forma: es otro modelo, no la misma corrida.")
         if "blanco" in ck["config"] and ck["config"]["blanco"] != a.blanco:
             sys.exit(f"ABORTA: el checkpoint se entreno con blanco="
                      f"{ck['config'].get('blanco', 'ausencia')} y se pidio blanco={a.blanco}. "

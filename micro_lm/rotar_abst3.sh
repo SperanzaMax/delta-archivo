@@ -39,7 +39,8 @@ export SEMBRAR="${SEMBRAR:-1}"
 # 2026-08-23 · escalonado (DISENO_ESCALONADO.md). Viajan hasta `entrenar.py` por el tramo, igual que
 # DONDE. Sin exportarlos, el tramo usaria sus defaults y la campania dinamica correria fija.
 export MEZCLA="${MEZCLA:-fija}"
-export BLANCO="${BLANCO:-ausencia}"   # 2026-08-26, A5. Viaja hasta entrenar.py por el tramo.
+export BLANCO="${BLANCO:-ausencia}"
+export KERNEL_Q="${KERNEL_Q:-3}"   # 2026-09-01, INFORME_QUERY_CIEGA   # 2026-08-26, A5. Viaja hasta entrenar.py por el tramo.
 # 2026-08-29, PREREG_PERDIDA_CABEZA. Misma familia que BLANCO y por la misma razon: sin
 # exportarla, el tramo usaria su default y las tres condiciones correrian IGUAL sin avisar.
 export PERDIDA_CABEZA="${PERDIDA_CABEZA:-bce}"
