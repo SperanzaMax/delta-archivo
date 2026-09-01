@@ -51,3 +51,33 @@ corromper una corrida larga.
 
 Mientras tanto **no se pushea nada**: subir estos commits sin rotar sería volver a publicar el mismo
 secreto en el mismo lugar.
+
+---
+
+## ✅ CERRADO · verificado el 2026-09-01
+
+**Las dos tareas del §«Lo que FALTA» ya no aplican, y la primera estaba hecha desde el mismo 27-ago.**
+
+Verificado contra la API de Telegram, no contra este documento:
+
+1. **El token publicado en el repo está REVOCADO.** Se extrajo el token del historial de commits y se
+   le pidió `getMe`: responde **401 Unauthorized**. Ya no sirve para nada.
+2. **El token vivo NUNCA estuvo commiteado.** Se comparó el del historial contra el de
+   `~/.config/avisos/telegram.env`: son distintos. El `bot_id` (`8723956710`) es el mismo porque el
+   id del bot no cambia al rotar, sólo la parte que va después de los dos puntos.
+3. **Escaneo completo del historial** con patrones de alto riesgo (AWS, OpenAI, GitHub, Google,
+   claves privadas, Bybit, `password=`, `api_secret=`): **cero coincidencias**. El token del bot era
+   el único secreto que hubo, y ya está muerto.
+
+**Entonces limpiar el historial no hace falta.** Lo que quedó publicado es una credencial revocada, y
+reescribir la historia de un repo público —que además está citado por tres preprints con DOI— tendría
+todo el costo y ningún beneficio.
+
+**Error de lectura, y vale registrarlo:** el 1-sep leí el §«Lo que FALTA» de este mismo informe y
+reporté que rotar el token seguía pendiente, sin comprobarlo. Bastaban cinco segundos de `getMe`
+contra el token del historial. Un documento dice lo que era cierto el día que se escribió; el estado
+se verifica contra el sistema, no contra el informe. Es [[regla-verificar-antes-de-veredicto]]
+aplicada a la propia bitácora.
+
+**Queda `micro_lm/rotar_token.sh`** para el día que haya que rotar de verdad: valida el token nuevo
+contra la API antes de tocar nada, hace copia del archivo y prueba un aviso real.
