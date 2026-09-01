@@ -1,0 +1,129 @@
+{
+ "ckpts/n3_s0.pkl": {
+  "rango_head": 128,
+  "L1_logits": {
+   "senal": 0.7002779121402989,
+   "nulo": 0.4993556419744247,
+   "techo": 0.9982737759821381,
+   "lambda": 0.01,
+   "confiable": true
+  },
+  "L2_estado": {
+   "senal": 0.7002735465710199,
+   "nulo": 0.5231724417327468,
+   "techo": 0.998306948062304,
+   "lambda": 0.01,
+   "confiable": true
+  },
+  "L3_nolineal": {
+   "senal": 0.6424275708400927,
+   "nulo": 0.5439032205677685,
+   "techo": 0.9978310562968475,
+   "lambda": 10000.0,
+   "confiable": true
+  },
+  "L4_bloque1": {
+   "senal": 0.5006888868322207,
+   "nulo": 0.4952960991019151,
+   "techo": 0.777753442134921,
+   "lambda": 1.0,
+   "confiable": false
+  },
+  "L4_bloque2": {
+   "senal": 0.6672205118891914,
+   "nulo": 0.5168231577734199,
+   "techo": 0.9973228430173835,
+   "lambda": 1.0,
+   "confiable": true
+  },
+  "L4_bloque3": {
+   "senal": 0.6826423219240635,
+   "nulo": 0.48861022975118,
+   "techo": 0.9976749774068364,
+   "lambda": 0.01,
+   "confiable": true
+  },
+  "L4_bloque4": {
+   "senal": 0.6850289786488738,
+   "nulo": 0.49417371124029313,
+   "techo": 0.9983009940991973,
+   "lambda": 0.01,
+   "confiable": true
+  },
+  "L5_busqueda": {
+   "senal": 0.49863881549881867,
+   "nulo": 0.49035645746276607,
+   "techo": 0.6242156185210781,
+   "lambda": 10000.0,
+   "confiable": false
+  }
+ },
+ "ckpts/t03_s3.pkl": {
+  "rango_head": 128,
+  "L1_logits": {
+   "senal": 0.6404281401103267,
+   "nulo": 0.5645244236138881,
+   "techo": 0.9998376631633558,
+   "lambda": 0.01,
+   "confiable": false
+  },
+  "L2_estado": {
+   "senal": 0.6401164384638086,
+   "nulo": 0.5161469310921083,
+   "techo": 0.9997694223521294,
+   "lambda": 1.0,
+   "confiable": true
+  },
+  "L3_nolineal": {
+   "senal": 0.6141408646970382,
+   "nulo": 0.5602099314954869,
+   "techo": 0.9994244035922641,
+   "lambda": 10000.0,
+   "confiable": false
+  },
+  "L4_bloque1": {
+   "senal": 0.49448759567145073,
+   "nulo": 0.5020863055584174,
+   "techo": 0.6139244315667581,
+   "lambda": 0.01,
+   "confiable": false
+  },
+  "L4_bloque2": {
+   "senal": 0.5195843803423654,
+   "nulo": 0.5135481077003403,
+   "techo": 0.934944890246735,
+   "lambda": 0.01,
+   "confiable": true
+  },
+  "L4_bloque3": {
+   "senal": 0.5812384421553339,
+   "nulo": 0.49717634979036535,
+   "techo": 0.9994176218967386,
+   "lambda": 0.01,
+   "confiable": true
+  },
+  "L4_bloque4": {
+   "senal": 0.6331721274117588,
+   "nulo": 0.47608060936362223,
+   "techo": 0.99966133907969,
+   "lambda": 1.0,
+   "confiable": true
+  },
+  "L5_busqueda": {
+   "senal": 0.48919128702221026,
+   "nulo": 0.5039268295664291,
+   "techo": 0.5409745805097461,
+   "lambda": 10000.0,
+   "confiable": false
+  }
+ },
+ "veredicto": {
+  "mejor": "L1_logits",
+  "auc": 0.7002779121402989,
+  "T1": true,
+  "T2": false,
+  "T3": true,
+  "T4": false,
+  "dif_recup": 0.060161473676490274
+ }
+}
