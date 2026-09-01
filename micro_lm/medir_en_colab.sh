@@ -18,8 +18,9 @@
 #   4. baja los .json que el script haya dejado,
 #   5. PARA la sesion pase lo que pase, tambien si el script revienta.
 #
-# ⚠ NO PROBADO todavia: se escribio la noche del 31 con las cuentas ya cerradas. Antes de confiarle
-# una medicion larga, correrlo una vez con un script trivial y verificar que el .json vuelve.
+# ✅ PROBADO el 1-sep 07:18 con `smoke_medicion.py` (cuenta C, T4): subio codigo + 2 checkpoints,
+# corrio, y el .json volvio a la PC. jax 0.11.1 sobre CudaDevice. La cuenta A dio 503, o sea que
+# conviene rotar cuentas igual que hace el rotador de entrenamiento.
 set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 AQUI="$PWD"
@@ -67,10 +68,15 @@ for CK in "${CKPTS[@]}"; do
   timeout -k 30 420 "${CL[@]}" upload -s "$SESION" "$AQUI/$CK" "/content/micro/ckpts/$(basename "$CK")" || exit 1
 done
 
+# Los checkpoints subidos se le pasan al script COMO ARGUMENTOS: asi mide exactamente los que se
+# mandaron, y no depende de una lista hardcodeada adentro del script (que fue lo que obligo a tocar
+# `sonda_techo_curva.py` el 1-sep para medir 17 unidades en vez de sus 10 por defecto).
+ARGS=""
+for CK in "${CKPTS[@]}"; do ARGS="$ARGS'ckpts/$(basename "$CK")',"; done
 cat > "$TMP/correr.py" <<PY
 import subprocess, sys, glob
 # -u por la leccion del 31: sin esto la salida queda en el buffer y no se sabe si avanza o se trabo.
-p = subprocess.run([sys.executable, '-u', '$SCRIPT'], cwd='/content/micro',
+p = subprocess.run([sys.executable, '-u', '$SCRIPT'] + [$ARGS], cwd='/content/micro',
                    capture_output=True, text=True)
 print(p.stdout[-8000:])
 if p.returncode: print('STDERR:', p.stderr[-3000:])

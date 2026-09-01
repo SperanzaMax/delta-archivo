@@ -1,0 +1,19 @@
+{
+ "dispositivos": [
+  "cuda:0"
+ ],
+ "filas": [
+  {
+   "unidad": "n3_s0",
+   "paso": 12000,
+   "nivel": 3,
+   "d": 128
+  },
+  {
+   "unidad": "t03_s3",
+   "paso": 3000,
+   "nivel": 3,
+   "d": 128
+  }
+ ]
+}
