@@ -40,6 +40,11 @@ export SEMBRAR="${SEMBRAR:-1}"
 # DONDE. Sin exportarlos, el tramo usaria sus defaults y la campania dinamica correria fija.
 export MEZCLA="${MEZCLA:-fija}"
 export BLANCO="${BLANCO:-ausencia}"
+# 2026-09-02, PREREG_CRUCE_FORMAS. MISMA familia que KERNEL_Q y por la misma razon exacta: sin
+# exportarla, el tramo usa su default `directa` y la campania del CRUCE correria con el idioma de
+# siempre, o sea seria una copia del control gastando tres unidades de GPU. Cazado ANTES de lanzar,
+# mirando que `FORMAS_Q` no apareciera en ninguno de los dos scripts del pipeline.
+export FORMAS_Q="${FORMAS_Q:-directa}"
 export KERNEL_Q="${KERNEL_Q:-3}"   # 2026-09-01, INFORME_QUERY_CIEGA   # 2026-08-26, A5. Viaja hasta entrenar.py por el tramo.
 # 2026-08-29, PREREG_PERDIDA_CABEZA. Misma familia que BLANCO y por la misma razon: sin
 # exportarla, el tramo usaria su default y las tres condiciones correrian IGUAL sin avisar.

@@ -53,12 +53,14 @@ NOSE = I.STOI["NOSE"]
 # cambiar en el medio de una corrida, y por eso `main` lo deja asentado en el JSON de config: si
 # alguna vez una corrida sale con el valor que no era, el JSON es donde se ve.
 _DONDE = "pre"
+FORMAS_Q = ("directa",)      # 2026-09-02, PREREG_CRUCE_FORMAS. Default = el idioma de siempre.
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
 _PERDIDA_CABEZA = "bce"   # 2026-08-29: forma de la perdida de la cabeza — bce/balance/ranking
 
 
-def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None):
+def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None,
+            formas_q=None, por_forma=False):
     """Devuelve un dict de metricas. Las dos caras de la abstencion van SEPARADAS:
 
       `nose`         acierta NOSE cuando la respuesta no esta en el archivo (lo que se quiere);
@@ -68,9 +70,15 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     """
     col = {k: [] for k in ("vigente", "anterior", "nose", "nose_ent", "nose_rel",
                            "falsa_abst", "abstencion")}
+    fq = tuple(formas_q) if formas_q else ("directa",)
+    # `por_forma` junta las mismas metricas separadas por forma de pregunta. Es lo que hace legible
+    # el cruce del 2-sep: `nose_rel` y `nose_ent` tienen que INTERCAMBIARSE entre `directa` e
+    # `invertida` si lo que manda es la ventana de la conv y no la dificultad del componente.
+    porf = {f: {k: [] for k in col} for f in fq} if por_forma else None
     for _ in range(n):
-        ses, cortes, turnos, mask, cons, pos, tgt, tipo = DAT.lote(
-            rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose)
+        ses, cortes, turnos, mask, cons, pos, tgt, tipo, forma = DAT.lote(
+            rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose,
+            formas_q=fq, con_formas=True)
         fn = pred_fn or predecir
         pred = np.array(fn(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
                            jnp.array(mask), jnp.array(cons), jnp.array(pos)))
@@ -84,7 +92,25 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
         hay = tipo < 2
         col["falsa_abst"].append((pred[hay] == NOSE).mean() if hay.any() else np.nan)
         col["abstencion"].append((pred == NOSE).mean())
-    return {k: float(np.nanmean(v)) for k, v in col.items()}
+        if porf is not None:
+            for j, f in enumerate(fq):
+                g = forma == j
+                if not g.any():
+                    continue
+                s2 = lambda m: ok[m & g].mean() if (m & g).any() else np.nan
+                porf[f]["vigente"].append(s2(tipo == 0))
+                porf[f]["anterior"].append(s2(tipo == 1))
+                porf[f]["nose"].append(s2(tipo >= 2))
+                porf[f]["nose_ent"].append(s2(tipo == 2))
+                porf[f]["nose_rel"].append(s2(tipo == 3))
+                h2 = (tipo < 2) & g
+                porf[f]["falsa_abst"].append((pred[h2] == NOSE).mean() if h2.any() else np.nan)
+                porf[f]["abstencion"].append((pred[g] == NOSE).mean())
+    out = {k: float(np.nanmean(v)) for k, v in col.items()}
+    if porf is not None:
+        out["por_forma"] = {f: {k: float(np.nanmean(v)) if v else float("nan")
+                                for k, v in d.items()} for f, d in porf.items()}
+    return out
 
 
 def logits_de(params, ses, cortes, turnos, mask, cons, pos):
@@ -436,7 +462,13 @@ def main():
                          "«ausencia» = ¿hay respuesta?, que es lo de siempre. «error» = ¿me voy a "
                          "equivocar si contesto?, con el blanco tomado del argmax del propio modelo "
                          "y stop_gradient. Solo tiene efecto con --abst cabeza o slot.")
-    ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7),
+    ap.add_argument("--formas-q", default="directa",
+                    help="formas de PREGUNTA separadas por coma (PREREG_CRUCE_FORMAS, 2026-09-02). "
+                         "`directa` deja la relacion a distancia 3 y la entidad a 1; `invertida` "
+                         "las cambia de lugar (relacion a 1, entidad a 3); `lejana` pone la "
+                         "relacion a 4. Con una sola forma NO se toca el rng y las corridas viejas "
+                         "se reproducen bit a bit (verificado con hash del lote).")
+    ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7, 9),
                     help="kernel de `convq`, la conv que forma la query en `--donde lat2` "
                          "(INFORME_QUERY_CIEGA_20260901.md). Con 3 la ENTIDAD entra en la ventana "
                          "(distancia 1) y la RELACION queda AFUERA (distancia 3) en el 100 % de las "
@@ -531,6 +563,7 @@ def main():
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
     global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
+    global FORMAS_Q
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
     _REC_RANK = a.rec_rank
     # Compuerta de la ENMIENDA, ahora ejecutable y no solo escrita: si el optimo de la perdida es un
@@ -548,6 +581,10 @@ def main():
     _DONDE = a.donde
     _ABST = a.abst
     _BLANCO = a.blanco
+    FORMAS_Q = tuple(x.strip() for x in a.formas_q.split(",") if x.strip())
+    for f in FORMAS_Q:
+        if f not in I.FORMAS_Q:
+            sys.exit(f"ABORTA: forma de pregunta desconocida {f!r}; hay {I.FORMAS_Q}")
     M.KQ = a.kernel_q          # antes de init_params: decide la forma de `convq`
     _PERDIDA_CABEZA = a.perdida_cabeza
 
@@ -661,6 +698,13 @@ def main():
             sys.exit(f"ABORTA: el checkpoint se entreno con kernel_q="
                      f"{ck['config'].get('kernel_q', 3)} y se pidio kernel_q={a.kernel_q}. "
                      f"`convq` tiene otra forma: es otro modelo, no la misma corrida.")
+        # `formas_q` (2026-09-02): misma familia. Cambiar las formas a mitad de una corrida la parte
+        # en dos tareas distintas sin avisar, que es justo el agujero que la guarda de `blanco`
+        # tapo. Las corridas anteriores a hoy no tienen la clave y son todas `directa`.
+        if ck["config"].get("formas_q", "directa") != a.formas_q:
+            sys.exit(f"ABORTA: el checkpoint se entreno con formas_q="
+                     f"{ck['config'].get('formas_q', 'directa')!r} y se pidio {a.formas_q!r}. "
+                     f"La consulta tiene otra geometria: es otra tarea, no la misma corrida.")
         if "blanco" in ck["config"] and ck["config"]["blanco"] != a.blanco:
             sys.exit(f"ABORTA: el checkpoint se entreno con blanco="
                      f"{ck['config'].get('blanco', 'ausencia')} y se pidio blanco={a.blanco}. "
@@ -809,7 +853,7 @@ def main():
     for s in range(paso0 + 1, fin + 1):
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
             rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
-            p_nose=p_nose_tr)
+            p_nose=p_nose_tr, formas_q=FORMAS_Q)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),
                                      jnp.array(pos), jnp.array(tgt))
@@ -820,7 +864,7 @@ def main():
             trunc = DAT.tasa_truncados()            # la compuerta, en el registro permanente
             ev = np.random.default_rng(90000 + a.semilla)
             m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
-                        pred_fn=fn_pred)
+                        pred_fn=fn_pred, formas_q=FORMAS_Q, por_forma=len(FORMAS_Q) > 1)
             # `p_nose` va en CADA evaluacion y no solo en la config, porque la guarda de identidad
             # del checkpoint no lo compara: una corrida puede reanudarse con otro valor. Eso es
             # deliberado —el curriculum de dos fases entrena primero sin preguntas sin respuesta y

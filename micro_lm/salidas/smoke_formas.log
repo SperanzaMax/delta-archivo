@@ -1,0 +1,4 @@
+MICRO-LM · nivel 3 · vocabulario 242 tokens · d=128 capas=4 · lectura lat2
+dispositivos: [CpuDevice(id=0)]  ->  hw=cpu:cpu
+parametros: 865,651 (3.5 MB en fp32)
+

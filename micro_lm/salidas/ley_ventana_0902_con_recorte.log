@@ -1,0 +1,67 @@
+====================================================================================================
+LEY DE LA VENTANA · TV de la busqueda al ablar cada componente · prereg SHA eb5e1d50 §B
+====================================================================================================
+La posicion de lectura se corre r lugares sobre el relleno:
+   distancia de la ENTIDAD = 1+r   ·   distancia de la RELACION = 3+r
+   «≈0» es TV media < 0.01 y esta escrito en el prereg, antes del dato.
+
+--- v3_s0  kernel 3 (alcance 2)  paso=26000
+   r  d_ent    TV_ent       d_rel    TV_rel
+   0      1  0.741271 dentro      3  0.000000 AFUERA   
+   1      2  0.154497 dentro      4  0.000000 AFUERA     <- ESCALON
+   2      3  0.000000 AFUERA      5  0.000000 AFUERA   
+   3      4  0.000000 AFUERA      6  0.000000 AFUERA   
+   4      5  0.000000 AFUERA      7  0.000000 AFUERA   
+
+--- v3_s1  kernel 3 (alcance 2)  paso=26000
+   r  d_ent    TV_ent       d_rel    TV_rel
+   0      1  0.706055 dentro      3  0.000000 AFUERA   
+   1      2  0.254334 dentro      4  0.000000 AFUERA     <- ESCALON
+   2      3  0.000000 AFUERA      5  0.000000 AFUERA   
+   3      4  0.000000 AFUERA      6  0.000000 AFUERA   
+   4      5  0.000000 AFUERA      7  0.000000 AFUERA   
+
+--- v3_s2  kernel 3 (alcance 2)  paso=26000
+   r  d_ent    TV_ent       d_rel    TV_rel
+   0      1  0.743573 dentro      3  0.000000 AFUERA   
+   1      2  0.166182 dentro      4  0.000000 AFUERA     <- ESCALON
+   2      3  0.000000 AFUERA      5  0.000000 AFUERA   
+   3      4  0.000000 AFUERA      6  0.000000 AFUERA   
+   4      5  0.000000 AFUERA      7  0.000000 AFUERA   
+
+--- kq3_s0  kernel 5 (alcance 4)  paso=26000
+   r  d_ent    TV_ent       d_rel    TV_rel
+   0      1  0.458670 dentro      3  0.271948 dentro   
+   1      2  0.099695 dentro      4  0.093020 dentro     <- ESCALON
+   2      3  0.084768 dentro      5  0.000000 AFUERA   
+   3      4  0.067216 dentro      6  0.000000 AFUERA     <- ESCALON
+   4      5  0.009314 AFUERA      7  0.000000 AFUERA   
+
+--- kq3_s1  kernel 5 (alcance 4)  paso=26000
+   r  d_ent    TV_ent       d_rel    TV_rel
+   0      1  0.359365 dentro      3  0.348029 dentro   
+   1      2  0.147595 dentro      4  0.326548 dentro     <- ESCALON
+   2      3  0.082397 dentro      5  0.000000 AFUERA   
+   3      4  0.076329 dentro      6  0.000000 AFUERA     <- ESCALON
+   4      5  0.009613 AFUERA      7  0.000000 AFUERA   
+
+--- kq3_s2  kernel 5 (alcance 4)  paso=26000
+   r  d_ent    TV_ent       d_rel    TV_rel
+   0      1  0.426718 dentro      3  0.175528 dentro   
+   1      2  0.137118 dentro      4  0.114975 dentro     <- ESCALON
+   2      3  0.054723 dentro      5  0.000000 AFUERA   
+   3      4  0.084363 dentro      6  0.000000 AFUERA     <- ESCALON
+   4      5  0.010610 AFUERA      7  0.000000 AFUERA   
+
+====================================================================================================
+B-1 · el escalon cae donde lo predice el alcance
+====================================================================================================
+  v3_s0     kernel 3: TODAS las celdas cumplen
+  v3_s1     kernel 3: TODAS las celdas cumplen
+  v3_s2     kernel 3: TODAS las celdas cumplen
+  kq3_s0    kernel 5: TODAS las celdas cumplen
+  kq3_s1    kernel 5: TODAS las celdas cumplen
+  kq3_s2    kernel 5: fallan -> ent d=5 afuera TV=0.010610
+
+  celdas que cumplen la prediccion: 59 de 60
+====================================================================================================

@@ -1,0 +1,26 @@
+============================================================================================
+1 · las distancias declaradas contra el texto real, token a token
+============================================================================================
+  directa    vigente   d_rel=3 (dice 3)  d_ent=1 (dice 1)  OK   «cual es el director de norte ?»
+  directa    anterior  d_rel=3 (dice 3)  d_ent=1 (dice 1)  OK   «cual era antes el director de norte ?»
+  invertida  vigente   d_rel=1 (dice 1)  d_ent=3 (dice 3)  OK   «cual es para norte el director ?»
+  invertida  anterior  d_rel=1 (dice 1)  d_ent=3 (dice 3)  OK   «cual era antes para norte el director ?»
+  lejana     vigente   d_rel=4 (dice 4)  d_ent=1 (dice 1)  OK   «cual es el director que tiene norte ?»
+  lejana     anterior  d_rel=4 (dice 4)  d_ent=1 (dice 1)  OK   «cual era antes el director que tiene norte ?»
+
+  -> todas las distancias coinciden
+
+============================================================================================
+2 · la sensibilidad de la busqueda se da vuelta entre las dos formas (kernel 3)
+============================================================================================
+  modelo v3_s0.pkl · kernel 3 (alcance 2) · paso 26000
+
+  forma       d_ent     TV_ent  d_rel     TV_rel   veredicto
+  directa         1   0.742449      3   0.000000   OK  (se esperaba ent >0, rel =0)
+  invertida       3   0.000000      1   0.267029   OK  (se esperaba ent =0, rel >0)
+
+  X-0 BLOQUEANTE: la sensibilidad se DA VUELTA entre las formas   CUMPLE
+
+============================================================================================
+COMPUERTA ABRE
+============================================================================================

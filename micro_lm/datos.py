@@ -43,7 +43,7 @@ TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3}
 
 
 def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False,
-         con_origen=False):
+         con_origen=False, formas_q=("directa",), con_formas=False):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
 
     Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
@@ -57,6 +57,10 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
     mask = np.zeros((B, N), bool)
     turnos = np.zeros((B, N), np.int32)
     consulta = np.full((B, T_Q), PAD, np.int32)
+    # Que FORMA de pregunta le toco a cada muestra (indice en `I.FORMAS_Q`). Es lo que permite
+    # desagregar `nose_rel` y `nose_ent` POR FORMA, que es el cruce del 2-sep: la misma pregunta
+    # reordenada cambia cual de las dos componentes entra en la ventana de la conv.
+    forma_q = np.zeros(B, np.int32)
     pos_q = np.zeros(B, np.int32)          # ultima posicion real de la pregunta
     target = np.zeros(B, np.int32)
     tipo = np.zeros(B, np.int32)          # 0 = vigente, 1 = anterior
@@ -70,22 +74,24 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
     hecho_q = np.full(B, -1, np.int32)
     b = 0
     while b < B:
-        sesiones, consultas, vals, origen = I.episodio(
+        sesiones, consultas, vals, origen, formas_ep = I.episodio(
             rng, nivel=nivel, n_hechos=n_hechos, n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
-            p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True, con_origen=True)
+            p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True, con_origen=True,
+            formas_q=formas_q, con_formas=True)
         if not consultas:
             continue
         # La consulta sin respuesta se elige con probabilidad `p_nose` EXACTA, en vez de dejarla
         # competir en el sorteo uniforme con las otras n_hechos: asi `--p-nose 0,2` significa
         # «el 20 % de los ejemplos no tiene respuesta» y no «0,2 dividido cinco».
-        sin_resp = [c for c in consultas if c[1] == "NOSE"]
-        con_resp = [c for c in consultas if c[1] != "NOSE"]
+        sin_resp = [(c, i) for i, c in enumerate(consultas) if c[1] == "NOSE"]
+        con_resp = [(c, i) for i, c in enumerate(consultas) if c[1] != "NOSE"]
         if sin_resp and rng.random() < p_nose:
-            q, r, t = sin_resp[0]
+            (q, r, t), i_q = sin_resp[0]
         else:
             if not con_resp:
                 continue
-            q, r, t = con_resp[int(rng.integers(len(con_resp)))]
+            (q, r, t), i_q = con_resp[int(rng.integers(len(con_resp)))]
+        forma_q[b] = I.FORMAS_Q.index(formas_ep[i_q]) if i_q < len(formas_ep) else 0
         turno = 0
         for s, enunciados in enumerate(sesiones):
             toks = [I.STOI["BOS"]]
@@ -129,12 +135,14 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                           for k, (rl, e, vs) in enumerate(vals) if k != idx],
             })
         b += 1
-    if con_meta and con_origen:
-        return (ses, cortes, turnos, mask, consulta, pos_q, target, tipo, meta,
-                origen_arch, hecho_q)
+    salida = [ses, cortes, turnos, mask, consulta, pos_q, target, tipo]
     if con_meta:
-        return ses, cortes, turnos, mask, consulta, pos_q, target, tipo, meta
-    return ses, cortes, turnos, mask, consulta, pos_q, target, tipo
+        salida.append(meta)
+    if con_meta and con_origen:
+        salida += [origen_arch, hecho_q]
+    if con_formas:                      # va AL FINAL: no mueve el desempaquetado de nadie
+        salida.append(forma_q)
+    return tuple(salida)
 
 
 if __name__ == "__main__":

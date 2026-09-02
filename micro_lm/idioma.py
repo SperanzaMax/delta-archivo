@@ -220,8 +220,41 @@ def correccion(rng, rel, ent, val, nivel):
     return str(rng.choice([f"no , es {val}", f"no , ahora es {val}", f"no , {val}"]))
 
 
-def pregunta(rel, ent, cual="vigente"):
+# --- formas de PREGUNTA (2026-09-02, PREREG_CRUCE_FORMAS) ---------------------------------------
+# Por que existen. El hallazgo del 1-sep es que la conv que forma la query tiene alcance 2 y en
+# «cual es <art> <sust> de <ent> ?» la RELACION cae a distancia 3, o sea afuera, mientras la ENTIDAD
+# cae a distancia 1, adentro. Con UNA sola forma de pregunta eso es una propiedad del generador y no
+# se puede distinguir «la ventana manda» de «la relacion es mas dificil que la entidad».
+#
+# `FORMAS_Q` rompe esa confusion sin cambiar ni una palabra del contenido: las mismas dos piezas,
+# reordenadas. En `directa` la entidad esta cerca y la relacion lejos; en `invertida` es al reves.
+# Si lo que manda es la VENTANA, el patron de fallo tiene que darse VUELTA entre las dos formas.
+#
+#   forma        texto                                   d(relacion)   d(entidad)
+#   directa      cual es <art> <sust> de <ent> ?              3            1
+#   invertida    cual es para <ent> <art> <sust> ?            1            3
+#   lejana       cual es <art> <sust> que tiene <ent> ?       4            1
+#
+# Las distancias se cuentan desde el ultimo token (el «?»), que es donde se forma la query.
+FORMAS_Q = ("directa", "invertida", "lejana")
+
+# Distancia de cada componente al «?», por forma. Es una propiedad ESTATICA de la plantilla, asi que
+# se escribe aca y `chequeo_formas_q.py` la verifica token a token contra el texto generado.
+DIST_Q = {"directa":   {"rel": 3, "ent": 1},
+          "invertida": {"rel": 1, "ent": 3},
+          "lejana":    {"rel": 4, "ent": 1}}
+
+
+def pregunta(rel, ent, cual="vigente", forma="directa"):
     sust, _, art = RELACIONES[rel]
+    if forma == "invertida":
+        if cual == "vigente":
+            return f"cual es para {ent} {art} {sust} ?"
+        return f"cual era antes para {ent} {art} {sust} ?"
+    if forma == "lejana":
+        if cual == "vigente":
+            return f"cual es {art} {sust} que tiene {ent} ?"
+        return f"cual era antes {art} {sust} que tiene {ent} ?"
     if cual == "vigente":
         return f"cual es {art} {sust} de {ent} ?"
     return f"cual era antes {art} {sust} de {ent} ?"
@@ -230,7 +263,8 @@ def pregunta(rel, ent, cual="vigente"):
 # --- episodios -------------------------------------------------------------------------------
 
 def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
-             p_nose=0.0, con_meta=False, con_origen=False):
+             p_nose=0.0, con_meta=False, con_origen=False, formas_q=("directa",),
+             con_formas=False):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
 
     `sesiones` es una lista de listas de enunciados (una lista por sesion).
@@ -283,12 +317,20 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             versiones.append(v2)
         vals_por_hecho.append((rel, ent, versiones))
 
+    # La forma se sortea SOLO si hay mas de una. Con la tupla por defecto no se toca el rng, asi que
+    # las corridas viejas siguen siendo reproducibles bit a bit desde su semilla.
+    def _forma():
+        return formas_q[0] if len(formas_q) == 1 else str(rng.choice(formas_q))
+
     consultas = []
+    formas_usadas = []
     for rel, ent, versiones in vals_por_hecho:
+        f = _forma()
+        formas_usadas.append(f)
         if len(versiones) > 1 and rng.random() < p_pregunta_vieja:
-            consultas.append((pregunta(rel, ent, "anterior"), versiones[-2], "anterior"))
+            consultas.append((pregunta(rel, ent, "anterior", f), versiones[-2], "anterior"))
         else:
-            consultas.append((pregunta(rel, ent, "vigente"), versiones[-1], "vigente"))
+            consultas.append((pregunta(rel, ent, "vigente", f), versiones[-1], "vigente"))
 
     if p_nose > 0 and rng.random() < p_nose:
         dichos = {(r, e) for r, e, _ in vals_por_hecho}
@@ -302,12 +344,13 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
             ent_q = str(rng.choice(sorted(ents_dichas)))
             libres = [r for r in RELACIONES if (r, ent_q) not in dichos]
             if not libres:
-                if con_meta and con_origen:
-                    return sesiones, consultas, vals_por_hecho, origen
-                return (sesiones, consultas, vals_por_hecho) if con_meta else (sesiones, consultas)
+                return _salida(sesiones, consultas, vals_por_hecho, origen, formas_usadas,
+                               con_meta, con_origen, con_formas)
             rel_q = str(rng.choice(libres))
             tipo = "nose_rel"
-        consultas.append((pregunta(rel_q, ent_q, "vigente"), "NOSE", tipo))
+        f = _forma()
+        formas_usadas.append(f)
+        consultas.append((pregunta(rel_q, ent_q, "vigente", f), "NOSE", tipo))
     # `con_meta` devuelve ademas vals_por_hecho = [(rel, ent, [v1, v2...]), ...], que es lo que hace
     # falta para CLASIFICAR un error en vez de sólo contarlo: si el modelo contesta una version vieja
     # del hecho preguntado es un error de VERSION, y si contesta el valor de OTRA entidad es un error
@@ -315,9 +358,21 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
     # penaliza el reuso de memoria invalidada sin separar los dos— y hasta ahora no se medía.
     # Es estrictamente aditivo: no toca ni una llamada al rng, así que las corridas siguen siendo
     # reproducibles bit a bit desde su semilla (verificado contra un hash de referencia).
+    return _salida(sesiones, consultas, vals_por_hecho, origen, formas_usadas,
+                   con_meta, con_origen, con_formas)
+
+
+def _salida(sesiones, consultas, vals, origen, formas, con_meta, con_origen, con_formas):
+    """La tupla de `episodio`. `con_formas` agrega un elemento AL FINAL y no mueve los demas, asi
+    que los llamadores viejos —`datos.lote` y `sonda_inyeccion`— siguen desempaquetando igual."""
+    out = [sesiones, consultas]
+    if con_meta:
+        out.append(vals)
     if con_meta and con_origen:
-        return sesiones, consultas, vals_por_hecho, origen
-    return (sesiones, consultas, vals_por_hecho) if con_meta else (sesiones, consultas)
+        out.append(origen)
+    if con_formas:
+        out.append(formas)
+    return tuple(out)
 
 
 def render(sesiones, consultas):

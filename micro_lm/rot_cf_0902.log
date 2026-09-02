@@ -1,0 +1,10 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_cf_0902.log (rotador 659841)
+== rotador2 · familia 'cf' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:0,3:1,3:2 · cuentas: I G D E F J N M L K O C H
+-- vuelta 1 · cuenta I · faltan: 3:0 3:1 3:2 · 07:32:05
+   (sin T4 en I, pero SI hubo TPU v5e1)
+   >> OTORGADA en I (TPU v5e1): [tr2_i_0732] tpu-v5e1-s-kkb-usw1c2-opmljze3eztm | Hardware: V5E1 | Variant: TPU | Status: IDLE
+   -> tramo 3:0 en I (desde el paso 0)
+== tramo · cuenta I · sesion tr2_i_0732 · cf3_s0 · +6500 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 3 · formas directa,invertida · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.9AMQFPzQBv/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck.pkl
