@@ -84,6 +84,29 @@ weight decay los deja ahí. Entonces **todo** lo que hay en el bloque 0 es gradi
 secundario que el prereg del kernel 5 dejó abierto queda contestado: **el modelo sí usó la ventana que
 se le dio.**
 
+## 4 bis. Un control que se agregó DESPUÉS de ver el dato, y da vuelta la lectura tentadora
+
+Al ver la tabla, la lectura que salta es atractiva: *«cuando le sacás a la query el acceso a la
+relación, el modelo se abstiene en vez de inventar»*. Y es cierto en números — entre el **81 %** y el
+**89 %** de lo que el kernel 5 deja de acertar termina en `NOSE` y no en una respuesta equivocada.
+
+Sonaba a resultado y hay que decir que **no lo es**, porque el control lo refuta. Se corrió la misma
+ablación sobre el modelo de **kernel 3**, que nunca tuvo el tap de la relación:
+
+| | fracción de la caída de `vigente` que va a abstención |
+|---|---|
+| kernel 5, tap de la relación | 0,81 · 0,89 · 0,85 |
+| **kernel 3, tap de la entidad** | **1,000 · 1,000 · 1,001** |
+
+El kernel 3 con la entidad ablada se calla el **100 %** de las veces: `vigente` cae a **0,0000** y
+`falsa_abst` sube a **1,0000** en las tres semillas. Convertir una query degradada en silencio **no es
+propiedad del kernel 5**, es propiedad de tener una cabeza de abstención entrenada, y el kernel 3 lo
+hace incluso más.
+
+El control se agregó **después** de ver el resultado y por eso se declara así, no como parte del
+prereg. Es la regla de buscar la explicación alternativa antes de dar el veredicto, y esta vez la
+explicación alternativa ganó.
+
 ## 5. Kernel 7
 
 Corriendo. Tres semillas desde cero, 26000 pasos.

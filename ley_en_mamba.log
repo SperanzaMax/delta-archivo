@@ -1,0 +1,34 @@
+The fast path is not available because one of `(selective_state_update, selective_scan_fn, causal_conv1d_fn, causal_conv1d_update, mamba_inner_fn)` is None. Falling back to the sequential implementation of Mamba, as use_mambapy is set to False. To install follow https://github.com/state-spaces/mamba/#installation for mamba-ssm and install the kernels library using `pip install kernels` or https://github.com/Dao-AILab/causal-conv1d for causal-conv1d. For the mamba.py backend, follow https://github.com/alxndrTL/mamba.py.
+================================================================================================
+LA LEY EN state-spaces/mamba-130m-hf · prereg SHA 91684b97
+================================================================================================
+  conv1d de la capa 0: kernel 4  ->  alcance 3 tokens hacia atras
+  parametros: 129,135,360
+
+--- texto «en» · 28 tokens · posiciones de lectura [27, 24, 21, 18, 15]
+  pos  27  d1:conv 1.69e+00  d2:conv 5.51e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 1.81e-01  d2:capa 4.01e-02  d3:capa 1.11e-02  d4:capa 1.86e-02  d5:capa 1.32e-02  d6:capa 1.34e-02  d7:capa 8.82e-02  d8:capa 1.68e-02
+  pos  24  d1:conv 1.07e+00  d2:conv 5.89e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 1.47e-01  d2:capa 4.30e-02  d3:capa 4.19e-02  d4:capa 3.95e-02  d5:capa 1.53e-02  d6:capa 1.01e-02  d7:capa 2.19e-02  d8:capa 6.34e-03
+  pos  21  d1:conv 1.54e+00  d2:conv 8.05e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 1.36e-01  d2:capa 4.82e-02  d3:capa 1.96e-02  d4:capa 4.14e-02  d5:capa 1.78e-02  d6:capa 1.70e-02  d7:capa 2.01e-02  d8:capa 1.25e-02
+  pos  18  d1:conv 2.48e+00  d2:conv 6.12e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 9.55e-01  d2:capa 4.32e-02  d3:capa 2.37e-02  d4:capa 1.94e-02  d5:capa 1.37e-02  d6:capa 1.53e-02  d7:capa 1.21e-02  d8:capa 1.07e-02
+  pos  15  d1:conv 1.55e+00  d2:conv 5.83e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 3.27e-01  d2:capa 2.10e-02  d3:capa 4.41e-02  d4:capa 2.56e-02  d5:capa 1.75e-02  d6:capa 1.21e-02  d7:capa 1.95e-02  d8:capa 1.01e-02
+--- texto «es» · 43 tokens · posiciones de lectura [42, 36, 30, 24, 18]
+  pos  42  d1:conv 7.71e-01  d2:conv 7.79e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 1.20e-01  d2:capa 3.54e-02  d3:capa 1.98e-02  d4:capa 3.76e-02  d5:capa 2.48e-02  d6:capa 1.99e-02  d7:capa 9.28e-02  d8:capa 8.42e-03
+  pos  36  d1:conv 3.66e+00  d2:conv 1.58e+00  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 3.82e-01  d2:capa 6.17e-02  d3:capa 4.74e-02  d4:capa 1.60e-02  d5:capa 4.28e-02  d6:capa 2.42e-02  d7:capa 3.30e-02  d8:capa 2.17e-02
+  pos  30  d1:conv 1.57e+00  d2:conv 9.94e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 9.17e-02  d2:capa 3.44e-02  d3:capa 2.07e-02  d4:capa 4.81e-02  d5:capa 1.22e-02  d6:capa 1.13e-02  d7:capa 4.74e-02  d8:capa 1.46e-02
+  pos  24  d1:conv 1.04e+00  d2:conv 1.24e+00  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 9.40e-02  d2:capa 4.87e-02  d3:capa 3.06e-02  d4:capa 1.54e-02  d5:capa 4.14e-02  d6:capa 1.71e-02  d7:capa 1.00e-01  d8:capa 1.44e-02
+  pos  18  d1:conv 7.61e-01  d2:conv 5.41e-01  d3:conv 0.0       d4:conv 0.0       d5:conv 0.0       d6:conv 0.0       d7:conv 0.0       d8:conv 0.0     
+           d1:capa 6.15e-01  d2:capa 5.22e-02  d3:capa 1.80e-02  d4:capa 2.07e-02  d5:capa 2.63e-02  d6:capa 1.13e-02  d7:capa 4.70e-02  d8:capa 1.08e-02
+
+================================================================================================
+R-1  conv1d se mueve si y solo si d <= 3:  70 de 80   ** NO CUMPLE **
+R-2  la salida de la CAPA se mueve SIEMPRE:      80 de 80   CUMPLE
+================================================================================================

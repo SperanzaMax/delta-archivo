@@ -82,7 +82,7 @@ def parte_2(ruta="ckpts/v3_s0.pkl"):
     print(f"  modelo {os.path.basename(ruta)} · kernel {M.KQ} (alcance {M.KQ - 1}) · paso {paso}")
     print(f"\n  {'forma':10s} {'d_ent':>6s} {'TV_ent':>10s} {'d_rel':>6s} {'TV_rel':>10s}   veredicto")
     filas = {}
-    for forma in ("directa", "invertida"):
+    for forma in I.FORMAS_Q:
         rng = np.random.default_rng(54321); rr = np.random.default_rng(99)
         TVE, TVR, vistos = [], [], 0
         while vistos < N:
@@ -114,15 +114,39 @@ def parte_2(ruta="ckpts/v3_s0.pkl"):
 
     d_e, d_r = filas["directa"]
     i_e, i_r = filas["invertida"]
-    cruza = (d_e > 0.01 and d_r < 0.01) and (i_r > 0.01 and i_e < 0.01)
-    print(f"\n  X-0 BLOQUEANTE: la sensibilidad se DA VUELTA entre las formas   "
-          f"{'CUMPLE' if cruza else '** NO CUMPLE, no se lanza la campania **'}")
-    return cruza
+    # `lejana` pone la relacion a distancia 4, o sea JUSTO en el borde del kernel 5 y afuera del 3.
+    # Es una prediccion de borde: la misma forma tiene que dar 0 en una familia y > 0 en la otra.
+    #
+    # OJO — 2026-09-02, y es un error MIO de lectura automatica, el sexto de la misma forma en este
+    # proyecto: el CRUCE es una prediccion sobre el kernel 3, donde una componente entra y la otra
+    # no. Con kernel 5 el alcance es 4 y en las TRES formas entran las dos, asi que la sensibilidad
+    # NO se da vuelta y eso es exactamente lo que la ley predice. Aplicarle el criterio de cruce a la
+    # familia equivocada daba «NO CUMPLE» sobre un resultado que CUMPLE. El criterio correcto es el
+    # mismo para las dos: cada celda tiene que estar en cero si y solo si esta afuera del alcance.
+    alc = M.KQ - 1
+    celdas, ok_celdas = 0, 0
+    for forma, (te, tr) in filas.items():
+        for comp, tv in (("ent", te), ("rel", tr)):
+            d = I.DIST_Q[forma][comp]
+            celdas += 1
+            ok_celdas += int((tv > 0.01) == (d <= alc))
+    todas = ok_celdas == celdas
+    print(f"\n  cada celda en cero si y solo si esta AFUERA del alcance {alc}: "
+          f"{ok_celdas} de {celdas}   {'CUMPLE' if todas else '** NO CUMPLE **'}")
+    if M.KQ <= 3:
+        cruza = (d_e > 0.01 and d_r < 0.01) and (i_r > 0.01 and i_e < 0.01)
+        print(f"  X-0 BLOQUEANTE (solo aplica al kernel 3): la sensibilidad se DA VUELTA   "
+              f"{'CUMPLE' if cruza else '** NO CUMPLE, no se lanza la campania **'}")
+        return todas and cruza
+    print(f"  (el cruce NO aplica con alcance {alc}: en las tres formas entran las dos componentes,"
+          f" que es lo que la ley predice)")
+    return todas
 
 
 if __name__ == "__main__":
     a = parte_1()
-    b = parte_2(*(sys.argv[1:] or []))
+    rutas = sys.argv[1:] or ["ckpts/v3_s0.pkl", "ckpts/kq3_s0.pkl"]
+    b = all(parte_2(r) for r in rutas)
     print("\n" + "=" * 92)
     print(f"COMPUERTA {'ABRE' if (a and b) else 'NO ABRE'}")
     print("=" * 92)
