@@ -1,0 +1,286 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[round]{natbib}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\title{\bfseries La consulta no puede ver la pregunta\\
+\large El alcance de una convolución corta decide qué parte de una consulta condiciona\\
+la recuperación, y lo que queda afuera se vuelve una respuesta equivocada y confiada}
+
+\author{Maximiliano Speranza\\
+\small Investigador independiente, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID 0009-0005-0413-8554}\\
+\small \texttt{maximiliano.speranza@gmail.com}}
+
+\date{Septiembre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Los modelos de atención lineal y de espacio de estados arman su consulta con una convolución causal
+corta. El tamaño de núcleo $4$ es el valor por omisión de hecho, así que la consulta de una capa
+resulta ser función del token actual y de tres anteriores. Mostramos que ese alcance no es un detalle
+de suavizado local sino un límite duro sobre \emph{qué parte de una pregunta puede condicionar la
+recuperación}, y que lo que cae afuera no se degrada de a poco. Desaparece exacto, y el modelo
+contesta con confianza a partir de la parte que todavía alcanza a ver.
+
+Medimos el efecto en un modelo de lenguaje chico con un archivo persistente co-entrenado que se
+consulta entre secuencias. La sensibilidad de la recuperación a un token de la consulta, medida como
+el movimiento en variación total de la distribución de lectura cuando ese token se reemplaza, vale
+$\mathbf{0{,}000000}$ apenas el token pasa el alcance de la convolución, y el corte se mueve con el
+núcleo. Con núcleo $3$ (alcance $2$) el escalón cae entre las distancias $2$ y $3$, y con núcleo $5$
+(alcance $4$) entre $4$ y $5$. Sesenta celdas de sesenta, dos arquitecturas, tres semillas cada una,
+dos componentes de la consulta y cinco distancias.
+
+La consecuencia en el comportamiento es una falla específica y frecuente. En nuestra tarea las
+preguntas tienen la forma \emph{cuál es la \textbf{<relación>} de \textbf{<entidad>}}, con la entidad
+a distancia $1$ de la posición de lectura y la relación a distancia $3$. Con núcleo $3$ la relación
+queda afuera de la ventana en el $100\,\%$ de las consultas, así que el modelo recupera solamente por
+la entidad. Cuando se le pregunta por una relación que nunca se enunció, sobre una entidad que sí
+apareció, responde con el hecho archivado equivocado en vez de abstenerse, y la abstención correcta
+queda en $0{,}5850$ a $0{,}7349$ sobre tres semillas. Ensanchar el núcleo a $5$, que cuesta $1{,}280$
+parámetros sobre $865{,}395$, la lleva a $\mathbf{0{,}9931}$ hasta $\mathbf{1{,}0000}$ sin solape
+entre condiciones, y la exactitud global a $0{,}988$ hasta $0{,}993$ contra un piso trivial de
+$0{,}4065$.
+
+Después verificamos el mecanismo afuera de nuestro propio modelo. En \texttt{mamba-130m-hf}, de $129$
+millones de parámetros, cambiar un token de cinco a ocho posiciones antes de la lectura mueve la
+salida de la capa en todas las distancias y deja la salida de la convolución en \textbf{cero exacto},
+$80$ celdas de $80$. El estado ve la secuencia entera y la consulta que lo lee no. De paso, el tap más
+viejo de la convolución en ese checkpoint vale cero exacto en las $24$ capas, así que su alcance
+efectivo es $2$ y no el nominal $3$. Informamos la medición y no una causa.
+
+Damos el diagnóstico como una receta que no necesita entrenamiento. Se cambia un token de la consulta
+y se mira si la recuperación se mueve. Si no se mueve, ese token es invisible para la búsqueda, y la
+confianza que el modelo muestre sobre él no está ganada.
+\end{abstract}
+
+\section{El problema}
+
+Un modelo con memoria persistente tiene que hacer dos cosas que suelen medirse juntas y en realidad
+son separadas. Tiene que \emph{encontrar} la entrada correcta, y tiene que \emph{saber} cuándo la
+entrada que busca no está. La segunda es la que separa una memoria de un fabulador, y es la difícil de
+las dos.
+
+Encontramos que en nuestro propio sistema la segunda falla tenía una causa puramente mecánica, aguas
+arriba de todo lo que el modelo aprende. La consulta con la que se busca en el archivo se arma con una
+convolución causal corta sobre los estados ocultos. En una pregunta de la forma \emph{cuál es
+\texttt{<art>} \texttt{<sust>} de \texttt{<entidad>}}, la entidad queda un token antes de la posición
+de lectura y el sustantivo que nombra la relación queda tres tokens antes. Un núcleo de tamaño $3$
+alcanza dos tokens hacia atrás. La relación cae un token afuera de la ventana, de forma determinista,
+en todas y cada una de las consultas.
+
+El modelo no estaba ignorando la relación. No la podía ver.
+
+\section{Trabajo relacionado}
+
+\textbf{Las convoluciones cortas están en todos lados y su tamaño se hereda, no se mide.} Mamba-2
+\citep{mamba2} usa por omisión una convolución causal depthwise de tamaño $4$. En la implementación de
+referencia de Qwen3-Next, que usa Gated DeltaNet \citep{gateddeltanet} en sus capas de atención lineal,
+la configuración expone \texttt{linear\_conv\_kernel\_dim}, documentado como el tamaño de núcleo de la
+convolución de las capas de atención lineal y \textbf{con valor por omisión 4} \citep{qwen3next}. Las
+ablaciones de esta línea informan que sacar la convolución empeora el modelo, lo cual establece que el
+contexto local importa. Ninguna informa qué se pierde cuando la ventana está presente pero es
+demasiado angosta para la consulta que hay que armar. Un alcance de tres tokens no es una
+configuración exótica, es lo que corre en modelos desplegados.
+
+\textbf{El resultado teórico más cercano.} \citet{cat} estudian el recuerdo asociativo de $n$-gramas y
+prueban, por construcción, que alcanza con un filtro causal de largo $N$, igualando el filtro al
+$n$-grama. Es la misma familia de idea y la citamos como precursora. Tres cosas la separan de lo que
+informamos acá. Su consulta es un $n$-grama \emph{contiguo}, los últimos $N$ tokens sin nada
+irrelevante en el medio, mientras que lo que manda en nuestro caso es la \emph{distancia} de un
+componente, con relleno entre las dos partes que importan. Su Teorema 1 es un resultado de existencia
+y no corren ningún experimento con el filtro demasiado corto. Y en la práctica informan lo contrario,
+al decir que la convolución sobre consultas y claves ayuda en las construcciones teóricas pero no da
+beneficios apreciables en los experimentos reales. Nosotros medimos un efecto grande en un régimen que
+ellos no prueban, que es una memoria persistente \emph{entre secuencias} con una consulta compuesta.
+
+\textbf{Por qué el campo no lo pudo ver.} La tarea canónica para esta capacidad, MQAR
+\citep{zoology}, tiene una consulta de \emph{un solo token}. Se busca la clave y se devuelve el valor.
+Por construcción esa consulta no puede tener una parte adentro de la ventana y otra afuera. Zoology
+atribuye el $82\,\%$ de la brecha de recuerdo a que la convolución aplica un filtro fijo e
+independiente de la entrada, que es una afirmación sobre \emph{adaptabilidad}. La nuestra es sobre
+\emph{alcance}, y las dos son independientes. Nuestro modelo de núcleo $5$ tiene exactamente la misma
+independencia de la entrada y la falla desaparece.
+
+\textbf{Del lado de la atención.} La atención multi-token \citep{mta} convoluciona sobre los pesos de
+atención para que la atención pueda condicionarse en varios tokens a la vez, motivada por la
+observación de que un solo token no alcanza para localizar una coincidencia. Va en la misma dirección
+y confirma la nuestra por contraste. Nunca se pregunta qué parte de la consulta queda ciega, y no
+conecta la pregunta con la abstención.
+
+\section{Montaje experimental}
+
+El sustrato es un modelo de lenguaje de $3{,}5$\,MB, $865{,}395$ parámetros, $d=128$, cuatro bloques,
+entrenado desde cero sobre un idioma sintético cerrado de $242$ tokens con un archivo persistente
+co-entrenado. Los hechos se enuncian en una secuencia, se revisan en otra y se consultan en una
+tercera, \textbf{con el estado recurrente reseteado entre secuencias}, así que la recuperación no se
+puede resolver arrastrando activaciones hacia adelante.
+
+Las consultas se leen en el último token de la pregunta. La lectura se inyecta en el bloque $0$
+\textbf{antes del mixer}, y eso importa para el mecanismo. En ese punto el estado oculto todavía es la
+embedding del token, sin ninguna mezcla recurrente, así que la ventana de la convolución es
+literalmente todo lo que la consulta puede ver. Eso también explica por qué el efecto de abajo puede
+ser cero exacto y no apenas chico.
+
+Se puntúan por separado cuatro categorías de respuesta. \texttt{vigente} y \texttt{anterior} son
+preguntas con respuesta en el archivo. \texttt{nose\_ent} pregunta por una entidad que nunca se
+mencionó, que es la ausencia fácil. \texttt{nose\_rel} pregunta por una relación que nunca se enunció
+\emph{sobre una entidad que sí apareció}, que es el caso que se parece a una alucinación real, porque
+la recuperación encuentra un hecho vecino y genuino.
+
+\section{Resultado 1. La ventana es una función escalón, y afuera vale cero exacto}
+
+Medimos la sensibilidad reemplazando un componente de la pregunta por otro del mismo tipo y
+registrando la distancia en variación total entre las distribuciones de lectura. Para variar la
+distancia sin tocar la pregunta, la posición de lectura se corre $r$ lugares sobre el relleno que ya
+sigue al signo de pregunta, que es exactamente equivalente a agregar $r$ rellenos.
+
+\begin{center}
+\begin{tabular}{lccccccc}
+\toprule
+modelo & núcleo (alcance) & $d{=}1$ & $d{=}2$ & $d{=}3$ & $d{=}4$ & $d{=}5$ & $d{=}6$ \\
+\midrule
+\texttt{v3} (3 semillas) & 3 (2) & $0{,}71$--$0{,}74$ & $0{,}15$--$0{,}25$ & $\mathbf{0{,}000000}$ & $\mathbf{0{,}000000}$ & $\mathbf{0{,}000000}$ & $\mathbf{0{,}000000}$ \\
+\texttt{kq3} (3 semillas) & 5 (4) & $0{,}36$--$0{,}46$ & $0{,}10$--$0{,}15$ & $0{,}05$--$0{,}35$ & $0{,}07$--$0{,}33$ & $\mathbf{0{,}000000}$ & $\mathbf{0{,}000000}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Sesenta celdas de sesenta coinciden con la predicción hecha antes de correr, que la sensibilidad es
+positiva mientras $d \le$ alcance y cero más allá. Una celda daba al principio $0{,}0106$ donde iba un
+cero. La causa era que la formulación por el valor anterior es dos tokens más larga, así que correr la
+posición de lectura la recortaba contra el borde del tensor, y recortar \emph{acorta} la distancia que
+se está midiendo. Esas muestras ahora se descartan en vez de recortarse y la celda pasó a
+$0{,}000000$.
+
+\section{Resultado 2. Ensanchar la ventana compra abstención}
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+unidad & núcleo & \texttt{vigente} & \texttt{nose\_ent} & \textbf{\texttt{nose\_rel}} & abstención falsa \\
+\midrule
+\texttt{kq3\_s0} & 5 & $1{,}0000$ & $0{,}9538$ & $\mathbf{0{,}9931}$ & $0{,}0000$ \\
+\texttt{kq3\_s1} & 5 & $0{,}9964$ & $0{,}9726$ & $\mathbf{1{,}0000}$ & $0{,}0030$ \\
+\texttt{kq3\_s2} & 5 & $1{,}0000$ & $0{,}9356$ & $\mathbf{1{,}0000}$ & $0{,}0000$ \\
+\midrule
+\texttt{v3\_s0} & 3 & $1{,}0000$ & $0{,}9851$ & $0{,}6090$ & $0{,}0000$ \\
+\texttt{v3\_s1} & 3 & $1{,}0000$ & $1{,}0000$ & $0{,}5850$ & $0{,}0000$ \\
+\texttt{v3\_s2} & 3 & $0{,}9927$ & $0{,}9414$ & $0{,}7349$ & $0{,}0064$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+No hay solape entre condiciones en \texttt{nose\_rel}. La exactitud global, contando una abstención
+correcta como acierto, va de $0{,}988$ a $0{,}993$ con núcleo $5$ contra un piso trivial de
+$0{,}4065$, que es lo que saca un modelo que se abstiene en todo.
+
+\textbf{El costo existe y lo declaramos.} \texttt{nose\_ent}, el caso fácil, baja un poco, de
+$0{,}941$--$1{,}000$ a $0{,}936$--$0{,}973$. Una lectura que informe solamente un número agregado de
+abstención esconde ese intercambio.
+
+\textbf{No es capacidad.} El modelo de núcleo $5$ agrega $1{,}280$ parámetros, el $0{,}15\,\%$, y el
+control de núcleo $3$ ya recupera la entrada correcta con probabilidad $1{,}0000$. Lo que cambia es el
+acceso, y el Resultado 1 lo mide directo.
+
+\section{Resultado 3. Apagar el tap que alcanza la relación}
+
+Apagar de a un tap por vez en el modelo de núcleo $5$ ya entrenado, sin reentrenar nada, daña
+\texttt{vigente} en $0{,}483$, $0{,}582$ y $0{,}530$ para el tap que alcanza la relación, contra
+$0{,}372$, $0{,}013$ y $0{,}195$ para el tap que alcanza una palabra funcional y $0{,}218$, $0{,}093$
+y $0{,}157$ para el que alcanza el artículo. El tap de la relación tiene la magnitud aprendida
+\emph{más chica} de los cinco, así que por unidad de peso cuesta cerca del doble que cualquiera de los
+dos controles.
+
+Un criterio preregistrado formulado sobre la métrica de abstención falló, e informamos por qué. Apagar
+el tap saca la relación de \emph{todas} las consultas, así que el modelo se abstiene más, y una
+métrica que premia abstenerse no puede bajar. El daño aparece en la exactitud y en la abstención
+falsa.
+
+\section{Resultado 4. La disociación se sostiene en un modelo real}
+
+Todo lo anterior está medido en un modelo chico, así que verificamos el mecanismo en uno que no es
+nuestro. \texttt{state-spaces/mamba-130m-hf}, $129{,}135{,}360$ parámetros, en CPU y sin entrenar
+nada. En Mamba la convolución corta se aplica a $x$ \emph{antes} de calcular $B$, $C$ y $\Delta$, y
+$C_t$ es el análogo de la consulta de lectura.
+
+Cambiamos un solo token a distancia $d$ de una posición de lectura y medimos, en la capa $0$, el
+movimiento de la salida de la convolución y el de la salida de la capa. Diez posiciones de lectura,
+dos textos.
+
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+& $d{=}1$ & $d{=}2$ & $d{=}3$ & $d{=}5$ & $d{=}7$ & $d{=}8$ \\
+\midrule
+salida de \texttt{conv1d} & $0{,}8$--$3{,}7$ & $0{,}5$--$1{,}6$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ \\
+salida de la capa & $9\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ & $9\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La salida de la capa se mueve en \emph{todas} las distancias, $80$ celdas de $80$, así que el estado
+sí ve la secuencia entera. La salida de la convolución vale cero exacto más allá de su alcance.
+\textbf{Eso es la disociación.} El modelo ve el contexto y la consulta que lee su estado no lo ve.
+
+\textbf{Un hallazgo incidental, informado con su incertidumbre.} Habíamos predicho movimiento en
+$d=3$, porque el núcleo es $4$. Vale cero exacto. La razón es que \textbf{el tap más viejo de la
+convolución vale cero exacto en las $24$ capas}, lo que confirmamos por los pesos y también por
+intervención, ya que cambiar un token mueve la salida de la convolución en exactamente tres posiciones
+consecutivas y no cuatro. La ventana efectiva de este checkpoint es $3$ y no $4$, y el alcance es $2$.
+No sabemos la causa. Un peso que vale cero exacto en $24 \times 1536$ entradas no sale de un
+gradiente, así que un artefacto de conversión es plausible, pero no lo verificamos y no lo afirmamos.
+El hecho se reproduce en tres líneas. Su consecuencia práctica, si generaliza, es que el núcleo
+nominal es una cota superior del alcance y conviene medirlo en vez de suponerlo.
+
+\section{El diagnóstico, como receta}
+
+La medición del Resultado 1 no necesita entrenamiento ni gradientes. Para cualquier modelo que
+consulte una memoria con una consulta armada desde una ventana local.
+
+\begin{enumerate}
+\item Tomar una consulta con sus partes separadas, de modo que algún componente quede a distancia $d$
+de la posición de lectura.
+\item Reemplazar ese componente por otro del mismo tipo.
+\item Comparar las distribuciones de recuperación.
+\end{enumerate}
+
+Si son idénticas, ese componente es invisible para la búsqueda, y la confianza que el modelo muestre
+sobre él no está ganada. Con un núcleo de $4$, que es el valor por omisión en las capas de atención
+lineal desplegadas, el alcance es de tres tokens, así que cualquier parte de una pregunta que quede
+más atrás no entra en la consulta de esa capa.
+
+\section{Limitaciones}
+
+El sustrato es un modelo chico sobre un idioma sintético cerrado, y la distancia entre la relación y
+la posición de lectura la fija el generador, así que el efecto acá es determinista donde en texto
+natural sería una distribución. La medición es de \emph{acceso} y no de uso. Un token adentro de la
+ventana no necesariamente se usa, y de hecho el tap del artículo está adentro y aporta poco. Por
+último, la lectura en nuestro modelo se inyecta antes del mixer, que es lo que hace que el cero sea
+exacto. En un modelo profundo que consulta su memoria desde capas más altas, la recurrencia ya movió
+información hacia adelante y el alcance efectivo crece con la profundidad. La afirmación se hace para
+memoria consultada desde capas tempranas, que es donde vive.
+
+\begin{thebibliography}{99}
+\bibitem[Dao y Gu(2024)]{mamba2} Dao, T., y Gu, A. (2024). Transformers are SSMs. Generalized Models and Efficient Algorithms Through Structured State Space Duality. ICML 2024.
+\bibitem[Yang et al.(2025)]{gateddeltanet} Yang, S., Kautz, J., y Hatamizadeh, A. (2025). Gated Delta Networks. Improving Mamba2 with Delta Rule. ICLR 2025. arXiv:2412.06464.
+\bibitem[Hugging Face(2026)]{qwen3next} Documentación de Hugging Face Transformers, \texttt{Qwen3NextConfig}, parámetro \texttt{linear\_conv\_kernel\_dim}, valor por omisión $4$. Consultada el 2 de septiembre de 2026.
+\bibitem[Li et al.(2024)]{cat} Li, M., Zhang, X., Huang, Y., y Oymak, S. (2024). On the Power of Convolution Augmented Transformer. arXiv:2407.05591.
+\bibitem[Arora et al.(2024)]{zoology} Arora, S., Eyuboglu, S., Timalsina, A., Johnson, I., Poli, M., Zou, J., Rudra, A., y R\'e, C. (2024). Zoology. Measuring and Improving Recall in Efficient Language Models. ICLR 2024. arXiv:2312.04927.
+\bibitem[Golovneva et al.(2025)]{mta} Golovneva, O., Wang, T., Weston, J., y Sukhbaatar, S. (2025). Multi-Token Attention. arXiv:2504.00927.
+\end{thebibliography}
+
+\end{document}

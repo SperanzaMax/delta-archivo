@@ -38,3 +38,17 @@ VIVO= True ULTIMO= paso   5500  loss 0.1202  acc 0.9375  (2504s)
 VIVO= True ULTIMO= ── eval: vigente 0.9161 · anterior 0.9861 · abstencion 0.4023 · truncados 0.0000 · nose 0.8626 (ent 0.8824/rel 0.8513) · falsa_abst 0.0696 
 VIVO= True ULTIMO= ── eval: vigente 0.9387 · anterior 1.0000 · abstencion 0.4102 · truncados 0.0000 · nose 0.9115 (ent 0.8793/rel 0.9315) · falsa_abst 0.0452 
 VIVO= True ULTIMO= ── eval: vigente 0.9387 · anterior 1.0000 · abstencion 0.4102 · truncados 0.0000 · nose 0.9115 (ent 0.8793/rel 0.9315) · falsa_abst 0.0452 
+VIVO= False ULTIMO= listo: {'paso': 6500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.965276369168357, 'anterior': 1.0, 'nose': 0.8925988458663653, 'nose_ent': 0.862160409035409, 'nose_rel': 0.9286858974358974, 'falsa_abst': 0.028398175654273217, 'abstencion': 0.39453125} 
+== tramo terminado
+/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/tramo_abst.sh: línea 251: error de sintaxis cerca del elemento inesperado `('
+/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/tramo_abst.sh: línea 251: `    && mv "$TMP/ck.pkl" "$CK" && echo "   checkpoint en $CK ($(du -h "$CK" | cut -f1))"'
+   tramo de 3:0 cerrado en el paso 6500 de 26000
+   -> tramo 3:1 en H (desde el paso 0)
+== tramo · cuenta H · sesion tr2_h_0705 · k73_s1 · +6500 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 7 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.jFe4u2633u/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+ck.pkl de otra unidad borrado
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 14486
+== polling cada 2 min (presupuesto ~80 min)
