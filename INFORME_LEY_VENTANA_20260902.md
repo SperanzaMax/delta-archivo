@@ -88,7 +88,31 @@ se le dio.**
 
 Corriendo. Tres semillas desde cero, 26000 pasos.
 
-## 6. Lo que esto NO dice
+## 6. Y esto rompe un trade-off que el proyecto había declarado imposible
+
+`INFORME_QUERY_CONJUNTA_20260822.md` cerró con una frase fuerte, y hasta hoy no se había vuelto a
+mirar:
+
+> *«Una query conjunta necesita contexto ya computado, y la lectura útil necesita entrar antes de que
+> el cómputo ocurra. **En esta arquitectura las dos cosas son incompatibles por construcción.**»*
+
+Era una conclusión honesta sobre las dos opciones que se habían probado. `pre` inyecta la lectura
+antes del mixer y la query queda siendo un token suelto; `post` le da a la query todo el contexto y
+paga la inyección tardía con el acierto cayendo de 0,97 a 0,39. Entre esas dos, la incompatibilidad
+es real.
+
+**`convq` es la tercera vía, y no estaba vista.** Una convolución local sobre la query da contexto
+**sin mover el punto de inyección**: la lectura sigue entrando antes del mixer —donde el 22-ago se
+midió que tiene que entrar— y la query igual ve la pregunta entera. Lo único que había que acertar
+era **cuánto** contexto, y ahí estaba el defecto: con kernel 3 la ventana llegaba a dos tokens y la
+relación estaba a tres.
+
+Dicho de otro modo, la incompatibilidad del 22-ago valía para el eje que se estaba mirando —**dónde**
+entra la lectura— y no para el que decidía —**cuánto ve la query en ese punto**. Es el mismo
+movimiento que hace la short conv en Mamba y en Gated DeltaNet, con la diferencia de que ahí el
+kernel 4 es un default heredado y nadie midió qué se pierde cuando no alcanza.
+
+## 7. Lo que esto NO dice
 
 - **Mide ACCESO, no uso.** Que un token entre en la ventana no obliga al modelo a usarlo: el propio
   kernel 5 tiene el artículo adentro y su tap es de los que menos duelen.

@@ -8,3 +8,7 @@
 [colab] Uploaded '/tmp/tmp.9AMQFPzQBv/micro.tgz' to '/content/micro.tgz'
 == sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
 no habia ck.pkl
+jax 0.7.2 | [TpuDevice(id=0, process_indVIVO= True ULTIMO= tramo: se corre hasta el paso 6500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 6500 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.0943 · anterior 0.1640 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+r 0.6500 · abstencion 0.2090 · truncados 0.0000 · nose 0.3282 (ent 0.3103/rel 0.3499) · falsa_abst 0.1304 

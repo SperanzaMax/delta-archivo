@@ -1,0 +1,230 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[round]{natbib}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\title{\bfseries The Query Cannot See the Question\\
+\large A Short Convolution's Reach Decides Which Part of a Query Conditions Retrieval,\\
+and What Falls Outside Becomes a Confident Wrong Answer}
+
+\author{Maximiliano Speranza\\
+\small Independent Researcher, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID 0009-0005-0413-8554}\\
+\small \texttt{maximiliano.speranza@gmail.com}}
+
+\date{September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Linear-attention and state-space models form their query with a short causal depthwise convolution.
+Kernel size $4$ is the de facto default, so the query at a given layer is a function of the current
+token and three predecessors. We show that this reach is not a detail of local smoothing but a hard limit on
+\emph{which part of a question is allowed to condition retrieval}, and that what falls outside does
+not degrade gracefully: it disappears exactly, and the model answers confidently from the part it can
+still see.
+
+We measure the effect in a small language model with a co-trained persistent archive queried across
+sequences. The sensitivity of retrieval to a query token, measured as the total-variation movement of
+the read distribution when that token is replaced, is $\mathbf{0.000000}$ as soon as the token passes
+the convolution's reach, and the cut-off moves with the kernel: with kernel $3$ (reach $2$) the step
+falls between distances $2$ and $3$, and with kernel $5$ (reach $4$) between $4$ and $5$. Sixty cells
+out of sixty, two architectures, three seeds each, two query components, five distances.
+
+The behavioural consequence is a specific and common failure. In our task, questions have the form
+\emph{what is the \textbf{<relation>} of \textbf{<entity>}?}, with the entity at distance $1$ from the
+read position and the relation at distance $3$. With kernel $3$, the relation is outside the window in
+$100\%$ of queries, so the model retrieves on the entity alone. When asked about a relation that was
+never stated for an entity that \emph{was}, it answers from the wrong stored fact instead of
+abstaining: correct abstention is $0.5850$ to $0.7349$ across three seeds. Widening the kernel to $5$,
+which costs $1{,}280$ parameters out of $865{,}395$, lifts it to $\mathbf{0.9931}$ to
+$\mathbf{1.0000}$ with no overlap between conditions, and overall accuracy to $0.988$--$0.993$ against
+a trivial floor of $0.4065$.
+
+We give the diagnosis as a recipe that requires no training: change one token of the query and see
+whether retrieval moves. If it does not, that token is invisible to the search, and any confidence the
+model expresses about it is unearned.
+\end{abstract}
+
+\section{The problem}
+
+A model that keeps a persistent memory has to do two things that are usually measured together and are
+in fact separate. It has to \emph{find} the right entry, and it has to \emph{know} when the entry it is
+looking for is not there. The second one is what makes the difference between a memory and a
+confabulator, and it is the harder of the two.
+
+We found that in our own system the second failure had a purely mechanical cause, upstream of anything
+the model learns. The query used to search the archive is formed by a short causal convolution over the
+hidden states. In a question of the form \emph{what is the \texttt{<art>} \texttt{<noun>} of
+\texttt{<entity>}?}, the entity sits one token before the read position and the noun that names the
+relation sits three tokens before it. A kernel of size $3$ reaches two tokens back. The relation is one
+token outside the window, deterministically, in every single query.
+
+The model was not ignoring the relation. It could not see it.
+
+\section{Related work}
+
+\textbf{Short convolutions are ubiquitous and their size is inherited, not measured.} Mamba-2
+\citep{mamba2} uses a causal depthwise convolution of size $4$ by default. In the reference
+implementation of Qwen3-Next, which uses Gated DeltaNet \citep{gateddeltanet} for its linear-attention
+layers, the configuration exposes \texttt{linear\_conv\_kernel\_dim}, documented as ``kernel size of the
+convolution used in linear attention layers'' and \textbf{defaulting to 4} \citep{qwen3next}. Ablations
+in this line report that removing the convolution hurts, which establishes that local context matters;
+none reports what is lost when the window is present but too narrow for the query at hand. A reach of
+three tokens is therefore not an exotic configuration, it is the setting in deployed models.
+
+\textbf{The closest theoretical result.} \citet{cat} study $N$-gram associative recall and prove, by
+construction, that a causal filter of length $N$ suffices, matching the filter to the $n$-gram. That is
+the same family of idea and we cite it as the precursor. Three things separate it from what we report.
+Their query is a \emph{contiguous} $n$-gram, the last $N$ tokens with nothing irrelevant in between,
+whereas what governs our case is the \emph{distance} of a component with filler between the two parts
+that matter. Their Theorem 1 is an existence result and they run no experiment in which the filter is
+too short. And they report the opposite in practice, stating that ``while K/Q convolution helps in
+theoretical constructions for N-gram AR, in real experiments, they don't provide noticeable performance
+benefits''. We measure a large effect in a regime they do not test, namely a persistent
+\emph{cross-sequence} memory with a compositional query.
+
+\textbf{Why the field could not see it.} The canonical benchmark for this capability, MQAR
+\citep{zoology}, has a \emph{single-token} query: the key is looked up and the value returned. By
+construction such a query cannot have one part inside the window and another part outside. Zoology
+attributes $82\%$ of the recall gap to the convolution applying a fixed, input-independent filter, which
+is a statement about \emph{adaptivity}. Ours is about \emph{reach}, and the two are independent: our
+kernel-$5$ model has exactly the same input-independence and the failure disappears.
+
+\textbf{From the attention side.} Multi-token attention \citep{mta} convolves over attention weights so
+that attention can be conditioned on several tokens at once, motivated by the observation that a single
+token is not enough to locate a match. It moves in the same direction and confirms ours by contrast: it
+never asks which part of the query goes blind, and does not connect the question to abstention.
+
+\section{Setup}
+
+The substrate is a $3.5$\,MB language model, $865{,}395$ parameters, $d=128$, four blocks, trained from
+scratch on a closed synthetic language of $242$ tokens with a co-trained persistent archive. Facts are
+stated in one sequence, revised in another and queried in a third, \textbf{with the recurrent state
+reset between sequences}, so retrieval cannot be solved by carrying activations forward.
+
+Queries are read at the final token of the question. The read is injected in block $0$
+\textbf{before the mixer}, which matters for the mechanism: at that point the hidden state is still the
+token embedding, with no recurrent mixing, so the convolution's window is literally everything the
+query can see. This also explains why the effect below can be exactly zero rather than merely small.
+
+Four answer categories are scored separately. \texttt{current} and \texttt{previous} are questions with
+an answer in the archive. \texttt{nose\_ent} asks about an entity never mentioned, the easy absence.
+\texttt{nose\_rel} asks about a relation never stated \emph{for an entity that was}, which is the case
+that looks like a real hallucination, because the retrieval finds a genuine neighbouring fact.
+
+\section{Result 1: the window is a step function, and it is exactly zero outside}
+
+We measure sensitivity by replacing one component of the question with a different one of the same
+type and recording the total-variation distance between the read distributions. To vary distance
+without touching the question, the read position is advanced $r$ places over the padding that already
+follows the question mark, which is exactly equivalent to appending $r$ fillers.
+
+\begin{center}
+\begin{tabular}{lccccccc}
+\toprule
+model & kernel (reach) & $d{=}1$ & $d{=}2$ & $d{=}3$ & $d{=}4$ & $d{=}5$ & $d{=}6$ \\
+\midrule
+\texttt{v3} (3 seeds) & 3 (2) & $0.71$--$0.74$ & $0.15$--$0.25$ & $\mathbf{0.000000}$ & $\mathbf{0.000000}$ & $\mathbf{0.000000}$ & $\mathbf{0.000000}$ \\
+\texttt{kq3} (3 seeds) & 5 (4) & $0.36$--$0.46$ & $0.10$--$0.15$ & $0.05$--$0.35$ & $0.07$--$0.33$ & $\mathbf{0.000000}$ & $\mathbf{0.000000}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Sixty cells out of sixty match the prediction made before running, namely that sensitivity is positive
+for $d \le$ reach and zero beyond it. One cell initially read $0.0106$ where a zero belonged; the cause
+was that the ``previous value'' phrasing is two tokens longer, so advancing the read position clipped
+against the tensor bound, and clipping \emph{shortens} the distance being measured. Those samples are
+now discarded rather than clipped and the cell reads $0.000000$.
+
+\section{Result 2: widening the window buys abstention}
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+unit & kernel & \texttt{current} & \texttt{nose\_ent} & \textbf{\texttt{nose\_rel}} & false abstention \\
+\midrule
+\texttt{kq3\_s0} & 5 & $1.0000$ & $0.9538$ & $\mathbf{0.9931}$ & $0.0000$ \\
+\texttt{kq3\_s1} & 5 & $0.9964$ & $0.9726$ & $\mathbf{1.0000}$ & $0.0030$ \\
+\texttt{kq3\_s2} & 5 & $1.0000$ & $0.9356$ & $\mathbf{1.0000}$ & $0.0000$ \\
+\midrule
+\texttt{v3\_s0} & 3 & $1.0000$ & $0.9851$ & $0.6090$ & $0.0000$ \\
+\texttt{v3\_s1} & 3 & $1.0000$ & $1.0000$ & $0.5850$ & $0.0000$ \\
+\texttt{v3\_s2} & 3 & $0.9927$ & $0.9414$ & $0.7349$ & $0.0064$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+There is no overlap between conditions on \texttt{nose\_rel}. Overall accuracy, counting a correct
+abstention as correct, is $0.988$--$0.993$ for kernel $5$ against a trivial floor of $0.4065$, the score
+of a model that abstains on everything.
+
+\textbf{The cost is real and we state it.} \texttt{nose\_ent}, the easy case, drops slightly, from
+$0.941$--$1.000$ to $0.936$--$0.973$. A reading that only reports a pooled abstention number hides this
+trade.
+
+\textbf{It is not capacity.} The kernel-$5$ model adds $1{,}280$ parameters, $0.15\%$, and the kernel-$3$
+control already retrieves the right entry with probability $1.0000$. What changes is access, and Result
+1 measures the access directly.
+
+\section{Result 3: ablating the tap that reaches the relation}
+
+Turning off one convolution tap at a time in the trained kernel-$5$ model, without retraining, damages
+\texttt{current} by $0.483$, $0.582$ and $0.530$ for the tap that reaches the relation, against $0.372$,
+$0.013$ and $0.195$ for the tap that reaches a function word and $0.218$, $0.093$ and $0.157$ for the
+tap that reaches the article. The relation tap has the \emph{smallest} learned magnitude of the five,
+so per unit of weight it costs about twice as much as either control.
+
+A pre-registered criterion phrased on the abstention metric failed, and we report why: ablating the tap
+removes the relation from \emph{every} query, so the model abstains more, and a metric that rewards
+abstention cannot fall. The damage appears in accuracy and in false abstention instead.
+
+\section{The diagnosis, as a recipe}
+
+The measurement in Result 1 requires no training and no gradient. For any model that consults a memory
+with a query built from a local window:
+
+\begin{enumerate}
+\item Take a query whose parts are separated, so that some component sits at distance $d$ from the read
+position.
+\item Replace that component with a different one of the same type.
+\item Compare the retrieval distributions.
+\end{enumerate}
+
+If they are identical, that component is invisible to the search, and the model's confidence about it
+is unearned. With a kernel of $4$, the default in deployed linear-attention layers, the reach is three
+tokens, so any part of a question further back than that does not enter that layer's query.
+
+\section{Limitations}
+
+The substrate is a small model on a closed synthetic language, and the distance between the relation
+and the read position is fixed by the generator, so the effect here is deterministic where in natural
+text it would be a distribution. The measurement is of \emph{access}, not use: a token inside the window
+is not necessarily used, and indeed the article tap is inside and contributes little. Finally, the read
+in our model is injected before the mixer, which is what makes the zero exact; in a deep model that
+consults memory from later layers, recurrence has already moved information forward and the effective
+reach grows with depth. The claim is made for memory consulted from early layers, which is where it
+lives.
+
+\begin{thebibliography}{99}
+\bibitem[Dao and Gu(2024)]{mamba2} Dao, T., and Gu, A. (2024). Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality. ICML 2024.
+\bibitem[Yang et al.(2025)]{gateddeltanet} Yang, S., Kautz, J., and Hatamizadeh, A. (2025). Gated Delta Networks: Improving Mamba2 with Delta Rule. ICLR 2025. arXiv:2412.06464.
+\bibitem[Hugging Face(2026)]{qwen3next} Hugging Face Transformers documentation, \texttt{Qwen3NextConfig}, parameter \texttt{linear\_conv\_kernel\_dim}, default $4$. Accessed 2 September 2026.
+\bibitem[Li et al.(2024)]{cat} Li, M., Zhang, X., Huang, Y., and Oymak, S. (2024). On the Power of Convolution Augmented Transformer. arXiv:2407.05591.
+\bibitem[Arora et al.(2024)]{zoology} Arora, S., Eyuboglu, S., Timalsina, A., Johnson, I., Poli, M., Zou, J., Rudra, A., and R\'e, C. (2024). Zoology: Measuring and Improving Recall in Efficient Language Models. ICLR 2024. arXiv:2312.04927.
+\bibitem[Golovneva et al.(2025)]{mta} Golovneva, O., Wang, T., Weston, J., and Sukhbaatar, S. (2025). Multi-Token Attention. arXiv:2504.00927.
+\end{thebibliography}
+
+\end{document}

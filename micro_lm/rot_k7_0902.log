@@ -26,3 +26,5 @@ VIVO= True ULTIMO= ── eval: vigente 0.6209 · anterior 0.7533 · abstencion 
 VIVO= True ULTIMO= ── eval: vigente 0.8352 · anterior 0.9141 · abstencion 0.3027 · truncados 0.0000 · nose 0.5579 (ent 0.5631/rel 0.5769) · falsa_abst 0.1181 
    [checkpoint parcial guardado: paso 3000]
 VIVO= True ULTIMO= ── eval: vigente 0.8352 · anterior 0.9141 · abstencion 0.3027 · truncados 0.0000 · nose 0.5579 (ent 0.5631/rel 0.5769) · falsa_abst 0.1181 
+VIVO= True ULTIMO= ── eval: vigente 0.8694 · anterior 0.9177 · abstencion 0.3711 · truncados 0.0000 · nose 0.7388 (ent 0.7419/rel 0.7549) · falsa_abst 0.1061 
+VIVO= True ULTIMO= ── eval: vigente 0.8694 · anterior 0.9177 · abstencion 0.3711 · truncados 0.0000 · nose 0.7388 (ent 0.7419/rel 0.7549) · falsa_abst 0.1061 
