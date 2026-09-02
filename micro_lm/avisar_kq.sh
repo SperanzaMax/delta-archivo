@@ -14,11 +14,11 @@ for _ in $(seq 1 480); do        # hasta 8 h
     p=$($PY -c "import pickle;print(pickle.load(open('ckpts/kq3_s$s.pkl','rb')).get('paso',0))" 2>/dev/null || echo 0)
     [ "${p:-0}" -ge 26000 ] && n=$((n+1))
   done
-  [ "$n" -ge 2 ] && break        # el prereg lee con >=2 (riesgo de legibilidad K-0)
+  [ "$n" -ge 3 ] && break   # Maxi pidio el aviso con las TRES cerradas, no con el minimo del prereg
   sleep 60
 done
 
 RES="$($PY -u juzgar_kq.py 2>/dev/null | tail -32)"
-mandar "🔬 KERNEL 5 · terminó y ya está juzgado (prereg SHA 50c4503d)
+mandar "🔬 KERNEL 5 · LAS TRES SEMILLAS CERRARON y ya está juzgado (prereg SHA 50c4503d)
 
 $RES"
