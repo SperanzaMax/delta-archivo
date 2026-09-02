@@ -1,64 +1,64 @@
-# Para retomar · escrito la noche del 1-sep con todo cerrado
+# Para retomar · escrito el 2-sep con dos campañas corriendo
 
-## Estado al cierre
-
-**Nada quedó corriendo.** Las tres semillas del kernel 5 llegaron a 26000 y están juzgadas.
+## Lo que se cerró hoy
 
 | | |
 |---|---|
-| preprint del sello de orden | **ENVIADO**, `rs-10896018`, en revisión editorial. El DOI llega cuando se postee, hasta 72 h hábiles |
-| kernel 5 | **los cuatro criterios CUMPLEN**, `INFORME_KERNEL_Q5_20260901.md` |
-| reparación del atractor mudo | cerrada, negativa, 0 de 6 |
-| `blanco=error` a presupuesto | corrió, `vigente` 0,20-0,45, no llega al 0,60 de R-1 |
-| pool de Colab | **14 cuentas**, se sumó la O el 1-sep |
+| **revisión de literatura** | **el hueco está libre.** Precursor a citar de frente: CAT (2407.05591). `REVISION_LITERATURA_VENTANA_20260902.md` |
+| **la ley de la ventana** | **60 celdas de 60**, cero EXACTO fuera del alcance, el escalón se mueve con el kernel |
+| **el cruce, mecanicista** | la misma pregunta reordenada da vuelta la ceguera. Compuerta X-0 ABIERTA |
+| **validación externa** | **Mamba-130M real: 80 de 80.** El estado ve todo, la query ve tres tokens |
+| **ablación de taps** | A-3 3/3, A-2 3/3 en `vigente`; **A-1 mal escrito** y el control refutó la lectura tentadora |
+| **cuarto preprint** | 5 páginas, compila limpio, citas verificadas de primera mano |
+| **el aviso a Maxi** | hecho, por Telegram, con el criterio de las cuatro condiciones cumplido |
 
-## 1. LO PRIMERO, y es lo único que separa esto de poder anunciarlo
+## Corriendo
 
-**Revisar la literatura sobre el hallazgo de la ventana.** El criterio de
-`CRITERIO_DESCUBRIMIENTO.md` pide las cuatro condiciones y hoy se cumplen tres: medido con control
-que podía fallar y falló (0 de 3), replicado en tres semillas, y resuelve el problema en el vehículo.
-**Falta la tercera, que nadie lo haya reportado.**
+- **`k73_s0/s1/s2`** · kernel 7 contra kernel 5 · `PREREG_LEY_VENTANA.md` §C · juez `juzgar_k7.py`
+- **`cf3_s0/s1/s2`** · el CRUCE, kernel 3 con las dos formas · `PREREG_CRUCE_FORMAS.md` · `juzgar_cruce.py`
+- **`avisar_0902.sh`** vigila las dos y manda el **juicio ya hecho** por Telegram, no un «terminó»
 
-Qué buscar, concretamente. Si alguien midió que **la ventana con la que se forma la query limita qué
-parte de la consulta condiciona la recuperación**, en atención lineal, modelos de espacio de estados
-o memoria externa. Términos por donde entrar: *query formation window*, *local convolution query*,
-*short convolution* (que es como Mamba y H3 llaman a esa conv), *partial query conditioning*,
-*retrieval query receptive field*. Y revisar de frente los papers de la familia delta y Mamba, que es
-donde esa conv corta existe por diseño.
+## 1. Lo primero cuando cierren
 
-**Si está libre, entra directo como cuarto preprint** y es el más accionable de los cuatro, porque da
-un diagnóstico barato que cualquiera puede correr sobre su propia arquitectura.
+**Leer `nose_ent` y `nose_rel` POR FORMA, nunca el `nose` global.** Todo el cruce vive en la
+desagregación: la predicción es que el orden se **invierte** entre `directa` e `invertida`, y un
+promedio lo borra.
 
-## 2. Después, la medición que hace generalizable el hallazgo
+Y para el kernel 7, el control es el **kernel 5**, no el 3: la pregunta ya no es si ver la relación
+ayuda, es si **más ventana ensucia**. La hipótesis en contra está escrita antes del dato.
 
-Hoy la distancia entre la relación y la posición de lectura es **fija en 3**, porque el generador
-escribe siempre igual. Eso hace el efecto determinista y también acota el alcance.
+## 2. Después, lo que le falta al preprint
 
-**La prueba que sigue: variar la distancia.** Generar consultas donde la relación caiga a distancia
-2, 3, 5, 8 y ver cómo se degrada. Predicción, la abstención en el caso difícil debería seguir a
-«¿entra la relación en la ventana?» y no a la distancia en sí. Si es así, el resultado deja de
-depender del generador y pasa a ser una **relación entre ventana y estructura de la consulta**, que
-es lo que se puede llevar a texto real.
+- Los dos resultados de arriba.
+- **El paso conductual en un modelo real**, que hoy no se pudo: que una pregunta con la parte
+  discriminante lejos del final se responda peor. Necesita GPU y es lo que convertiría la medición de
+  arquitectura en una de comportamiento.
 
-## 3. Y el barrido que cierra la pregunta de diseño
+## 3. La regla que salió de mirar el proyecto entero
 
-Kernel 5 fue el mínimo que cubre la relación. **Falta saber si más es mejor o si empeora.** Correr 7
-y 9. Hay una hipótesis en contra que vale la pena tener escrita antes: una ventana más ancha mete
-palabras irrelevantes en la query y podría **ensuciar** la búsqueda. Hoy hay un indicio compatible
-con eso, y es que `nose_ent` bajó un poco al pasar de 3 a 5.
+**Un hallazgo de ARQUITECTURA vale más que uno de ENTRENAMIENTO, y hay que buscarlo primero.** Entre
+el 26-ago y el 1-sep hubo doce intentos de arreglar la abstención por la vía del entrenamiento, todos
+negativos o parciales; el 1-sep se hizo el primer diagnóstico mecanicista y el problema se resolvió en
+un día. Los de arquitectura se verifican sin entrenar, dan ceros exactos y transfieren.
+
+**Y el corolario incómodo: siete criterios de este proyecto no se pudieron leer como estaban
+escritos**, y los siete tienen la misma forma — el criterio se escribió sobre la métrica del resultado
+**anterior**, o sobre un número **supuesto**, en vez de sobre lo que mide la intervención **nueva**.
+Antes de congelar un prereg conviene preguntarse: *si la intervención funciona perfecto, ¿esta métrica
+se mueve?*
 
 ## 4. Lo que NO hay que hacer
 
-- **No leer sólo `nose` global.** Esconde el intercambio entre el caso fácil y el difícil, que es
-  donde está toda la información.
-- **No anunciar el hallazgo antes del punto 1.** Un criterio laxo entrena a no creer los avisos.
-- **No usar `b3` como familia homogénea**, mezcla preentrenadas con de-cero.
-- **No intentar reparar unidades mudas.** Cerrado, 0 de 6, y el control tampoco.
+- **No anunciar el cruce antes de mirar `vigente` por forma.** Si una plantilla no se aprende, el
+  cruce es un artefacto.
+- **No leer `nose_rel` como medida de daño en una ablación.** Premia abstenerse, así que al cegar al
+  modelo sube en vez de bajar. Fue el error de A-1.
+- **No afirmar la causa del tap cero de Mamba.** Está medido, no explicado, y así va en el informe.
 
 ## 5. Operativo
 
-- Venv **`/home/maxi/.venv-ligamento/bin/python`**, no hay jax en el sistema.
-- `medir_en_colab.sh <CUENTA> <script.py> <ckpts...>` probado, pasa los checkpoints como argumentos.
-- Pool con 14 cuentas. La A dio 503 todo el 1-sep, la C y la H anduvieron siempre.
-- Alta de cuenta nueva sin argumentos, `~/.colab-pool/alta.sh`, elige letra sola y saca el mail del
-  login. Sigue en P.
+- Venv **`/home/maxi/.venv-ligamento/bin/python`** para el micro-LM; **`/home/maxi/.venv_datasets_pandas/bin/python`**
+  es el que tiene torch y transformers, para las pruebas sobre modelos reales.
+- **`FORMAS_Q` viaja por los dos scripts del pipeline** (`rotar_abst3.sh` y `tramo_abst.sh`). Sin eso
+  la campaña del cruce corre como una copia del control; se cazó antes de lanzar.
+- Pool con 14 cuentas. Hoy k7 salió por H y el cruce por I (TPU v5e1).

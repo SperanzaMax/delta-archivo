@@ -53,3 +53,4 @@ jax 0.7.2 | [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0)]
 compuerta de padding OK
 lanzado pid 7410
 == polling cada 2 min (presupuesto ~80 min)
+VIVO= True ULTIMO= ── eval: vigente 0.2596 · anterior 0.2726 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 

@@ -31,3 +31,11 @@
   forma       d_ent     TV_ent  d_rel     TV_rel   veredicto
   directa         1   0.462669      3   0.273919   OK  (se esperaba ent >0, rel >0)
   invertida       3   0.044004      1   0.145923   OK  (se esperaba ent >0, rel >0)
+  lejana          1   0.301922      4   0.051406   OK  (se esperaba ent >0, rel >0)
+
+  cada celda en cero si y solo si esta AFUERA del alcance 4: 6 de 6   CUMPLE
+  (el cruce NO aplica con alcance 4: en las tres formas entran las dos componentes, que es lo que la ley predice)
+
+============================================================================================
+COMPUERTA ABRE
+============================================================================================

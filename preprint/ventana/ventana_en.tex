@@ -53,6 +53,13 @@ which costs $1{,}280$ parameters out of $865{,}395$, lifts it to $\mathbf{0.9931
 $\mathbf{1.0000}$ with no overlap between conditions, and overall accuracy to $0.988$--$0.993$ against
 a trivial floor of $0.4065$.
 
+We then check the mechanism outside our own model. In \texttt{mamba-130m-hf}, $129$M parameters,
+changing one token five to eight positions before the read moves the layer output at every distance
+and leaves the convolution output at \textbf{exactly zero}, $80$ cells out of $80$. The state sees the
+whole sequence; the query that reads it does not. Incidentally, the oldest convolution tap in that
+checkpoint is exactly zero in all $24$ layers, so its effective reach is $2$ rather than the nominal
+$3$; we report the measurement and not a cause.
+
 We give the diagnosis as a recipe that requires no training: change one token of the query and see
 whether retrieval moves. If it does not, that token is invisible to the search, and any confidence the
 model expresses about it is unearned.
@@ -190,6 +197,41 @@ so per unit of weight it costs about twice as much as either control.
 A pre-registered criterion phrased on the abstention metric failed, and we report why: ablating the tap
 removes the relation from \emph{every} query, so the model abstains more, and a metric that rewards
 abstention cannot fall. The damage appears in accuracy and in false abstention instead.
+
+\section{Result 4: the dissociation holds in a real model}
+
+The results above are measured in a small model, so we checked the mechanism in one that is not ours:
+\texttt{state-spaces/mamba-130m-hf}, $129{,}135{,}360$ parameters, on CPU, with no training. In Mamba
+the short convolution is applied to $x$ \emph{before} $B$, $C$ and $\Delta$ are computed, and $C_t$ is
+the analogue of the read query.
+
+We change a single token at distance $d$ from a read position and measure, in layer $0$, the movement
+of the convolution output and of the layer output. Ten read positions, two texts.
+
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+& $d{=}1$ & $d{=}2$ & $d{=}3$ & $d{=}5$ & $d{=}7$ & $d{=}8$ \\
+\midrule
+\texttt{conv1d} output & $0.8$--$3.7$ & $0.5$--$1.6$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ \\
+layer output & $9\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ & $9\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The layer output moves at \emph{every} distance, $80$ cells out of $80$: the state does see the whole
+sequence. The convolution output is exactly zero beyond its reach. \textbf{That is the dissociation.}
+The model sees the context; the query that reads its state does not.
+
+\textbf{An incidental finding, reported with its uncertainty.} We had predicted movement at $d=3$,
+since the kernel is $4$. It is exactly zero. The reason is that \textbf{the oldest tap of the
+convolution is exactly zero in all $24$ layers}, which we confirmed both from the weights and by
+intervention: changing one token moves the convolution output at exactly three consecutive positions,
+not four. So the effective window in this checkpoint is $3$, not $4$, and the reach is $2$. We do not
+know the cause. A weight that is exactly zero across $24 \times 1536$ entries does not come from a
+gradient, so a conversion artefact is plausible, but we did not verify that and we do not claim it.
+The fact is reproducible in three lines. Its practical consequence, if it generalises, is that the
+nominal kernel is an upper bound on the reach and should be measured rather than assumed.
 
 \section{The diagnosis, as a recipe}
 
