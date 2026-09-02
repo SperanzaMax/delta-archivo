@@ -21,7 +21,7 @@ sys.path.insert(0, AQUI)
 
 import entrenar as E, idioma as I, medir_ratio_ce as R, modelo as M
 
-TRAT = ["cf3_s0", "cf3_s1", "cf3_s2"]
+TRAT = ["cf3_s1", "cf3_s2", "cf3_s3"]   # D-1: s0 se descarto por formas_q contaminada
 META = 26000
 FORMAS = ("directa", "invertida")
 

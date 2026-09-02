@@ -1,0 +1,16 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_cf_0902b.log (rotador 2931730)
+== rotador2 · familia 'cf' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:1,3:2,3:3 · cuentas: D E F J N M L K O C I G H
+-- vuelta 1 · cuenta D · faltan: 3:1 3:2 3:3 · 09:15:08
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta E · faltan: 3:1 3:2 3:3 · 09:15:15
+   (sin T4 en E, pero SI hubo TPU v5e1)
+   >> OTORGADA en E (TPU v5e1): [tr2_e_0915] tpu-v5e1-s-kkb-usw1c1-5j0cwziw5uxw | Hardware: V5E1 | Variant: TPU | Status: IDLE
+   -> tramo 3:1 en E (desde el paso 13000)
+== tramo · cuenta E · sesion tr2_e_0915 · cf3_s1 · +6500 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 3 · formas directa,invertida · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.qZ929zMKj3/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/cf3_s1.pkl' to '/content/ck.pkl'
+jax 0.7.2 | [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0)]
+compuerta de padding OK
+lanzado pid 17773
+== polling cada 2 min (presupuesto ~80 min)
