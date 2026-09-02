@@ -1,0 +1,17 @@
+================================================================================================
+KERNEL 7 · ¿mas ventana mejora, o mete tokens irrelevantes y ENSUCIA?  prereg eb5e1d50 §C
+================================================================================================
+
+unidad    kq   paso  vigente    nose   falsa
+--- TRATAMIENTO kernel 5
+k73_s0     7  26000   1.0000  1.0000  0.0000
+k73_s1     7  26000   0.9964  0.9667  0.0033
+k73_s2     7   6000   0.5992  0.6241  0.1571  <- 6000 de 26000
+--- CONTROL kernel 3 (ya medido)
+kq3_s0     5  26000   1.0000  0.9697  0.0000
+kq3_s1     5  26000   0.9964  0.9861  0.0030
+kq3_s2     5  26000   1.0000  0.9699  0.0000
+
+--- K-0 y K-1: la sonda sobre la busqueda (esto tarda unos minutos) ---
+
+>>> k73_s0

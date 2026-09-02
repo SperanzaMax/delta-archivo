@@ -1,0 +1,10 @@
+The fast path is not available because one of `(selective_state_update, selective_scan_fn, causal_conv1d_fn, causal_conv1d_update, mamba_inner_fn)` is None. Falling back to the sequential implementation of Mamba, as use_mambapy is set to False. To install follow https://github.com/state-spaces/mamba/#installation for mamba-ssm and install the kernels library using `pip install kernels` or https://github.com/Dao-AILab/causal-conv1d for causal-conv1d. For the mamba.py backend, follow https://github.com/alxndrTL/mamba.py.
+/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/entrenar_real.py:73: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  if float(conv.weight[:, 0, t].abs().max()) > 0]
+modelo state-spaces/mamba-370m-hf · 371,516,416 params · cpu
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion dos · formas de entrenamiento ('directa', 'invertida') · se EVALUA en `directa`
+  BASELINE paso 0 · vigente 0.0373 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+  ── eval 2: vigente 0.3292 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0124
+listo

@@ -1,0 +1,94 @@
+== real_dos_s0 en la cuenta D · sesion NUEVA real_d_1237 · 1200 pasos
+[colab] Creating session 'real_d_1237'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.ANA7DtK3Op/real.tgz' to '/content/real.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+lanzado pid 829
+VIVO= True
+ULTIMO= BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+VIVO= True
+ULTIMO= paso    50  loss 0.4212  (172s)
+VIVO= True
+ULTIMO= ── eval 100: vigente 1.0000 · nose 0.9556 (ent 1.0000/rel 0.9000) · falsa 0.0000
+VIVO= True
+ULTIMO= ── eval 100: vigente 1.0000 · nose 0.9556 (ent 1.0000/rel 0.9000) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   150  loss 0.0000  (519s)
+VIVO= True
+ULTIMO= ── eval 200: vigente 0.9880 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0120
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Connection was lost.
+VIVO= True
+ULTIMO= ── eval 300: vigente 0.9880 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0120
+VIVO= True
+ULTIMO= paso   350  loss 0.0032  (1212s)
+VIVO= True
+ULTIMO= ── eval 400: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   450  loss 0.0028  (1558s)
+VIVO= True
+ULTIMO= paso   450  loss 0.0028  (1558s)
+VIVO= True
+ULTIMO= ── eval 500: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   550  loss 0.0000  (1905s)
+VIVO= True
+ULTIMO= ── eval 600: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+VIVO= True
+ULTIMO= ── eval 600: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   650  loss 0.0000  (2251s)
+VIVO= True
+ULTIMO= ── eval 700: vigente 0.9639 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   750  loss 0.0000  (2597s)
+VIVO= True
+ULTIMO= paso   750  loss 0.0000  (2597s)
+VIVO= True
+ULTIMO= ── eval 800: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   850  loss 0.0000  (2944s)
+VIVO= True
+ULTIMO= ── eval 900: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+VIVO= True
+ULTIMO= ── eval 900: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+VIVO= True
+ULTIMO= paso   950  loss 0.0000  (3290s)
+[colab] Session 'real_d_1237' appears to be lost (404/401). Cleaning up.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+[colab] Session 'real_d_1237' not found.
+== real_dos_s0 SIN RESULTADO

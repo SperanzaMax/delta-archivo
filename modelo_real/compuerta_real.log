@@ -1,0 +1,33 @@
+========================================================================================================
+COMPUERTA DEL EXPERIMENTO EN MODELO REAL · state-spaces/mamba-370m-hf
+========================================================================================================
+The fast path is not available because one of `(selective_state_update, selective_scan_fn, causal_conv1d_fn, causal_conv1d_update, mamba_inner_fn)` is None. Falling back to the sequential implementation of Mamba, as use_mambapy is set to False. To install follow https://github.com/state-spaces/mamba/#installation for mamba-ssm and install the kernels library using `pip install kernels` or https://github.com/Dao-AILab/causal-conv1d for causal-conv1d. For the mamba.py backend, follow https://github.com/alxndrTL/mamba.py.
+  parametros 371,516,416
+
+1 · ALCANCE REAL de la conv que forma la query
+--------------------------------------------------------------------------------------------------------
+  kernel nominal 4 · taps con peso NO nulo en la capa 0: [1, 2, 3]
+  capas con el tap 0 en CERO EXACTO: 48 de 48
+  cambiando el token 10, la conv se mueve en las posiciones [10, 11, 12]
+  >> ALCANCE REAL MEDIDO = 2 tokens hacia atras
+
+2 · DISTANCIAS REALES en tokens del BPE (no en palabras)
+--------------------------------------------------------------------------------------------------------
+
+  plantilla               d_rel             d_ent   ejemplo tokenizado
+  directa       4..6    (VARIA)   2..3    (VARIA)   ['What', ' is', ' the', ' director', ' of', ' Ze', 'phy', 'ra', '?']
+  invertida     1..2    (VARIA)   7..9    (VARIA)   ['For', ' Ze', 'phy', 'ra', ',', ' what', ' is', ' the', ' director', '?']
+  lejana        5..7    (VARIA)   3..4    (VARIA)   ['What', ' is', ' the', ' director', ' that', ' Ze', 'phy', 'ra', ' has', '?']
+  corta         4..6    (VARIA)   2..3    (VARIA)   ['The', ' director', ' of', ' Ze', 'phy', 'ra', ' is']
+  inv_corta     1..2    (VARIA)   5..7    (VARIA)   ['For', ' Ze', 'phy', 'ra', ',', ' the', ' director', ' is']
+
+3 · ¿EXISTE EL CONTRASTE?
+--------------------------------------------------------------------------------------------------------
+  con la relacion SIEMPRE ADENTRO de la ventana (d_rel <= 2): ['invertida', 'inv_corta']
+  con la relacion SIEMPRE AFUERA (d_rel > 2):                 ['directa', 'lejana', 'corta']
+  con distancias FIJAS, o sea sin depender de cuantos tokens ocupe el nombre: []
+
+========================================================================================================
+COMPUERTA ABRE
+========================================================================================================
+  el contraste es 'invertida' (relacion adentro) contra 'directa' (afuera).

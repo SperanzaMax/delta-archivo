@@ -93,8 +93,13 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
         col["falsa_abst"].append((pred[hay] == NOSE).mean() if hay.any() else np.nan)
         col["abstencion"].append((pred == NOSE).mean())
         if porf is not None:
-            for j, f in enumerate(fq):
-                g = forma == j
+            # OJO — 2026-09-02, bug encontrado con la familia `cl`: `datos.lote` guarda el indice
+            # respecto de la tupla GLOBAL `I.FORMAS_Q`, no respecto de `fq`. Con ("directa",
+            # "invertida") los dos ordenes coinciden por casualidad y no se notaba; con ("directa",
+            # "lejana") no, porque `lejana` es 2 en la global y seria 1 en la local, y todas las
+            # metricas de esa forma salian `nan` en silencio. Se traduce por NOMBRE, no por posicion.
+            for f in fq:
+                g = forma == I.FORMAS_Q.index(f)
                 if not g.any():
                     continue
                 s2 = lambda m: ok[m & g].mean() if (m & g).any() else np.nan

@@ -1,0 +1,63 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/482 [00:00<?, ?it/s]Loading weights:  87%|████████▋ | 420/482 [00:00<00:00, 4190.73it/s]Loading weights: 100%|██████████| 482/482 [00:00<00:00, 4271.76it/s]
+modelo state-spaces/mamba-370m-hf · 371,516,416 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion dos · formas de entrenamiento ('directa', 'invertida') · se EVALUA en `directa`
+  BASELINE paso 0 · vigente 0.0373 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+Traceback (most recent call last):
+  File "/content/real/entrenar_real.py", line 120, in <module>
+    main()
+    ~~~~^^
+  File "/content/real/entrenar_real.py", line 99, in main
+    out = modelo(ids, labels=lab)
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/mamba/modeling_mamba.py", line 777, in forward
+    mamba_outputs = self.backbone(
+        input_ids,
+    ...<5 lines>...
+        attention_mask=attention_mask,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/mamba/modeling_mamba.py", line 679, in forward
+    hidden_states = mixer_block(
+        hidden_states,
+        cache_params=cache_params,
+        attention_mask=attention_mask,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/modeling_layers.py", line 114, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/mamba/modeling_mamba.py", line 526, in forward
+    hidden_states = self.mixer(hidden_states, cache_params=cache_params, attention_mask=attention_mask)
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/integrations/accelerate.py", line 1010, in wrapped
+    output = forward_func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/mamba/modeling_mamba.py", line 459, in forward
+    scan_result = mamba_selective_scan(
+        hidden_states_B_C.transpose(1, 2),
+    ...<10 lines>...
+        use_associative_scan=self.use_associative_scan,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/integrations/hub_kernels.py", line 861, in wrapped
+    return implementation(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/mamba/modeling_mamba.py", line 216, in mamba_selective_scan
+    deltaB_u = discrete_B * hidden_states[:, :, :, None].float()
+               ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 128.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 31.81 MiB is free. Including non-PyTorch memory, this process has 14.53 GiB memory in use. Of the allocated memory 14.32 GiB is allocated by PyTorch, and 90.78 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
