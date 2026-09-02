@@ -164,3 +164,34 @@ compuerta de padding OK
 lanzado pid 2044
 == polling cada 2 min (presupuesto ~80 min)
 VIVO= True ULTIMO= tramo: se corre hasta el paso 19500 y se guarda para continuar despues 
+VIVO= True ULTIMO= ── eval: vigente 0.9923 · anterior 1.0000 · abstencion 0.3906 · truncados 0.0000 · nose 0.9600 (ent 0.9312/rel 0.9934) · falsa_abst 0.0063 
+VIVO= True ULTIMO= ── eval: vigente 0.9923 · anterior 1.0000 · abstencion 0.3906 · truncados 0.0000 · nose 0.9600 (ent 0.9312/rel 0.9934) · falsa_abst 0.0063 
+   [checkpoint parcial guardado: paso 15500]
+VIVO= True ULTIMO= ── eval: vigente 0.9880 · anterior 1.0000 · abstencion 0.3984 · truncados 0.0000 · nose 0.9759 (ent 0.9630/rel 0.9934) · falsa_abst 0.0101 
+VIVO= True ULTIMO= ── eval: vigente 0.9880 · anterior 1.0000 · abstencion 0.3984 · truncados 0.0000 · nose 0.9759 (ent 0.9630/rel 0.9934) · falsa_abst 0.0101 
+VIVO= True ULTIMO= ── eval: vigente 0.9890 · anterior 0.9821 · abstencion 0.3965 · truncados 0.0000 · nose 0.9754 (ent 0.9591/rel 0.9934) · falsa_abst 0.0060 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3926 · truncados 0.0000 · nose 0.9750 (ent 0.9599/rel 0.9934) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 19500]
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3926 · truncados 0.0000 · nose 0.9750 (ent 0.9599/rel 0.9934) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.9958 · anterior 0.9688 · abstencion 0.3906 · truncados 0.0000 · nose 0.9655 (ent 0.9429/rel 0.9934) · falsa_abst 0.0032 
+VIVO= True ULTIMO= ── eval: vigente 0.9958 · anterior 0.9688 · abstencion 0.3906 · truncados 0.0000 · nose 0.9655 (ent 0.9429/rel 0.9934) · falsa_abst 0.0032 
+VIVO= True ULTIMO= ── eval: vigente 0.9950 · anterior 1.0000 · abstencion 0.3926 · truncados 0.0000 · nose 0.9720 (ent 0.9534/rel 0.9934) · falsa_abst 0.0035 
+   [checkpoint parcial guardado: paso 19500]
+VIVO= True ULTIMO= ── eval: vigente 0.9950 · anterior 1.0000 · abstencion 0.3926 · truncados 0.0000 · nose 0.9720 (ent 0.9534/rel 0.9934) · falsa_abst 0.0035 
+VIVO= True ULTIMO= ── eval: vigente 0.9918 · anterior 0.9861 · abstencion 0.3945 · truncados 0.0000 · nose 0.9716 (ent 0.9607/rel 0.9851) · falsa_abst 0.0065 
+VIVO= True ULTIMO= ── eval: vigente 0.9954 · anterior 1.0000 · abstencion 0.3965 · truncados 0.0000 · nose 0.9800 (ent 0.9704/rel 0.9934) · falsa_abst 0.0039 
+VIVO= True ULTIMO= ── eval: vigente 0.9954 · anterior 1.0000 · abstencion 0.3965 · truncados 0.0000 · nose 0.9800 (ent 0.9704/rel 0.9934) · falsa_abst 0.0039 
+   [checkpoint parcial guardado: paso 19500]
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3945 · truncados 0.0000 · nose 0.9804 (ent 0.9696/rel 0.9934) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.9960 · anterior 1.0000 · abstencion 0.3926 · truncados 0.0000 · nose 0.9765 (ent 0.9599/rel 0.9934) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.9960 · anterior 1.0000 · abstencion 0.3926 · truncados 0.0000 · nose 0.9765 (ent 0.9599/rel 0.9934) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.9929 · anterior 1.0000 · abstencion 0.4004 · truncados 0.0000 · nose 0.9854 (ent 0.9800/rel 0.9934) · falsa_abst 0.0060 
+   [checkpoint parcial guardado: paso 17000]
+VIVO= True ULTIMO= ── eval: vigente 0.9929 · anterior 1.0000 · abstencion 0.4004 · truncados 0.0000 · nose 0.9854 (ent 0.9800/rel 0.9934) · falsa_abst 0.0060 
+VIVO= True ULTIMO= ── eval: vigente 0.9963 · anterior 1.0000 · abstencion 0.3984 · truncados 0.0000 · nose 0.9854 (ent 0.9800/rel 0.9934) · falsa_abst 0.0030 
+VIVO= False ULTIMO= listo: {'paso': 19500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.9963235294117647, 'anterior': 1.0, 'nose': 0.9797301136363636, 'nose_ent': 0.9703525641025641, 'nose_rel': 0.993421052631579, 'falsa_abst': 0.003048780487804878, 'abstencion': 0.396484375, 'por_forma': {'directa': {'vigente': 0.9916666666666667, 'anterior': 1.0, 'nose': 0.9718406593406594, 'nose_ent': 0.9472222222222222, 'nose_rel': 1.0, 'falsa_abst': 0.006578947368421052, 'abstencion': 0.3976052015114515}, 'invertida': {'vigente': 1.0, 'anterior': 1.0, 'nose': 0.9926470588235294, 'nose_ent': 1.0, 'nose_rel': 0.984375, 'falsa_abst': 0.0, 'abstencion': 0.40448065314984005}}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/cf3_s1.pkl (10M)
+   ultimo paso registrado: "paso": 19500
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_e_0908)

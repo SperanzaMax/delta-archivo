@@ -1,0 +1,13 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/rot_cl_0902.log (rotador 2055935)
+== rotador2 · familia 'cl' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:0,3:1,3:2 · cuentas: N M L K O C G I F J D E H
+-- vuelta 1 · cuenta N · faltan: 3:0 3:1 3:2 · 11:31:29
+   >> OTORGADA en N (T4): [tr2_n_1131] gpu-t4-s-kkb-usw4a0-pr6nq4t05f0a | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en N (desde el paso 0)
+== tramo · cuenta N · sesion tr2_n_1131 · cl3_s0 · +6500 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 3 · formas directa,lejana · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.YZynyaoZVn/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck.pkl
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3793
+== polling cada 2 min (presupuesto ~80 min)
