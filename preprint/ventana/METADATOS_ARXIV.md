@@ -101,12 +101,50 @@ advierte que dos versiones fragmentan las métricas: declarar el DOI es lo que l
 
 ---
 
-## Lo que hay que saber antes de darle enviar
+## ⚠ EL BLOQUEO REAL, verificado el 3-sep contra el blog de arXiv
 
-1. **Hace falta endorsement.** Para el primer envío a `cs.LG` arXiv pide que un autor establecido te
-   avale, salvo que tu dominio de correo esté auto-endorsed. Al registrarte con
-   `mrsperanza@frba.utn.edu.ar` el sistema te dirá cuál de las dos cosas aplica. Si pide endorsement,
-   arXiv te da un **código** para pasarle a quien te avale.
+**El correo institucional SOLO ya no alcanza, y no alcanza desde el 21 de enero de 2026.** La política
+nueva pide **las dos cosas juntas** para el endorsement automático:
+
+1. correo institucional de una institución académica o de investigación, **y**
+2. **autoría previa en un paper ya aceptado en ese mismo dominio de endorsement**.
+
+Maxi cumple (1) desde hoy y **no cumple (2)**: sus preprints están en Research Square, no en arXiv.
+La razón del cambio la dice arXiv de frente: frenar la avalancha de envíos no científicos.
+
+> **Consecuencia: hace falta un endorsement personal de un autor establecido en `cs.LG`.** El correo
+> institucional destrabó OpenReview y Scholar, pero **no destraba arXiv por sí solo.**
+
+### Cómo se pide, en este orden
+
+1. **Registrarse en arxiv.org con `mrsperanza@frba.utn.edu.ar`.** El correo institucional sigue
+   siendo necesario aunque no sea suficiente.
+2. **Empezar la submission en `cs.LG`.** No hay que completarla: el solo hecho de iniciarla hace que
+   arXiv genere un **código de endorsement** y una URL para compartir. Sin empezarla no hay código.
+3. **Pedirlo**, con el código, a alguien que ya publique en `cs.LG`.
+
+### A quién pedírselo, ordenado por probabilidad de respuesta
+
+El endorsement **no es peer review** —arXiv lo dice explícitamente—, pero se le pide al avalista que
+conozca a la persona *o* que mire el trabajo, y que verifique que el tema encaja en la categoría. Por
+eso conviene pedirlo a alguien cuyo trabajo el paper **extiende**, no a un nombre grande al azar.
+
+1. **El grupo de CAT (arXiv 2407.05591)**, Li, Zhang, Huang y Oymak. Es **el precursor directo** que
+   el paper cita de frente: su Teorema 1 pide un filtro de largo N para n-gramas, y este trabajo mide
+   lo que pasa con el filtro corto, que ellos no midieron. Un pedido que dice «extiendo su Teorema 1
+   y le agrego la medición que falta» es concreto y verificable en dos minutos.
+2. **Songlin Yang / Ali Hatamizadeh** (Gated DeltaNet, arXiv 2412.06464), porque el paper usa el
+   `linear_conv_kernel_dim` de su familia como el caso desplegado.
+3. **Alguien de la UTN que publique en `cs.LG`.** Ahora que existe el vínculo institucional, y con
+   Alexander López y Nico Censabella ya involucrados en el trámite del correo, es la vía con más
+   probabilidad de respuesta aunque sea la menos obvia. arXiv no indexa afiliaciones, así que hay
+   que preguntar adentro y no buscarlo en la web.
+
+**Precedente para no repetirlo:** el 23-ago se pidió endorsement a los autores de [IDK] (Cohen,
+Dobler, Biran, de Melo) y al 26-ago no habían contestado. Un pedido frío a un grupo cuyo trabajo no
+se extiende tiene poca tasa de respuesta. Conviene mandar **varios en paralelo** y no esperar a uno.
+
+## Otras cosas que hay que saber antes de darle enviar
 2. **El registro y la contraseña los hacés vos.** No creo cuentas ni cargo credenciales.
 3. **arXiv no borra.** Una vez anunciado, el paper queda; se puede reemplazar por una versión nueva
    (v2, v3) pero no retirar. Por eso conviene subir la versión que ya tiene el negativo adentro, que
