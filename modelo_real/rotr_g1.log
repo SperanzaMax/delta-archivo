@@ -1,3 +1,12 @@
 -- vuelta 1 · cuenta H · 12:42
 cuenta H ocupada por el pid 3168792
 -- vuelta 1 · cuenta C · 12:42
+  (la sensibilidad final fallo: KeyError: 0) — las metricas ya estan
+listo
+== g1_lejos_relleno_s1 codigo 0 en 866 s
+CAMPANIA COMPLETA
+[colab] Downloaded '/content/g1_lejos_relleno_s1.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/g1_lejos_relleno_s1.json'
+[colab] Downloaded '/content/g1_lejos_relleno_s1.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/g1_lejos_relleno_s1.json'
+[colab] Downloaded '/content/campana_g1.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/campana_g1.log'
+== g1: sesion dist_c_1242 queda VIVA para reusar
+== s1 LISTA

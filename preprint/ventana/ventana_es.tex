@@ -320,6 +320,85 @@ modelo, decide cuánto cuesta esa combinación. Ésta es la versión cuantitativ
 el primer borrador declaramos sin medir, y precisa dónde se aplica la afirmación fuerte: a la memoria
 consultada desde una capa temprana, donde no quedan capas con que pagar.
 
+\section{Resultado 6. La ley de acceso no se vuelve una falla de comportamiento cuando el modelo tiene capas con que pagar}
+
+Los Resultados 1 a 5 miden \emph{acceso}. Éste pregunta si el acceso predice el \emph{comportamiento},
+y la respuesta es un negativo limpio que nos parece la parte más útil del trabajo, porque acota la
+afirmación en vez de extenderla.
+
+\paragraph{Montaje, pre-registrado antes de correr.} Ajustamos \texttt{state-spaces/mamba-130m-hf}
+sobre la misma tarea, cuatro hechos en el contexto, la respuesta de un solo token, y evaluamos en la
+forma con la que el modelo se entrenó. Tres condiciones, tres semillas cada una, $800$ pasos, $512$
+ejemplos por evaluación: \texttt{cerca} entrena y evalúa en $d{=}2$, donde relación y entidad
+comparten ventana en la capa $0$; \texttt{lejos} en $d{=}5$, donde el movimiento en la capa $0$ es
+cero exacto; \texttt{lejos+cerca} mezcla las dos. El criterio bloqueante era \texttt{vigente}
+$\ge 0{,}90$ y el principal \texttt{cerca} $-$ \texttt{lejos} $\ge 0{,}10$ en $\ge 2$ de $3$ semillas.
+
+\paragraph{El resultado, como curva, porque el punto final solo lo escondería.}
+
+\begin{center}
+\begin{tabular}{rccl}
+\toprule
+paso & \texttt{cerca} & \texttt{lejos} & \texttt{cerca} $-$ \texttt{lejos}, por semilla \\
+\midrule
+$100$ & $0{,}9850$ & $0{,}8221$ & $\mathbf{+0{,}167}$ \quad $\mathbf{+0{,}181}$ \quad $\mathbf{+0{,}141}$ \\
+$200$ & $0{,}9881$ & $0{,}9209$ & $+0{,}095$ \quad $+0{,}106$ \quad $+0{,}000$ \\
+$300$ & $0{,}9881$ & $0{,}9489$ & $+0{,}095$ \quad $+0{,}011$ \quad $+0{,}012$ \\
+$400$ & $0{,}9881$ & $0{,}9886$ & $-0{,}012$ \quad $+0{,}011$ \quad $+0{,}000$ \\
+$800$ & $0{,}9485$ & $0{,}9921$ & $-0{,}131$ \quad $+0{,}000$ \quad $+0{,}000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+En el paso $100$ el efecto está, es grande y es unánime: tres semillas de tres por encima del umbral
+pre-registrado, con una media de $+0{,}163$. Para el paso $400$ ya no está. \textbf{La ventana decide
+cuánto tiene que gastar el modelo para aprender la discriminación, no si puede aprenderla.}
+
+\paragraph{Cómo se leen los criterios, y se leen tal como están escritos.} En el horizonte de $800$
+pasos las tres semillas de \texttt{lejos} terminan en $\ge 0{,}95$, así que la guarda de techo que
+declaramos por adelantado se dispara y el criterio principal es \textbf{no evaluable}: no queda margen
+para que \texttt{cerca} sea mejor. El criterio de velocidad, un área bajo la curva declarada post-hoc
+después de un piloto pero antes de esta campaña, da $+0{,}022$, $+0{,}040$, $+0{,}021$ --- tres signos
+positivos de tres, y todos bastante por debajo del $0{,}10$ que pedía. \textbf{No cumple}. Mezclar
+formas no compró nada acá ($+0{,}013$, $+0{,}009$, $-0{,}003$), y el criterio de no daño sí cumple
+(falsa abstención $\le 0{,}0063$).
+
+El área bajo la curva entera era el estadístico equivocado para un efecto transitorio: promedia ocho
+puntos de los cuales sólo los dos primeros traen señal, así que diluye $+0{,}16$ en $+0{,}03$. Lo
+informamos como lección y no como rescate --- el criterio queda como está escrito y no cumple.
+
+\paragraph{Por qué esto es coherente con el Resultado 5 y no una refutación.} El Resultado 5 midió que
+el corte de la ventana es exacto en la capa $0$ y que la recurrencia restituye la señal en las capas
+siguientes, atenuada pero presente. Un modelo de $24$ capas tiene entonces con qué pagar el peaje, y
+lo que observamos es exactamente el pago: un arranque más lento y después paridad. El contraste con
+nuestro modelo chico es el punto, y es un contraste controlado, porque los dos vehículos difieren en
+profundidad:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+& profundidad & efecto de dejar la parte discriminante afuera de la ventana \\
+\midrule
+modelo chico, $26{.}000$ pasos & $2$ bloques & \textbf{permanente}: $0{,}544$, $0{,}678$, $0{,}506$ contra $0{,}993$, $0{,}980$, $1{,}000$ \\
+\texttt{mamba-130m}, $800$ pasos & $24$ capas & \textbf{transitorio}: $+0{,}16$ en el paso $100$, cero desde el $400$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Donde no quedan capas con que pagar, la ventana pone un techo. Donde quedan, pone un peaje.}
+La afirmación fuerte de este trabajo vale entonces para memoria consultada desde una capa temprana
+--- lecturas aumentadas por recuperación inyectadas antes del mixer, adaptadores poco profundos,
+cabezas de memoria de una sola capa --- y no vale, como predicción de comportamiento, para un modelo
+profundo entrenado hasta converger en la tarea.
+
+\paragraph{Lo que esto no nos autoriza a concluir.} Que el efecto sea despreciable en general. Nuestra
+tarea tiene cuatro hechos y satura, el horizonte es de $800$ pasos, y la distancia que pudimos sondear
+llega hasta $d{=}7$ porque la atenuación se mide sobre una plantilla fija. Una distancia mayor, una
+tarea más difícil o un modelo menos profundo podrían mover esto. Lo que el negativo sí establece es
+que \emph{medir el acceso no alcanza}: un componente demostrablemente invisible para la consulta de
+una capa puede igual gobernar la respuesta, y cualquier afirmación de que un modelo «no puede usar»
+ese componente hay que probarla en el comportamiento y no deducirla de la convolución.
+
 \section{El diagnóstico, como receta}
 
 La medición del Resultado 1 no necesita entrenamiento ni gradientes. Para cualquier modelo que

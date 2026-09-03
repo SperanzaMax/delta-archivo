@@ -19,3 +19,12 @@ https://colab.research.google.com/tun/m/assign?nbh=fbe7af07_4e90_48e7_a974_d64aa
 f965f4d........&variant=GPU&accelerator=T4: Service Unavailable
 sin sesion en I
 -- vuelta 1 · cuenta G · 12:43
+  (la sensibilidad final fallo: KeyError: 0) — las metricas ya estan
+listo
+== g0_lejos_relleno_s0 codigo 0 en 846 s
+CAMPANIA COMPLETA
+[colab] Downloaded '/content/g0_lejos_relleno_s0.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/g0_lejos_relleno_s0.json'
+[colab] Downloaded '/content/g0_lejos_relleno_s0.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/g0_lejos_relleno_s0.json'
+[colab] Downloaded '/content/campana_g0.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/campana_g0.log'
+== g0: sesion dist_g_1243 queda VIVA para reusar
+== s0 LISTA

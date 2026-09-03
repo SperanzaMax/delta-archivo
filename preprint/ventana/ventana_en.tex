@@ -306,6 +306,83 @@ decides what that combination costs. This is the quantitative version of the lim
 rather than measured in the first draft, and it sharpens where the strong claim applies: memory
 consulted from an early layer, where there are no layers left to pay with.
 
+\section{Result 6: the access law does not become a behavioural failure once the model has layers to pay with}
+
+Results 1--5 measure \emph{access}. This one asks whether access predicts \emph{behaviour}, and the
+answer is a clean negative that we think is the most useful part of the paper, because it bounds the
+claim rather than extending it.
+
+\paragraph{Setup, pre-registered before running.} We fine-tune \texttt{state-spaces/mamba-130m-hf} on
+the same task, four facts in context, the answer a single token, and evaluate on the form the model
+was trained on. Three conditions, three seeds each, $800$ steps, $512$ examples per evaluation:
+\texttt{near} trains and evaluates on $d{=}2$, where relation and entity share a window in layer $0$;
+\texttt{far} on $d{=}5$, where the movement in layer $0$ is exactly zero; \texttt{far+near} mixes
+both. The blocking criterion was \texttt{current} $\ge 0.90$ and the primary one was
+\texttt{near} $-$ \texttt{far} $\ge 0.10$ in $\ge 2$ of $3$ seeds.
+
+\paragraph{The result, as a curve, because the endpoint alone would hide it.}
+
+\begin{center}
+\begin{tabular}{rccl}
+\toprule
+step & \texttt{near} & \texttt{far} & \texttt{near} $-$ \texttt{far}, per seed \\
+\midrule
+$100$ & $0.9850$ & $0.8221$ & $\mathbf{+0.167}$ \quad $\mathbf{+0.181}$ \quad $\mathbf{+0.141}$ \\
+$200$ & $0.9881$ & $0.9209$ & $+0.095$ \quad $+0.106$ \quad $+0.000$ \\
+$300$ & $0.9881$ & $0.9489$ & $+0.095$ \quad $+0.011$ \quad $+0.012$ \\
+$400$ & $0.9881$ & $0.9886$ & $-0.012$ \quad $+0.011$ \quad $+0.000$ \\
+$800$ & $0.9485$ & $0.9921$ & $-0.131$ \quad $+0.000$ \quad $+0.000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At step $100$ the effect is present, large, and unanimous: three seeds out of three above the
+pre-registered threshold, with a mean of $+0.163$. By step $400$ it is gone. \textbf{The window
+decides how much the model has to spend to learn the discrimination, not whether it can learn it.}
+
+\paragraph{How the pre-registered criteria read, and we read them as written.} At the $800$-step
+horizon all three \texttt{far} seeds finish at $\ge 0.95$, so the ceiling guard we declared in advance
+fires and the primary criterion is \textbf{not evaluable}: there is no headroom left for \texttt{near}
+to be better. The velocity criterion, an area under the curve declared post-hoc after a pilot but
+before this campaign, gives $+0.022$, $+0.040$, $+0.021$ --- three positive signs out of three, and
+all well below the $0.10$ it asked for. It \textbf{does not pass}. Mixing forms bought nothing here
+($+0.013$, $+0.009$, $-0.003$), and the no-harm criterion passes (false abstention $\le 0.0063$).
+
+The area under the whole curve was the wrong statistic for a transient effect: it averages eight
+points of which only the first two carry signal, so it dilutes $+0.16$ into $+0.03$. We report that as
+a lesson rather than as a rescue --- the criterion stands as written and does not pass.
+
+\paragraph{Why this is coherent with Result 5 rather than a refutation of it.} Result 5 measured that
+the window's cut is exact in layer $0$ and that recurrence restores the signal over the following
+layers, attenuated but present. A model with $24$ layers therefore has room to pay the toll, and what
+we observe is exactly the price being paid: a slower start, then parity. The contrast with our small
+model is the point, and it is a controlled one, since the two vehicles differ in depth:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+& depth & effect of keeping the discriminating part outside the window \\
+\midrule
+small model, $26{,}000$ steps & $2$ blocks & \textbf{permanent}: $0.544$, $0.678$, $0.506$ against $0.993$, $0.980$, $1.000$ \\
+\texttt{mamba-130m}, $800$ steps & $24$ layers & \textbf{transient}: $+0.16$ at step $100$, zero from step $400$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Where there are no layers left to pay with, the window sets a ceiling. Where there are, it
+sets a toll.} The strong claim of this paper therefore holds for memory consulted from an early layer
+--- retrieval-augmented reads injected before the mixer, shallow adapters, single-layer memory heads
+--- and does not hold, as a behavioural prediction, for a deep model trained to convergence on the
+task.
+
+\paragraph{What we are not entitled to conclude.} That the effect is negligible in general. Our task
+has four facts and saturates, our horizon is $800$ steps, and the distance we could probe tops out at
+$d{=}7$ because the attenuation is measured in a fixed template. A larger distance, a harder task, or
+a shallower model could all move this. What the negative does establish is that \emph{measuring access
+is not enough}: a component that is provably invisible to one layer's query can still govern the
+answer, and any claim that a model ``cannot use'' such a component has to be tested behaviourally
+rather than inferred from the convolution.
+
 \section{The diagnosis, as a recipe}
 
 The measurement in Result 1 requires no training and no gradient. For any model that consults a memory
