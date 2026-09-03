@@ -93,7 +93,9 @@ for i in $(seq 1 90); do          # hasta 3 h
   # que bajar recien al final costaba la campania completa. Se baja CADA unidad apenas aparece.
   for t in "${TRABAJOS[@]}"; do
     U="${ETIQ}_${t%%:*}_s${t##*:}"
-    [ -f "$AQUI/${U}.json" ] && continue
+    # Se baja SIEMPRE, no solo la primera vez. El json remoto se reescribe entero en cada
+    # evaluacion, asi que saltear cuando ya existe una copia local deja congelada la PRIMERA version
+    # parcial: el 3-sep eso dejo cuatro unidades guardadas en el paso 100 de 800.
     echo "$OUT" | grep -q "${U}.json" || continue
     timeout -k 30 300 "${CL[@]}" download -s "$SESION" "/content/${U}.json" "$AQUI/${U}.json" \
       2>&1 | tail -1
