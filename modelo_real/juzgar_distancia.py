@@ -160,6 +160,20 @@ def main():
         print("  G-3   ADJUDICA")
         for s in tri:
             l, d, r = (D[(c, s)]["rel"][-1] for c in ("lejos", "lejos_dos", "lejos_relleno"))
+            # G-3 compara a cual de las dos se PARECE `lejos_relleno`. Si las tres estan tan juntas
+            # que la distancia a una y a otra cabe dentro del error de la propia medicion, la
+            # adjudicacion es aritmetica sobre ruido, no un resultado. n de `nose_rel` ~ 0,20*512.
+            n_rel = 0.20 * 16 * 32
+            # p se acota: con p exactamente 1,0000 la varianza binomial da CERO y la guarda no
+            # filtraria nunca, que es justo el caso en que mas hace falta (todo saturado).
+            p_ = min(max(max(l, d, r), 0.02), 0.95)
+            err = (p_ * (1 - p_) / n_rel) ** 0.5
+            sep = abs(abs(r - d) - abs(r - l))
+            if sep < 2 * err:
+                print(f"        s{s}: lejos {l:.4f} · lejos_dos {d:.4f} · lejos_relleno {r:.4f}"
+                      f"  -> **NO ADJUDICA**: la diferencia entre las dos distancias es {sep:.4f}, "
+                      f"por debajo de 2 sigma ({2*err:.4f})")
+                continue
             cual = "la DIVERSIDAD SOLA" if abs(r - d) < abs(r - l) else "que la relacion ENTRE A VECES"
             print(f"        s{s}: lejos {l:.4f} · lejos_dos {d:.4f} · lejos_relleno {r:.4f}"
                   f"  -> gana {cual}")

@@ -102,10 +102,20 @@ con kernel 5: **7 no agrega nada sobre 5**.
 2. **El titular «~4 capas por token» (r = 0,971) no aguanta el barrido de umbral**: de 1,2 a 2,5 la
    pendiente va de 3,97 a 1,54 y el orden se rompe. Descartado antes de publicarlo.
 
-## 7. Lo que queda abierto
+## 6b. Cierre de `lejos_relleno`, y G-3 tampoco adjudica
 
-- **`lejos_relleno`** quedó cortado en dos semillas (200/800 y 700/800), así que **G-3 tiene una sola
-  semilla evaluable**. Relanzado.
+Las dos semillas cortadas se completaron. `lejos_relleno` da 0,9643 · 0,9894 · 1,0000, y **G-3 no
+adjudica en ninguna de las tres**: la diferencia entre «se parece a `lejos_dos`» y «se parece a
+`lejos`» es de 0,0000 a 0,0119, contra un error típico de 0,0216 por celda. Con las tres condiciones
+saturadas, adjudicar ahí es aritmética sobre ruido.
+
+**Y hubo un sexto defecto, en la guarda que escribí para cazar esto:** la primera versión calculaba
+el error binomial con la proporción observada, que vale exactamente 1,0000 en varias celdas, así que
+la varianza daba **cero** y la guarda no filtraba nunca — justo en el caso donde más falta hacía. Se
+acota la proporción antes de calcular el error. **Regla: una guarda estadística hay que probarla en
+el régimen degenerado que pretende cubrir, no sólo en el caso típico.**
+
+## 7. Lo que queda abierto
 - **El paper de la ventana** ya tiene el Resultado 5 con lo mecanicista; falta agregarle **este
   negativo conductual**, que es lo que lo vuelve honesto.
 - **La familia `muylejos` (d=9) no se corrió**, y ahora tiene sentido correrla: si a d=5 las 24 capas
