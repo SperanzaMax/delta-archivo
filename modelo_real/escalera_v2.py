@@ -12,6 +12,7 @@ o sea cuantas capas le cuesta a la recurrencia pagar el impuesto de la ventana.
 """
 import json
 import os
+import re
 import sys
 
 import numpy as np
@@ -49,6 +50,8 @@ CAPAS = list(range(len(m.backbone.layers)))
 V = json.load(open(os.path.join(AQUI, "vocabulario.json")))
 ENTS, RELS, VALS = V["entidades"], V["relaciones"], V["valores"]
 N_TEXTOS = int(os.environ.get("N_TEXTOS", "8"))
+# el nombre del modelo trae barras y guiones; el tamaño es lo unico que hace falta
+TAM = re.search(r"(\d+[mb])", MODELO).group(1)
 
 
 def contexto(rng):
@@ -129,5 +132,6 @@ for d in sorted(resumen):
 
 json.dump({"curvas": {n: c.tolist() for n, c in curvas.items()}, "d": dmed,
            "resumen": {str(k): v for k, v in resumen.items()}},
-          open(os.path.join(AQUI, "escalera_v2.json"), "w"), indent=1)
-print("\nguardado en escalera_v2.json")
+          open(os.path.join(AQUI, "escalera_v2_%s.json" % TAM), "w"),
+          indent=1)
+print("\nguardado en escalera_v2_%s.json" % TAM)

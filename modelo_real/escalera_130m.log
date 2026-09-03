@@ -1,0 +1,49 @@
+The fast path is not available because one of `(selective_state_update, selective_scan_fn, causal_conv1d_fn, causal_conv1d_update, mamba_inner_fn)` is None. Falling back to the sequential implementation of Mamba, as use_mambapy is set to False. To install follow https://github.com/state-spaces/mamba/#installation for mamba-ssm and install the kernels library using `pip install kernels` or https://github.com/Dao-AILab/causal-conv1d for causal-conv1d. For the mamba.py backend, follow https://github.com/alxndrTL/mamba.py.
+modelo state-spaces/mamba-130m-hf · 24 capas · alcance medido 2 · 8 contextos
+
+ATENUACION contra el promedio de las d=2 · conv1d en la posicion de la ENTIDAD
+
+relleno                         d |      c0      c1      c2      c3      c4      c6      c8     c12     c16     c20     c23
+---------------------------------------------------------------------------------------------------------------------------
+of                              2 |     1.0     0.8     0.6     0.8     0.7     0.7     0.7     0.7     0.9     0.8     0.9
+for                             2 |     1.0     1.1     1.3     1.2     1.3     1.1     1.1     1.2     1.0     1.0     0.8
+about                           2 |     1.0     1.1     1.5     1.2     1.5     1.5     1.7     1.4     1.0     1.3     1.4
+of your                         3 |     inf     1.6     1.7     2.2     1.8     2.0     1.4     1.7     1.0     0.9     0.4
+for the                         3 |     inf     3.0     2.9     2.0     1.7     1.8     1.7     1.7     1.4     1.1     1.0
+of the person                   4 |     inf     3.5     1.8     2.3     2.3     2.0     1.5     2.2     1.2     1.2     1.1
+in the file                     4 |     inf     2.7     1.3     1.6     1.9     2.1     2.8     2.8     1.8     1.5     1.0
+of the person named             5 |     inf     3.9     2.7     3.2     2.5     2.3     2.6     3.0     1.8     1.2     1.4
+of that other person            5 |     inf     4.1     1.5     2.9     2.8     2.6     2.5     2.4     1.5     1.5     1.1
+in the file for                 5 |     inf     5.2     3.5     3.5     2.3     2.4     2.4     2.4     2.5     1.3     1.2
+of our dear friend              5 |     inf     7.8     1.7     3.2     3.5     3.2     2.5     2.7     1.5     1.1     1.0
+of the very well known          6 |     inf     5.5     2.9     3.1     2.7     3.0     2.6     2.7     1.3     1.0     0.6
+of the person we call           6 |     inf     3.8     3.3     3.0     2.5     3.6     4.1     2.1     2.5     1.7     1.9
+in the records                  7 |     inf     8.6     1.7     3.8     2.7     1.7     1.7     1.5     1.9     1.1     0.8
+of the person that we called    7 |     inf     5.3     5.0     3.7     3.1     3.3     3.8     3.8     2.9     2.0     1.8
+
+POR DISTANCIA · mediana entre rellenos, y DISPERSION entre rellenos de la misma d
+
+ d rellenos |      c0      c1      c2      c3      c4      c6      c8     c12     c16     c20     c23   (linea 2: max/min entre rellenos)
+------------------------------------------------------------------------------------------------------
+ 2        3 |     1.0     1.1     1.3     1.2     1.3     1.1     1.1     1.2     1.0     1.0     0.9
+            |    1.00    1.39    2.42    1.65    2.27    2.08    2.46    1.96    1.09    1.68    1.68
+ 3        2 | 452679329862197179782195576832.0     2.3     2.3     2.1     1.7     1.9     1.5     1.7     1.2     1.0     0.7
+            |    1.00    1.83    1.72    1.10    1.04    1.08    1.21    1.03    1.34    1.25    2.97
+ 4        2 | 452679329862197179782195576832.0     3.1     1.5     2.0     2.1     2.1     2.1     2.5     1.5     1.3     1.0
+            |    1.00    1.31    1.42    1.43    1.21    1.04    1.85    1.30    1.56    1.24    1.05
+ 5        4 | 452679329862197179782195576832.0     4.6     2.2     3.2     2.6     2.5     2.5     2.5     1.7     1.3     1.1
+            |    1.00    1.98    2.37    1.19    1.49    1.39    1.09    1.27    1.60    1.31    1.40
+ 6        2 | 452679329862197179782195576832.0     4.6     3.1     3.1     2.6     3.3     3.3     2.4     1.9     1.4     1.3
+            |    1.00    1.45    1.13    1.02    1.08    1.18    1.59    1.25    1.88    1.58    2.92
+ 7        2 | 452679329862197179782195576832.0     6.9     3.3     3.8     2.9     2.5     2.8     2.7     2.4     1.5     1.3
+            |    1.00    1.62    2.89    1.02    1.18    1.93    2.32    2.49    1.50    1.85    2.27
+
+¿EN QUE CAPA SE CIERRA LA BRECHA?  primera capa con atenuacion < 1,5x, por distancia
+  d=2:  capa 0   · atenuacion en la capa 1: x1.10 · en la ultima: x0.94
+  d=3:  capa 9   · atenuacion en la capa 1: x2.31 · en la ultima: x0.70
+  d=4:  capa 9   · atenuacion en la capa 1: x3.06 · en la ultima: x1.04
+  d=5:  capa 13   · atenuacion en la capa 1: x4.64 · en la ultima: x1.15
+  d=6:  capa 19   · atenuacion en la capa 1: x4.65 · en la ultima: x1.27
+  d=7:  capa 21   · atenuacion en la capa 1: x6.92 · en la ultima: x1.31
+
+guardado en escalera_v2_130m.json

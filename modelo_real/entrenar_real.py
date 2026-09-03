@@ -176,7 +176,71 @@ def main():
                   f"falsa {m['falsa_abst']:.4f}", flush=True)
             json.dump({"config": vars(a), "alcance_real": alcance, "historia": hist},
                       open(a.salida, "w"), indent=1)
+
+    # 2026-09-03. Lo mecanicista se venia midiendo en el modelo PREENTRENADO y lo conductual en el
+    # AJUSTADO, o sea sobre dos objetos distintos, y eso deja el puente entre las dos mitades sin
+    # cerrar. Aca se mide lo mismo que `escalera_v2.py` sobre ESTE modelo, al final: cuanto se mueve
+    # `conv1d` en la posicion de la entidad al cambiar el token de la relacion. El fine-tune puede
+    # haber movido los pesos de la conv, y si el alcance cambio hay que saberlo.
+    # Va envuelto: el json con las metricas ya se escribio en el ultimo eval, y una medicion de
+    # yapa no puede tumbar una unidad que costo su tiempo de GPU.
+    try:
+        sens = sensibilidad(modelo, tok, F_EVAL, dev)
+        print(f"  SENSIBILIDAD final en `{F_EVAL}` · alcance {sens['alcance']} · "
+              f"conv@ent capa 0 {sens['conv_ent'][0]:.4e} · capa 1 {sens['conv_ent'][1]:.4e} · "
+              f"capa 12 {sens['conv_ent'][12]:.4e}", flush=True)
+        json.dump({"config": vars(a), "alcance_real": alcance, "historia": hist,
+                   "sensibilidad_final": sens}, open(a.salida, "w"), indent=1)
+    except Exception as e:
+        print(f"  (la sensibilidad final fallo: {type(e).__name__}: {e}) — las metricas ya estan",
+              flush=True)
     print("listo", flush=True)
+
+
+def sensibilidad(modelo, tok, forma, dev, n_textos=4):
+    """max|dif| de la salida de `conv1d` en la posicion de la ENTIDAD al cambiar la RELACION.
+
+    Es la medicion de `sonda_combinacion.py` corrida sobre el modelo ya ajustado. Devuelve tambien
+    el alcance MEDIDO de la conv despues del entrenamiento: el tap mas viejo valia cero exacto en el
+    preentrenado y no hay garantia de que siga valiendo cero.
+    """
+    modelo.eval()
+    capas = modelo.backbone.layers
+    plantilla = T.PLANTILLAS[forma]
+    rng = np.random.default_rng(12345)
+    acum = []
+    for _ in range(n_textos):
+        es = list(rng.choice(T.ENTIDADES, size=5, replace=False)); ent = es.pop()
+        rs = list(rng.choice(T.RELACIONES, size=6, replace=False))
+        vs = list(rng.choice(T.VALORES, size=4, replace=False))
+        ctx = " ".join(f"The {rs[2+i]} of {es[i]} is {vs[i]}." for i in range(4))
+        pares = []
+        for r in (rs[0], rs[1]):
+            ids = tok(f"{ctx} {plantilla.format(r=r, e=ent)}", return_tensors="pt").input_ids
+            g, hs = {}, []
+            for i, capa in enumerate(capas):
+                hs.append(capa.mixer.conv1d.register_forward_hook(
+                    (lambda i: lambda _m, _i, o:
+                        g.__setitem__(i, o.detach()[0].transpose(0, 1).float().cpu()))(i)))
+            with torch.no_grad():
+                modelo(ids.to(dev))
+            for h in hs:
+                h.remove()
+            pares.append((ids[0], g))
+        (i1, g1), (i2, g2) = pares
+        dif = [k for k in range(len(i1)) if int(i1[k]) != int(i2[k])]
+        if len(dif) != 1:
+            continue
+        p_e = [k for k in range(len(i1)) if int(i1[k]) == tok(" " + ent).input_ids[0]][-1]
+        acum.append([float((g1[i][p_e] - g2[i][p_e]).abs().max()) for i in range(len(capas))])
+    modelo.train()
+    conv = capas[0].mixer.conv1d
+    with torch.no_grad():
+        vivos = [t for t in range(conv.kernel_size[0])
+                 if float(conv.weight[:, 0, t].abs().max()) > 0]
+    return {"conv_ent": np.array(acum).mean(0).tolist() if acum else [],
+            "n_textos": len(acum), "taps_vivos": vivos,
+            "alcance": conv.kernel_size[0] - 1 - min(vivos)}
 
 
 if __name__ == "__main__":

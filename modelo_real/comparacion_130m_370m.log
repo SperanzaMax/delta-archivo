@@ -1,0 +1,21 @@
+¿La atenuacion es la misma en dos modelos de distinta profundidad?
+
+ d |  130m (24 capas)  370m (48 capas) |   razon   atenuacion en la CAPA 1
+----------------------------------------------------------------------
+ 2 |            1.097            0.998 |    1.10
+ 3 |            2.307            3.300 |    1.43
+ 4 |            3.064            3.711 |    1.21
+ 5 |            4.637            4.806 |    1.04
+ 6 |            4.650            4.131 |    1.13
+ 7 |            6.918            6.879 |    1.01
+
+  130m: pendiente 1.077 por token · r = 0.9784
+
+  370m: pendiente 0.943 por token · r = 0.9159
+
+  correlacion entre las dos curvas: 0.9646
+  diferencia media absoluta: 0.411
+
+CAPA 0 · ¿el cero exacto cae en el mismo lugar?
+  130m: se mueve en d=['2'] · CERO EXACTO en d=['3', '4', '5', '6', '7']
+  370m: se mueve en d=['2'] · CERO EXACTO en d=['3', '4', '5', '6', '7']

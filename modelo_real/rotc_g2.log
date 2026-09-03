@@ -67,3 +67,10 @@ https://colab.research.google.com/tun/m/assign?nbh=a84795cb_a7fd_4760_8b94_d38cf
 4ebf3b3........&variant=GPU&accelerator=T4: Service Unavailable
 sin sesion en E
 -- lista agotada, descanso 8 min
+-- vuelta 2 · cuenta H · 08:30
+== g2 en H · sesion NUEVA dist_h_0830
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=ebde421e_45ef_44d8_ac9b_8bc0f
+9ce220a........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en H
+-- vuelta 2 · cuenta C · 08:30
