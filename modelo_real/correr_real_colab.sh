@@ -12,6 +12,7 @@ CUENTA="${1:?falta la cuenta, p.ej. H}"
 COND="${2:?falta la condicion: una | dos | ciega}"
 SEM="${3:?falta la semilla}"
 PASOS="${4:-1200}"
+NH="${NH:-16}"     # hechos en el contexto; con 4 la tarea SATURA, medido el 2-sep
 MODELO="${MODELO:-state-spaces/mamba-130m-hf}"
 # 2026-09-02, MEDIDO y no estimado: con mamba-370m y SIN los kernels `mamba-ssm`/`causal-conv1d`
 # (que Colab no trae) HF cae al camino secuencial en Python y el paso cuesta 9,7 s. 3000 pasos serian
@@ -65,7 +66,8 @@ det = subprocess.run([sys.executable, '-c',
 print('entorno', det.stdout.strip(), det.stderr.strip()[:200], flush=True)
 assert 'True' in det.stdout, 'NO hay GPU'
 cmd = [sys.executable, '-u', 'entrenar_real.py', '--condicion', '$COND', '--semilla', '$SEM',
-       '--pasos', '$PASOS', '--batch', '8', '--acum', '1', '--largo', '64',
+       '--pasos', '$PASOS', '--batch', '8', '--acum', '1', '--largo', '192',
+       '--n-hechos', '$NH',
        '--modelo', '$MODELO', '--cada', '100',
        '--salida', '/content/${UNI}.json']
 log = open('/content/real.log', 'w')

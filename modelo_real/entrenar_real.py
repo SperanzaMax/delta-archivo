@@ -26,13 +26,14 @@ sys.path.insert(0, AQUI)
 import tarea_real as T
 
 
-def evaluar(modelo, tok, rng, n=8, B=16, forma="directa", p_nose=0.4, largo=64):
+def evaluar(modelo, tok, rng, n=8, B=16, forma="directa", p_nose=0.4, largo=64, n_hechos=4):
     modelo.eval()
     id_abst = tok(" " + T.ABST).input_ids[0]
     P, G, TI = [], [], []
     with torch.no_grad():
         for _ in range(n):
-            ids, lab, tipos, _ = T.lote(rng, tok, B, (forma,), p_nose=p_nose, largo=largo)
+            ids, lab, tipos, _ = T.lote(rng, tok, B, (forma,), n_hechos=n_hechos,
+                                        p_nose=p_nose, largo=largo)
             ids = ids.to(modelo.device)
             lg = modelo(ids[:, :-1]).logits[:, -1, :]
             P.append(lg.argmax(-1).cpu().numpy())
@@ -59,6 +60,10 @@ def main():
                          "128 causaba OOM en T4 (medido, no estimado).")
     ap.add_argument("--cada", type=int, default=250)
     ap.add_argument("--p-nose", type=float, default=0.4)
+    ap.add_argument("--n-hechos", type=int, default=4,
+                    help="hechos en el contexto. MEDIDO el 2-sep: con 4 la tarea SATURA en "
+                         "mamba-130m, las dos condiciones dan nose_rel 1,0000 y no queda margen "
+                         "para medir nada. Es efecto techo, no ausencia de efecto.")
     ap.add_argument("--salida", default="salida.json")
     a = ap.parse_args()
 
@@ -96,7 +101,7 @@ def main():
     rng_ev = lambda: np.random.default_rng(90000 + a.semilla)
 
     hist = []
-    base = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose)
+    base = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose, n_hechos=a.n_hechos)
     base["paso"] = 0
     hist.append(base)
     print(f"  BASELINE paso 0 · vigente {base['vigente']:.4f} · nose {base['nose']:.4f} "
@@ -106,7 +111,8 @@ def main():
     t0 = time.time()
     for paso in range(1, a.pasos + 1):
         for _ in range(a.acum):
-            ids, lab, _, _ = T.lote(rng, tok, a.batch, FORMAS, p_nose=a.p_nose, largo=a.largo)
+            ids, lab, _, _ = T.lote(rng, tok, a.batch, FORMAS, n_hechos=a.n_hechos,
+                                    p_nose=a.p_nose, largo=a.largo)
             ids, lab = ids.to(dev), lab.to(dev)
             out = modelo(ids, labels=lab)
             (out.loss / a.acum).backward()
@@ -117,7 +123,8 @@ def main():
             print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
                   flush=True)
         if paso % a.cada == 0 or paso == a.pasos:
-            m = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose)
+            m = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose,
+                        n_hechos=a.n_hechos)
             m["paso"] = paso
             hist.append(m)
             print(f"  ── eval {paso}: vigente {m['vigente']:.4f} · nose {m['nose']:.4f} "

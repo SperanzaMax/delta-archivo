@@ -1,64 +1,98 @@
-# Para retomar · escrito el 2-sep con dos campañas corriendo
+# Para retomar · escrito la noche del 2-sep con todo apagado
 
-## Lo que se cerró hoy
+## Estado al cierre
+
+**Nada quedó corriendo.** Colab apagado, catorce sesiones detenidas una por cuenta, locks liberados,
+rotadores y vigías muertos.
 
 | | |
 |---|---|
-| **revisión de literatura** | **el hueco está libre.** Precursor a citar de frente: CAT (2407.05591). `REVISION_LITERATURA_VENTANA_20260902.md` |
-| **la ley de la ventana** | **60 celdas de 60**, cero EXACTO fuera del alcance, el escalón se mueve con el kernel |
-| **el cruce, mecanicista** | la misma pregunta reordenada da vuelta la ceguera. Compuerta X-0 ABIERTA |
-| **validación externa** | **Mamba-130M real: 80 de 80.** El estado ve todo, la query ve tres tokens |
-| **ablación de taps** | A-3 3/3, A-2 3/3 en `vigente`; **A-1 mal escrito** y el control refutó la lectura tentadora |
-| **cuarto preprint** | 5 páginas, compila limpio, citas verificadas de primera mano |
-| **el aviso a Maxi** | hecho, por Telegram, con el criterio de las cuatro condiciones cumplido |
+| **el micro-LM** | **TERMINADO**, las tres campañas cerradas y juzgadas |
+| revisión de literatura | **el hueco está libre**, `REVISION_LITERATURA_VENTANA_20260902.md` |
+| validación externa | **Mamba-130M real, 80 celdas de 80**, `INFORME_MODELO_REAL_20260902.md` |
+| cuarto preprint | 5 páginas, **en inglés y en español**, compila limpio, citas verificadas |
+| PeerJ 138627 | **retirado** por decisión propia, dentro del plazo, con agradecimiento |
+| el experimento en modelo real | **bloqueado**, ver §2 |
 
-## Corriendo
+## 1. Lo que quedó medido, y es el arco entero
 
-- **`k73_s0/s1/s2`** · kernel 7 contra kernel 5 · `PREREG_LEY_VENTANA.md` §C · juez `juzgar_k7.py`
-- **`cf3_s0/s1/s2`** · el CRUCE, kernel 3 con las dos formas · `PREREG_CRUCE_FORMAS.md` · `juzgar_cruce.py`
-- **`avisar_0902.sh`** vigila las dos y manda el **juicio ya hecho** por Telegram, no un «terminó»
+Todo con kernel 3 y evaluado en la forma `directa`, donde la búsqueda tiene sensibilidad
+**0,000000 exacto** a la relación.
 
-## 1. Lo primero cuando cierren
+| condición | qué ve la búsqueda | `nose_rel` |
+|---|---|---|
+| una sola forma | la relación **nunca** | 0,6090 · 0,5850 · 0,7349 |
+| dos formas, la relación **nunca** entra | nunca | **0,5370 · 0,5526** |
+| dos formas, la relación entra **a veces** | a veces | **1,0000 · 0,9625 · 1,0000** |
 
-**Leer `nose_ent` y `nose_rel` POR FORMA, nunca el `nose` global.** Todo el cruce vive en la
-desagregación: la predicción es que el orden se **invierte** entre `directa` e `invertida`, y un
-promedio lo borra.
+Y por el lado de la arquitectura, kernel 5 lo arregla y **kernel 7 no agrega nada**, con los rangos
+solapados en las tres semillas. La sonda explica por qué: con alcance 6 la búsqueda ve entidad 0,8317
+y relación 0,8238, o sea ve más y no acierta más.
 
-Y para el kernel 7, el control es el **kernel 5**, no el 3: la pregunta ya no es si ver la relación
-ayuda, es si **más ventana ensucia**. La hipótesis en contra está escrita antes del dato.
+> **La ventana decide qué se puede aprender. Una vez aprendido, se usa incluso donde la ventana no
+> llega.**
 
-## 2. Después, lo que le falta al preprint
+## 2. LO PRIMERO DE MAÑANA · destrabar el experimento en modelo real
 
-- Los dos resultados de arriba.
-- **El paso conductual en un modelo real**, que hoy no se pudo: que una pregunta con la parte
-  discriminante lejos del final se responda peor. Necesita GPU y es lo que convertiría la medición de
-  arquitectura en una de comportamiento.
+Está atrapado entre dos paredes, las dos **medidas**:
 
-## 3. La regla que salió de mirar el proyecto entero
+- con **4 hechos** de contexto la tarea **satura**, las dos condiciones dan `nose_rel` 1,0000 y no
+  queda margen para medir nada. Es efecto techo, no ausencia de efecto;
+- con **16 hechos** rompe el techo pero el paso cuesta **9,7 s en T4** y **279 s en esta PC**, o sea
+  11,6 días las seis unidades. Inviable.
 
-**Un hallazgo de ARQUITECTURA vale más que uno de ENTRENAMIENTO, y hay que buscarlo primero.** Entre
-el 26-ago y el 1-sep hubo doce intentos de arreglar la abstención por la vía del entrenamiento, todos
-negativos o parciales; el 1-sep se hizo el primer diagnóstico mecanicista y el problema se resolvió en
-un día. Los de arquitectura se verifican sin entrenar, dan ceros exactos y transfieren.
+**La causa es la misma en los dos casos y tiene arreglo.** Colab **no trae** `mamba-ssm` ni
+`causal-conv1d`, así que HF recorre la secuencia token por token en Python, 192 posiciones por cada
+una de las 24 capas. Lo que domina el costo **no es el tamaño del modelo sino el largo de la
+secuencia**.
 
-**Y el corolario incómodo: siete criterios de este proyecto no se pudieron leer como estaban
-escritos**, y los siete tienen la misma forma — el criterio se escribió sobre la métrica del resultado
-**anterior**, o sobre un número **supuesto**, en vez de sobre lo que mide la intervención **nueva**.
-Antes de congelar un prereg conviene preguntarse: *si la intervención funciona perfecto, ¿esta métrica
-se mueve?*
+**Qué hacer, en este orden.**
 
-## 4. Lo que NO hay que hacer
+1. **Instalar los kernels en la VM** con `colab install`. Compilan desde fuente y tardan entre quince
+   y treinta minutos, por eso hoy no se probó. Si andan, el salto es de diez a cincuenta veces y
+   resuelve las dos paredes de una sola vez, y encima permite volver al **370m**.
+2. Si no compilan en T4, **plan B**: 8 hechos como punto medio, y comprobar si ya rompe el techo.
+3. Y no perder tiempo con TPU ni con L4. **La TPU es peor** porque Mamba depende de kernels CUDA que
+   ahí no existen, y **L4 y G4 están fuera de cuota** en estas cuentas, verificado con el backend
+   rechazando el pedido. En el tier gratuito hay T4 y TPU, nada más.
 
-- **No anunciar el cruce antes de mirar `vigente` por forma.** Si una plantilla no se aprende, el
-  cruce es un artefacto.
+**Ojo con la disponibilidad.** El 2-sep a la tarde **no había T4 en ninguna de las catorce cuentas**,
+probadas a mano una por una. Era falta de disponibilidad global, no problema nuestro. Conviene
+intentar temprano.
+
+## 3. Después, lo que le falta al preprint
+
+- El resultado del modelo real, cuando se destrabe.
+- La tercera semilla del control ciego, que quedó en 1000 pasos. **No cambia el veredicto**, porque el
+  prereg pide dos y cumplen dos, pero cierra la tabla.
+
+## 4. La regla del día, y es la más reutilizable
+
+**Un hallazgo de ARQUITECTURA vale más que uno de ENTRENAMIENTO y hay que buscarlo primero.** Entre el
+26-ago y el 1-sep hubo doce intentos de arreglar la abstención por la vía del entrenamiento, todos
+negativos o parciales; el primer diagnóstico mecanicista lo resolvió en un día.
+
+**Y el corolario, que hoy sumó tres casos más:** un criterio se escribe sobre la métrica que mide la
+intervención **nueva**, nunca sobre la del resultado anterior ni sobre un número supuesto. Antes de
+congelar un prereg hay que preguntarse *si la intervención funcionara perfecto, ¿esta métrica se
+mueve?* Hoy fallaron por eso A-1, R-1 y el cruce entero.
+
+## 5. Lo que NO hay que hacer
+
 - **No leer `nose_rel` como medida de daño en una ablación.** Premia abstenerse, así que al cegar al
-  modelo sube en vez de bajar. Fue el error de A-1.
-- **No afirmar la causa del tap cero de Mamba.** Está medido, no explicado, y así va en el informe.
+  modelo sube en vez de bajar.
+- **No confiar en el kernel nominal.** En mamba-130m y en mamba-370m el tap más viejo vale **cero
+  exacto** en todas las capas, 24 de 24 y 48 de 48, así que el alcance real es 2 y no 3. Medirlo.
+- **No contar distancias en palabras.** El BPE parte los nombres y las distancias dejan de ser fijas.
+  El vocabulario de `modelo_real/vocabulario.json` es todo de un token justamente por eso.
 
-## 5. Operativo
+## 6. Operativo
 
-- Venv **`/home/maxi/.venv-ligamento/bin/python`** para el micro-LM; **`/home/maxi/.venv_datasets_pandas/bin/python`**
-  es el que tiene torch y transformers, para las pruebas sobre modelos reales.
-- **`FORMAS_Q` viaja por los dos scripts del pipeline** (`rotar_abst3.sh` y `tramo_abst.sh`). Sin eso
-  la campaña del cruce corre como una copia del control; se cazó antes de lanzar.
-- Pool con 14 cuentas. Hoy k7 salió por H y el cruce por I (TPU v5e1).
+- `/home/maxi/.venv-ligamento/bin/python` para el micro-LM, JAX.
+- `/home/maxi/.venv_datasets_pandas/bin/python` para los modelos reales, torch 2.9 y transformers 4.57.
+- `micro_lm/estado_todo.sh` imprime el estado de todo en un bloque listo para Telegram.
+- `micro_lm/reporte_periodico.sh` manda ese bloque cada 45 minutos, y `micro_lm/avisar_0902.sh` avisa
+  con el **juicio ya hecho** cuando cierra una campaña. Los dos hay que relanzarlos a mano.
+- `modelo_real/rotar_real.sh <condicion> <semilla> <pasos> [cuentas]` rota cuentas hasta conseguir T4.
+- `FORMAS_Q` viaja por los **dos** scripts del pipeline. Sin eso una campaña corre como copia del
+  control, y hoy casi pasa.

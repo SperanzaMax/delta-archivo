@@ -1,0 +1,5 @@
+== real_dos_s0 en la cuenta F · sesion NUEVA real_f_1657 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=3d61cca7_8316_4820_8e2a_583d8
+80791cf........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en F

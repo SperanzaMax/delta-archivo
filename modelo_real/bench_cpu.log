@@ -1,0 +1,7 @@
+The fast path is not available because one of `(selective_state_update, selective_scan_fn, causal_conv1d_fn, causal_conv1d_update, mamba_inner_fn)` is None. Falling back to the sequential implementation of Mamba, as use_mambapy is set to False. To install follow https://github.com/state-spaces/mamba/#installation for mamba-ssm and install the kernels library using `pip install kernels` or https://github.com/Dao-AILab/causal-conv1d for causal-conv1d. For the mamba.py backend, follow https://github.com/alxndrTL/mamba.py.
+hilos 3 · batch 4 · largo 192 · 16 hechos
+
+  279.22 s por paso de entrenamiento
+      600 pasos -> 46.54 h por unidad · 279.2 h las 6 unidades
+     1200 pasos -> 93.07 h por unidad · 558.4 h las 6 unidades
+     2000 pasos -> 155.12 h por unidad · 930.7 h las 6 unidades

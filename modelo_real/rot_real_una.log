@@ -1,0 +1,113 @@
+-- vuelta 1 · cuenta H · 16:59
+cuenta H ocupada por el pid 2055935
+-- vuelta 1 · cuenta C · 16:59
+== real_una_s0 en la cuenta C · sesion NUEVA real_c_1659 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=237b5be7_f4fe_4a94_b45d_d9c0c
+30757da........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en C
+-- vuelta 1 · cuenta O · 16:59
+cuenta O ocupada por el pid 252974
+-- vuelta 1 · cuenta K · 16:59
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+[colab] Session 'real_k_1659' not found.
+== real_una_s0 SIN RESULTADO
+-- vuelta 1 · cuenta I · 19:03
+== real_una_s0 en la cuenta I · sesion NUEVA real_i_1903 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=02f818e2_4b85_4fce_ab4c_1ed83
+89a526d........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en I
+-- vuelta 1 · cuenta G · 19:03
+== real_una_s0 en la cuenta G · sesion NUEVA real_g_1903 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=9e4d16b7_2b77_4bf8_9329_9b0e5
+2bf777c........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en G
+-- vuelta 1 · cuenta D · 19:03
+== real_una_s0 en la cuenta D · sesion NUEVA real_d_1903 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=51280d94_4e2f_4292_b650_88026
+c8c62d0........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en D
+-- vuelta 1 · cuenta E · 19:03
+== real_una_s0 en la cuenta E · sesion NUEVA real_e_1903 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=08c6531b_b4ff_45b5_a520_387fc
+1a14f9c........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en E
+-- vuelta 1 · cuenta F · 19:03
+== real_una_s0 en la cuenta F · sesion NUEVA real_f_1903 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=bfc5523d_a386_42fb_a38e_f7104
+098ddaf........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en F
+-- vuelta 1 · cuenta J · 19:03
+== real_una_s0 en la cuenta J · sesion NUEVA real_j_1903 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=09b476f6_eb15_4681_a00e_35270
+f27f673........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en J
+-- lista agotada, se descansa 10 min
+-- vuelta 2 · cuenta H · 19:14
+== real_una_s0 en la cuenta H · sesion NUEVA real_h_1914 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=c6dd9c73_bd9e_455d_8c6c_5e3d2
+4a9c6e8........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en H
+-- vuelta 2 · cuenta C · 19:14
+== real_una_s0 en la cuenta C · sesion NUEVA real_c_1914 · 1200 pasos
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=948e22ad_280a_499b_8c79_4c3e4
+f494493........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en C
+-- vuelta 2 · cuenta O · 19:14
+cuenta O ocupada por el pid 1248980
+-- vuelta 2 · cuenta K · 19:14
+VIVO= True
+ULTIMO= paso    50  loss 0.0037  (1281s)
+VIVO= True
+ULTIMO= paso    50  loss 0.0037  (1281s)
+VIVO= True
+ULTIMO= paso    50  loss 0.0037  (1281s)
+VIVO= True
+ULTIMO= paso    50  loss 0.0037  (1281s)
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+VIVO= True
+ULTIMO= ── eval 100: vigente 0.9459 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0270
+[colab] Session 'real_k_1914' appears to be lost (404/401). Cleaning up.
+[colab] Session 'real_k_1914' not found.
+[colab] Session 'real_k_1914' not found.

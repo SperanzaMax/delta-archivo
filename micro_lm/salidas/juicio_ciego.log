@@ -2,17 +2,27 @@
 EL CONTROL QUE ADJUDICA · ¿arregla la DIVERSIDAD, o arregla VER la relacion?
 prereg SHA 2b480ce7 · las DOS formas tienen la relacion AFUERA de la ventana
 ========================================================================================================
-  (sin checkpoint: cl3_s2)
 
 unidad     paso formas                  vigente    nose   falsa
 cl3_s0    26000 directa,lejana           1.0000  0.7422  0.0000
-cl3_s1     5000 directa,lejana           0.8795  0.5628  0.0451  <- 5000 de 26000
+cl3_s1    26000 directa,lejana           0.9967  0.7652  0.0023
+cl3_s2     1000 directa,lejana           0.1607  0.0000  0.0000  <- 1000 de 26000
 
 unidad   forma       d_rel d_ent  vigente  nose_ent  nose_rel   ent-rel   falsa
 cl3_s0   directa         3     1   1.0000    0.9907    0.5370   +0.4537  0.0000
 cl3_s0   lejana          4     1   1.0000    0.9610    0.5630   +0.3980  0.0000
-cl3_s1   directa         3     1   0.8834    0.5274    0.5912   -0.0638  0.0510
-cl3_s1   lejana          4     1   0.8713    0.5802    0.6542   -0.0740  0.0361
+cl3_s1   directa         3     1   0.9948    0.8910    0.5526   +0.3385  0.0038
+cl3_s1   lejana          4     1   1.0000    0.9415    0.7475   +0.1940  0.0000
+cl3_s2   directa         3     1   0.1620    0.0000    0.0000   +0.0000  0.0000
+cl3_s2   lejana          4     1   0.1591    0.0000    0.0000   +0.0000  0.0000
 
-  llegaron a 26000: 1 de 3
-  ** NO EVALUABLE ** el prereg pide >=2.
+  llegaron a 26000: 2 de 3
+
+--------------------------------------------------------------------------------------------------------
+CRITERIOS, escritos antes del dato   (control v3, misma arquitectura y UNA forma: 0,59-0,73)
+  C-1  nose_rel en `directa` >= 0,90   0 de 2   -> gana DIVERSIDAD
+  C-1  nose_rel en `directa` <= 0,80   2 de 2   -> gana VER LA RELACION
+  C-2  NO DAÑO, vigente >= 0,90 en las DOS formas   2 de 2   CUMPLE
+--------------------------------------------------------------------------------------------------------
+  -> gana (V): hay que VER la relacion al menos a veces. La ventana vuelve al centro
+     y `cf3` funciona porque la forma `invertida` la mete adentro en la mitad de los casos.

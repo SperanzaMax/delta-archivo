@@ -6,7 +6,7 @@ unidad    kq   paso  vigente    nose   falsa
 --- TRATAMIENTO kernel 5
 k73_s0     7  26000   1.0000  1.0000  0.0000
 k73_s1     7  26000   0.9964  0.9667  0.0033
-k73_s2     7   6000   0.5992  0.6241  0.1571  <- 6000 de 26000
+k73_s2     7  26000   0.9927  0.9833  0.0060
 --- CONTROL kernel 3 (ya medido)
 kq3_s0     5  26000   1.0000  0.9697  0.0000
 kq3_s1     5  26000   0.9964  0.9861  0.0030
@@ -15,3 +15,78 @@ kq3_s2     5  26000   1.0000  0.9699  0.0000
 --- K-0 y K-1: la sonda sobre la busqueda (esto tarda unos minutos) ---
 
 >>> k73_s0
+
+==================================================================================================
+k73_s0.pkl  paso=26000  n=1536  ·  sin respuesta 0.4121
+==================================================================================================
+  grupo                          n  mueve_ENT  mueve_REL   TV_ent   TV_rel
+  HAY respuesta                903     0.7486     0.0078   0.6487   0.0795
+    nose_ent (ent ausente)     336     0.6875     0.2024   0.4127   0.0935
+    nose_rel (otra relacion)   297     0.8855     0.0303   0.6819   0.0517
+
+  AUC contra la ausencia (mayor = mas ausente):
+    sensibilidad a ENTIDAD (TV)      0.6430
+    sensibilidad a RELACION (TV)     0.5265
+    cambia argmax al ablar ENT       0.4848
+    cambia argmax al ablar REL       0.4184
+    TV_ent - TV_rel                  0.6230
+
+  restringido a HAY vs nose_REL (el caso dificil):
+    sensibilidad a ENTIDAD           0.4621
+    sensibilidad a RELACION          0.6422
+
+  [referencia] techo del estado 0,7003 · afilado ~0,48 · entidad-vs-relacion ingenuo 0,4049
+
+>>> k73_s1
+
+==================================================================================================
+k73_s1.pkl  paso=26000  n=1536  ·  sin respuesta 0.4121
+==================================================================================================
+  grupo                          n  mueve_ENT  mueve_REL   TV_ent   TV_rel
+  HAY respuesta                903     0.6766     0.3311   0.5314   0.2333
+    nose_ent (ent ausente)     336     0.6399     0.3780   0.4018   0.2347
+    nose_rel (otra relacion)   297     0.7744     0.2626   0.5284   0.1810
+
+  AUC contra la ausencia (mayor = mas ausente):
+    sensibilidad a ENTIDAD (TV)      0.5928
+    sensibilidad a RELACION (TV)     0.5523
+    cambia argmax al ablar ENT       0.4959
+    cambia argmax al ablar REL       0.4939
+    TV_ent - TV_rel                  0.5547
+
+  restringido a HAY vs nose_REL (el caso dificil):
+    sensibilidad a ENTIDAD           0.5088
+    sensibilidad a RELACION          0.6111
+
+  [referencia] techo del estado 0,7003 · afilado ~0,48 · entidad-vs-relacion ingenuo 0,4049
+
+>>> k73_s2
+
+==================================================================================================
+k73_s2.pkl  paso=26000  n=1536  ·  sin respuesta 0.4121
+==================================================================================================
+  grupo                          n  mueve_ENT  mueve_REL   TV_ent   TV_rel
+  HAY respuesta                903     0.7298     0.4729   0.5657   0.3261
+    nose_ent (ent ausente)     336     0.1250     0.0714   0.2243   0.1092
+    nose_rel (otra relacion)   297     0.1987     0.1751   0.2923   0.1529
+
+  AUC contra la ausencia (mayor = mas ausente):
+    sensibilidad a ENTIDAD (TV)      0.8578
+    sensibilidad a RELACION (TV)     0.8575
+    cambia argmax al ablar ENT       0.7819
+    cambia argmax al ablar REL       0.6631
+    TV_ent - TV_rel                  0.6358
+
+  restringido a HAY vs nose_REL (el caso dificil):
+    sensibilidad a ENTIDAD           0.8317
+    sensibilidad a RELACION          0.8238
+
+  [referencia] techo del estado 0,7003 · afilado ~0,48 · entidad-vs-relacion ingenuo 0,4049
+
+------------------------------------------------------------------------------------------------
+Los numeros de K-0 (sensibilidad a la RELACION) y K-1 (AUC contra nose_rel) salen de la
+tabla de arriba: K-0 pide que `TV_rel` deje de ser 0,0000 con media > 0,05 en >=2 de 3,
+y K-1 que el AUC restringido a HAY vs nose_REL suba de 0,4914 a >= 0,60 en >=2 de 3.
+
+K-2 UTILIDAD  nose>=0,90 y falsa<=0,10: 3 de 3   CUMPLE   (control v3: nose 0,78-0,81)
+------------------------------------------------------------------------------------------------
