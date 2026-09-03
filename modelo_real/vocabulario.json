@@ -85,7 +85,10 @@
  "plantillas": {
   "directa": "What is the {r} of {e}?",
   "invertida": "For {e}, what is the {r}?",
-  "lejana": "What is the {r} that {e} has?"
+  "lejana": "What is the {r} that {e} has?",
+  "d2": "What is the {r} of {e}?",
+  "d5": "What is the {r} of the person named {e}?",
+  "d5b": "What is the {r} of that other person {e}?"
  },
  "alcance_real": 2
 }

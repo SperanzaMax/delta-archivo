@@ -1,0 +1,17 @@
+modelo state-spaces/mamba-130m-hf · hilos 3
+/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/bench_mambapy.py:49: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  sal[nombre] = (out.logits.detach().clone(), float(out.loss), g.detach().clone())
+
+  EQUIVALENCIA (batch 2 · largo 48)
+    logits   max|dif| 2.899e-04   sobre escala 8.694e+01   rel 3.335e-06
+    loss     12.86536598 vs 12.86537170   dif 5.722e-06
+    grad     max|dif| 4.220e-05   sobre escala 4.631e+00   rel 9.113e-06
+    -> EQUIVALENTE dentro de fp32
+
+  VELOCIDAD · batch 4 · largo 192 · 16 hechos
+
+    29.21 s por paso  ·  contra 279.22 s del camino secuencial  ·  ACELERACION 9.6x
+        600 pasos ->   4.87 h por unidad ·   29.2 h las 6 unidades
+       1200 pasos ->   9.74 h por unidad ·   58.4 h las 6 unidades
+       2000 pasos ->  16.23 h por unidad ·   97.4 h las 6 unidades

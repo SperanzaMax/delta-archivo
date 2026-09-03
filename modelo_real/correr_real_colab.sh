@@ -65,6 +65,15 @@ det = subprocess.run([sys.executable, '-c',
     capture_output=True, text=True)
 print('entorno', det.stdout.strip(), det.stderr.strip()[:200], flush=True)
 assert 'True' in det.stdout, 'NO hay GPU'
+# 2026-09-03: mambapy es pip PURO (40 kB, sin compilar CUDA) y da el scan paralelo. Es lo que
+# destraba las dos paredes del 2-sep. Si no instala, la corrida NO sigue: con el camino secuencial
+# no entra en una sesion y gastariamos la asignacion al pedo.
+ins = subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'mambapy'],
+                     capture_output=True, text=True)
+chk = subprocess.run([sys.executable, '-c', 'from mambapy.pscan import pscan; print("pscan OK")'],
+                     capture_output=True, text=True)
+print('mambapy', chk.stdout.strip(), (ins.stderr or chk.stderr).strip()[:200], flush=True)
+assert 'pscan OK' in chk.stdout, 'mambapy NO instalado'
 cmd = [sys.executable, '-u', 'entrenar_real.py', '--condicion', '$COND', '--semilla', '$SEM',
        '--pasos', '$PASOS', '--batch', '8', '--acum', '1', '--largo', '192',
        '--n-hechos', '$NH',

@@ -46,9 +46,16 @@ def evaluar(modelo, tok, rng, n=8, B=16, forma="directa", p_nose=0.4, largo=64, 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--modelo", default="state-spaces/mamba-370m-hf")
-    ap.add_argument("--condicion", choices=("una", "dos", "ciega"), required=True,
-                    help="una = solo directa · dos = directa+invertida · "
-                         "ciega = directa+lejana, el control donde la relacion nunca entra")
+    ap.add_argument("--condicion",
+                    choices=("una", "dos", "ciega", "cerca", "lejos", "lejos_dos", "lejos_relleno"),
+                    required=True,
+                    help="LAS DE ARRIBA quedan del 2-sep y su geometria estaba mal contada: "
+                         "una = solo directa · dos = directa+invertida · ciega = directa+lejana. "
+                         "LAS DE ABAJO son las del 3-sep, contadas sobre la distancia relacion<->"
+                         "entidad, que es la que decide en un modelo recurrente: "
+                         "cerca = d2 (comparten ventana) · lejos = d5 (0,0 exacto en la capa 0) · "
+                         "lejos_dos = d5+d2, la diversidad · lejos_relleno = d5+d5b, el control "
+                         "que adjudica, con diversidad y SIN que la relacion entre nunca")
     ap.add_argument("--semilla", type=int, default=0)
     ap.add_argument("--pasos", type=int, default=3000)
     ap.add_argument("--batch", type=int, default=4)
@@ -64,11 +71,19 @@ def main():
                     help="hechos en el contexto. MEDIDO el 2-sep: con 4 la tarea SATURA en "
                          "mamba-130m, las dos condiciones dan nose_rel 1,0000 y no queda margen "
                          "para medir nada. Es efecto techo, no ausencia de efecto.")
+    ap.add_argument("--sin-pscan", action="store_true",
+                    help="fuerza el camino secuencial de HF. Solo para control de equivalencia.")
     ap.add_argument("--salida", default="salida.json")
     a = ap.parse_args()
 
     FORMAS = {"una": ("directa",), "dos": ("directa", "invertida"),
-              "ciega": ("directa", "lejana")}[a.condicion]
+              "ciega": ("directa", "lejana"),
+              "cerca": ("d2",), "lejos": ("d5",),
+              "lejos_dos": ("d5", "d2"), "lejos_relleno": ("d5", "d5b")}[a.condicion]
+    # Todas las condiciones `lejos*` se EVALUAN en d5, que es donde la relacion no entra en la
+    # ventana de la capa 0. `cerca` se evalua en d2, su propia forma.
+    F_EVAL = "d2" if a.condicion == "cerca" else ("d5" if a.condicion.startswith("lejos")
+                                                  else "directa")
 
     from transformers import AutoTokenizer, AutoModelForCausalLM
     torch.manual_seed(a.semilla)
@@ -76,6 +91,23 @@ def main():
     modelo = AutoModelForCausalLM.from_pretrained(a.modelo, dtype=torch.float32)
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     modelo.to(dev).train()
+
+    # 2026-09-03. Sin los kernels CUDA de `mamba-ssm` HF recorre la secuencia token por token en
+    # Python y el paso costaba 279 s en la PC y 9,7 s en T4. El propio mensaje de error nombraba la
+    # salida: `use_mambapy is set to False`. `mambapy` es un scan asociativo en PyTorch PURO, se
+    # instala con pip sin compilar nada y se verifico EQUIVALENTE en `bench_mambapy.py` (logits
+    # 3e-6 relativo, gradientes 9e-6, o sea ruido de fp32). En CPU acelera 9,6x.
+    # Ojo con modeling_mamba.py:418: el pscan solo entra si `use_mambapy and self.training and
+    # cache_params is None`, asi que la EVALUACION sigue yendo por el camino lento.
+    if not a.sin_pscan:
+        from transformers.utils.import_utils import is_mambapy_available
+        if is_mambapy_available():
+            modelo.config.use_mambapy = True
+            for capa in modelo.backbone.layers:
+                capa.mixer.use_mambapy = True
+            print("scan PARALELO (mambapy) ACTIVADO", flush=True)
+        else:
+            print("*** mambapy NO instalado: se cae al scan secuencial, ~10x mas lento", flush=True)
     # OOM medido en T4 con batch 8 y largo 128: Mamba guarda estados intermedios de las 48 capas y
     # las activaciones pesan mucho mas de lo que sugiere el conteo de parametros. El checkpointing
     # las recalcula en el backward, cuesta ~30 % de tiempo y es lo que hace entrar el modelo.
@@ -93,7 +125,7 @@ def main():
           flush=True)
     print(f"conv kernel {conv.kernel_size[0]} · taps vivos {vivos} · ALCANCE REAL {alcance}",
           flush=True)
-    print(f"condicion {a.condicion} · formas de entrenamiento {FORMAS} · se EVALUA en `directa`",
+    print(f"condicion {a.condicion} · formas de entrenamiento {FORMAS} · se EVALUA en `{F_EVAL}`",
           flush=True)
 
     opt = torch.optim.AdamW(modelo.parameters(), lr=a.lr, weight_decay=0.01)
@@ -101,7 +133,8 @@ def main():
     rng_ev = lambda: np.random.default_rng(90000 + a.semilla)
 
     hist = []
-    base = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose, n_hechos=a.n_hechos)
+    base = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose, n_hechos=a.n_hechos,
+                   forma=F_EVAL)
     base["paso"] = 0
     hist.append(base)
     print(f"  BASELINE paso 0 · vigente {base['vigente']:.4f} · nose {base['nose']:.4f} "
@@ -124,7 +157,7 @@ def main():
                   flush=True)
         if paso % a.cada == 0 or paso == a.pasos:
             m = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose,
-                        n_hechos=a.n_hechos)
+                        n_hechos=a.n_hechos, forma=F_EVAL)
             m["paso"] = paso
             hist.append(m)
             print(f"  ── eval {paso}: vigente {m['vigente']:.4f} · nose {m['nose']:.4f} "

@@ -1,0 +1,34 @@
+-- vuelta 1 · cuenta H · 07:42
+== smoke en H · sesion NUEVA smk_h_0742
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=97ecc5eb_e69f_491c_8743_bb76b
+4c50db7........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en H
+-- vuelta 1 · cuenta C · 07:42
+== smoke en C · sesion NUEVA smk_c_0742
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=8631e8a2_b1c5_41f7_94b2_48d2b
+2e74b66........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en C
+-- vuelta 1 · cuenta O · 07:42
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4883.17it/s]
+VIVO= False
+LOG:
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 242/242 [00:00<00:00, 5893.24it/s]
+
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4183.67it/s]
+EQUIV logits rel 3.466e-06 · loss 12.865364 vs 12.865360 · grad rel 9.421e-06
+
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4295.86it/s]
+VEL SECUENCIAL: 25.771 s/paso · pico 3.90 GiB · 1200 pasos = 8.59 h
+
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4883.17it/s]
+VEL PSCAN: 2.977 s/paso · pico 5.08 GiB · 1200 pasos = 0.99 h
+[colab] Downloaded '/content/smoke.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/smoke_pscan_O.log'
+== SESION smk_o_0742 en la cuenta O queda VIVA a proposito, para reusarla en la campania
+== SMOKE LISTO en O

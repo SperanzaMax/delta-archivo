@@ -1,0 +1,10 @@
+mambapy IMPORTA OK
+gpu Tesla T4
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 5893.24it/s]
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4183.67it/s]
+EQUIV logits rel 3.466e-06 · loss 12.865364 vs 12.865360 · grad rel 9.421e-06
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4295.86it/s]
+VEL SECUENCIAL: 25.771 s/paso · pico 3.90 GiB · 1200 pasos = 8.59 h
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 4883.17it/s]
+VEL PSCAN: 2.977 s/paso · pico 5.08 GiB · 1200 pasos = 0.99 h

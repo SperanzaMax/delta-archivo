@@ -1,0 +1,102 @@
+{
+ "directa": {
+  "d_rel": 3,
+  "d_ent": 1,
+  "d_re": 2,
+  "combinan": true,
+  "tokens": [
+   "What",
+   " is",
+   " the",
+   " director",
+   " of",
+   " Barton",
+   "?"
+  ],
+  "p_r": 3,
+  "p_e": 5,
+  "largo": 7
+ },
+ "invertida": {
+  "d_rel": 1,
+  "d_ent": 6,
+  "d_re": 5,
+  "combinan": false,
+  "tokens": [
+   "For",
+   " Barton",
+   ",",
+   " what",
+   " is",
+   " the",
+   " director",
+   "?"
+  ],
+  "p_r": 6,
+  "p_e": 1,
+  "largo": 8
+ },
+ "lejana": {
+  "d_rel": 4,
+  "d_ent": 2,
+  "d_re": 2,
+  "combinan": true,
+  "tokens": [
+   "What",
+   " is",
+   " the",
+   " director",
+   " that",
+   " Barton",
+   " has",
+   "?"
+  ],
+  "p_r": 3,
+  "p_e": 5,
+  "largo": 8
+ },
+ "separada": {
+  "d_rel": 6,
+  "d_ent": 1,
+  "d_re": 5,
+  "combinan": false,
+  "tokens": [
+   "What",
+   " is",
+   " the",
+   " director",
+   " of",
+   " the",
+   " person",
+   " named",
+   " Barton",
+   "?"
+  ],
+  "p_r": 3,
+  "p_e": 8,
+  "largo": 10
+ },
+ "separada2": {
+  "d_rel": 8,
+  "d_ent": 1,
+  "d_re": 7,
+  "combinan": false,
+  "tokens": [
+   "What",
+   " is",
+   " the",
+   " director",
+   ",",
+   " in",
+   " the",
+   " records",
+   ",",
+   " of",
+   " Barton",
+   "?"
+  ],
+  "p_r": 3,
+  "p_e": 10,
+  "largo": 12
+ }
+}
