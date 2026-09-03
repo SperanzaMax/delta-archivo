@@ -1,0 +1,27 @@
+PARA: yangsl66@mit.edu
+CC:   jkautz@nvidia.com, ahatamizadeh@nvidia.com
+ENVIAR DESDE: mrsperanza@frba.utn.edu.ar
+ASUNTO: arXiv endorsement request (cs.LG) - measurement on the conv kernel of Gated DeltaNet
+-------------------------------------------------------------------------------------------
+
+Dear Dr. Yang,
+
+I am an independent researcher in Buenos Aires, Argentina, writing to ask whether you would consider endorsing me for cs.LG on arXiv. This is my first submission there, so arXiv requires an endorsement from an established author in the category.
+
+My arXiv endorsement code is QPVI87, and the endorsement can be granted at https://arxiv.org/auth/endorse?x=QPVI87
+
+The paper measures something about the short convolution that your architecture uses. In Gated DeltaNet, and in the Qwen3Next configuration that adopts it, linear_conv_kernel_dim defaults to 4, so the query at a given layer sees the current token and three predecessors. My paper measures what that reach costs when part of a question falls outside it.
+
+The result is that retrieval sensitivity to the excluded component is not small, it is zero to floating point precision, and the model then answers confidently from the part it can still see. I verify this in mamba-130m and mamba-370m, where the layer output moves at every distance while the conv1d output stays at exactly zero. I also report a pre-registered negative alongside it, which is that the effect does not become a behavioural failure once the model has 24 layers to pay with.
+
+Your work is cited as the case where kernel size 4 is the documented default in a deployed architecture, which is what makes the measurement relevant beyond a toy model.
+
+I understand that endorsement is not peer review and that it only certifies that the submission is appropriate for the category. I am happy to send the manuscript beforehand if you would rather look at it first.
+
+Thank you for your time.
+
+Best regards,
+Maximiliano Rodrigo Speranza
+Independent Researcher, Buenos Aires, Argentina
+ORCID 0009-0005-0413-8554
+mrsperanza@frba.utn.edu.ar

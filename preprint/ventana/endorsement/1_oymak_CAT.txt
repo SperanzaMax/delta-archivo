@@ -1,0 +1,27 @@
+PARA: oymak@umich.edu
+CC:   yixiaoh@berkeley.edu
+ENVIAR DESDE: mrsperanza@frba.utn.edu.ar
+ASUNTO: arXiv endorsement request (cs.LG) - work extending Theorem 1 of CAT
+--------------------------------------------------------------------------
+
+Dear Professor Oymak,
+
+I am an independent researcher in Buenos Aires, Argentina, writing to ask whether you would consider endorsing me for cs.LG on arXiv. This is my first submission there, so arXiv requires an endorsement from an established author in the category.
+
+My arXiv endorsement code is QPVI87, and the endorsement can be granted at https://arxiv.org/auth/endorse?x=QPVI87
+
+I am writing to you rather than sending this at random, because the paper extends your work directly. In "On the Power of Convolution Augmented Transformer" (arXiv 2407.05591) your Theorem 1 requires a convolution filter of length N to solve N-gram associative recall. That is an existence result, and it does not measure what happens when the filter is shorter than the query. My paper measures exactly that.
+
+The finding is that when a query component falls outside the convolution's reach, retrieval sensitivity to it is not small, it is zero to floating point precision, and the model answers confidently from the part it can still see. Sixty cells out of sixty in a small model, and eighty out of eighty in mamba-130m, where the layer output moves at every distance while the conv1d output stays at exactly zero. The paper also reports a pre-registered negative, which is that the effect does not become a behavioural failure in a 24 layer model, and explains why.
+
+Your paper is the closest prior work and is cited as such. Anyone can verify the connection in two minutes by comparing your Theorem 1 with my Result 1.
+
+I understand that endorsement is not peer review and that it only certifies that the submission is appropriate for the category. I am happy to send the manuscript beforehand if you would rather look at it first.
+
+Thank you for your time, and either way I appreciate the work.
+
+Best regards,
+Maximiliano Rodrigo Speranza
+Independent Researcher, Buenos Aires, Argentina
+ORCID 0009-0005-0413-8554
+mrsperanza@frba.utn.edu.ar

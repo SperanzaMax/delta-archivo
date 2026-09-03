@@ -1,0 +1,102 @@
+{
+ "config": {
+  "modelo": "state-spaces/mamba-130m-hf",
+  "condicion": "cerca",
+  "semilla": 0,
+  "pasos": 800,
+  "batch": 8,
+  "acum": 1,
+  "lr": 3e-05,
+  "largo": 64,
+  "cada": 100,
+  "p_nose": 0.4,
+  "n_eval": 32,
+  "n_hechos": 4,
+  "sin_pscan": false,
+  "salida": "/content/g0_cerca_s0.json"
+ },
+ "alcance_real": 2,
+ "historia": [
+  {
+   "vigente": 0.0,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 0
+  },
+  {
+   "vigente": 0.9970059880239521,
+   "nose": 0.9887640449438202,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9761904761904762,
+   "falsa_abst": 0.0029940119760479044,
+   "abstencion": 0.345703125,
+   "paso": 100
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9831460674157303,
+   "nose_ent": 0.9893617021276596,
+   "nose_rel": 0.9761904761904762,
+   "falsa_abst": 0.0,
+   "abstencion": 0.341796875,
+   "paso": 200
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9887640449438202,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9761904761904762,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 300
+  },
+  {
+   "vigente": 0.9970059880239521,
+   "nose": 0.9887640449438202,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9761904761904762,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 400
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9719101123595506,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9404761904761905,
+   "falsa_abst": 0.0,
+   "abstencion": 0.337890625,
+   "paso": 500
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9887640449438202,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9761904761904762,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 600
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9943820224719101,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9880952380952381,
+   "falsa_abst": 0.0,
+   "abstencion": 0.345703125,
+   "paso": 700
+  },
+  {
+   "vigente": 0.9940119760479041,
+   "nose": 0.9325842696629213,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8571428571428571,
+   "falsa_abst": 0.0029940119760479044,
+   "abstencion": 0.326171875,
+   "paso": 800
+  }
+ ]
+}

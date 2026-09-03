@@ -1,0 +1,102 @@
+{
+ "config": {
+  "modelo": "state-spaces/mamba-130m-hf",
+  "condicion": "lejos_relleno",
+  "semilla": 1,
+  "pasos": 800,
+  "batch": 8,
+  "acum": 1,
+  "lr": 3e-05,
+  "largo": 64,
+  "cada": 100,
+  "p_nose": 0.4,
+  "n_eval": 32,
+  "n_hechos": 4,
+  "sin_pscan": false,
+  "salida": "/content/g1_lejos_relleno_s1.json"
+ },
+ "alcance_real": 2,
+ "historia": [
+  {
+   "vigente": 0.0,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 0
+  },
+  {
+   "vigente": 0.9873417721518988,
+   "nose": 0.8673469387755102,
+   "nose_ent": 1.0,
+   "nose_rel": 0.723404255319149,
+   "falsa_abst": 0.006329113924050633,
+   "abstencion": 0.3359375,
+   "paso": 100
+  },
+  {
+   "vigente": 0.9968354430379747,
+   "nose": 0.8775510204081632,
+   "nose_ent": 1.0,
+   "nose_rel": 0.7446808510638298,
+   "falsa_abst": 0.0031645569620253164,
+   "abstencion": 0.337890625,
+   "paso": 200
+  },
+  {
+   "vigente": 0.9841772151898734,
+   "nose": 0.9489795918367347,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8936170212765957,
+   "falsa_abst": 0.015822784810126583,
+   "abstencion": 0.373046875,
+   "paso": 300
+  },
+  {
+   "vigente": 0.9936708860759493,
+   "nose": 0.9693877551020408,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9361702127659575,
+   "falsa_abst": 0.006329113924050633,
+   "abstencion": 0.375,
+   "paso": 400
+  },
+  {
+   "vigente": 0.9936708860759493,
+   "nose": 0.9591836734693877,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9148936170212766,
+   "falsa_abst": 0.006329113924050633,
+   "abstencion": 0.37109375,
+   "paso": 500
+  },
+  {
+   "vigente": 0.9968354430379747,
+   "nose": 0.9795918367346939,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9574468085106383,
+   "falsa_abst": 0.0031645569620253164,
+   "abstencion": 0.376953125,
+   "paso": 600
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9897959183673469,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9787234042553191,
+   "falsa_abst": 0.0,
+   "abstencion": 0.37890625,
+   "paso": 700
+  },
+  {
+   "vigente": 0.9810126582278481,
+   "nose": 0.9948979591836735,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9893617021276596,
+   "falsa_abst": 0.0189873417721519,
+   "abstencion": 0.392578125,
+   "paso": 800
+  }
+ ]
+}

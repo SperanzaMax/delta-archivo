@@ -103,6 +103,42 @@ en todas y cada una de las consultas.
 
 El modelo no estaba ignorando la relación. No la podía ver.
 
+
+\paragraph{Contribuciones.} Las enunciamos como afirmaciones, porque es lo que un lector tiene que
+poder contrastar contra la evidencia.
+
+\begin{enumerate}
+\item \textbf{El alcance de la convolución que forma la consulta es un corte duro, no una caída
+suave.} La sensibilidad de la recuperación a un token de la consulta es $0{,}000000$ en cuanto ese
+token pasa el alcance, y el escalón se mueve con el kernel. Sesenta celdas de sesenta (Resultado 1), y
+la ablación del único tap que alcanza la relación lo reproduce (Resultado 3).
+
+\item \textbf{Ensanchar la ventana un tap de cada lado compra abstención.} La abstención correcta en
+el caso difícil va de $0{,}5850$--$0{,}7349$ a $0{,}9931$--$1{,}0000$ sin solape en tres semillas, por
+$1{.}280$ parámetros sobre $865{.}395$ (Resultado 2).
+
+\item \textbf{La disociación se sostiene en un modelo que no es nuestro.} En \texttt{mamba-130m} la
+salida de la capa se mueve a toda distancia mientras la de la convolución queda en cero exacto,
+$80$ celdas de $80$. El estado ve la secuencia entera y la consulta que lo lee no (Resultado 4).
+
+\item \textbf{En un modelo profundo la ventana atenúa en vez de bloquear, a una tasa que no depende
+del tamaño.} $1{,}077$ y $1{,}028$ por token de distancia en modelos de $24$ y $48$ capas,
+$r = 0{,}978$ en los dos, con un control que separa la distancia del contenido léxico (Resultado 5).
+
+\item \textbf{El acceso no implica el comportamiento, y lo informamos como negativo.} Un componente
+demostrablemente invisible para la consulta de una capa se aprende igual, sólo que más lento. El
+efecto es $+0{,}16$ en el paso $100$ en tres semillas de tres y desaparece para el paso $400$
+(Resultado 6).
+
+\item \textbf{Un diagnóstico que no cuesta nada.} Reemplazar un token de la consulta y ver si la
+recuperación se mueve. No necesita entrenamiento, ni gradiente, ni etiquetas, y se aplica a cualquier
+modelo que consulte una memoria con una consulta formada localmente.
+\end{enumerate}
+
+\paragraph{Lo que hicimos mal, y lo informamos igual.} Un control que no podía dar otra cosa, y un
+titular que no sobrevivió al barrido de su umbral. Los dos están en el Resultado 5, con la prueba que
+caza cada clase de error.
+
 \section{Trabajo relacionado}
 
 \textbf{Las convoluciones cortas están en todos lados y su tamaño se hereda, no se mide.} Mamba-2
@@ -435,6 +471,11 @@ sobre él no está ganada. Con un núcleo de $4$, que es el valor por omisión e
 lineal desplegadas, el alcance es de tres tokens, así que cualquier parte de una pregunta que quede
 más atrás no entra en la consulta de esa capa.
 
+\paragraph{Código y datos.} Todo el código, los pre-registros congelados con su SHA256 y los JSON
+crudos de los que sale cada número de este trabajo están en
+\url{https://github.com/SperanzaMax/delta-archivo}. Los Resultados 4 y 5 no necesitan entrenamiento ni
+GPU: descargan un checkpoint público y lo sondean, y se reproducen en minutos en una notebook.
+
 \section{Limitaciones}
 
 El sustrato es un modelo chico sobre un idioma sintético cerrado, y la distancia entre la relación y
@@ -448,6 +489,33 @@ razón de un factor $\approx 1{,}05$ por token de distancia, replicado en dos pr
 esa medición \emph{no} dice es si la señal atenuada alcanza para la tarea. Es una medición de
 magnitud, no de utilidad, y en las capas altas la atenuación tiende a $1$ sin que sepamos si eso
 significa que la información se recuperó o que la representación pasó a estar dominada por otra cosa.
+
+\section{Conclusión}
+
+Una convolución corta decide qué parte de una pregunta puede condicionar una lectura de memoria, y lo
+que cae afuera no llega débil. No llega. Es una propiedad de la arquitectura, no cuesta nada
+comprobarlo, y es invisible desde afuera porque el modelo contesta con total confianza desde la parte
+que sí puede ver.
+
+El resto del trabajo es sobre hasta dónde llega esa afirmación. Sobrevive salir de nuestro propio
+modelo, en dos checkpoints públicos de distinta profundidad, donde el corte de la primera capa es
+exacto y cae en el alcance medido y no en el nominal. Sobrevive cambiar el tamaño del modelo, porque
+la atenuación posterior a la primera capa corre a prácticamente la misma tasa con $24$ y con $48$
+capas. Y se detiene, de una forma que podemos precisar, cuando el modelo tiene profundidad para
+gastar: un componente afuera de la ventana se aprende igual, sólo que más tarde.
+
+Ese último resultado es el que conservaríamos si sólo pudiéramos conservar uno. Convierte una
+afirmación sobre acceso en una afirmación sobre costo, y el costo es algo que un arquitecto puede
+negociar. Donde no quedan capas con que pagar, la ventana pone un techo; donde quedan, pone un peaje.
+La memoria leída desde una capa temprana, un adaptador o una única cabeza de recuperación cae del
+primer lado de esa línea, y son exactamente los lugares donde hoy se le está atornillando recuperación
+a los modelos de lenguaje.
+
+Nos parece que lo más útil de acá no es el arreglo sino la medición, porque la medición es gratis. Se
+cambia un token de la consulta, se mira si la búsqueda se mueve, y uno se entera de si el modelo tiene
+derecho a la confianza que está por expresar. Nos sorprendió cuántas veces la respuesta era que no, y
+nos sorprendió igual, después, que no poder ver algo resultara no ser lo mismo que no poder
+aprenderlo.
 
 \begin{thebibliography}{99}
 \bibitem[Dao y Gu(2024)]{mamba2} Dao, T., y Gu, A. (2024). Transformers are SSMs. Generalized Models and Efficient Algorithms Through Structured State Space Duality. ICML 2024.

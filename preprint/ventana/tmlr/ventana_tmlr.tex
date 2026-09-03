@@ -98,6 +98,41 @@ token outside the window, deterministically, in every single query.
 
 The model was not ignoring the relation. It could not see it.
 
+
+\paragraph{Contributions.} We state them as claims, because that is what a reader has to be able to
+check against the evidence.
+
+\begin{enumerate}
+\item \textbf{The reach of the query-forming convolution is a hard cut, not a soft decay.} Retrieval
+sensitivity to a query token is $0.000000$ as soon as the token passes the reach, and the step moves
+with the kernel. Sixty cells out of sixty (Result 1), and the ablation of the single tap that reaches
+the relation reproduces it (Result 3).
+
+\item \textbf{Widening the window by one tap on each side buys abstention.} Correct abstention on the
+hard case goes from $0.5850$--$0.7349$ to $0.9931$--$1.0000$ with no overlap across three seeds, for
+$1{,}280$ parameters out of $865{,}395$ (Result 2).
+
+\item \textbf{The dissociation holds in a model that is not ours.} In \texttt{mamba-130m}, the layer
+output moves at every distance while the convolution output stays at exactly zero, $80$ cells out of
+$80$. The state sees the whole sequence; the query that reads it does not (Result 4).
+
+\item \textbf{In a deep model the window attenuates rather than blocks, at a rate that does not depend
+on model size.} $1.077$ and $1.028$ per token of distance in $24$ and $48$ layer checkpoints,
+$r = 0.978$ in both, with a control that separates distance from lexical content (Result 5).
+
+\item \textbf{Access does not imply behaviour, and we report that as a negative.} A component that is
+provably invisible to one layer's query still gets learned, only more slowly. The effect is
+$+0.16$ at step $100$ across three seeds and gone by step $400$ (Result 6).
+
+\item \textbf{A diagnosis that costs nothing.} Replace one token of a query and check whether
+retrieval moves. It requires no training, no gradient and no labels, and it applies to any model that
+consults a memory through a locally formed query.
+\end{enumerate}
+
+\paragraph{What we got wrong, and report anyway.} A control that could not have come out any other
+way, and a headline statistic that did not survive sweeping its threshold. Both are in Result 5, with
+the test that catches each class of mistake.
+
 \section{Related work}
 
 \textbf{Short convolutions are ubiquitous and their size is inherited, not measured.} Mamba-2
@@ -416,6 +451,11 @@ If they are identical, that component is invisible to the search, and the model'
 is unearned. With a kernel of $4$, the default in deployed linear-attention layers, the reach is three
 tokens, so any part of a question further back than that does not enter that layer's query.
 
+\paragraph{Code and data.} All code, the frozen pre-registrations with their SHA256, and the raw JSON
+from which every number in this paper is computed are in the anonymous supplementary material.
+Results 4 and 5 need no training and no GPU: they download a public checkpoint and probe it, and they
+reproduce in minutes on a laptop.
+
 \section{Limitations}
 
 The substrate is a small model on a closed synthetic language, and the distance between the relation
@@ -429,6 +469,33 @@ of distance, replicated at two depths. What that measurement does \emph{not} say
 attenuated signal suffices for the task. It is a measurement of magnitude, not of use, and in the
 upper layers the attenuation tends to $1$ without our knowing whether that means the information was
 recovered or that the representation came to be dominated by something else.
+
+\section{Conclusion}
+
+A short convolution decides which part of a question is allowed to condition a memory read, and what
+falls outside does not arrive weakly. It does not arrive. That is a property of the architecture, it
+costs nothing to check, and it is invisible from the outside because the model answers with full
+confidence from the part it can still see.
+
+The rest of the paper is about how far that statement travels. It survives leaving our own model, in
+two public checkpoints of different depth, where the cut in the first layer is exact and falls at the
+measured reach rather than the nominal one. It survives changing the model size, since the attenuation
+past the first layer runs at essentially the same rate in $24$ and $48$ layers. And it stops, in a way
+we can state precisely, when the model has depth to spend: a component outside the window is learned
+anyway, just later.
+
+That last result is the one we would keep if we could keep only one. It converts a claim about access
+into a claim about cost, and cost is something an architect can trade. Where there are no layers left
+to pay with, the window sets a ceiling; where there are, it sets a toll. Memory read from an early
+layer, an adapter, or a single retrieval head sits on the first side of that line, and those are
+exactly the places where retrieval is being bolted onto language models today.
+
+We think the most useful thing here is not the fix but the measurement, because the measurement is
+free. Change one token of a query, look at whether the search moves, and you learn whether the model
+is entitled to the confidence it is about to express. We were surprised by how often the answer was
+that it is not, and equally surprised, later, that being unable to see something turned out not to
+mean being unable to learn it.
+
 
 \begin{thebibliography}{99}
 \bibitem[Dao and Gu(2024)]{mamba2} Dao, T., and Gu, A. (2024). Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality. ICML 2024.

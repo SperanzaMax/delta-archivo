@@ -1,0 +1,32 @@
+PARA: el docente o investigador de la UTN que califique
+ENVIAR DESDE: mrsperanza@frba.utn.edu.ar
+ASUNTO: Pedido de aval (endorsement) para arXiv, categoria cs.LG
+----------------------------------------------------------------
+
+NOTA: este es el que tiene MAS chance de respuesta, y es en castellano a proposito. Antes de
+mandarlo hay que verificar que la persona califique, con el link «Which of the authors of this
+article can endorse?» al pie de cualquiera de sus papers en arXiv (hay que estar logueado).
+El criterio de arXiv es amplio: 3 papers en CUALQUIERA de las 40 categorias de Computer Science,
+enviados hace mas de tres meses y menos de cinco años.
+
+Hola [NOMBRE], como estas.
+
+Te escribo desde mi correo institucional, que me dieron esta semana. Estoy por subir a arXiv un
+trabajo de investigacion sobre memoria en modelos de lenguaje y me falta una sola cosa, que es un
+aval.
+
+arXiv pide que a los autores nuevos los avale alguien que ya haya publicado ahi. No es una revision
+del trabajo ni implica ninguna responsabilidad sobre el contenido, arXiv lo dice explicitamente. Solo
+certifica que el articulo corresponde a la categoria en la que lo estoy subiendo.
+
+Mi codigo es QPVI87 y se otorga entrando a https://arxiv.org/auth/endorse?x=QPVI87
+
+El trabajo mide una limitacion de arquitectura en modelos de espacio de estados, verificada en dos
+modelos publicos de Mamba, y esta escrito con pre-registro, o sea con los criterios congelados antes
+de correr los experimentos. Si queres te lo paso antes para que le des una mirada.
+
+Cualquier cosa te lo explico en dos minutos.
+
+Gracias,
+Maximiliano Rodrigo Speranza
+ORCID 0009-0005-0413-8554
