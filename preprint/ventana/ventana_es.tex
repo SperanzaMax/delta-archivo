@@ -62,6 +62,25 @@ $80$ celdas de $80$. El estado ve la secuencia entera y la consulta que lo lee n
 viejo de la convolución en ese checkpoint vale cero exacto en las $24$ capas, así que su alcance
 efectivo es $2$ y no el nominal $3$. Informamos la medición y no una causa.
 
+La profundidad cambia la ley sin derogarla, y medimos cuánto. En un modelo recurrente la combinación
+de dos componentes de la consulta ocurre donde los dos están disponibles, así que la distancia que
+decide es la que los separa entre sí. Sobre quince formas de pregunta, seis distancias y dos modelos
+---\texttt{mamba-130m} con $24$ capas y \texttt{mamba-370m} con $48$--- el corte en la capa $0$ es
+exacto y cae en el alcance medido en los dos, mientras que desde la capa $1$ la recurrencia restituye
+la señal \emph{atenuada}, a razón de $1{,}077$ y $1{,}028$ por token de distancia ($r = 0{,}978$ en
+los dos, curvas correlacionadas a $0{,}955$). Tres veces los parámetros y el doble de capas dejan la
+tasa igual, lo que hace de la atenuación una propiedad de la arquitectura. Un control que deja fija la
+distancia y varía el relleno separa la distancia del contenido léxico.
+
+Por último probamos si el acceso predice el comportamiento, y damos un negativo. Ajustar
+\texttt{mamba-130m} sobre la misma tarea con el componente discriminante afuera de la ventana cuesta
+$+0{,}167$, $+0{,}181$ y $+0{,}141$ de abstención correcta en el paso $100$ ---tres semillas de tres
+por encima de nuestro umbral pre-registrado--- y \textbf{nada en absoluto para el paso $400$}.
+Nuestro modelo chico, de dos bloques, no se recupera nunca; el de $24$ capas se recupera rápido.
+\textbf{Donde no quedan capas con que pagar, la ventana pone un techo; donde quedan, pone un peaje.}
+La afirmación fuerte vale entonces para memoria consultada desde una capa temprana, y no como
+predicción de comportamiento para un modelo profundo entrenado hasta converger.
+
 Damos el diagnóstico como una receta que no necesita entrenamiento. Se cambia un token de la consulta
 y se mira si la recuperación se mueve. Si no se mueve, ese token es invisible para la búsqueda, y la
 confianza que el modelo muestre sobre él no está ganada.
