@@ -1,0 +1,39 @@
+{
+ "config": {
+  "modelo": "state-spaces/mamba-130m-hf",
+  "condicion": "cerca",
+  "semilla": 2,
+  "pasos": 800,
+  "batch": 8,
+  "acum": 1,
+  "lr": 3e-05,
+  "largo": 64,
+  "cada": 100,
+  "p_nose": 0.4,
+  "n_eval": 32,
+  "n_hechos": 4,
+  "sin_pscan": false,
+  "salida": "/content/g2_cerca_s2.json"
+ },
+ "alcance_real": 2,
+ "historia": [
+  {
+   "vigente": 0.0,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 0
+  },
+  {
+   "vigente": 0.9905660377358491,
+   "nose": 1.0,
+   "nose_ent": 1.0,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.0031446540880503146,
+   "abstencion": 0.380859375,
+   "paso": 100
+  }
+ ]
+}

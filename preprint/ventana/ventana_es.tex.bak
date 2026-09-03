@@ -246,80 +246,6 @@ gradiente, así que un artefacto de conversión es plausible, pero no lo verific
 El hecho se reproduce en tres líneas. Su consecuencia práctica, si generaliza, es que el núcleo
 nominal es una cota superior del alcance y conviene medirlo en vez de suponerlo.
 
-\section{Resultado 5. En un modelo profundo la ventana atenúa en vez de bloquear, y la tasa es la misma en dos tamaños}
-
-El Resultado 4 midió el acceso en la capa $0$ de un modelo real. La objeción obvia es que un modelo
-recurrente profundo tiene muchas capas para mover la información hacia adelante, así que un cero duro
-en una capa no tiene por qué importar. Lo medimos de frente, y la respuesta es más útil que cualquiera
-de los dos extremos.
-
-\paragraph{Qué se mide, y por qué acá la distancia es entre las dos \emph{partes}.} En nuestro modelo
-chico la consulta se forma en el último token y lee un archivo externo, así que la distancia que
-decide es la de cada componente a la posición de lectura. Un modelo de lenguaje recurrente no tiene
-archivo externo: la memoria es el estado, se actualiza en \emph{cada} posición, y cada token tiene su
-propio turno de condicionar la búsqueda cuando entra. Para responder hay que \emph{combinar} la
-entidad y la relación, y esa combinación puede ocurrir en cualquier posición donde las dos estén
-disponibles. La distancia que decide es entonces la que separa la relación de la entidad, y medimos
-el movimiento de la salida de \texttt{conv1d} \emph{en la posición de la entidad} al reemplazar el
-token de la relación.
-
-\paragraph{Montaje.} Quince formas de pregunta que abarcan seis distancias relación--entidad, ocho
-contextos al azar de cuatro hechos cada uno, todas las capas, en \texttt{state-spaces/mamba-130m-hf}
-($24$ capas) y \texttt{state-spaces/mamba-370m-hf} ($48$ capas). El alcance medido de la convolución
-es $2$ en los dos. La atenuación se informa contra el promedio de las formas con $d{=}2$.
-
-\begin{center}
-\begin{tabular}{lcccccc}
-\toprule
-& $d{=}2$ & $d{=}3$ & $d{=}4$ & $d{=}5$ & $d{=}6$ & $d{=}7$ \\
-\midrule
-capa $0$ (los dos modelos) & se mueve & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ \\
-\midrule
-atenuación en la capa $1$, \texttt{130m} & $1{,}10$ & $2{,}31$ & $3{,}06$ & $4{,}64$ & $4{,}65$ & $6{,}92$ \\
-atenuación en la capa $1$, \texttt{370m} & $1{,}04$ & $3{,}21$ & $3{,}17$ & $4{,}47$ & $5{,}72$ & $6{,}47$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{itemize}
-\item \textbf{En la capa $0$ el corte es exacto y cae en el alcance medido}, en los dos modelos:
-$d{=}2$ se mueve y $d \ge 3$ vale cero exacto. Es el Resultado 1 reproducido en un modelo que no es
-nuestro y a otra profundidad.
-\item \textbf{Desde la capa $1$ ya no es cero.} La recurrencia sí transporta la relación hacia
-adelante. Pero la señal llega atenuada, y la atenuación crece con la distancia: el ajuste lineal da
-$1{,}077$ por token ($r = 0{,}9784$) en \texttt{130m} y $1{,}028$ por token ($r = 0{,}9777$) en
-\texttt{370m}. Las dos curvas correlacionan a $0{,}9549$.
-\item \textbf{Tres veces los parámetros y el doble de capas no cambian la tasa.} Eso hace de la
-atenuación una propiedad de la arquitectura y no de un checkpoint particular.
-\end{itemize}
-
-\paragraph{El control que adjudica, y uno que no.} Si la atenuación dependiera de qué palabras hay en
-el medio en vez de cuántas, el efecto sería léxico y no arquitectónico. Por eso dejamos fija la
-distancia y variamos el relleno: con $d{=}5$, cuatro rellenos distintos (\emph{of the person named},
-\emph{of that other person}, \emph{in the file for}, \emph{of our dear friend}) se dispersan por un
-factor de $1{,}98$, contra un rango de $1{,}10$ a $6{,}92$ entre distancias. La distancia decide; el
-relleno no.
-
-Informamos también un control que falló, por una razón instructiva. Primero probamos dejar $d{=}2$ y
-alargar la pregunta \emph{después} de la entidad. Devolvió valores idénticos a la condición base hasta
-el último decimal en las $24$ capas, y tenía que hacerlo: nada que venga después de una posición puede
-afectar a esa posición. Era causalidad disfrazada de control, y vale la pena dejar escrita la prueba
-que caza esta clase de error antes de que lleguen los datos --- \emph{si la hipótesis fuera falsa,
-¿este control podría dar distinto?}
-
-\paragraph{Un titular que descartamos.} Leer la capa en la que la atenuación baja por primera vez de
-$1{,}5$ da $0, 9, 9, 13, 19, 21$ para $d = 2 \ldots 7$, o sea unas cuatro capas por token de
-distancia, con $r = 0{,}971$. Al barrer el umbral de $1{,}2$ a $2{,}5$ esa pendiente va de $3{,}97$ a
-$1{,}54$ y el orden se rompe, así que la cantidad es un artefacto del umbral y no se informa. La
-atenuación en la capa $1$ no depende de ningún umbral, y es lo que dice el párrafo de arriba.
-
-\paragraph{Qué cambia esto sobre la afirmación.} La forma fuerte de la ley --- cero exacto fuera del
-alcance --- vale \emph{por capa}, y vale en la capa donde se inyecta una lectura. En un modelo
-profundo se convierte en una ley de atenuación: la ventana no decide qué puede llegar a combinar el
-modelo, decide cuánto cuesta esa combinación. Ésta es la versión cuantitativa de la limitación que en
-el primer borrador declaramos sin medir, y precisa dónde se aplica la afirmación fuerte: a la memoria
-consultada desde una capa temprana, donde no quedan capas con que pagar.
-
 \section{El diagnóstico, como receta}
 
 La medición del Resultado 1 no necesita entrenamiento ni gradientes. Para cualquier modelo que
@@ -344,12 +270,9 @@ la posición de lectura la fija el generador, así que el efecto acá es determi
 natural sería una distribución. La medición es de \emph{acceso} y no de uso. Un token adentro de la
 ventana no necesariamente se usa, y de hecho el tap del artículo está adentro y aporta poco. Por
 último, la lectura en nuestro modelo se inyecta antes del mixer, que es lo que hace que el cero sea
-exacto, y por eso la afirmación fuerte se hace para memoria consultada desde capas tempranas. El
-Resultado 5 mide qué pasa cuando no es así: la recurrencia transporta, pero la señal llega atenuada a
-razón de un factor $\approx 1{,}05$ por token de distancia, replicado en dos profundidades. Lo que
-esa medición \emph{no} dice es si la señal atenuada alcanza para la tarea. Es una medición de
-magnitud, no de utilidad, y en las capas altas la atenuación tiende a $1$ sin que sepamos si eso
-significa que la información se recuperó o que la representación pasó a estar dominada por otra cosa.
+exacto. En un modelo profundo que consulta su memoria desde capas más altas, la recurrencia ya movió
+información hacia adelante y el alcance efectivo crece con la profundidad. La afirmación se hace para
+memoria consultada desde capas tempranas, que es donde vive.
 
 \begin{thebibliography}{99}
 \bibitem[Dao y Gu(2024)]{mamba2} Dao, T., y Gu, A. (2024). Transformers are SSMs. Generalized Models and Efficient Algorithms Through Structured State Space Duality. ICML 2024.

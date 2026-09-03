@@ -156,3 +156,11 @@ LOG:
   paso   400  loss 0.0000  (407s)
   ── eval 400: vigente 0.9970 · nose 0.9944 (ent 1.0000/rel 0.9881) · falsa 0.0030
   paso   450  loss 0.0000  (466s)
+--- 08:44
+[colab] Session 'smk_o_0742' appears to be lost (404/401). Cleaning up.
+--- 08:46
+[colab] Session 'smk_o_0742' not found.
+--- 08:48
+[colab] Session 'smk_o_0742' not found.
+--- 08:50
+[colab] Session 'smk_o_0742' not found.

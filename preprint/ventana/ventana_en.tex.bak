@@ -233,79 +233,6 @@ gradient, so a conversion artefact is plausible, but we did not verify that and 
 The fact is reproducible in three lines. Its practical consequence, if it generalises, is that the
 nominal kernel is an upper bound on the reach and should be measured rather than assumed.
 
-\section{Result 5: in a deep model the window attenuates rather than blocks, and the rate is the same in two model sizes}
-
-Result 4 measured access in layer $0$ of a real model. The obvious objection is that a deep recurrent
-model has many layers in which to move information forward, so a hard zero in one layer need not
-matter. We measured that directly, and the answer is more useful than either extreme.
-
-\paragraph{What is measured, and why here the distance is between the two \emph{parts}.} In our small
-model the query is formed at the last token and reads an external archive, so the distance that
-decides is the one from each component to the read position. A recurrent language model has no
-external archive: the memory is the state, it is updated at \emph{every} position, and each token
-gets its own turn to condition retrieval as it enters. Answering requires \emph{combining} the entity
-and the relation, and that combination can happen at any position where both are available. The
-distance that decides is therefore the one separating the relation from the entity, and we measure
-the movement of the \texttt{conv1d} output \emph{at the entity's position} when the relation token is
-replaced.
-
-\paragraph{Setup.} Fifteen question forms spanning six relation-to-entity distances, eight random
-contexts of four facts each, all layers, in \texttt{state-spaces/mamba-130m-hf} ($24$ layers) and
-\texttt{state-spaces/mamba-370m-hf} ($48$ layers). The measured reach of the convolution is $2$ in
-both. Attenuation is reported against the mean of the $d{=}2$ forms.
-
-\begin{center}
-\begin{tabular}{lcccccc}
-\toprule
-& $d{=}2$ & $d{=}3$ & $d{=}4$ & $d{=}5$ & $d{=}6$ & $d{=}7$ \\
-\midrule
-layer $0$ (both models) & moves & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ \\
-\midrule
-attenuation at layer $1$, \texttt{130m} & $1.10$ & $2.31$ & $3.06$ & $4.64$ & $4.65$ & $6.92$ \\
-attenuation at layer $1$, \texttt{370m} & $1.04$ & $3.21$ & $3.17$ & $4.47$ & $5.72$ & $6.47$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{itemize}
-\item \textbf{In layer $0$ the cut is exact and falls at the measured reach}, in both models: $d{=}2$
-moves, $d \ge 3$ is exactly zero. This is Result 1 reproduced in a model that is not ours and at a
-different depth.
-\item \textbf{From layer $1$ on it is no longer zero.} Recurrence does carry the relation forward.
-But the signal arrives attenuated, and the attenuation grows with distance: a linear fit gives
-$1.077$ per token ($r = 0.9784$) in \texttt{130m} and $1.028$ per token ($r = 0.9777$) in
-\texttt{370m}. The two curves correlate at $0.9549$.
-\item \textbf{Three times the parameters and twice the depth do not change the rate.} That makes the
-attenuation a property of the architecture rather than of a particular checkpoint.
-\end{itemize}
-
-\paragraph{The control that adjudicates, and one that did not.} If attenuation depended on which words
-sit in the gap rather than on how many, the effect would be lexical and not architectural. We
-therefore held the distance fixed and varied the filler: at $d{=}5$, four different fillers
-(\emph{of the person named}, \emph{of that other person}, \emph{in the file for}, \emph{of our dear
-friend}) spread by a factor of $1.98$, against a range of $1.10$ to $6.92$ across distances. Distance
-decides; the filler does not.
-
-We report a control that failed for an instructive reason. We first tried holding $d{=}2$ and
-lengthening the question \emph{after} the entity. It returned values identical to the base condition
-to the last decimal in all $24$ layers, and it had to: nothing that follows a position can affect that
-position. It was causality wearing the costume of a control, and it is worth stating the test that
-catches this class of mistake before the data arrive --- \emph{if the hypothesis were false, could
-this control come out differently?}
-
-\paragraph{A headline we discarded.} Reading off the layer at which attenuation first drops below
-$1.5$ gives $0, 9, 9, 13, 19, 21$ for $d = 2 \ldots 7$, about four layers per token of distance, with
-$r = 0.971$. Sweeping the threshold from $1.2$ to $2.5$ moves that slope from $3.97$ to $1.54$ and
-breaks the ordering, so the quantity is an artefact of the threshold and we do not report it. The
-layer-$1$ attenuation depends on no threshold, and that is what the paragraph above states.
-
-\paragraph{What this changes about the claim.} The strong form of the law --- exactly zero outside
-the reach --- holds \emph{per layer}, and holds in the layer where a read is injected. In a deep model
-it becomes a law of attenuation: the window does not decide what the model can eventually combine, it
-decides what that combination costs. This is the quantitative version of the limitation we stated
-rather than measured in the first draft, and it sharpens where the strong claim applies: memory
-consulted from an early layer, where there are no layers left to pay with.
-
 \section{The diagnosis, as a recipe}
 
 The measurement in Result 1 requires no training and no gradient. For any model that consults a memory
@@ -328,13 +255,10 @@ The substrate is a small model on a closed synthetic language, and the distance 
 and the read position is fixed by the generator, so the effect here is deterministic where in natural
 text it would be a distribution. The measurement is of \emph{access}, not use: a token inside the window
 is not necessarily used, and indeed the article tap is inside and contributes little. Finally, the read
-in our model is injected before the mixer, which is what makes the zero exact, and that is why the
-strong claim is made for memory consulted from early layers. Result 5 measures what happens when it is
-not: recurrence does carry the signal forward, but attenuated by a factor of $\approx 1.05$ per token
-of distance, replicated at two depths. What that measurement does \emph{not} say is whether the
-attenuated signal suffices for the task. It is a measurement of magnitude, not of use, and in the
-upper layers the attenuation tends to $1$ without our knowing whether that means the information was
-recovered or that the representation came to be dominated by something else.
+in our model is injected before the mixer, which is what makes the zero exact; in a deep model that
+consults memory from later layers, recurrence has already moved information forward and the effective
+reach grows with depth. The claim is made for memory consulted from early layers, which is where it
+lives.
 
 \begin{thebibliography}{99}
 \bibitem[Dao and Gu(2024)]{mamba2} Dao, T., and Gu, A. (2024). Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality. ICML 2024.

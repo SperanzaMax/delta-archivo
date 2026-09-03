@@ -89,7 +89,20 @@ for i in $(seq 1 90); do          # hasta 3 h
   sleep 120
   OUT="$(timeout -k 20 200 "${CL[@]}" exec -s "$SESION" --timeout 150 -f "$TMP/ver.py" 2>&1 | tail -16)"
   echo "--- $(date +%H:%M)"; echo "$OUT"
+  # 3-sep: las sesiones de Colab se estan muriendo a los ~60 min y una semilla entera son ~80, asi
+  # que bajar recien al final costaba la campania completa. Se baja CADA unidad apenas aparece.
+  for t in "${TRABAJOS[@]}"; do
+    U="${ETIQ}_${t%%:*}_s${t##*:}"
+    [ -f "$AQUI/${U}.json" ] && continue
+    echo "$OUT" | grep -q "${U}.json" || continue
+    timeout -k 30 300 "${CL[@]}" download -s "$SESION" "/content/${U}.json" "$AQUI/${U}.json" \
+      2>&1 | tail -1
+  done
   echo "$OUT" | grep -q "VIVO= False" && break
+  if echo "$OUT" | grep -qi "not found"; then
+    echo "!! la sesion $SESION se perdio; se sale para que el rotador cambie de cuenta"
+    exit 3
+  fi
 done
 
 for t in "${TRABAJOS[@]}"; do
