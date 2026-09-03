@@ -1,0 +1,162 @@
+trabajos: cerca:2 lejos:2 lejos_dos:2 lejos_relleno:2
+
+===== g2_cerca_s2  (12:55:00)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 14328.77it/s]
+scan PARALELO (mambapy) ACTIVADO
+gradient checkpointing ACTIVADO
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion cerca · formas de entrenamiento ('d2',) · se EVALUA en `d2`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:167: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0001  (44s)
+  paso   100  loss 0.6423  (88s)
+  ── eval 100: vigente 0.9906 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0031
+  paso   150  loss 0.0001  (145s)
+  paso   200  loss 0.0000  (188s)
+  ── eval 200: vigente 0.9969 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0031
+  paso   250  loss 0.0000  (246s)
+  paso   300  loss 0.0000  (289s)
+  ── eval 300: vigente 0.9969 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0031
+  paso   350  loss 0.0000  (347s)
+  paso   400  loss 0.0000  (390s)
+  ── eval 400: vigente 0.9969 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0031
+  paso   450  loss 0.0003  (448s)
+  paso   500  loss 0.0000  (491s)
+  ── eval 500: vigente 0.9969 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0031
+  paso   550  loss 0.0000  (549s)
+  paso   600  loss 0.0000  (592s)
+  ── eval 600: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+  paso   650  loss 0.0000  (650s)
+  paso   700  loss 0.0000  (693s)
+  ── eval 700: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+  paso   750  loss 0.0000  (751s)
+  paso   800  loss 0.0000  (794s)
+  ── eval 800: vigente 1.0000 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0000
+  (la sensibilidad final fallo: KeyError: 0) — las metricas ya estan
+listo
+== g2_cerca_s2 codigo 0 en 850 s
+
+===== g2_lejos_s2  (13:09:11)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 7124.76it/s]
+scan PARALELO (mambapy) ACTIVADO
+gradient checkpointing ACTIVADO
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion lejos · formas de entrenamiento ('d5',) · se EVALUA en `d5`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:167: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0024  (44s)
+  paso   100  loss 0.4193  (88s)
+  ── eval 100: vigente 0.9969 · nose 0.9227 (ent 0.9725/rel 0.8588) · falsa 0.0031
+  paso   150  loss 0.4227  (145s)
+  paso   200  loss 0.0017  (189s)
+  ── eval 200: vigente 0.9780 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0220
+  paso   250  loss 0.0099  (246s)
+  paso   300  loss 0.0000  (290s)
+  ── eval 300: vigente 0.9969 · nose 0.9897 (ent 1.0000/rel 0.9765) · falsa 0.0031
+  paso   350  loss 0.0000  (347s)
+  paso   400  loss 0.0000  (391s)
+  ── eval 400: vigente 0.9969 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0031
+  paso   450  loss 0.0000  (448s)
+  paso   500  loss 0.0002  (492s)
+  ── eval 500: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+  paso   550  loss 0.0000  (549s)
+  paso   600  loss 0.0000  (593s)
+  ── eval 600: vigente 1.0000 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0000
+  paso   650  loss 0.0004  (650s)
+  paso   700  loss 0.0000  (694s)
+  ── eval 700: vigente 1.0000 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0000
+  paso   750  loss 0.0000  (751s)
+  paso   800  loss 0.0000  (795s)
+  ── eval 800: vigente 1.0000 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0000
+  (la sensibilidad final fallo: KeyError: 0) — las metricas ya estan
+listo
+== g2_lejos_s2 codigo 0 en 832 s
+
+===== g2_lejos_dos_s2  (13:23:03)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 3798.92it/s]
+scan PARALELO (mambapy) ACTIVADO
+gradient checkpointing ACTIVADO
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion lejos_dos · formas de entrenamiento ('d5', 'd2') · se EVALUA en `d5`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:167: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0002  (44s)
+  paso   100  loss 0.0002  (88s)
+  ── eval 100: vigente 1.0000 · nose 0.8866 (ent 0.9266/rel 0.8353) · falsa 0.0000
+  paso   150  loss 0.0142  (145s)
+  paso   200  loss 0.0000  (189s)
+  ── eval 200: vigente 1.0000 · nose 0.9794 (ent 1.0000/rel 0.9529) · falsa 0.0000
+  paso   250  loss 0.6299  (246s)
+  paso   300  loss 0.0000  (290s)
+  ── eval 300: vigente 0.9937 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0063
+  paso   350  loss 0.0000  (347s)
+  paso   400  loss 0.0000  (390s)
+  ── eval 400: vigente 0.9717 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0283
+  paso   450  loss 0.0000  (448s)
+  paso   500  loss 0.0000  (491s)
+  ── eval 500: vigente 0.9969 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0031
+  paso   550  loss 0.0000  (548s)
+  paso   600  loss 0.0000  (592s)
+  ── eval 600: vigente 1.0000 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0000
+  paso   650  loss 0.0000  (649s)
+  paso   700  loss 0.0000  (693s)
+  ── eval 700: vigente 1.0000 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0000
+  paso   750  loss 0.0001  (750s)
+  paso   800  loss 0.0000  (794s)
+  ── eval 800: vigente 0.9969 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0031
+  (la sensibilidad final fallo: KeyError: 0) — las metricas ya estan
+listo
+== g2_lejos_dos_s2 codigo 0 en 832 s
+
+===== g2_lejos_relleno_s2  (13:36:55)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 8142.19it/s]
+scan PARALELO (mambapy) ACTIVADO
+gradient checkpointing ACTIVADO
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion lejos_relleno · formas de entrenamiento ('d5', 'd5b') · se EVALUA en `d5`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:167: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0003  (44s)
+  paso   100  loss 0.0010  (88s)
+  ── eval 100: vigente 0.9969 · nose 0.9536 (ent 1.0000/rel 0.8941) · falsa 0.0000
+  paso   150  loss 0.0216  (145s)
+  paso   200  loss 0.0000  (189s)
+  ── eval 200: vigente 0.9748 · nose 0.9639 (ent 1.0000/rel 0.9176) · falsa 0.0126
+  paso   250  loss 0.0272  (246s)
+  paso   300  loss 0.0000  (290s)
+  ── eval 300: vigente 0.9937 · nose 0.9794 (ent 1.0000/rel 0.9529) · falsa 0.0063
+  paso   350  loss 0.0001  (347s)
+  paso   400  loss 0.0005  (391s)
+  ── eval 400: vigente 0.9748 · nose 0.9897 (ent 1.0000/rel 0.9765) · falsa 0.0252
+  paso   450  loss 0.9533  (448s)
+  paso   500  loss 0.0000  (491s)
+  ── eval 500: vigente 0.9874 · nose 0.9948 (ent 1.0000/rel 0.9882) · falsa 0.0126
+  paso   550  loss 0.0002  (549s)
+  paso   600  loss 0.0000  (592s)
+  ── eval 600: vigente 0.9874 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0094
+  paso   650  loss 0.0000  (649s)
+  paso   700  loss 0.0000  (693s)
+  ── eval 700: vigente 1.0000 · nose 0.9588 (ent 1.0000/rel 0.9059) · falsa 0.0000
+  paso   750  loss 0.0000  (750s)
+  paso   800  loss 0.0000  (794s)
+  ── eval 800: vigente 0.9906 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0094
+  (la sensibilidad final fallo: KeyError: 0) — las metricas ya estan
+listo
+== g2_lejos_relleno_s2 codigo 0 en 832 s
+CAMPANIA COMPLETA

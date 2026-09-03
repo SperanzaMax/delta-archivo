@@ -1,7 +1,7 @@
 {
  "config": {
   "modelo": "state-spaces/mamba-130m-hf",
-  "condicion": "cerca",
+  "condicion": "lejos_dos",
   "semilla": 2,
   "pasos": 800,
   "batch": 8,
@@ -13,7 +13,7 @@
   "n_eval": 32,
   "n_hechos": 4,
   "sin_pscan": false,
-  "salida": "/content/g2_cerca_s2.json"
+  "salida": "/content/g2_lejos_dos_s2.json"
  },
  "alcance_real": 2,
  "historia": [
@@ -27,39 +27,39 @@
    "paso": 0
   },
   {
-   "vigente": 0.9905660377358491,
-   "nose": 1.0,
-   "nose_ent": 1.0,
-   "nose_rel": 1.0,
-   "falsa_abst": 0.0031446540880503146,
-   "abstencion": 0.380859375,
+   "vigente": 1.0,
+   "nose": 0.8865979381443299,
+   "nose_ent": 0.926605504587156,
+   "nose_rel": 0.8352941176470589,
+   "falsa_abst": 0.0,
+   "abstencion": 0.3359375,
    "paso": 100
   },
   {
-   "vigente": 0.9968553459119497,
-   "nose": 0.9948453608247423,
+   "vigente": 1.0,
+   "nose": 0.979381443298969,
    "nose_ent": 1.0,
-   "nose_rel": 0.9882352941176471,
-   "falsa_abst": 0.0031446540880503146,
-   "abstencion": 0.37890625,
+   "nose_rel": 0.9529411764705882,
+   "falsa_abst": 0.0,
+   "abstencion": 0.37109375,
    "paso": 200
   },
   {
-   "vigente": 0.9968553459119497,
-   "nose": 0.9948453608247423,
+   "vigente": 0.9937106918238994,
+   "nose": 1.0,
    "nose_ent": 1.0,
-   "nose_rel": 0.9882352941176471,
-   "falsa_abst": 0.0031446540880503146,
-   "abstencion": 0.37890625,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.006289308176100629,
+   "abstencion": 0.3828125,
    "paso": 300
   },
   {
-   "vigente": 0.9968553459119497,
-   "nose": 0.9948453608247423,
+   "vigente": 0.9716981132075472,
+   "nose": 1.0,
    "nose_ent": 1.0,
-   "nose_rel": 0.9882352941176471,
-   "falsa_abst": 0.0031446540880503146,
-   "abstencion": 0.37890625,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.02830188679245283,
+   "abstencion": 0.396484375,
    "paso": 400
   },
   {
@@ -73,21 +73,12 @@
   },
   {
    "vigente": 1.0,
-   "nose": 1.0,
+   "nose": 0.9948453608247423,
    "nose_ent": 1.0,
-   "nose_rel": 1.0,
+   "nose_rel": 0.9882352941176471,
    "falsa_abst": 0.0,
-   "abstencion": 0.37890625,
+   "abstencion": 0.376953125,
    "paso": 600
-  },
-  {
-   "vigente": 1.0,
-   "nose": 1.0,
-   "nose_ent": 1.0,
-   "nose_rel": 1.0,
-   "falsa_abst": 0.0,
-   "abstencion": 0.37890625,
-   "paso": 700
   },
   {
    "vigente": 1.0,
@@ -96,6 +87,15 @@
    "nose_rel": 0.9882352941176471,
    "falsa_abst": 0.0,
    "abstencion": 0.376953125,
+   "paso": 700
+  },
+  {
+   "vigente": 0.9968553459119497,
+   "nose": 1.0,
+   "nose_ent": 1.0,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.0031446540880503146,
+   "abstencion": 0.380859375,
    "paso": 800
   }
  ]

@@ -1,0 +1,102 @@
+{
+ "config": {
+  "modelo": "state-spaces/mamba-130m-hf",
+  "condicion": "lejos_relleno",
+  "semilla": 2,
+  "pasos": 800,
+  "batch": 8,
+  "acum": 1,
+  "lr": 3e-05,
+  "largo": 64,
+  "cada": 100,
+  "p_nose": 0.4,
+  "n_eval": 32,
+  "n_hechos": 4,
+  "sin_pscan": false,
+  "salida": "/content/g2_lejos_relleno_s2.json"
+ },
+ "alcance_real": 2,
+ "historia": [
+  {
+   "vigente": 0.0,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 0
+  },
+  {
+   "vigente": 0.9968553459119497,
+   "nose": 0.9536082474226805,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8941176470588236,
+   "falsa_abst": 0.0,
+   "abstencion": 0.361328125,
+   "paso": 100
+  },
+  {
+   "vigente": 0.9748427672955975,
+   "nose": 0.9639175257731959,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9176470588235294,
+   "falsa_abst": 0.012578616352201259,
+   "abstencion": 0.373046875,
+   "paso": 200
+  },
+  {
+   "vigente": 0.9937106918238994,
+   "nose": 0.979381443298969,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9529411764705882,
+   "falsa_abst": 0.006289308176100629,
+   "abstencion": 0.375,
+   "paso": 300
+  },
+  {
+   "vigente": 0.9748427672955975,
+   "nose": 0.9896907216494846,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9764705882352941,
+   "falsa_abst": 0.025157232704402517,
+   "abstencion": 0.390625,
+   "paso": 400
+  },
+  {
+   "vigente": 0.9874213836477987,
+   "nose": 0.9948453608247423,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9882352941176471,
+   "falsa_abst": 0.012578616352201259,
+   "abstencion": 0.384765625,
+   "paso": 500
+  },
+  {
+   "vigente": 0.9874213836477987,
+   "nose": 1.0,
+   "nose_ent": 1.0,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.009433962264150943,
+   "abstencion": 0.384765625,
+   "paso": 600
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9587628865979382,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9058823529411765,
+   "falsa_abst": 0.0,
+   "abstencion": 0.36328125,
+   "paso": 700
+  },
+  {
+   "vigente": 0.9905660377358491,
+   "nose": 1.0,
+   "nose_ent": 1.0,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.009433962264150943,
+   "abstencion": 0.384765625,
+   "paso": 800
+  }
+ ]
+}

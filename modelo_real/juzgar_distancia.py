@@ -88,9 +88,11 @@ def main():
 
     # ---- G-L: techo
     techo = [k for k, v in D.items() if k[0].startswith("lejos") and v["rel"][-1] >= 0.95]
+    sem_techo = {k[1] for k in techo}
     if techo:
         print(f"  G-L TECHO: {', '.join(f'{k[0]}_s{k[1]}' for k in techo)} dan nose_rel >= 0,95 -> "
               f"esas comparaciones son NO EVALUABLES")
+        print(f"      semillas afectadas en el criterio FINAL: {sorted(sem_techo)}")
 
     def contraste(a, b, campo):
         """Devuelve [(semilla, delta)] solo para pares con IGUAL ultimo paso."""
@@ -113,6 +115,14 @@ def main():
             ("G-2  ", "lejos_dos", "lejos", "final", 0.10),
             ("G-2v ", "lejos_dos", "lejos", "auc", 0.10)):
         pares, saltados = contraste(a, b, campo)
+        # G-L SE APLICA, no solo se informa. Sobre el valor FINAL, una semilla donde la condicion de
+        # abajo ya toco el techo no puede mostrar diferencia: no queda margen. El AUC no tiene ese
+        # problema, porque promedia la curva entera, asi que ahi no se filtra.
+        if campo == "final" and sem_techo:
+            antes = len(pares)
+            pares = [(s_, d) for s_, d in pares if s_ not in sem_techo]
+            if antes != len(pares):
+                saltados = saltados + [f"s{s_} por TECHO" for s_ in sorted(sem_techo)]
         etq = f"{nombre} {a} - {b} ({campo})"
         if not pares:
             print(f"  {etq}: **NO EVALUABLE**, no hay ningun par con igual presupuesto"

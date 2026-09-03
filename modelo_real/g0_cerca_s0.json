@@ -70,6 +70,33 @@
    "falsa_abst": 0.0,
    "abstencion": 0.337890625,
    "paso": 500
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9887640449438202,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9761904761904762,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 600
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9943820224719101,
+   "nose_ent": 1.0,
+   "nose_rel": 0.9880952380952381,
+   "falsa_abst": 0.0,
+   "abstencion": 0.345703125,
+   "paso": 700
+  },
+  {
+   "vigente": 0.9940119760479041,
+   "nose": 0.9325842696629213,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8571428571428571,
+   "falsa_abst": 0.0029940119760479044,
+   "abstencion": 0.326171875,
+   "paso": 800
   }
  ]
 }

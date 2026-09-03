@@ -1,0 +1,21 @@
+-- vuelta 1 · cuenta H · 12:42
+== g0 en H · sesion NUEVA dist_h_1242
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=a44b6e47_0de2_4509_9484_ec708
+566a5c4........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en H
+-- vuelta 1 · cuenta C · 12:42
+cuenta C ocupada por el pid 3171102
+-- vuelta 1 · cuenta K · 12:42
+== g0 en K · sesion NUEVA dist_k_1242
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=c2419d7a_586c_4882_a59f_3ce51
+c9fdcc1........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en K
+-- vuelta 1 · cuenta I · 12:43
+== g0 en I · sesion NUEVA dist_i_1243
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=fbe7af07_4e90_48e7_a974_d64aa
+f965f4d........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en I
+-- vuelta 1 · cuenta G · 12:43
