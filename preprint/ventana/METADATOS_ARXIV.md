@@ -115,6 +115,32 @@ La razón del cambio la dice arXiv de frente: frenar la avalancha de envíos no 
 > **Consecuencia: hace falta un endorsement personal de un autor establecido en `cs.LG`.** El correo
 > institucional destrabó OpenReview y Scholar, pero **no destraba arXiv por sí solo.**
 
+### ✅ HECHO el 3-sep · cuenta creada y CÓDIGO OBTENIDO
+
+Cuenta `mrsperanza`, afiliación *Independent Researcher*, categoría por defecto `cs.LG`, URL el ORCID.
+
+> **Código de endorsement: `QPVI87`**
+> Se otorga en `https://arxiv.org/auth/endorse?x=QPVI87`
+
+arXiv además mandó un mail con el código a `mrsperanza@frba.utn.edu.ar`, que se puede **reenviar tal
+cual** a un candidato en vez de escribir uno propio.
+
+### ★ QUIÉN CALIFICA PARA ENDOSAR, y es MUCHO más amplio de lo que parecía
+
+Textual de arXiv: hace falta haber enviado **3 papers a CUALQUIERA** de `cs.AI`, `cs.AR`, `cs.CC`,
+`cs.CE`, `cs.CG`, `cs.CL`, `cs.CR`, `cs.CV`, `cs.CY`, `cs.DB`, `cs.DC`, `cs.DL`, `cs.DM`, `cs.DS`,
+`cs.ET`, `cs.FL`, `cs.GL`, `cs.GR`, `cs.GT`, `cs.HC`, `cs.IR`, `cs.IT`, `cs.LG`, `cs.LO`, `cs.MA`,
+`cs.MM`, `cs.MS`, `cs.NA`, `cs.NE`, `cs.NI`, `cs.OH`, `cs.OS`, `cs.PF`, `cs.PL`, `cs.RO`, `cs.SC`,
+`cs.SD`, `cs.SE`, `cs.SI` o `cs.SY`, **más de tres meses atrás y menos de cinco años atrás**.
+
+**No hace falta que la persona publique en `cs.LG`.** Sirve cualquier rama de Computer Science, y eso
+abre el campo enormemente: un docente de sistemas con tres papers en `cs.SE` o `cs.DB` califica igual
+que un investigador de aprendizaje automático.
+
+**Cómo verificar ANTES de pedir, sin molestar a nadie:** entrar al abstract del paper de esa persona
+en arXiv y usar el link **«Which of the authors of this article can endorse?»** al pie. Hay que estar
+logueado en arXiv para que funcione (desde afuera devuelve 401).
+
 ### Cómo se pide, en este orden
 
 1. **Registrarse en arxiv.org con `mrsperanza@frba.utn.edu.ar`.** El correo institucional sigue
