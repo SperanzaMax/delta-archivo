@@ -26,7 +26,11 @@ sys.path.insert(0, AQUI)
 import tarea_real as T
 
 
-def evaluar(modelo, tok, rng, n=8, B=16, forma="directa", p_nose=0.4, largo=64, n_hechos=4):
+def evaluar(modelo, tok, rng, n=32, B=16, forma="directa", p_nose=0.4, largo=64, n_hechos=4):
+    """n*B ejemplos. Con n=8 quedaban ~40 de `nose_rel` y el error tipico de la proporcion era
+    0,063: la diferencia de 0,15 que abrio la compuerta del 3-sep daba 2,4 sigma, demasiado poco
+    para leer tres semillas. Con n=32 son ~160 y el error baja a ~0,03. La evaluacion va por el
+    camino lento de HF (el pscan solo entra en training) pero cuesta una fraccion del paso."""
     modelo.eval()
     id_abst = tok(" " + T.ABST).input_ids[0]
     P, G, TI = [], [], []
@@ -47,7 +51,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--modelo", default="state-spaces/mamba-370m-hf")
     ap.add_argument("--condicion",
-                    choices=("una", "dos", "ciega", "cerca", "lejos", "lejos_dos", "lejos_relleno"),
+                    choices=("una", "dos", "ciega", "cerca", "lejos", "lejos_dos", "lejos_relleno",
+                             "muylejos", "muylejos_dos", "muylejos_relleno"),
                     required=True,
                     help="LAS DE ARRIBA quedan del 2-sep y su geometria estaba mal contada: "
                          "una = solo directa · dos = directa+invertida · ciega = directa+lejana. "
@@ -67,6 +72,8 @@ def main():
                          "128 causaba OOM en T4 (medido, no estimado).")
     ap.add_argument("--cada", type=int, default=250)
     ap.add_argument("--p-nose", type=float, default=0.4)
+    ap.add_argument("--n-eval", type=int, default=32,
+                    help="lotes de 16 en cada evaluacion; 32 da ~160 ejemplos de nose_rel")
     ap.add_argument("--n-hechos", type=int, default=4,
                     help="hechos en el contexto. MEDIDO el 2-sep: con 4 la tarea SATURA en "
                          "mamba-130m, las dos condiciones dan nose_rel 1,0000 y no queda margen "
@@ -79,11 +86,15 @@ def main():
     FORMAS = {"una": ("directa",), "dos": ("directa", "invertida"),
               "ciega": ("directa", "lejana"),
               "cerca": ("d2",), "lejos": ("d5",),
-              "lejos_dos": ("d5", "d2"), "lejos_relleno": ("d5", "d5b")}[a.condicion]
-    # Todas las condiciones `lejos*` se EVALUAN en d5, que es donde la relacion no entra en la
-    # ventana de la capa 0. `cerca` se evalua en d2, su propia forma.
-    F_EVAL = "d2" if a.condicion == "cerca" else ("d5" if a.condicion.startswith("lejos")
-                                                  else "directa")
+              "lejos_dos": ("d5", "d2"), "lejos_relleno": ("d5", "d5b"),
+              # d=9, donde la atenuacion medida en la capa 1 es ~2x la de d=5. Para el caso de que
+              # con d=5 las 24 capas alcancen a pagar el impuesto y las dos condiciones saturen.
+              "muylejos": ("d9",), "muylejos_dos": ("d9", "d2"),
+              "muylejos_relleno": ("d9", "d9b")}[a.condicion]
+    # Cada condicion se EVALUA en la forma mas lejana con la que entrena, que es donde la relacion
+    # no entra en la ventana de la capa 0.
+    F_EVAL = {"una": "directa", "dos": "directa", "ciega": "directa", "cerca": "d2"}.get(
+        a.condicion, "d9" if a.condicion.startswith("muylejos") else "d5")
 
     from transformers import AutoTokenizer, AutoModelForCausalLM
     torch.manual_seed(a.semilla)
@@ -133,8 +144,8 @@ def main():
     rng_ev = lambda: np.random.default_rng(90000 + a.semilla)
 
     hist = []
-    base = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose, n_hechos=a.n_hechos,
-                   forma=F_EVAL)
+    base = evaluar(modelo, tok, rng_ev(), n=a.n_eval, largo=a.largo, p_nose=a.p_nose,
+                   n_hechos=a.n_hechos, forma=F_EVAL)
     base["paso"] = 0
     hist.append(base)
     print(f"  BASELINE paso 0 · vigente {base['vigente']:.4f} · nose {base['nose']:.4f} "
@@ -156,7 +167,7 @@ def main():
             print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
                   flush=True)
         if paso % a.cada == 0 or paso == a.pasos:
-            m = evaluar(modelo, tok, rng_ev(), largo=a.largo, p_nose=a.p_nose,
+            m = evaluar(modelo, tok, rng_ev(), n=a.n_eval, largo=a.largo, p_nose=a.p_nose,
                         n_hechos=a.n_hechos, forma=F_EVAL)
             m["paso"] = paso
             hist.append(m)

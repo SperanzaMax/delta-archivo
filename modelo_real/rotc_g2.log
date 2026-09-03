@@ -1,0 +1,69 @@
+-- vuelta 1 · cuenta H · 08:21
+== g2 en H · sesion NUEVA dist_h_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=0052e2e6_2d56_4f39_8446_cdcec
+551e202........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en H
+-- vuelta 1 · cuenta C · 08:21
+== g2 en C · sesion NUEVA dist_c_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=dbc2137f_0e38_4596_bae0_44781
+b397406........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en C
+-- vuelta 1 · cuenta K · 08:21
+== g2 en K · sesion NUEVA dist_k_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=002a05f4_3c2a_44b7_a163_ed233
+926a5a5........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en K
+-- vuelta 1 · cuenta I · 08:21
+== g2 en I · sesion NUEVA dist_i_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=f8dd7dc0_f335_4059_9abd_0a481
+984175c........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en I
+-- vuelta 1 · cuenta G · 08:22
+== g2 en G · sesion NUEVA dist_g_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=c8eb21fa_b478_446d_95fd_982ae
+2f8a74e........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en G
+-- vuelta 1 · cuenta F · 08:22
+== g2 en F · sesion NUEVA dist_f_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=c0e0e59c_000b_43f2_978b_25c84
+832f330........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en F
+-- vuelta 1 · cuenta J · 08:22
+== g2 en J · sesion NUEVA dist_j_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=7b900d74_e3fe_482e_a349_34f13
+b386d70........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en J
+-- vuelta 1 · cuenta L · 08:22
+cuenta L ocupada por el pid 1213493
+-- vuelta 1 · cuenta M · 08:22
+== g2 en M · sesion NUEVA dist_m_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=1fd5b0de_5552_4b68_ad7a_78f77
+7fe3f97........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en M
+-- vuelta 1 · cuenta A · 08:22
+== g2 en A · sesion NUEVA dist_a_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=a320763b_d48c_4b57_8633_c3bcc
+0014a22........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en A
+-- vuelta 1 · cuenta D · 08:22
+== g2 en D · sesion NUEVA dist_d_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=ede3d048_7d97_4cb4_8692_67c55
+2586ff7........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en D
+-- vuelta 1 · cuenta E · 08:22
+== g2 en E · sesion NUEVA dist_e_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=a84795cb_a7fd_4760_8b94_d38cf
+4ebf3b3........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en E
+-- lista agotada, descanso 8 min

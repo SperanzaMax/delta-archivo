@@ -1,0 +1,56 @@
+trabajos: cerca:0 lejos:0
+
+===== dist_cerca_s0  (11:01:01)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 6663.35it/s]
+scan PARALELO (mambapy) ACTIVADO
+gradient checkpointing ACTIVADO
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion cerca · formas de entrenamiento ('d2',) · se EVALUA en `d2`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:156: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0000  (43s)
+  paso   100  loss 0.0000  (85s)
+  ── eval 100: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   150  loss 0.0008  (133s)
+  paso   200  loss 0.0000  (177s)
+  ── eval 200: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   250  loss 0.0000  (227s)
+  paso   300  loss 0.0000  (272s)
+  ── eval 300: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   350  loss 0.0000  (321s)
+  paso   400  loss 0.0000  (366s)
+  ── eval 400: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+listo
+== dist_cerca_s0 codigo 0 en 382 s
+
+===== dist_lejos_s0  (11:07:23)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/242 [00:00<?, ?it/s]Loading weights: 100%|██████████| 242/242 [00:00<00:00, 5779.28it/s]
+scan PARALELO (mambapy) ACTIVADO
+gradient checkpointing ACTIVADO
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion lejos · formas de entrenamiento ('d5',) · se EVALUA en `d5`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:156: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.1015  (46s)
+  paso   100  loss 0.0001  (91s)
+  ── eval 100: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+  paso   150  loss 0.8466  (140s)
+  paso   200  loss 0.0123  (186s)
+  ── eval 200: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+  paso   250  loss 0.3421  (235s)
+  paso   300  loss 0.0000  (280s)
+  ── eval 300: vigente 0.9880 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0120
+  paso   350  loss 0.0000  (329s)
+  paso   400  loss 0.0000  (375s)
+  ── eval 400: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+listo
+== dist_lejos_s0 codigo 0 en 391 s
+CAMPANIA COMPLETA

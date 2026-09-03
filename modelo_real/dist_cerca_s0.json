@@ -1,0 +1,65 @@
+{
+ "config": {
+  "modelo": "state-spaces/mamba-130m-hf",
+  "condicion": "cerca",
+  "semilla": 0,
+  "pasos": 400,
+  "batch": 8,
+  "acum": 1,
+  "lr": 3e-05,
+  "largo": 64,
+  "cada": 100,
+  "p_nose": 0.4,
+  "n_hechos": 4,
+  "sin_pscan": false,
+  "salida": "/content/dist_cerca_s0.json"
+ },
+ "alcance_real": 2,
+ "historia": [
+  {
+   "vigente": 0.0,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 0
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9777777777777777,
+   "nose_ent": 1.0,
+   "nose_rel": 0.95,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 100
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9777777777777777,
+   "nose_ent": 1.0,
+   "nose_rel": 0.95,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 200
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9777777777777777,
+   "nose_ent": 1.0,
+   "nose_rel": 0.95,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 300
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9777777777777777,
+   "nose_ent": 1.0,
+   "nose_rel": 0.95,
+   "falsa_abst": 0.0,
+   "abstencion": 0.34375,
+   "paso": 400
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "config": {
+  "modelo": "state-spaces/mamba-130m-hf",
+  "condicion": "lejos",
+  "semilla": 0,
+  "pasos": 400,
+  "batch": 8,
+  "acum": 1,
+  "lr": 3e-05,
+  "largo": 64,
+  "cada": 100,
+  "p_nose": 0.4,
+  "n_hechos": 4,
+  "sin_pscan": false,
+  "salida": "/content/dist_lejos_s0.json"
+ },
+ "alcance_real": 2,
+ "historia": [
+  {
+   "vigente": 0.0,
+   "nose": 0.0,
+   "nose_ent": 0.0,
+   "nose_rel": 0.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.0,
+   "paso": 0
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9111111111111111,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8,
+   "falsa_abst": 0.0,
+   "abstencion": 0.3203125,
+   "paso": 100
+  },
+  {
+   "vigente": 1.0,
+   "nose": 0.9111111111111111,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8,
+   "falsa_abst": 0.0,
+   "abstencion": 0.3203125,
+   "paso": 200
+  },
+  {
+   "vigente": 0.9879518072289156,
+   "nose": 0.9111111111111111,
+   "nose_ent": 1.0,
+   "nose_rel": 0.8,
+   "falsa_abst": 0.012048192771084338,
+   "abstencion": 0.328125,
+   "paso": 300
+  },
+  {
+   "vigente": 1.0,
+   "nose": 1.0,
+   "nose_ent": 1.0,
+   "nose_rel": 1.0,
+   "falsa_abst": 0.0,
+   "abstencion": 0.3515625,
+   "paso": 400
+  }
+ ]
+}

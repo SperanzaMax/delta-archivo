@@ -1,0 +1,106 @@
+== compuerta en O · REUSA smk_o_0742
+[colab] Uploaded '/tmp/tmp.J5G7a1a78H/real.tgz' to '/content/real.tgz'
+mambapy pscan OK 
+lanzado pid 9558 trabajos: cerca:0 lejos:0 
+--- 08:03
+VIVO= True
+HECHOS= ['dist_cerca_s0.json']
+LOG:
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion cerca · formas de entrenamiento ('d2',) · se EVALUA en `d2`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:156: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0000  (43s)
+  paso   100  loss 0.0000  (85s)
+  ── eval 100: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+--- 08:05
+VIVO= True
+HECHOS= ['dist_cerca_s0.json']
+LOG:
+/content/real/entrenar_real.py:156: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0000  (43s)
+  paso   100  loss 0.0000  (85s)
+  ── eval 100: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   150  loss 0.0008  (133s)
+  paso   200  loss 0.0000  (177s)
+  ── eval 200: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   250  loss 0.0000  (227s)
+--- 08:07
+VIVO= True
+HECHOS= ['dist_cerca_s0.json']
+LOG:
+  paso    50  loss 0.0000  (43s)
+  paso   100  loss 0.0000  (85s)
+  ── eval 100: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   150  loss 0.0008  (133s)
+  paso   200  loss 0.0000  (177s)
+  ── eval 200: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   250  loss 0.0000  (227s)
+  paso   300  loss 0.0000  (272s)
+  ── eval 300: vigente 1.0000 · nose 0.9778 (ent 1.0000/rel 0.9500) · falsa 0.0000
+  paso   350  loss 0.0000  (321s)
+--- 08:09
+VIVO= True
+HECHOS= ['dist_cerca_s0.json', 'dist_lejos_s0.json']
+LOG:
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion lejos · formas de entrenamiento ('d5',) · se EVALUA en `d5`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:156: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.1015  (46s)
+  paso   100  loss 0.0001  (91s)
+  ── eval 100: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+--- 08:11
+VIVO= True
+HECHOS= ['dist_cerca_s0.json', 'dist_lejos_s0.json']
+LOG:
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:156: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.1015  (46s)
+  paso   100  loss 0.0001  (91s)
+  ── eval 100: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+  paso   150  loss 0.8466  (140s)
+  paso   200  loss 0.0123  (186s)
+  ── eval 200: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+--- 08:13
+VIVO= True
+HECHOS= ['dist_cerca_s0.json', 'dist_lejos_s0.json']
+LOG:
+  paso    50  loss 0.1015  (46s)
+  paso   100  loss 0.0001  (91s)
+  ── eval 100: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+  paso   150  loss 0.8466  (140s)
+  paso   200  loss 0.0123  (186s)
+  ── eval 200: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+  paso   250  loss 0.3421  (235s)
+  paso   300  loss 0.0000  (280s)
+  ── eval 300: vigente 0.9880 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0120
+  paso   350  loss 0.0000  (329s)
+--- 08:15
+VIVO= False
+HECHOS= ['dist_cerca_s0.json', 'dist_lejos_s0.json']
+LOG:
+  ── eval 200: vigente 1.0000 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0000
+  paso   250  loss 0.3421  (235s)
+  paso   300  loss 0.0000  (280s)
+  ── eval 300: vigente 0.9880 · nose 0.9111 (ent 1.0000/rel 0.8000) · falsa 0.0120
+  paso   350  loss 0.0000  (329s)
+  paso   400  loss 0.0000  (375s)
+  ── eval 400: vigente 1.0000 · nose 1.0000 (ent 1.0000/rel 1.0000) · falsa 0.0000
+listo
+== dist_lejos_s0 codigo 0 en 391 s
+CAMPANIA COMPLETA
+[colab] Downloaded '/content/dist_cerca_s0.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/dist_cerca_s0.json'
+[colab] Downloaded '/content/dist_lejos_s0.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/dist_lejos_s0.json'
+[colab] Downloaded '/content/campana_compuerta.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/campana_compuerta.log'
+== compuerta: sesion smk_o_0742 queda VIVA para reusar

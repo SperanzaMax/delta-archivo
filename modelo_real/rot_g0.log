@@ -1,0 +1,32 @@
+== g0 en O · REUSA smk_o_0742
+[colab] Uploaded '/tmp/tmp.YmCU2zLynw/real.tgz' to '/content/real.tgz'
+mambapy pscan OK 
+lanzado pid 14131 trabajos: cerca:0 lejos:0 lejos_dos:0 lejos_relleno:0 
+--- 08:21
+VIVO= True
+HECHOS= ['g0_cerca_s0.json']
+LOG:
+modelo state-spaces/mamba-130m-hf · 129,135,360 params · cuda
+conv kernel 4 · taps vivos [1, 2, 3] · ALCANCE REAL 2
+condicion cerca · formas de entrenamiento ('d2',) · se EVALUA en `d2`
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:167: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0000  (43s)
+  paso   100  loss 0.0000  (86s)
+  ── eval 100: vigente 0.9970 · nose 0.9888 (ent 1.0000/rel 0.9762) · falsa 0.0030
+--- 08:23
+VIVO= True
+HECHOS= ['g0_cerca_s0.json']
+LOG:
+  BASELINE paso 0 · vigente 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa 0.0000
+/content/real/entrenar_real.py:167: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"  paso {paso:5d}  loss {float(out.loss):.4f}  ({time.time()-t0:.0f}s)",
+  paso    50  loss 0.0000  (43s)
+  paso   100  loss 0.0000  (86s)
+  ── eval 100: vigente 0.9970 · nose 0.9888 (ent 1.0000/rel 0.9762) · falsa 0.0030
+  paso   150  loss 0.0008  (145s)
+  paso   200  loss 0.0000  (190s)
+  ── eval 200: vigente 1.0000 · nose 0.9831 (ent 0.9894/rel 0.9762) · falsa 0.0000

@@ -1,0 +1,43 @@
+-- vuelta 1 · cuenta H · 08:21
+== g1 en H · sesion NUEVA dist_h_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=fbda1cbe_5d4c_4823_8fb9_5d628
+8b75bc3........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en H
+-- vuelta 1 · cuenta C · 08:21
+== g1 en C · sesion NUEVA dist_c_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=f1a368b2_7e6f_4466_aa6f_b32f9
+8e7423e........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en C
+-- vuelta 1 · cuenta K · 08:21
+== g1 en K · sesion NUEVA dist_k_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=b07d4185_4783_415d_a42a_0bce4
+3f3d731........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en K
+-- vuelta 1 · cuenta I · 08:21
+== g1 en I · sesion NUEVA dist_i_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=2a9355a2_970e_4d88_810c_87bcd
+9549ce0........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en I
+-- vuelta 1 · cuenta G · 08:21
+== g1 en G · sesion NUEVA dist_g_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=bdbaf063_565b_4eb9_9619_8777c
+bbff6a4........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en G
+-- vuelta 1 · cuenta F · 08:21
+== g1 en F · sesion NUEVA dist_f_0821
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=81ebf18b_b437_4629_9c94_98489
+1ad772e........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en F
+-- vuelta 1 · cuenta J · 08:22
+== g1 en J · sesion NUEVA dist_j_0822
+ColabRequestError: Failed to issue request POST 
+https://colab.research.google.com/tun/m/assign?nbh=8e9e39d3_c0bf_4f73_aa82_8a498
+3e2af0b........&variant=GPU&accelerator=T4: Service Unavailable
+sin sesion en J
+-- vuelta 1 · cuenta L · 08:22

@@ -88,7 +88,10 @@
   "lejana": "What is the {r} that {e} has?",
   "d2": "What is the {r} of {e}?",
   "d5": "What is the {r} of the person named {e}?",
-  "d5b": "What is the {r} of that other person {e}?"
+  "d5b": "What is the {r} of that other person {e}?",
+  "d9": "What is the {r} of the person that we have always called {e}?",
+  "d12": "What is the {r} of the one person that we have always known well as {e}?",
+  "d9b": "What is the {r} of the fellow that we have often called {e}?"
  },
  "alcance_real": 2
 }
