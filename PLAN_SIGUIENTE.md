@@ -100,19 +100,28 @@ vector de 8.000 logits por unidad guardado** para no volver a pasar por los chec
 es exactamente lo que faltó la primera vez y dejó la columna sin rastrear. 47 minutos de CPU con
 `taskset -c 0-1`.
 
-### ★ Y un lateral que puede tocar la constante `q`
+### ✖ EL LATERAL SE CAYÓ EN LOS CONTROLES, el mismo día
 
-La correlación entre la **tasa de error** de la unidad y su **AUC(a)** es **r = −0,9892** sobre las
-nueve, con `frac_error` yendo de `0.4074` en la útil a `0.8197` en la más degenerada.
+Se había reportado `r = −0,9892` entre la tasa de error y el AUC como posible explicación mecánica de
+la degeneración de la cabeza. **No aguanta, y los dos controles son concluyentes.**
 
-Se lee así, y el propio código ya lo anticipaba en un comentario de `entrenar.py`: cuando la
-recuperación falla, el blanco de la cabeza se satura hacia 1, y **un blanco casi constante no deja
-señal para aprender a discriminar**. Mala recuperación → blanco saturado → cabeza sin gradiente útil →
-AUC ≈ 0,5.
+**Control 1 · no era información nueva.** `r(RECUP, tasa de error) = −1,0000` **exacto**: la tasa de
+error es una transformación algebraica de RECUP,
+`err = p_nose + (1 − p_nose)(1 − RECUP)`, con diferencias de ±0,0006 en las nueve unidades. Así que
+`r(error, AUC)` **es** `r(RECUP, AUC) = +0,9892`, que la tabla del paper ya mostraba. Se reescribió una
+columna al revés.
 
-⚠️ **Es una observación, no un resultado.** n = 9, las unidades difieren en más de una cosa a la vez, y
-no hay control. Para que sea un resultado hay que **fijar la recuperación y mover sólo la saturación
-del blanco**. Pero si aguanta, es la primera explicación mecánica que aparece para la degeneración de
-la cabeza, y toca directamente el frente de `q ≈ 0,50`.
+**Control 2 · el mecanismo propuesto es falso.** Forzando la tasa de error de la unidad buena de
+`0.4074` a `0.8201` por submuestreo, sin tocar un solo score, **el AUC se queda en `0.9997` en los tres
+casos**. El AUC es invariante a la prevalencia, que es una propiedad conocida de la métrica. Entonces
+«el blanco se satura y por eso el AUC baja» **no puede ser cierto**.
+
+**Lo que sí queda vivo:** la hipótesis *dinámica* —blanco saturado → poco gradiente → la cabeza nunca
+aprende a discriminar— sigue en pie, pero la correlación **no es evidencia a su favor** y no se decide
+midiendo. Hay que **entrenar** con la recuperación fijada y distinta saturación del blanco, y eso va a
+Colab.
+
+> **Séptimo veredicto que se da vuelta al correrle el control.** Costó veinte minutos en vez de una
+> campaña, que es exactamente para lo que sirve la regla.
 
 **Lo que le queda al atractor para poder enviarse:** la versión en castellano. Los números ya están.
