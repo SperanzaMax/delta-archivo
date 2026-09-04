@@ -50,8 +50,8 @@ a distancia $1$ de la posición de lectura y la relación a distancia $3$. Con n
 queda afuera de la ventana en el $100\,\%$ de las consultas, así que el modelo recupera solamente por
 la entidad. Cuando se le pregunta por una relación que nunca se enunció, sobre una entidad que sí
 apareció, responde con el hecho archivado equivocado en vez de abstenerse, y la abstención correcta
-queda en $0{,}5850$ a $0{,}7349$ sobre tres semillas. Ensanchar el núcleo a $5$, que cuesta $1{,}280$
-parámetros sobre $865{,}395$, la lleva a $\mathbf{0{,}9931}$ hasta $\mathbf{1{,}0000}$ sin solape
+queda en $0{,}5850$ a $0{,}7349$ sobre tres semillas. Ensanchar el núcleo a $5$, que cuesta $1{,}024$
+parámetros sobre $865{,}651$, la lleva a $\mathbf{0{,}9931}$ hasta $\mathbf{1{,}0000}$ sin solape
 entre condiciones, y la exactitud global a $0{,}988$ hasta $0{,}993$ contra un piso trivial de
 $0{,}4065$.
 
@@ -122,7 +122,7 @@ la ablación del único tap que alcanza la relación lo reproduce (Resultado 3).
 
 \item \textbf{Ensanchar la ventana un tap de cada lado compra abstención.} La abstención correcta en
 el caso difícil va de $0{,}5850$--$0{,}7349$ a $0{,}9931$--$1{,}0000$ sin solape en tres semillas, por
-$1{.}280$ parámetros sobre $865{.}395$ (Resultado 2).
+$1{.}024$ parámetros sobre $865{.}651$ (Resultado 2).
 
 \item \textbf{La disociación se sostiene en un modelo que no es nuestro.} En \texttt{mamba-130m} la
 salida de la capa se mueve a toda distancia mientras la de la convolución queda en cero exacto,
@@ -189,7 +189,7 @@ conecta la pregunta con la abstención.
 
 \section{Montaje experimental}
 
-El sustrato es un modelo de lenguaje de $3{,}5$\,MB, $865{,}395$ parámetros, $d=128$, cuatro bloques,
+El sustrato es un modelo de lenguaje de $3{,}5$\,MB, $865{,}651$ parámetros, $d=128$, cuatro bloques,
 entrenado desde cero sobre un idioma sintético cerrado de $242$ tokens con un archivo persistente
 co-entrenado. Los hechos se enuncian en una secuencia, se revisan en otra y se consultan en una
 tercera, \textbf{con el estado recurrente reseteado entre secuencias}, así que la recuperación no se
@@ -258,7 +258,7 @@ $0{,}4065$, que es lo que saca un modelo que se abstiene en todo.
 $0{,}941$--$1{,}000$ a $0{,}936$--$0{,}973$. Una lectura que informe solamente un número agregado de
 abstención esconde ese intercambio.
 
-\textbf{No es capacidad.} El modelo de núcleo $5$ agrega $1{,}280$ parámetros, el $0{,}15\,\%$, y el
+\textbf{No es capacidad.} El modelo de núcleo $5$ agrega $1{,}024$ parámetros, el $0{,}12\,\%$, y el
 control de núcleo $3$ ya recupera la entrada correcta con probabilidad $1{,}0000$. Lo que cambia es el
 acceso, y el Resultado 1 lo mide directo.
 

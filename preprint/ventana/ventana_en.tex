@@ -49,7 +49,7 @@ read position and the relation at distance $3$. With kernel $3$, the relation is
 $100\%$ of queries, so the model retrieves on the entity alone. When asked about a relation that was
 never stated for an entity that \emph{was}, it answers from the wrong stored fact instead of
 abstaining: correct abstention is $0.5850$ to $0.7349$ across three seeds. Widening the kernel to $5$,
-which costs $1{,}280$ parameters out of $865{,}395$, lifts it to $\mathbf{0.9931}$ to
+which costs $1{,}024$ parameters out of $865{,}651$, lifts it to $\mathbf{0.9931}$ to
 $\mathbf{1.0000}$ with no overlap between conditions, and overall accuracy to $0.988$--$0.993$ against
 a trivial floor of $0.4065$.
 
@@ -120,7 +120,7 @@ the relation reproduces it (Result 3).
 
 \item \textbf{Widening the window by one tap on each side buys abstention.} Correct abstention on the
 hard case goes from $0.5850$--$0.7349$ to $0.9931$--$1.0000$ with no overlap across three seeds, for
-$1{,}280$ parameters out of $865{,}395$ (Result 2).
+$1{,}024$ parameters out of $865{,}651$ (Result 2).
 
 \item \textbf{The dissociation holds in a model that is not ours.} In \texttt{mamba-130m}, the layer
 output moves at every distance while the convolution output stays at exactly zero, $80$ cells out of
@@ -183,7 +183,7 @@ never asks which part of the query goes blind, and does not connect the question
 
 \section{Setup}
 
-The substrate is a $3.5$\,MB language model, $865{,}395$ parameters, $d=128$, four blocks, trained from
+The substrate is a $3.5$\,MB language model, $865{,}651$ parameters, $d=128$, four blocks, trained from
 scratch on a closed synthetic language of $242$ tokens with a co-trained persistent archive. Facts are
 stated in one sequence, revised in another and queried in a third, \textbf{with the recurrent state
 reset between sequences}, so retrieval cannot be solved by carrying activations forward.
@@ -248,7 +248,7 @@ of a model that abstains on everything.
 $0.941$--$1.000$ to $0.936$--$0.973$. A reading that only reports a pooled abstention number hides this
 trade.
 
-\textbf{It is not capacity.} The kernel-$5$ model adds $1{,}280$ parameters, $0.15\%$, and the kernel-$3$
+\textbf{It is not capacity.} The kernel-$5$ model adds $1{,}024$ parameters, $0.12\%$, and the kernel-$3$
 control already retrieves the right entry with probability $1.0000$. What changes is access, and Result
 1 measures the access directly.
 

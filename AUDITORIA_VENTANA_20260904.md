@@ -71,6 +71,35 @@ palabras, la cota sube a `0.19`–`0.30`. Por eso la que se publica es la de pal
   no es el span entre partes sino la distancia de la parte más lejana **al final de la pregunta**, que
   es `X1 + X2` y es todavía mayor. Ahí el paper **subestima** su propio efecto.
 
+
+## ⚠️ CUARTO ERROR, encontrado DESPUÉS de la auditoría · el conteo de parámetros
+
+Salió de una pregunta de Maxi («¿con 1.280 parámetros qué desbloqueamos?»), al ir a verificar el
+desglose en vez de repetir el número del paper. **No cierra.**
+
+| unidad | `params` medido |
+|---|---|
+| `v3`, kernel 3 | **865.651** |
+| `kq3`, kernel 5 | **866.675** |
+| `k73`, kernel 7 | 867.699 |
+
+**El costo real de pasar de kernel 3 a 5 es 1.024, no 1.280**, y la progresión lo confirma dos veces
+(+1.024 por cada dos taps). El desglose exacto es `2 taps × 128 canales × 4 bloques = 1.024`.
+
+**Y el denominador tampoco existe: NINGUNA de las corridas tiene 865.395 parámetros.** El modelo con
+kernel 3 tiene 865.651. Los únicos valores que aparecen en todo el repo son 863.730, 863.859,
+865.651, 866.675 y 867.699.
+
+Los dos números estaban **en el abstract**, y el `0.15 %` derivado también (el real es `0.12 %`).
+Corregidos en los tres manuscritos y aplicada una segunda `Revision` en TMLR el mismo día.
+
+> ### ⚠️ EL HUECO DE ESTA AUDITORÍA, y es la lección que importa
+> Se auditaron **las siete tablas** contra los datos crudos y las seis que declaraban su estadístico
+> reprodujeron exacto. Pero **no se auditaron los números que viven sólo en el texto corrido**, y ahí
+> estaban estos dos. **Un número en un párrafo se verifica igual que uno en una tabla.** Los demás del
+> texto sí se chequearon después y cierran: `129.135.360` coincide con el log de `mamba-130m`, y
+> 865.651 × 4 bytes = 3,46 MB sostiene el «3,5 MB».
+
 ## La regla que deja
 
 > **Una tabla publicada tiene que decir QUÉ estadístico es cada fila.** Las seis tablas que lo decían
