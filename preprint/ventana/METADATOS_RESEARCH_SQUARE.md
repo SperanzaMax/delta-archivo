@@ -1,63 +1,37 @@
 # Envío a Research Square — el paper de la ventana
 
-## ✅ ENVIADO EL 2026-09-04 a las 07:43 (GMT-3) · RSID `rs-10929866`
+## ⚠️ ESTADO AL 2026-09-04 · EL ENVÍO FUE ELIMINADO Y HAY QUE REHACERLO
 
-| campo | valor |
-|---|---|
-| **RSID** | `rs-10929866` |
-| **estado** | **Prescreening** (hasta 72 h hábiles; el del sello tardó día y medio) |
-| **DOI** | *Available once preprint is posted* |
-| panel | https://www.researchsquare.com/article/rs-10929866/private/article-overview |
+**`rs-10929866` ya no existe.** El ticket `#11738664` pidió corregir el abstract antes de postear y
+**Erika K.** de Preprints Publishing Support contestó a las 09:44 (hora ARG):
 
-Es el **cuarto** preprint de esta línea. Lo que se cargó, exacto:
+> «Thank you for letting us know. **I have removed the submission and you may submit a new one.**
+> Once it is submitted, we are not permitted to make changes.»
 
-| sección | qué se puso |
-|---|---|
-| 1. manuscrito | `ventana_en.pdf`, 10 páginas |
-| 2. título | el de abajo, título y subtítulo unidos por dos puntos |
-| 3. article type | Research Article |
-| 4. area of study | Computer Science → Artificial Intelligence and Machine Learning |
-| 5. autor | Maximiliano Rodrigo Speranza · Independent Researcher · **`mrsperanza@frba.utn.edu.ar`** · ORCID · corresponding |
-| 6. abstract | el de `abstract_rs.txt`, 4618 de 5000 caracteres |
-| 7. keywords | los diez de abajo |
-| 8. figuras | salteada, van dentro del PDF |
-| 9. suplementario | `ventana_es.pdf`, «Complete Spanish-language version of the manuscript» |
-| 10. institución | salteada. La UTN **no** patrocinó ni va como afiliación |
-| 11. funding | salteada, no hay |
-| 12. ethics | guardada sin marcar: ni sujetos humanos ni vertebrados |
-| 13. competing interests | «No, I declare that authors have no interests…» |
-| 14. submit | términos + CC BY 4.0, con código de 6 dígitos por mail |
+**Salió más drástico de lo pedido** —se pidió devolver a draft o reemplazar el archivo, y eliminaron
+el envío— pero el resultado neto es el que se buscaba: **el error no va a salir publicado.** El costo
+es rehacer el envío y perder el lugar en la cola del prescreening.
 
-**★ El mail del autor pasó a ser el INSTITUCIONAL, por pedido de Maxi durante la carga.** Los dos
-`.tex` se editaron y los dos PDF se **recompilaron antes de subirlos**, así que el registro y el
-manuscrito dicen lo mismo. Los tres preprints anteriores llevan el Gmail; desde éste es
-`mrsperanza@frba.utn.edu.ar`. ⚠️ **`ventana_arxiv.tar.gz` sigue teniendo el Gmail**: hay que
-regenerarlo antes del envío a arXiv.
+> ### ★★ LA REGLA QUE DEJA, textual de Research Square
+> **«Once it is submitted, we are not permitted to make changes.»**
+> En Research Square **NO se puede editar un envío ni siquiera en prescreening**. La única salida es
+> que soporte lo elimine y se reenvíe entero. **La verificación va ANTES de apretar enviar, no
+> después.** La auditoría del 4-sep se hizo el mismo día pero unas horas tarde, y eso costó un envío.
 
-**El código de 6 dígitos se leyó del Gmail con el conector**, no hizo falta que lo pasara a mano.
-Expira en 10 minutos y la sesión del navegador aguantó sin problema, así que el envío entero se puede
-hacer de una sentada.
+### El paquete para reenviar está listo
 
-## ⏳ 2026-09-04 · TICKET `#11738664` para corregir ANTES de que postee
+| qué | dónde | estado |
+|---|---|---|
+| manuscrito | `ventana_en.pdf` | ✅ corregido, 11 páginas |
+| suplementario | `ventana_es.pdf` | ✅ corregido, 11 páginas |
+| abstract en texto plano | `abstract_rs.txt` | ✅ **4.676 caracteres**, sin `<>`, con «four blocks deep» |
 
-La auditoría del mismo día (`AUDITORIA_VENTANA_20260904.md`) encontró que el abstract dice
-**«two blocks deep»** y el micro-LM tiene **cuatro** bloques. Corregido en el manuscrito, pero el
-envío ya estaba adentro.
+⚠️ **En el abstract van CORCHETES, no `<relation>` / `<entity>`.** OpenReview los interpretó como
+etiquetas HTML y los borró del render; el editor de Research Square es rich-text y puede hacer lo
+mismo. Ya está resuelto en `abstract_rs.txt`.
 
-**No corresponde una v2**, y se verificó en la plataforma en vez de suponerlo: `/article/rs-10929866/v1`
-devuelve **`Resource not found`**, o sea que **no hay versión pública ni DOI todavía**. Lo que
-corresponde es corregir el envío para que la versión pública nazca sin el error.
-
-**★ La vía que NO necesita sesión, y es lo reutilizable:** el formulario de soporte
-`support.researchsquare.com/support/tickets/new` **no pide login**. Pide correo, categoría, RSID,
-título y descripción. Se abrió el ticket con categoría *Preprint posting status*, pidiendo que
-devuelvan el envío a draft o reemplacen el archivo, con el link al PDF corregido en GitHub.
-
-Sirvió porque **la sesión de Research Square no sobrevive a un reinicio de Chrome** (la de OpenReview
-sí) y el login sólo lo puede hacer Maxi.
-
-**Riesgo de esperar, bajo:** el prescreening tarda de día y medio a 72 h hábiles.
-
+**Falta sólo la sesión de Maxi** para rehacer las 14 secciones. El resto está resuelto acá abajo y el
+código de 6 dígitos se lee del Gmail con el conector.
 
 ---
 
