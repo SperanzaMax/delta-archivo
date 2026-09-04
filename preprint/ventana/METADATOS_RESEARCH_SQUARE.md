@@ -1,37 +1,34 @@
 # Envío a Research Square — el paper de la ventana
 
-## ⚠️ ESTADO AL 2026-09-04 · EL ENVÍO FUE ELIMINADO Y HAY QUE REHACERLO
+## ✅ REENVIADO EL 2026-09-04 a las 15:36 (GMT-3) · RSID `rs-10934426`
 
-**`rs-10929866` ya no existe.** El ticket `#11738664` pidió corregir el abstract antes de postear y
-**Erika K.** de Preprints Publishing Support contestó a las 09:44 (hora ARG):
+**Este es el envío bueno, con los cuatro errores ya corregidos.** El anterior (`rs-10929866`) lo
+eliminó soporte a pedido nuestro, ticket `#11738664`, porque en Research Square **no se puede editar
+un envío ni siquiera en prescreening**.
 
-> «Thank you for letting us know. **I have removed the submission and you may submit a new one.**
-> Once it is submitted, we are not permitted to make changes.»
+| campo | valor |
+|---|---|
+| **RSID** | `rs-10934426` |
+| **estado** | **Prescreening** |
+| **DOI** | *Available once preprint is posted* |
+| panel | <https://www.researchsquare.com/article/rs-10934426/private/article-overview> |
 
-**Salió más drástico de lo pedido** —se pidió devolver a draft o reemplazar el archivo, y eliminaron
-el envío— pero el resultado neto es el que se buscaba: **el error no va a salir publicado.** El costo
-es rehacer el envío y perder el lugar en la cola del prescreening.
+### Lo que cambió respecto del envío eliminado
 
-> ### ★★ LA REGLA QUE DEJA, textual de Research Square
-> **«Once it is submitted, we are not permitted to make changes.»**
-> En Research Square **NO se puede editar un envío ni siquiera en prescreening**. La única salida es
-> que soporte lo elimine y se reenvíe entero. **La verificación va ANTES de apretar enviar, no
-> después.** La auditoría del 4-sep se hizo el mismo día pero unas horas tarde, y eso costó un envío.
+1. «two blocks deep» → **four blocks deep** (el micro-LM tiene cuatro)
+2. la fila `layer output` de la Tabla 3 ahora declara **mediana + rango**, y el texto da el mínimo global
+3. el `n` de X3 corregido, y agregada la **cota inferior** que faltaba
+4. **1.024 parámetros sobre 865.651**, no 1.280 sobre 865.395, y 0,12 % en vez de 0,15 %
+5. en el abstract, `<relation>` y `<entity>` van **entre corchetes**, porque los editores rich-text
+   los interpretan como HTML y los borran
 
-### El paquete para reenviar está listo
+### Verificado ANTES de enviar, que es la lección del día
 
-| qué | dónde | estado |
-|---|---|---|
-| manuscrito | `ventana_en.pdf` | ✅ corregido, 11 páginas |
-| suplementario | `ventana_es.pdf` | ✅ corregido, 11 páginas |
-| abstract en texto plano | `abstract_rs.txt` | ✅ **4.676 caracteres**, sin `<>`, con «four blocks deep» |
+Título completo, mail del autor `mrsperanza@frba.utn.edu.ar`, institución *Independent Researcher*,
+ORCID, corresponding marcado, abstract con los números nuevos, y las 13 secciones en verde. Recién
+después se apretó enviar.
 
-⚠️ **En el abstract van CORCHETES, no `<relation>` / `<entity>`.** OpenReview los interpretó como
-etiquetas HTML y los borró del render; el editor de Research Square es rich-text y puede hacer lo
-mismo. Ya está resuelto en `abstract_rs.txt`.
-
-**Falta sólo la sesión de Maxi** para rehacer las 14 secciones. El resto está resuelto acá abajo y el
-código de 6 dígitos se lee del Gmail con el conector.
+El código de 6 dígitos (`787577`) se leyó del Gmail con el conector.
 
 ---
 
