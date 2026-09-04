@@ -24,6 +24,20 @@ etrieval»* —dos letras comidas— y el `<textarea>` del abstract, con 4.618 c
 **Los campos cortos y críticos se setean por valor, no se tipean, y se releen con zoom antes de
 enviar.** Se verificó que el abstract estaba intacto comparando el valor previo contra el nuevo.
 
+
+## ✅ REVISION APLICADA EL 2026-09-04, mismo día
+
+Después de la auditoría (`AUDITORIA_VENTANA_20260904.md`) se corrigió el envío **sin gastar cuota**:
+`Edit → Revision` en el foro del paper, y queda como *modified* con historial de *Revisions* público.
+
+Cambió el **abstract** (los cuatro bloques, la matización del Resultado 7 y los corchetes de abajo) y
+el **PDF**. El suplementario no se tocó.
+
+> ⚠️ **OpenReview se come lo que parece HTML.** El abstract quedó publicado diciendo *«questions have
+> the form what is the of ?»*: `<relation>` y `<entity>` desaparecieron al **renderizar**. El dato
+> guardado estaba bien, pero el revisor ve el render. **En un formulario web van corchetes, nunca
+> `<...>`.**
+
 ---
 
 **Entrar a** `openreview.net`, buscar **TMLR** en Active Venues y darle a **Submit**.
