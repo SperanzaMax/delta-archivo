@@ -1,0 +1,684 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[round]{natbib}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\title{\bfseries La abstención perfecta es conocimiento nulo\\
+\large Dos puntos fijos estables de un objetivo de abstención autorreferencial\\
+en un modelo de lenguaje chico con memoria versionada}
+
+\author{Maximiliano Speranza\\
+\small Investigador independiente, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID 0009-0005-0413-8554}\\
+\small \texttt{mrsperanza@frba.utn.edu.ar}}
+
+\date{Septiembre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Un detector de alucinaciones tendría que predecir los errores de su propio modelo, así que el blanco
+natural de entrenamiento es autorreferencial. Cada ejemplo se etiqueta según si el modelo
+\emph{se equivocaría en caso de contestar}. Entrenamos ese blanco en un modelo de lenguaje de
+$863{,}730$ parámetros con un archivo versionado co-entrenado, dejando fijas la arquitectura, los datos
+y el presupuesto, y encontramos que el objetivo tiene \textbf{dos puntos fijos estables}. Nueve
+unidades se reparten $5$ y $4$ entre ellos, y el reparto lo gobierna \textbf{cuánta recuperación tenía
+ya el modelo cuando empezó el entrenamiento de abstención}. Seis unidades que arrancaron de cero se
+reparten $2$ y $4$, mientras que tres que heredaron $12{,}000$ pasos de pre-entrenamiento de
+recuperación (RECUP $0{,}77$ a $0{,}80$) alcanzaron el punto útil $3$ de $3$.
+
+El degenerado es el hallazgo. Cuatro de nueve unidades convergen a un estado que puntúa
+$\texttt{nose} = 1{,}0000$ y $\texttt{invento} = 0{,}0000$, \emph{perfecto} en las dos métricas que la
+literatura de abstención informa, mientras su exactitud global queda en $0{,}4065$, que es exactamente
+el piso trivial que se obtiene abstiéndose en todo. No son detectores que fallan. Son
+\textbf{detectores perfectamente calibrados de un generador que no sabe nada}, y la calibración es
+honesta, porque el modelo no recupera y lo informa correctamente. Su cabeza binaria colapsó a una
+constante con $\mathrm{AUC}$ de $0{,}522$ a $0{,}578$ sobre su propio blanco, y esa constante se
+ubica donde la predice el prior. Para la unidad más joven, el $\mathrm{logit}$ de la tasa de error base
+vale $1{,}513$ contra una mediana medida de $1{,}507$.
+
+La bifurcación se decide temprano y es nítidamente legible. En el paso $2500$, sobre el lote de
+evaluación de $512$ muestras que el propio bucle de entrenamiento ya computa, las cinco unidades
+sobrevivientes habían emitido $2$, $4$, $4$, $8$ y $1$ respuestas, y las cuatro degeneradas habían
+emitido \textbf{cero}. La regla ``cero contra no cero en el paso $2500$'' separa \textbf{40 de 40}
+corridas con cabeza binaria en doce familias de este repositorio, y una unidad sobrevivió con una
+\emph{sola} muestra de $512$. La fase muda inicial pertenece al blanco autorreferencial. Sobre el
+control pareado que comparte semilla \emph{y} inicialización, tres unidades con un blanco fijo e
+independiente del modelo leen entre $0{,}06$ y $0{,}20$ contra $0{,}98$ y $0{,}99$ de sus gemelas
+autorreferenciales.
+
+El punto degenerado es \textbf{absorbente} y no meramente lento. Medir la recuperación dentro de una
+misma unidad con muestras pareadas a lo largo de $4000$ pasos más da $-0{,}0021$, o sea $0{,}4\sigma$,
+y no se mueve. Informamos además una corrección a nuestra propia primera lectura, en la que una
+tendencia entre unidades que sobrevive a un control de ruido ($r = 0{,}986$) igual no era
+extrapolable, porque la curva es cóncava y un ajuste lineal escondía una saturación.
+
+La consecuencia práctica es una afirmación sobre métricas y no sobre arquitectura. \textbf{Cualquier
+criterio de éxito que lea tasa de abstención y tasa de fabricación sin leer exactitud global queda
+maximizado por un modelo que no aprendió nada}, y un objetivo autorreferencial aporta una dinámica de
+entrenamiento que alcanza ese máximo por sí sola, en una fracción sustancial de las corridas, sin
+aviso de ninguna de las dos métricas.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Palabras clave.} abstención; detección de alucinaciones; predicción selectiva;
+objetivos autorreferenciales; dinámica de entrenamiento; soluciones degeneradas; modelos de lenguaje
+chicos; memoria persistente
+
+\section{La métrica que gana un modelo callado}
+\label{sec:intro}
+
+La literatura sobre abstención informa dos números. Uno es la tasa con la que un modelo se niega
+correctamente a contestar preguntas que no puede contestar, y el otro es la tasa con la que fabrica.
+Los dos son deseables, los dos están acotados, y un sistema que mejora en ambos se toma normalmente
+como un sistema que mejoró.
+
+Un modelo que se abstiene en todas las preguntas puntúa perfecto en los dos.
+
+No es una observación sutil, y como punto abstracto tampoco es nueva. La literatura de predicción
+selectiva siempre emparejó riesgo con cobertura, precisamente porque el riesgo solo se minimiza de
+forma trivial \citep{elyaniv2010selective, geifman2017selective}. Lo que informamos acá es que la
+esquina degenerada no solo es alcanzable en principio sino que es un \textbf{atractor de un objetivo
+de entrenamiento natural}, que una fracción sustancial de las corridas cae en ella, y que una vez
+adentro el estado es estable si se sigue entrenando.
+
+El objetivo en cuestión es el que un detector de alucinaciones realmente quiere. Un detector sirve si
+predice los errores \emph{de este modelo}, así que el blanco no debería ser ``¿existe la respuesta?''
+sino ``¿me voy a equivocar si contesto?''. Ese blanco está disponible gratis durante el entrenamiento.
+Se toma el propio \texttt{argmax} del modelo, se compara contra la etiqueta y se usa la comparación
+como blanco binario con el gradiente cortado. Es lo natural, y en este banco es lo que produjo las
+unidades de las que trata este trabajo.
+
+Su defecto es estructural antes que incidental. La etiqueta es función del propio estado del modelo,
+así que se mueve mientras el modelo aprende, y el mapa tiene más de una solución consistente. En la
+inicialización el modelo se equivoca en casi todo, con lo cual el blanco es la constante~$1$ y la
+cabeza aprende a predecir ``me voy a equivocar'', que es \emph{cierto}. Escapar exige que el generador
+empiece a acertar antes de que la cabeza termine de asentarse en la constante. Es una carrera entre dos
+escalas de tiempo de aprendizaje, y la sección~\ref{sec:mudas} muestra que tanto la semilla como la
+cantidad de recuperación que el modelo ya tiene cuando arranca la carrera deciden cuál gana.
+
+Los dos desenlaces son autoconsistentes, y eso es lo que vuelve estable al degenerado.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+punto fijo & qué afirma el modelo, y si es cierto \\
+\midrule
+útil & ``recupero bien, y sé cuándo voy a fallar'', y es cierto \\
+\textbf{degenerado} & ``no recupero casi nada, y sé que no recupero casi nada'', y \textbf{también es cierto} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El modelo degenerado no está mal calibrado. Es honesto, inútil e invisible para las dos métricas que
+el campo informa.
+
+\paragraph{Contribuciones.}
+\begin{enumerate}
+\item Caracterizamos el punto fijo degenerado de un objetivo de abstención autorreferencial y mostramos
+que lo alcanzan $4$ de las $6$ unidades entrenadas desde cero, y ninguna de las $3$ que heredaron
+pre-entrenamiento de recuperación (sección~\ref{sec:mudas}).
+\item Mostramos que las unidades degeneradas \emph{no} son detectores rotos. Sus cabezas colapsaron al
+prior, y lo verificamos cuantitativamente contra la constante en forma cerrada, no solo de manera
+cualitativa (sección~\ref{sec:prior}).
+\item Mostramos que la bifurcación queda decidida para el paso $2500$ y es separable con una regla de
+cero contra no cero sobre datos que el bucle de entrenamiento ya produce, validada en $40$ corridas
+(sección~\ref{sec:bifurcacion}).
+\item Mostramos que el punto degenerado es absorbente y no lento, usando la primera medición dentro de
+una misma unidad que se hace en esta línea de trabajo (sección~\ref{sec:absorbente}).
+\item Corregimos una primera lectura de nuestros propios datos, en la que una tendencia real entre
+unidades se extrapoló con la forma funcional equivocada (sección~\ref{sec:correccion}).
+\end{enumerate}
+
+\section{Trabajo relacionado}
+\label{sec:related}
+
+\paragraph{Predicción selectiva.} El marco de riesgo y cobertura
+\citep{elyaniv2010selective, geifman2017selective} existe porque la abstención se cambia contra la
+utilidad, y SelectiveNet \citep{geifman2019selectivenet} vuelve explícito ese intercambio entrenando
+una cabeza de selección contra una restricción de cobertura. Nuestras unidades degeneradas son la razón
+de ser de esa restricción, observada como desenlace de entrenamiento y no como argumento.
+
+\paragraph{Aprender a decir ``no sé''.} Agregar un token \texttt{[IDK]} al vocabulario
+\citep{cohen2024idk} y agregar una cabeza binaria separada son las dos interfaces dominantes. Comparamos
+cuatro de ellas con presupuesto igualado en un trabajo previo \citep{speranza2026abstention} y
+encontramos que la cabeza es superior en este régimen. Esa comparación usaba un blanco \emph{fijo},
+``¿existe la respuesta?'', y ninguna de sus unidades entró en el estado que se describe acá. El presente
+trabajo es lo que pasa cuando el blanco se vuelve autorreferencial.
+
+\paragraph{Blancos autorreferenciales y bootstrapeados.} Entrenar un predictor contra etiquetas
+derivadas del modelo actual es estándar en autoentrenamiento y pseudo-etiquetado, y el modo de falla
+por sesgo de confirmación está bien documentado \citep{arazo2020pseudo}. Nuestro aporte no es que los
+blancos autorreferenciales puedan colapsar, cosa esperable, sino la forma específica del colapso en el
+contexto de la abstención. El estado colapsado es \emph{correcto}, puntúa perfecto en las métricas
+estándar y por lo tanto esas métricas no lo detectan como falla.
+
+\paragraph{Soluciones degeneradas y colapso.} Los métodos de aprendizaje de representaciones que
+predicen sus propias salidas colapsan a constantes si no se les pone un remedio explícito
+\citep{grill2020byol, chen2021simsiam}. El mecanismo acá es de la misma familia, un blanco que el
+modelo puede satisfacer moviendo el blanco, pero la solución colapsada no es una representación
+constante sino una \emph{decisión} constante, y esa constancia es exactamente lo que la hace puntuar
+bien.
+
+\section{El banco}
+\label{sec:bench}
+
+El banco es el que describe \citet{speranza2026abstention}. Repetimos acá lo necesario para leer los
+resultados y remitimos ahí para el resto.
+
+\paragraph{Modelo.} Un modelo de lenguaje entrenado \emph{desde cero}, sin ningún componente
+pre-entrenado. Son $863{,}730$ parámetros, $3{,}5$~MB y un vocabulario cerrado de $242$ tokens
+legibles por humanos. Una recurrencia de regla delta más un \textbf{archivo persistente co-entrenado}
+con un sello de orden aprendido en la clave, leído por softmax e inyectado en el bloque~0. El archivo
+persiste entre sesiones mientras que el estado recurrente se reinicia entre ellas.
+
+\paragraph{Tarea.} Los hechos se enuncian en una sesión, se corrigen en otra y se consultan en una
+tercera. La respuesta es un \textbf{token único}, así que la métrica es exacta y determinista, sin juez
+LLM y sin parser interpretativo. El $40\,\%$ de las preguntas no tiene respuesta
+($p_{\mathrm{nose}} = 0{,}4$), y la fracción empírica en la muestra de evaluación es $0{,}4065$.
+
+\paragraph{Interfaz.} Todas las unidades de este trabajo usan la cabeza binaria separada, que fue la
+que seleccionó la comparación previa. Es un escalar $a$ proyectado desde el mismo estado final que
+alimenta el softmax de vocabulario, con $+129$ parámetros. El modelo se abstiene cuando $a > 0$.
+Informar el colapso sobre la interfaz \emph{ganadora} es deliberado, porque así no queda como artefacto
+de un mecanismo de abstención débil.
+
+\paragraph{Métricas.} \texttt{vigente} es la exactitud sobre el valor actual \emph{tal como se emite},
+o sea después de la decisión de la cabeza. \texttt{nose} es la tasa de abstención en preguntas sin
+respuesta. \texttt{falsa\_abst} es la tasa de abstención en preguntas que sí la tienen. \texttt{invento}
+es la tasa de respuestas que nombran contenido ausente del archivo. Agregamos dos instrumentos.
+
+\begin{itemize}
+\item \textbf{Exactitud global}, definida como (respuestas correctas más abstenciones correctas) sobre
+$n$. Su piso trivial en este banco es $\mathbf{0{,}4065}$, que se obtiene abstiéndose en todo.
+\item \textbf{RECUP}, la exactitud de recuperación \emph{ignorando la cabeza}, o sea el \texttt{argmax}
+sobre valores en las preguntas que sí tienen respuesta, sin aplicar la decisión de abstención.
+\texttt{vigente} es un compuesto de recuperación y decisión, y vale $0{,}0000$ siempre que $a > 0$ en
+todas partes, sin importar qué recuperó el modelo. RECUP separa las dos cosas.
+\end{itemize}
+
+\paragraph{Protocolo de medición.} RECUP se mide con $n = 8000$ y una semilla de datos fija ($54321$)
+en todos los checkpoints, de modo que las comparaciones son \textbf{pareadas}. Las preguntas son
+idénticas y lo único que cambia es el modelo. Esto importa. Medida sobre seis semillas de datos con
+$n=2000$, RECUP tiene $\sigma = 0{,}0135$, así que una diferencia no pareada arrastra
+$\sigma \approx 0{,}0191$, que es más grande que los efectos de interés. Informamos $p_{\mathrm{flip}}$,
+la fracción de preguntas en las que dos checkpoints difieren, y de ahí derivamos el desvío estándar
+pareado en vez de suponer un valor.
+
+\paragraph{Protocolo.} Cada campaña tiene un preregistro congelado con su SHA antes de la
+implementación, un archivo de desvíos y reporte por unidad. \textbf{Los resultados nunca se informan
+como un promedio solo.} La bimodalidad entre semillas es una propiedad medida de este banco, y la
+sección~\ref{sec:mudas} es una consecuencia directa de eso.
+
+\paragraph{Uso de un modelo de lenguaje.} Todo el código de experimentación, las campañas de
+entrenamiento y la generación de informes de este trabajo se hicieron con la asistencia de un modelo
+de lenguaje grande. El diseño del estudio, los preregistros y sus hashes congelados, la elección de los
+controles y la verificación de cada número informado son del autor. El modelo no es autor y no tiene
+responsabilidad sobre el trabajo.
+
+\section{El objetivo}
+\label{sec:objetivo}
+
+Escribimos $\ell$ para los logits de valor, $y$ para la etiqueta y $a$ para el escalar de la cabeza. El
+blanco autorreferencial es
+\[
+b \;=\; \mathbb{1}\!\left[\operatorname{sg}\!\big(\arg\max\nolimits_{v \neq \texttt{NOSE}} \ell_v\big) \neq y\right],
+\qquad
+\mathcal{L} \;=\; \mathrm{BCE}(a, b) \;+\; \mathrm{CE}_{\text{valor}},
+\]
+con $\operatorname{sg}$ el corte de gradiente. En las preguntas sin respuesta, $b = 1$ por
+construcción. La entropía cruzada de valor se computa solo donde existe respuesta y se normaliza por
+esa fracción, de modo que la escala de la pérdida no dependa de $p_{\mathrm{nose}}$.
+
+De ahí se siguen dos propiedades directas que conviene enunciar antes de cualquier medición, porque son
+las que los resultados confirman.
+
+\paragraph{El gradiente de valor nunca queda condicionado por la cabeza.}
+$\mathrm{CE}_{\text{valor}}$ no depende de $a$. Le pase lo que le pase a la cabeza, la recuperación
+sigue recibiendo gradiente. El colapso que informamos más abajo no es entonces un caso de ``el modelo
+deja de aprender porque dejó de contestar'', una hipótesis que sostuvimos y refutamos
+(sección~\ref{sec:mudas}).
+
+\paragraph{Si la cabeza ignora su entrada, su óptimo es el prior.} Una constante $a$ que minimiza la
+$\mathrm{BCE}$ contra $b$ vale $\mathrm{logit}\,\mathbb{E}[b]$, y $\mathbb{E}[b]$ se computa en forma
+cerrada a partir de RECUP.
+\begin{equation}
+\mathbb{E}[b] \;=\; p_{\mathrm{nose}} + (1 - p_{\mathrm{nose}})\,(1 - \mathrm{RECUP}),
+\qquad p_{\mathrm{nose}} = 0{,}4065 .
+\label{eq:prior}
+\end{equation}
+Es una predicción sin ningún parámetro libre, y la sección~\ref{sec:prior} la pone a prueba.
+
+\section{Resultados}
+
+Nueve unidades, semillas $0$ a $8$, con banderas idénticas. Cinco llegan a un estado útil y cuatro no.
+Informamos por unidad en todo el trabajo.
+
+\paragraph{Un confundido en el punto de partida, encontrado tarde e informado completo.} Las nueve
+unidades \emph{no} son homogéneas, y nos dimos cuenta después de escrito el análisis que sigue. El
+arnés de entrenamiento siembra la fase de abstención desde un checkpoint base cuando existe uno para
+esa semilla. Solo existían tres bases (\texttt{n3\_s0}, \texttt{n3\_s1}, \texttt{n3\_s2}, cada una con
+$12{,}000$ pasos de entrenamiento de recuperación pura), así que las semillas $0$ a $2$ entraron a la
+fase de abstención recuperando ya a RECUP $0{,}7734$, $0{,}7970$ y $0{,}7725$, mientras que las
+semillas $3$ a $8$ arrancaron de cero. El preregistro de la campaña afirmaba que solo variaba la
+semilla, y el chequeo que se hizo en su momento comparó los \emph{configs} guardados, que no registran
+si hubo siembra.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+grupo & semillas & RECUP inicial & desenlace \\
+\midrule
+pre-entrenadas & 0, 1, 2 & $\approx 0{,}78$ & \textbf{3 de 3 útiles} \\
+desde cero & 3 a 8 & $0$ & 2 útiles, \textbf{4 degeneradas} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Decimos con todas las letras qué cuesta esto y qué no. \textbf{Cuesta la tasa.} ``Cuatro de nueve
+semillas'' no es una tasa sobre una población homogénea, y la afirmación honesta es $0$ de $3$ con
+pre-entrenamiento y $4$ de $6$ sin él. \textbf{No cuesta el fenómeno}, que se mide por unidad y no
+depende del agrupamiento. El punto fijo degenerado existe, cuatro unidades están en él, sus cabezas se
+ubican en el prior y el estado es absorbente.
+
+Y \emph{fortalece} el mecanismo de la sección~\ref{sec:objetivo} en vez de debilitarlo. Si el desenlace
+es una carrera entre el aprendizaje de la recuperación y el asentamiento de la cabeza, entonces un
+modelo que llega recuperando ya ganó la carrera antes de que empiece, que es exactamente el patrón
+observado. Que dos de las seis unidades desde cero lleguen igual al punto útil muestra que el
+pre-entrenamiento no es necesario, solo fuertemente favorable.
+
+\textbf{Dónde muerde esto y dónde no, dicho en las dos secciones afectadas.} La
+sección~\ref{sec:exclusiva} se apoya en un control pareado que comparte semilla \emph{y} base, así que
+no queda tocada, mientras que la tabulación amplia de $31$ contra $9$ sí queda confundida y no nos
+apoyamos en ella.
+
+\subsection{Cuatro de nueve unidades terminan mudas}
+\label{sec:mudas}
+
+\begin{table}[h]
+\centering
+\caption{Las nueve unidades en su propio punto de operación. RECUP es la recuperación ignorando la
+cabeza, y las últimas tres columnas describen el comportamiento de la cabeza. Las unidades degeneradas
+van en negrita.}
+\begin{tabular}{lrrrrrr}
+\toprule
+unidad & paso & RECUP & $\mathrm{AUC}(a)$ & $a > 0$ & mediana de $a$ & rango de $a$ \\
+\midrule
+b3\_s0 & 26000 & 0.9996 & 0.9997 & 0.407 & $-7.634$ & 29.17 \\
+b3\_s1 & 26000 & 0.9992 & 0.9999 & 0.407 & $-7.563$ & 29.86 \\
+b3\_s4 & 19000 & 0.7984 & 0.8084 & 0.413 & $-0.157$ & 14.17 \\
+b3\_s2 & 26000 & 0.7946 & 0.8163 & 0.392 & $-0.233$ & 14.23 \\
+b3\_s5 & 6000  & 0.7314 & 0.7550 & 0.529 & $+0.069$ & 5.66 \\
+\midrule
+\textbf{b3\_s6} & 26000 & \textbf{0.3964} & \textbf{0.5734} & \textbf{1.000} & $+1.006$ & \textbf{3.12} \\
+\textbf{b3\_s3} & 26000 & \textbf{0.3820} & \textbf{0.5784} & \textbf{1.000} & $+1.045$ & \textbf{2.83} \\
+\textbf{b3\_s7} & 13500 & \textbf{0.3432} & \textbf{0.5220} & \textbf{1.000} & $+1.251$ & \textbf{1.06} \\
+\textbf{b3\_s8} & 8000  & \textbf{0.3040} & \textbf{0.5458} & \textbf{1.000} & $+1.507$ & \textbf{0.85} \\
+\bottomrule
+\end{tabular}
+\label{tab:nueve}
+\end{table}
+
+\paragraph{Qué dicen las métricas estándar sobre las filas en negrita.} Las cuatro se abstienen en
+todas las preguntas. Por lo tanto \texttt{nose} vale $1{,}0000$, o sea que rechazan correctamente toda
+pregunta sin respuesta. Y \texttt{invento} vale $0{,}0000$, porque nunca nombran contenido ausente del
+archivo, ya que nunca nombran nada. En los dos números que la literatura de abstención informa, estas
+son las mejores unidades de la tabla, estrictamente mejores que \texttt{b3\_s0}, que contesta y por eso
+ocasionalmente se equivoca.
+
+Su exactitud global es $0{,}4065$, el piso trivial, con cuatro decimales, en las cuatro.
+
+\paragraph{Una hipótesis que sostuvimos y refutamos.} \texttt{vigente} es compuesta, así que
+$\texttt{vigente} = 0{,}0000$ es compatible con una recuperación \emph{perfecta} escondida detrás de una
+cabeza trabada. Eso esperábamos. Es falso. RECUP va de $0{,}30$ a $0{,}40$ en las unidades degeneradas
+contra $0{,}73$ a $1{,}00$ en el resto. La recuperación está genuinamente dañada.
+
+Pero no es cero, y eso importa para la interpretación. Con $\approx 0{,}35$ contra una tasa de azar por
+debajo de $0{,}01$, estos modelos aprendieron una parte sustancial de la tarea y se quedaron a mitad de
+camino. El estado degenerado no es un modelo sin entrenar. Es un modelo parcialmente entrenado cuya
+cabeza informa correctamente que ese entrenamiento parcial es insuficiente.
+
+\subsection{La cabeza colapsó al prior, y la constante está donde la pone la teoría}
+\label{sec:prior}
+
+Las cuatro cabezas degeneradas no discriminan. Su $\mathrm{AUC}$ sobre su propio blanco va de $0{,}522$
+a $0{,}578$, contra $0{,}9997$ de \texttt{b3\_s0}. Tampoco están saturadas en $+\infty$, ya que el rango
+entero entre los percentiles $1$ y $99$ de sus logits abarca de $0{,}85$ a $3{,}24$, contra $29{,}17$.
+Son constantes ubicadas apenas por encima del umbral de decisión.
+
+La ecuación~\eqref{eq:prior} predice \emph{cuál} constante, sin ningún parámetro ajustado.
+
+\begin{table}[h]
+\centering
+\caption{Prior en forma cerrada contra el logit mediano medido. No se ajusta ningún parámetro.}
+\begin{tabular}{lrrrrr}
+\toprule
+unidad & RECUP & $\mathbb{E}[b]$ & $\mathrm{logit}$ predicho & mediana medida de $a$ & diferencia \\
+\midrule
+b3\_s8 & 0.3040 & 0.8196 & $1.513$ & $1.507$ & $\mathbf{0.006}$ \\
+b3\_s7 & 0.3432 & 0.7963 & $1.363$ & $1.251$ & $0.112$ \\
+b3\_s3 & 0.3820 & 0.7733 & $1.227$ & $1.045$ & $0.182$ \\
+b3\_s6 & 0.3964 & 0.7647 & $1.179$ & $1.006$ & $0.173$ \\
+\bottomrule
+\end{tabular}
+\label{tab:prior}
+\end{table}
+
+El ordenamiento se reproduce en las cuatro y la unidad más joven cae a $0{,}006$ de la predicción sin
+parámetros. Las unidades más viejas quedan apenas por debajo de su prior, que es lo que haría una
+cabeza que empieza a discriminar, y de manera consistente con eso el rango de $a$ crece de forma
+monótona con el paso a lo largo de las cuatro ($0{,}85$, luego $1{,}06$, luego $2{,}83$, luego
+$3{,}12$). \textbf{La cabeza no está rota. Es óptima para un generador que se equivoca el $80\,\%$ de
+las veces.}
+
+\subsection{La bifurcación se decide en el paso 2500}
+\label{sec:bifurcacion}
+
+Toda unidad con este blanco pasa por una fase muda inicial, cosa esperable, porque en la
+inicialización el blanco es la constante~$1$. Lo que cambia es si esa fase termina.
+
+El bucle de entrenamiento ya evalúa sobre $8$ lotes de $64$, o sea $512$ muestras. En el paso $2500$
+tenemos lo siguiente.
+
+\begin{table}[h]
+\centering
+\caption{Respuestas emitidas sobre $512$ en el paso $2500$, contra el desenlace final.}
+\begin{tabular}{lrrl}
+\toprule
+unidad & \texttt{abstencion} @2500 & respuestas emitidas & desenlace \\
+\midrule
+b3\_s2 & 0.9844 & 8 & útil \\
+b3\_s0 & 0.9922 & 4 & útil \\
+b3\_s5 & 0.9922 & 4 & útil \\
+b3\_s1 & 0.9961 & 2 & útil \\
+b3\_s4 & 0.9980 & \textbf{1} & útil \\
+\midrule
+b3\_s3 & 1.0000 & \textbf{0} & degenerada \\
+b3\_s6 & 1.0000 & \textbf{0} & degenerada \\
+b3\_s7 & 1.0000 & \textbf{0} & degenerada \\
+b3\_s8 & 1.0000 & \textbf{0} & degenerada \\
+\bottomrule
+\end{tabular}
+\label{tab:bifurcacion}
+\end{table}
+
+La separación es cero contra no cero, y \texttt{b3\_s4} sobrevive con una \textbf{sola muestra de
+$512$} y llega a $\texttt{vigente} = 0{,}68$. Romper el silencio una vez parece ser el evento que
+importa, que es lo que predice la carrera de la sección~\ref{sec:objetivo}. Una muestra en la que el
+\texttt{argmax} acierta es una muestra cuyo blanco vale $0$, y eso es justamente lo que una cabeza
+constante no tiene gradiente para producir.
+
+\paragraph{Validación sobre el repositorio.} Aplicada a \textbf{todas} las corridas de este repositorio
+con cabeza binaria de abstención que llegaron a $\geq 6000$ pasos y tienen checkpoint en el paso
+$2500$, o sea $40$ corridas, doce familias, dos reglas de decisión y los dos blancos, la regla separa
+\textbf{40 de 40}. Son $36$ predichas útiles y útiles, y $4$ predichas degeneradas y degeneradas.
+
+\paragraph{La prueba más dura disponible, corrida después de formular la regla.} La regla se derivó
+post hoc. Después llevamos las dos unidades degeneradas \emph{más viejas} al horizonte completo con las
+banderas originales, preregistrando la predicción de que ninguna saldría de la abstención total.
+Ninguna salió. \texttt{b3\_s3} y \texttt{b3\_s6} llegaron al paso $26000$ con
+$\texttt{abstencion} \geq 0{,}999$ en todos los hitos registrados. No es una validación prospectiva,
+porque la prueba propiamente prospectiva habría sido un diseño de barrido que no corrimos, pero es la
+prueba más fuerte que permitían las unidades existentes y la regla la sobrevivió.
+
+\paragraph{Una advertencia sobre el margen.} Una muestra en $512$ es un margen del $0{,}2\,\%$. Como
+criterio operativo la \emph{tasa} de abstención es demasiado frágil, y la forma robusta de la misma
+cantidad es $\min_i a_i$ sobre un lote grande, que es continua e independiente del tamaño del lote.
+
+\subsection{La fase muda pertenece al blanco autorreferencial}
+\label{sec:exclusiva}
+
+\textbf{Esta es la sección que más toca el confundido de la siembra, así que enunciamos primero el
+límite.} Toda corrida con blanco fijo de este repositorio usa las semillas $0$ a $2$, y esas son
+exactamente las semillas para las que existe una base pre-entrenada. La tabulación amplia que sigue
+queda entonces confundida con la inicialización, y la informamos como descripción y no como evidencia.
+
+\begin{center}
+\begin{tabular}{lrl}
+\toprule
+blanco & corridas & \texttt{abstencion} en el paso 2500 \\
+\midrule
+fijo (``¿existe la respuesta?'') & 31 & $0{,}02$ a $0{,}32$ \\
+\textbf{autorreferencial (``¿me voy a equivocar?'')} & 9 & $\mathbf{0{,}98}$ a $\mathbf{1{,}00}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{La afirmación se apoya en cambio en el control pareado, al que el confundido no llega.} Las tres
+unidades \texttt{p3} comparten semilla, arquitectura, presupuesto \emph{y} base pre-entrenada con
+\texttt{b3\_s0}, \texttt{b3\_s1} y \texttt{b3\_s2}, y difieren solamente en el blanco.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+semilla & \texttt{abstencion} @2500, blanco fijo & \texttt{abstencion} @2500, autorreferencial \\
+\midrule
+0 & 0.086 & \textbf{0.992} \\
+1 & 0.201 & \textbf{0.996} \\
+2 & 0.063 & \textbf{0.984} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Tres de tres, con la variable confundida fijada por construcción. El blanco autorreferencial mete al
+modelo en la fase muda \emph{incluso cuando llega recuperando} a RECUP $\approx 0{,}78$, y el blanco
+fijo no lo hace nunca. Las unidades \texttt{p3} terminan con RECUP de $0{,}80$ a $0{,}97$ y ninguna cae
+en la banda degenerada.
+
+El mecanismo es el que nombra la sección~\ref{sec:objetivo}. Un blanco fijo es observable desde el
+paso~$1$ y discriminativo de entrada, así que su cabeza nunca pasa por la fase constante en la que la
+solución degenerada está disponible.
+
+\subsection{El punto degenerado es absorbente y no lento}
+\label{sec:absorbente}
+
+Que el estado sea un punto fijo o un cuello de botella lento cambia por completo lo que se sigue de él,
+y los dos se distinguen midiendo la recuperación \emph{dentro de una misma unidad}, cosa que esta línea
+de trabajo nunca había hecho, porque los checkpoints intermedios se sobrescriben y la \texttt{vigente}
+registrada vale $0{,}0000$ en todos los hitos sin importar la recuperación.
+
+Archivamos cada checkpoint parcial de \texttt{b3\_s3} desde $22000$ hasta $26000$ y medimos RECUP en
+cada uno con muestras pareadas ($n=8000$, semilla $54321$), bajo un preregistro congelado de antemano
+que pedía $\geq +0{,}0100$ y monotonía en $\geq 3$ de $4$ intervalos.
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+paso & 22000 & 23000 & 24000 & 25000 \quad 26000 \\
+\midrule
+RECUP & 0.3841 & 0.3778 & 0.3844 & 0.3812 \quad 0.3820 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El total es $\mathbf{-0{,}0021}$ a lo largo de $4000$ pasos. Con $p_{\mathrm{flip}} = 0{,}1526$ medido,
+el desvío estándar pareado es $0{,}0057$, así que el total vale $0{,}4\sigma$ y cada intervalo queda
+entre $0{,}1$ y $1{,}2\sigma$, o sea \textbf{ruido alrededor de una línea plana}. La monotonía dio $2$
+de $4$. El criterio de riesgo del preregistro se disparó y se aplicó su cláusula de abandono, con lo
+cual se canceló una campaña de seguimiento de $70000$ pasos que estaba planificada.
+
+\paragraph{Qué no separa esto, declarado de antemano.} Los últimos $4000$ pasos corren con la tasa de
+aprendizaje en el piso de su cronograma coseno. ``El atractor es absorbente'' y ``nada se mueve con la
+tasa de aprendizaje en el piso'' son las dos compatibles con una curva plana, y la campaña cancelada era
+la que las habría separado. Por eso enunciamos el resultado como \emph{absorbente bajo este presupuesto
+y este cronograma}, y no como absorbente en general. Esta es la principal pregunta abierta que deja el
+trabajo.
+
+\paragraph{Un intervalo apunta al revés.} \texttt{b3\_s6}, al que le quedaban solo $1000$ pasos, da
+$+0{,}0080$ ($1{,}6\sigma$). El preregistro ya había dictaminado que un intervalo suelto no constituye
+tendencia, y no la constituye, pero es la única medición de este trabajo que empuja en dirección
+contraria y la informamos como tal.
+
+\subsection{Una corrección a nuestra propia primera lectura}
+\label{sec:correccion}
+
+Nuestro primer análisis ajustó una recta a través de las cuatro unidades degeneradas ordenadas por paso
+y extrapoló que RECUP llegaría a $0{,}70$ hacia los $84000$ pasos, o sea que el estado era lento y no
+absorbente. Antes de publicar esa lectura se corrieron dos chequeos, y el segundo la dio vuelta.
+
+\paragraph{El chequeo que pasó.} La medición inicial usaba $n=2000$, cuyo $\sigma = 0{,}0135$ es
+comparable a la dispersión entre unidades, así que sospechamos que la tendencia era ruido de medición.
+Volver a medir las cuatro con $n=8000$ da $r = 0{,}9864$ con un rango de $12{,}5\sigma$. \textbf{La
+tendencia es real y la sospecha estaba equivocada.}
+
+\paragraph{El chequeo que falló.} La tendencia es real pero no es lineal. Las pendientes por intervalo
+decrecen de forma monótona, con $+0{,}0071$, $+0{,}0048$ y $+0{,}0014$ por cada $1000$ pasos entre
+unidades sucesivas, y $-0{,}0005$ dentro de \texttt{b3\_s3}, y un ajuste con saturación da una suma de
+cuadrados residual $12{,}6$ veces menor que el lineal. La extrapolación era un artefacto de ajustar una
+recta a una curva cóncava.
+
+\paragraph{Qué \emph{no} concluimos del ajuste con saturación.} Tiene tres parámetros para cuatro
+puntos, y su propia predicción en el paso $26000$ ($0{,}4535$) le erra al valor medido ($0{,}3820$) por
+$0{,}07$. No es evidencia. La afirmación de la sección~\ref{sec:absorbente} se apoya en la medición
+dentro de una misma unidad, que no tiene confundido entre semillas, y el ajuste con saturación solo
+explica por qué la extrapolación anterior estaba mal.
+
+\section{Lo que no afirmamos}
+\label{sec:noclaim}
+
+\paragraph{Esto no es evidencia de que el blanco autorreferencial sea inútil.} Cinco de nueve unidades
+llegan a un estado útil, dos de ellas con $\mathrm{RECUP} \geq 0{,}999$ y $\mathrm{AUC} \geq 0{,}9999$.
+La afirmación es que el objetivo admite una segunda solución estable y que una minoría sustancial de
+semillas la encuentra, no que el objetivo fracase.
+
+\paragraph{Las unidades degeneradas no están mal calibradas.} Sería cómodo llamarlas rotas. No lo
+están. Sus cabezas son óptimas para sus generadores, con $0{,}006$ de diferencia contra la predicción
+sin parámetros en el caso más limpio. La falla es que estar bien calibrado sobre no saber nada no vale
+nada, que es una afirmación sobre el objetivo y las métricas, no sobre la calibración.
+
+\paragraph{No afirmamos que el modelo sepa cuándo no sabe.} Todo acá es supervisado. La cabeza se
+entrena contra etiquetas, y en el caso autorreferencial contra etiquetas derivadas de una comparación
+supervisada. Las unidades degeneradas en particular son una advertencia contra esa lectura, porque
+exhiben la firma externa de saber cuándo no saben mientras no saben absolutamente nada.
+
+\paragraph{La regla del paso 2500 es post hoc.} Se formuló después de observar los desenlaces, se
+validó sobre $40$ corridas existentes y se puso a prueba en dos unidades llevadas al horizonte completo
+bajo preregistro. Eso es evidencia retrospectiva fuerte más una confirmación dura. No es una validación
+prospectiva y no la informamos como tal.
+
+\section{Limitaciones}
+\label{sec:limits}
+
+\begin{itemize}
+\item \textbf{El punto de partida no estuvo controlado, y lo encontramos tarde.} Las semillas $0$ a $2$
+heredaron $12{,}000$ pasos de pre-entrenamiento de recuperación y las semillas $3$ a $8$ no, así que el
+reparto del titular no es una tasa sobre una población homogénea (sección~\ref{sec:mudas}). Los
+fenómenos por unidad no quedan afectados y el control pareado de la sección~\ref{sec:exclusiva} está
+limpio, pero cualquier campaña futura sobre esta pregunta tiene que fijar la inicialización en todas las
+unidades, y el arnés tiene que registrar si hubo siembra, cosa que el config guardado no hace y por eso
+el chequeo original no lo vio.
+\item \textbf{Escala.} Son $863{,}730$ parámetros, un idioma sintético de $242$ tokens, un solo nivel de
+dificultad y $p_{\mathrm{nose}}$ fijo en $0{,}4$. Nada de esto transfiere automáticamente. Solo
+señalamos que el punto fijo degenerado es una propiedad del álgebra del objetivo antes que del tamaño
+del modelo, lo que vuelve la pregunta por la transferencia digna de hacerse, no respondida.
+\item \textbf{El presupuesto y el cronograma están confundidos con la afirmación de que es absorbente},
+como se declara en la sección~\ref{sec:absorbente}. Es el hueco más grande del trabajo.
+\item \textbf{Nueve unidades.} El reparto $5$ y $4$ es un conteo y no una estimación de tasa. Lo
+informamos como observado y no le adosamos un intervalo de confianza a una proporción salida de nueve
+semillas.
+\item \textbf{Dos unidades están incompletas.} \texttt{b3\_s7} y \texttt{b3\_s8} se detuvieron en los
+pasos $13500$ y $8000$, después de que el criterio bloqueante de la campaña se volviera aritméticamente
+inalcanzable. Su condición degenerada en esos pasos está medida y no extrapolada, pero no corrieron
+hasta el horizonte, y el desvío está declarado en el repositorio.
+\item \textbf{Una sola regla de decisión.} Todas las unidades usan la cabeza binaria separada. Si las
+interfaces de token o de slot admiten el mismo punto fijo bajo un blanco autorreferencial es algo que
+no está probado.
+\item \textbf{Búsqueda bibliográfica dirigida, no revisión sistemática.}
+\end{itemize}
+
+\section{Conclusión}
+
+Un detector de alucinaciones quiere predecir los errores de su propio modelo, así que el blanco natural
+es autorreferencial. Ese blanco tiene dos puntos fijos estables, y el degenerado no es una patología
+para sacarse de encima por ingeniería sino una solución correcta. Es un modelo que no recupera casi nada
+y que informa, con exactitud, que no recupera casi nada. Cuatro de las seis unidades que empezaron
+desde cero lo encontraron, y ninguna de las tres que empezaron recuperando.
+
+Lo que hace que esto sea más que una curiosidad es que la solución degenerada es \textbf{invisible para
+las métricas que el campo informa}. Puntúa $\texttt{nose} = 1{,}0000$ e $\texttt{invento} = 0{,}0000$,
+mejor que las unidades que funcionan, mientras su exactitud global queda en el piso trivial con cuatro
+decimales. Cualquier criterio armado con tasa de abstención y tasa de fabricación queda maximizado por
+ella. El remedio no es sutil, y consiste en informar la exactitud global contra su piso trivial y
+exigirla junto a cualquier métrica de abstención, pero hay que aplicarlo, y en este proyecto se aplicó
+recién después de que una campaña ya estuviera diseñada alrededor de criterios que un modelo mudo habría
+ganado.
+
+La bifurcación es legible temprano y barata de leer. Cero respuestas emitidas en el paso $2500$ separó
+$40$ de $40$ corridas, y una unidad sobrevivió con una muestra de $512$. Si esa regla generaliza, cosa
+que este trabajo no establece, entonces la pregunta relevante para un objetivo de abstención
+autorreferencial no es cómo hacer que un modelo se abstenga bien. Abstenerse bien es trivial, y un
+modelo puede lograrlo no sabiendo nada. La pregunta es cómo salir del silencio sin empezar a inventar, y
+eso se decide en los primeros pocos miles de pasos.
+
+\section*{Disponibilidad de datos y código}
+
+Todos los preregistros con sus hashes SHA, los archivos de desvíos, los scripts de análisis, los
+resultados crudos por semilla y los informes generados automáticamente están archivados en el
+repositorio del proyecto, \url{https://github.com/SperanzaMax/delta-archivo}, cuyo historial de commits
+lleva las marcas de tiempo que establecen el orden entre preregistro y resultado.
+
+\section*{Declaraciones}
+
+\textbf{Financiamiento.} Ninguno. \textbf{Conflictos de interés.} Ninguno. \textbf{Aprobación ética.}
+No aplica, no hay sujetos humanos ni animales. \textbf{Disponibilidad de datos.} Ver más arriba.
+\textbf{Contribuciones de autoría.} Autor único.
+
+\bibliographystyle{plainnat}
+\begin{thebibliography}{9}
+
+\bibitem[Arazo et~al.(2020)]{arazo2020pseudo}
+Arazo, E., Ortego, D., Albert, P., O'Connor, N.~E., and McGuinness, K. (2020).
+Pseudo-labeling and confirmation bias in deep semi-supervised learning.
+\emph{IJCNN}.
+
+\bibitem[Chen and He(2021)]{chen2021simsiam}
+Chen, X. and He, K. (2021).
+Exploring simple Siamese representation learning.
+\emph{CVPR}.
+
+\bibitem[Cohen et~al.(2024)]{cohen2024idk}
+Cohen, R., Dobler, K., Biran, E., and de~Melo, G. (2024).
+I don't know: Explicit modeling of uncertainty with an [IDK] token.
+\emph{NeurIPS}.
+
+\bibitem[El-Yaniv and Wiener(2010)]{elyaniv2010selective}
+El-Yaniv, R. and Wiener, Y. (2010).
+On the foundations of noise-free selective classification.
+\emph{JMLR}, 11:1605--1641.
+
+\bibitem[Geifman and El-Yaniv(2017)]{geifman2017selective}
+Geifman, Y. and El-Yaniv, R. (2017).
+Selective classification for deep neural networks.
+\emph{NeurIPS}.
+
+\bibitem[Geifman and El-Yaniv(2019)]{geifman2019selectivenet}
+Geifman, Y. and El-Yaniv, R. (2019).
+SelectiveNet: A deep neural network with an integrated reject option.
+\emph{ICML}.
+
+\bibitem[Grill et~al.(2020)]{grill2020byol}
+Grill, J.-B. et~al. (2020).
+Bootstrap your own latent: A new approach to self-supervised learning.
+\emph{NeurIPS}.
+
+\bibitem[Speranza(2026)]{speranza2026abstention}
+Speranza, M. (2026).
+Where abstention lives: A pre-registered four-way comparison of abstention interfaces in a small
+language model with versioned memory.
+\emph{Research Square}, DOI 10.21203/rs.3.rs-10839567/v1.
+
+\end{thebibliography}
+
+\end{document}
