@@ -1,0 +1,248 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{\bfseries The Query Cannot See the Question\\[0.3em]
+\large A short convolution's reach decides which part of a question\\
+conditions retrieval from a model's memory}
+\author{Maximiliano Speranza\\
+\small Independent Researcher, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID 0009-0005-0413-8554}}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\begin{minipage}{0.92\textwidth}
+\small
+\textbf{In one line.} In linear-attention and state-space models there is a part of every question
+that the internal search \textbf{literally cannot see}, and what falls outside does not degrade
+gracefully: \textbf{it disappears exactly}. The model then answers confidently from the part it can
+still see.
+\end{minipage}}
+\end{center}
+
+\section{What it is}
+
+A model with memory has to do two things that are usually measured together and are in fact separate.
+It has to \emph{find} the right entry, and it has to \emph{know} when the entry it is looking for is
+not there. The second one is what separates a memory from a confabulator.
+
+What we found is that the second one can fail for a purely mechanical reason, upstream of everything
+the model learns. The query used to search the memory is not built from the whole question. It is
+built by a \textbf{short causal convolution} over the hidden states, and that convolution has a fixed
+reach of a few tokens.
+
+If part of the question falls outside that reach, it does not influence the search a little.
+\textbf{It does not influence it at all.}
+
+\section{How it works}
+
+The default kernel size of that convolution is \textbf{4}. That means the query at a given layer is a
+function of the current token and \textbf{three predecessors}, and of nothing else.
+
+That number is usually inherited rather than measured. Mamba-2 uses 4 by default. The reference
+implementation of Qwen3-Next exposes \texttt{linear\_conv\_kernel\_dim}, documented as ``kernel size
+of the convolution used in linear attention layers'', also defaulting to 4. A reach of three tokens is
+not an exotic configuration, it is the factory setting in deployed models.
+
+\subsection*{The concrete failure it produces}
+
+Consider a question of the form \emph{``what is the \textbf{[relation]} of \textbf{[entity]}?''}. Read
+from the end, the \textbf{entity} sits 1 token away and the \textbf{relation} 3. With a reach of 2,
+the relation falls \textbf{exactly one token outside}, deterministically, in 100\% of queries.
+
+The model therefore searches \textbf{using the entity alone}. And there the failure that most closely
+resembles a real hallucination appears: asked about a relation that was \textbf{never stated}, for an
+entity that \textbf{was}, it does not abstain. It retrieves the neighbouring fact, the one it does
+have stored for that entity, and delivers it confidently.
+
+It was not ignoring the relation. \textbf{It could not see it.}
+
+\section{How it was found}
+
+The intervention is simple enough to repeat on any architecture, and it requires no training:
+
+\begin{center}
+\fbox{\begin{minipage}{0.85\textwidth}
+\centering\textbf{Change one token of the question and see whether the search moves.}
+\end{minipage}}
+\end{center}
+
+Pick a read position, replace \textbf{a single token} at distance $d$ behind it, and measure how much
+the convolution output moved at that position.
+
+\subsection*{Measurement 1 · the real reach is not the nominal one}
+
+Before measuring the effect one has to measure the window, because a weight can be zero, in which case
+the effective reach is smaller than the nominal one. In \texttt{mamba-130m-hf}:
+
+\begin{center}
+\begin{tabular}{crrrr}
+\toprule
+layer & \multicolumn{4}{c}{$\max|\text{weight}|$ per tap, oldest to current} \\
+\midrule
+0  & \textbf{0.000000} & 0.933774 & 1.396596 & 3.513000 \\
+1  & \textbf{0.000000} & 0.599272 & 0.928984 & 1.315802 \\
+12 & \textbf{0.000000} & 0.309363 & 0.901561 & 0.981588 \\
+23 & \textbf{0.000000} & 0.128891 & 0.611719 & 1.090700 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{The oldest tap is exactly zero in all 24 layers.} Not small: zero, across all 1{,}536 entries
+of each layer. The effective reach of this checkpoint is \textbf{2 tokens}, not 3.
+
+We report the measurement and not a cause. A weight that is exactly zero across $24 \times 1536$
+entries does not come from a gradient, so a conversion artefact is plausible, but we did not verify
+that and we do not claim it. The practical consequence, if it generalises, is that \textbf{the nominal
+kernel is an upper bound on the reach and should be measured rather than assumed}.
+
+\subsection*{Measurement 2 · the cut is exact, and the layer sees what the query does not}
+
+Here is the central result, and the part that surprises. With the same intervention we measure two
+things: how much the \textbf{query} moves, and how much the \textbf{layer output} moves.
+
+\begin{center}
+\begin{tabular}{crr}
+\toprule
+distance & query & layer output \\
+\midrule
+$d=1$ & 1.100457 & 0.074570 \\
+$d=2$ & 0.579417 & 0.057475 \\
+$d=3$ & \textbf{0.000000} & 0.017182 \\
+$d=4$ & \textbf{0.000000} & 0.024114 \\
+$d=5$ & \textbf{0.000000} & 0.014883 \\
+$d=6$ & \textbf{0.000000} & 0.012871 \\
+$d=7$ & \textbf{0.000000} & 0.017005 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two things, and the second is what makes this non-obvious.
+
+\textbf{There is no decay.} The query's movement goes from a large value to \texttt{0.000000} in one
+step, exactly where the measured reach ends.
+
+\textbf{And the model does see that token.} The layer output moves at \emph{every} distance, because
+recurrence carries the information forward. That is:
+
+\begin{center}
+\emph{The state sees the whole sequence; the query that reads it does not.}
+\end{center}
+
+That is why the problem is invisible from the outside. The model \emph{has} the information. What it
+cannot do is use it to decide what to look for.
+
+\section{What it is good for}
+
+\subsection*{A diagnosis that costs nothing}
+
+Changing one token and checking whether retrieval moves requires no training, no gradients and no
+labels. If it does not move, that token is \textbf{invisible} to the search, and any confidence the
+model expresses about it is \textbf{unearned}.
+
+\subsection*{A fix that costs 0.12\%}
+
+Widening the kernel of the query-forming convolution from 3 to 5 raises the reach from 2 to 4, and the
+missing part enters the window. Measured on a small model trained from scratch, three seeds per
+condition:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & kernel 3 & kernel 5 \\
+\midrule
+correct abstention in the hard case & $0.5850$ -- $0.7349$ & $\mathbf{0.9931}$ -- $\mathbf{1.0000}$ \\
+overall accuracy & $0.91$ -- $0.93$ & $\mathbf{0.988}$ -- $\mathbf{0.993}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{With no overlap} between conditions, against a trivial floor of $0.4065$. And it costs
+\textbf{1{,}024 parameters out of 865{,}651}, that is \textbf{0.12\%} of the model: two more taps, by
+128 channels, by 4 blocks.
+
+It is not capacity. It is access.
+
+\subsection*{And it is not a corner case}
+
+Measured over \textbf{33{,}585 questions} from four public corpora (SQuAD, Natural Questions, TriviaQA
+and HotpotQA), between \textbf{90\% and 100\%} of real questions have their discriminating parts
+further apart than the measured reach. And it \textbf{gets worse with difficulty}: on multi-hop
+questions it reaches $1.0000$.
+
+The configuration our synthetic task was built to study is the ordinary case.
+
+\section{What this does NOT claim}
+
+The limit is part of the result, so it is worth stating explicitly.
+
+\textbf{In a deep model the window attenuates rather than blocks.} The cut is exact at layer 0, but
+from layer 1 recurrence restores the signal attenuated. We measured the rate: $1.077$ and $1.028$ per
+token of distance in 24- and 48-layer models, with $r = 0.978$ in both. Three times the parameters and
+twice the depth leave the rate unchanged, which is what makes the attenuation a property of the
+architecture rather than of a particular checkpoint.
+
+\textbf{The behavioural effect is transient when there are layers to spare.} Fine-tuning a 24-layer
+model on the same task, the difference exists and is large at step 100, and \textbf{disappears
+entirely by step 400}. This is a negative result, it was pre-registered, and we report it.
+
+\begin{center}
+\fbox{\begin{minipage}{0.88\textwidth}
+\centering
+\textbf{Where there are no layers left to pay with, the window sets a ceiling.\\
+Where there are, it sets a toll.}
+\end{minipage}}
+\end{center}
+
+The strong claim therefore holds for \textbf{memory consulted from an early layer}, and not as a
+behavioural prediction for a deep model trained to convergence.
+
+\section{Where it applies, by scale}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & depth & what happens \\
+\midrule
+small model & 4 blocks, read at block 0 & \textbf{permanent ceiling} \\
+\texttt{mamba-130m} / \texttt{370m} & 24 and 48 layers & \textbf{toll}, the effect recovers \\
+frontier models & tens of layers, hybrid & \textbf{not measured} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+On frontier models the honest statement is this: \textbf{the mechanism is present} --- kernel 4 is the
+default in Mamba-2 and in the linear-attention layers of Qwen3-Next --- but \textbf{whether it
+produces failures in a large model trained to convergence we did not measure and do not claim}. Two
+reasons push against it: if 24 layers suffice to pay the toll, 60 are likely to suffice more; and
+frontier models are hybrid, where a full-attention layer does not have this limitation because its
+query sees the whole sequence.
+
+Where it is reasonable to expect it to matter in a large system is when \textbf{memory is consulted
+from an early layer}, as in retrieval conditioned on early-layer states. There are no layers upstream
+to pay the toll with, and the ceiling returns.
+
+\vspace{1em}
+\begin{center}
+\fbox{\begin{minipage}{0.9\textwidth}
+\textbf{The lesson that generalises.} The query used to search a memory has to be formed where the
+whole question has already been seen. And it can be checked cheaply on any architecture, without
+training anything: change one part of the query and see whether retrieval moves. If it does not, that
+part is invisible.
+\end{minipage}}
+\end{center}
+
+\end{document}

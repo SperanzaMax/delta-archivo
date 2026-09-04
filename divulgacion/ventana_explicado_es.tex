@@ -1,0 +1,252 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{fancyvrb}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{\bfseries La consulta no puede ver la pregunta\\[0.3em]
+\large El alcance de una convolución corta decide qué parte de una pregunta\\
+condiciona la búsqueda en la memoria de un modelo}
+\author{Maximiliano Speranza\\
+\small Investigador independiente, Buenos Aires, Argentina\\
+\small \href{https://orcid.org/0009-0005-0413-8554}{ORCID 0009-0005-0413-8554}}
+\date{Septiembre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\begin{minipage}{0.92\textwidth}
+\small
+\textbf{Resumen en una línea.} En los modelos de atención lineal y de espacio de estados hay una parte
+de cada pregunta que la búsqueda interna \textbf{literalmente no puede ver}, y lo que queda afuera no
+se degrada de a poco: \textbf{desaparece exacto}. El modelo entonces contesta con confianza usando
+sólo la parte que sí alcanza a ver.
+\end{minipage}}
+\end{center}
+
+\section{Qué es}
+
+Un modelo con memoria tiene que hacer dos cosas que suelen medirse juntas y son distintas. Tiene que
+\emph{encontrar} lo que busca, y tiene que \emph{saber} cuándo lo que busca no está. La segunda es la
+que separa una memoria de un fabulador.
+
+Lo que encontramos es que la segunda puede fallar por una causa puramente mecánica, aguas arriba de
+todo lo que el modelo aprende. La consulta con la que se busca en la memoria no se arma con la
+pregunta entera. Se arma con una \textbf{convolución causal corta} sobre los estados ocultos, y esa
+convolución tiene un alcance fijo de pocos tokens.
+
+Si una parte de la pregunta cae afuera de ese alcance, no influye poco en la búsqueda.
+\textbf{No influye nada.}
+
+\section{Cómo funciona}
+
+El tamaño de núcleo por omisión de esa convolución es \textbf{4}. Es decir que la consulta de una capa
+es función del token actual y de \textbf{tres anteriores}, y de nada más.
+
+Ese número no suele medirse: se hereda. Mamba-2 usa 4 por defecto. La implementación de referencia de
+Qwen3-Next expone \texttt{linear\_conv\_kernel\_dim}, documentado como «kernel size of the convolution
+used in linear attention layers», también con valor 4. Un alcance de tres tokens no es una
+configuración exótica, es el ajuste de fábrica en modelos desplegados.
+
+\subsection*{La falla concreta que produce}
+
+Pensemos una pregunta de la forma \emph{«cuál es la \textbf{⟨relación⟩} de \textbf{⟨entidad⟩}?»}.
+Leída desde el final, la \textbf{entidad} queda a 1 token y la \textbf{relación} a 3. Con alcance 2,
+la relación cae \textbf{exactamente un token afuera}, de forma determinista, en el 100\,\% de las
+consultas.
+
+El modelo busca entonces \textbf{usando sólo la entidad}. Y ahí aparece la falla que más se parece a
+una alucinación real: si se le pregunta por una relación que \textbf{nunca se enunció}, sobre una
+entidad que \textbf{sí} existe, no se abstiene. Recupera el hecho vecino, el que sí tiene guardado de
+esa entidad, y lo entrega con confianza.
+
+No estaba ignorando la relación. \textbf{No la podía ver.}
+
+\section{Cómo se descubrió}
+
+La intervención es tan simple que se puede repetir en cualquier arquitectura, y no necesita entrenar
+nada:
+
+\begin{center}
+\fbox{\begin{minipage}{0.85\textwidth}
+\centering\textbf{Cambiá un token de la pregunta y mirá si la búsqueda se mueve.}
+\end{minipage}}
+\end{center}
+
+Se toma una posición de lectura, se cambia \textbf{un solo token} a distancia $d$ hacia atrás, y se
+mide cuánto se movió la salida de la convolución en esa posición.
+
+\subsection*{Medición 1 · el alcance real no es el nominal}
+
+Antes de medir el efecto hay que medir la ventana, porque un peso puede estar en cero y entonces el
+alcance efectivo es menor que el nominal. En \texttt{mamba-130m-hf}:
+
+\begin{center}
+\begin{tabular}{crrrr}
+\toprule
+capa & \multicolumn{4}{c}{$\max|\text{peso}|$ de cada tap, del más viejo al actual} \\
+\midrule
+0  & \textbf{0.000000} & 0.933774 & 1.396596 & 3.513000 \\
+1  & \textbf{0.000000} & 0.599272 & 0.928984 & 1.315802 \\
+12 & \textbf{0.000000} & 0.309363 & 0.901561 & 0.981588 \\
+23 & \textbf{0.000000} & 0.128891 & 0.611719 & 1.090700 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{El tap más viejo es cero exacto en las 24 capas.} No pequeño: cero, en las 1.536 entradas de
+cada capa. El alcance efectivo de este checkpoint es \textbf{2 tokens}, no 3.
+
+Informamos la medición y no una causa. Un peso exactamente nulo en $24 \times 1536$ entradas no sale
+de un gradiente, así que un artefacto de conversión es plausible, pero no lo verificamos y no lo
+afirmamos. La consecuencia práctica, si generaliza, es que \textbf{el núcleo nominal es una cota
+superior del alcance y hay que medirlo}.
+
+\subsection*{Medición 2 · el corte es exacto, y la capa sí ve lo que la consulta no}
+
+Acá está el resultado central, y la parte que sorprende. Con la misma intervención medimos dos cosas:
+cuánto se mueve la \textbf{consulta}, y cuánto se mueve la \textbf{salida de la capa}.
+
+\begin{center}
+\begin{tabular}{crr}
+\toprule
+distancia & consulta & salida de la capa \\
+\midrule
+$d=1$ & 1.100457 & 0.074570 \\
+$d=2$ & 0.579417 & 0.057475 \\
+$d=3$ & \textbf{0.000000} & 0.017182 \\
+$d=4$ & \textbf{0.000000} & 0.024114 \\
+$d=5$ & \textbf{0.000000} & 0.014883 \\
+$d=6$ & \textbf{0.000000} & 0.012871 \\
+$d=7$ & \textbf{0.000000} & 0.017005 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Dos cosas, y la segunda es la que hace que esto no sea obvio.
+
+\textbf{No hay decaimiento.} El movimiento de la consulta pasa de un valor grande a \texttt{0.000000}
+de un paso al siguiente, exactamente donde termina el alcance medido.
+
+\textbf{Y el modelo sí ve ese token.} La salida de la capa se mueve a \emph{todas} las distancias,
+porque la recurrencia arrastra la información. O sea:
+
+\begin{center}
+\emph{El estado ve la secuencia entera; la consulta que lo lee, no.}
+\end{center}
+
+Por eso el problema es invisible desde afuera. El modelo \emph{tiene} la información. Lo que no puede
+es usarla para decidir qué buscar.
+
+\section{Para qué sirve}
+
+\subsection*{Un diagnóstico que no cuesta nada}
+
+Cambiar un token y ver si la búsqueda se mueve no necesita entrenamiento, ni gradientes, ni etiquetas.
+Si no se mueve, ese token es \textbf{invisible} para la búsqueda, y cualquier confianza que el modelo
+exprese sobre él \textbf{no está ganada}.
+
+\subsection*{Un arreglo que cuesta el 0,12\,\%}
+
+Ensanchar el núcleo de la convolución que forma la consulta, de 3 a 5, sube el alcance de 2 a 4 y la
+parte que faltaba entra en la ventana. Medido en un modelo chico entrenado desde cero, con tres
+semillas por condición:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & núcleo 3 & núcleo 5 \\
+\midrule
+abstención correcta en el caso difícil & $0{,}5850$ -- $0{,}7349$ & $\mathbf{0{,}9931}$ -- $\mathbf{1{,}0000}$ \\
+exactitud global & $0{,}91$ -- $0{,}93$ & $\mathbf{0{,}988}$ -- $\mathbf{0{,}993}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Sin un solo solape} entre condiciones, contra un piso trivial de $0{,}4065$. Y cuesta
+\textbf{1.024 parámetros sobre 865.651}, o sea el \textbf{0,12\,\%} del modelo: dos taps más, por 128
+canales, por 4 bloques.
+
+No es capacidad. Es acceso.
+
+\subsection*{Y no es un caso de borde}
+
+Medido sobre \textbf{33.585 preguntas} de cuatro corpus públicos (SQuAD, Natural Questions, TriviaQA y
+HotpotQA), entre el \textbf{90\,\% y el 100\,\%} de las preguntas reales tienen sus partes
+discriminantes más separadas que el alcance medido. Y \textbf{empeora con la dificultad}: en las
+preguntas multi-hop llega a $1{,}0000$.
+
+La configuración que la tarea sintética fue construida para estudiar es el caso ordinario.
+
+\section{Lo que esto NO afirma}
+
+El límite es parte del resultado, así que conviene decirlo explícito.
+
+\textbf{En un modelo profundo la ventana atenúa, no bloquea.} El corte es exacto en la capa 0, pero
+desde la capa 1 la recurrencia restituye la señal atenuada. Medimos la tasa: $1{,}077$ y $1{,}028$ por
+token de distancia en modelos de 24 y 48 capas, con $r = 0{,}978$ en los dos. Triplicar los parámetros
+y duplicar las capas no cambia la tasa, y eso es lo que hace de la atenuación una propiedad de la
+arquitectura y no de un checkpoint.
+
+\textbf{El efecto sobre el comportamiento es transitorio cuando hay capas de sobra.} Al ajustar un
+modelo de 24 capas sobre la misma tarea, la diferencia existe y es grande en el paso 100, y
+\textbf{desaparece del todo para el paso 400}. Es un resultado negativo, estaba pre-registrado, y lo
+informamos.
+
+\begin{center}
+\fbox{\begin{minipage}{0.88\textwidth}
+\centering
+\textbf{Donde no quedan capas con que pagar, la ventana pone un techo.\\ Donde quedan, pone un peaje.}
+\end{minipage}}
+\end{center}
+
+La afirmación fuerte vale entonces para \textbf{memoria consultada desde una capa temprana}, y no como
+predicción de comportamiento para un modelo profundo entrenado hasta converger.
+
+\section{Dónde aplica, según el tamaño}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & profundidad & qué pasa \\
+\midrule
+modelo chico & 4 bloques, lectura en el bloque 0 & \textbf{techo permanente} \\
+\texttt{mamba-130m} / \texttt{370m} & 24 y 48 capas & \textbf{peaje}, el efecto se recupera \\
+modelos de frontera & decenas de capas, híbridos & \textbf{no medido} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Sobre los modelos de frontera lo honesto es esto: \textbf{el mecanismo está presente} —el kernel 4 es
+el default en Mamba-2 y en las capas lineales de Qwen3-Next— pero \textbf{que produzca fallas en un
+modelo grande entrenado a convergencia no lo medimos y no lo afirmamos}. Dos razones empujan en
+contra: si a 24 capas les alcanza para pagar el peaje, es esperable que a 60 les alcance más; y los
+modelos de frontera son híbridos, donde una capa de atención completa no tiene esta limitación porque
+su consulta ve toda la secuencia.
+
+Donde sí es esperable que importe en un sistema grande es cuando \textbf{la memoria se consulta desde
+una capa temprana}, como en una recuperación condicionada por estados de las primeras capas. Ahí no
+hay capas aguas arriba para pagar el peaje, y el techo vuelve.
+
+\vspace{1em}
+\begin{center}
+\fbox{\begin{minipage}{0.9\textwidth}
+\textbf{La lección que generaliza.} La consulta con la que se busca en una memoria tiene que formarse
+donde ya se vio la pregunta completa. Y se verifica barato en cualquier arquitectura, sin entrenar
+nada: cambiá una parte de la consulta y fijate si la búsqueda se mueve. Si no se mueve, esa parte es
+invisible.
+\end{minipage}}
+\end{center}
+
+\end{document}
