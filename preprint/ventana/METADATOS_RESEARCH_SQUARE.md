@@ -38,6 +38,27 @@ regenerarlo antes del envío a arXiv.
 Expira en 10 minutos y la sesión del navegador aguantó sin problema, así que el envío entero se puede
 hacer de una sentada.
 
+## ⏳ 2026-09-04 · TICKET `#11738664` para corregir ANTES de que postee
+
+La auditoría del mismo día (`AUDITORIA_VENTANA_20260904.md`) encontró que el abstract dice
+**«two blocks deep»** y el micro-LM tiene **cuatro** bloques. Corregido en el manuscrito, pero el
+envío ya estaba adentro.
+
+**No corresponde una v2**, y se verificó en la plataforma en vez de suponerlo: `/article/rs-10929866/v1`
+devuelve **`Resource not found`**, o sea que **no hay versión pública ni DOI todavía**. Lo que
+corresponde es corregir el envío para que la versión pública nazca sin el error.
+
+**★ La vía que NO necesita sesión, y es lo reutilizable:** el formulario de soporte
+`support.researchsquare.com/support/tickets/new` **no pide login**. Pide correo, categoría, RSID,
+título y descripción. Se abrió el ticket con categoría *Preprint posting status*, pidiendo que
+devuelvan el envío a draft o reemplacen el archivo, con el link al PDF corregido en GitHub.
+
+Sirvió porque **la sesión de Research Square no sobrevive a un reinicio de Chrome** (la de OpenReview
+sí) y el login sólo lo puede hacer Maxi.
+
+**Riesgo de esperar, bajo:** el prescreening tarda de día y medio a 72 h hábiles.
+
+
 ---
 
 ## Archivos
