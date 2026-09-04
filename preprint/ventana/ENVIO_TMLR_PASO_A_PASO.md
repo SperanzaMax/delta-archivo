@@ -1,4 +1,30 @@
-# Envío a TMLR, paso a paso · todo resuelto salvo apretar el botón
+# Envío a TMLR, paso a paso · ✅ ENVIADO EL 2026-09-04
+
+## Resultado
+
+| campo | valor |
+|---|---|
+| **número de paper** | **11988** |
+| consola | <https://openreview.net/group?id=TMLR/Authors> |
+| estado | 0 reviews, sin action editor todavía |
+| tipo | **Regular submission** (main content ≤ 12 páginas; el PDF tiene 10) |
+| PDF | `tmlr/ventana_tmlr.pdf`, anónimo, metadatos vacíos |
+| suplementario | `suplementario_anonimo.zip`, 39 archivos, cero coincidencias de identidad |
+| competing interests | `N/A` |
+| human subjects | `N/A` |
+| licencia | CC BY 4.0 |
+| arXiv | **no se declaró ningún enlace**, como corresponde al doble ciego |
+
+**Este es el PRIMERO de los dos envíos del año.** Queda uno hasta septiembre de 2027, y un desk
+reject lo gastaría igual.
+
+⚠️ **Lección de instrumento, cazada acá:** escribir con el teclado simulado **pierde caracteres
+sueltos en los `input` de una línea**. El título entró como *«A Short Convoluton's Reach … Conditions
+etrieval»* —dos letras comidas— y el `<textarea>` del abstract, con 4.618 caracteres, salió perfecto.
+**Los campos cortos y críticos se setean por valor, no se tipean, y se releen con zoom antes de
+enviar.** Se verificó que el abstract estaba intacto comparando el valor previo contra el nuevo.
+
+---
 
 **Entrar a** `openreview.net`, buscar **TMLR** en Active Venues y darle a **Submit**.
 
