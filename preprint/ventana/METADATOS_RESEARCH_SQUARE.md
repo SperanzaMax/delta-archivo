@@ -1,6 +1,14 @@
 # Envío a Research Square — el paper de la ventana
 
-Mismo formato que los dos envíos anteriores de esta línea, que salieron publicados sin fricción.
+Mismo formato que los **tres** envíos anteriores de esta línea, que salieron publicados sin
+fricción. Éste sería el **cuarto**:
+
+| # | paper | DOI |
+|---|---|---|
+| 1 | Geometric Indexing Does Not Improve Versioned Memory Retrieval | `10.21203/rs.3.rs-10669947` |
+| 2 | Where Abstention Lives | `10.21203/rs.3.rs-10839567/v1` |
+| 3 | Similarity Finds the Fact, Not the Version | `10.21203/rs.3.rs-10896018/v1` |
+
 **Un solo registro**, inglés como principal y el español como material suplementario. Nunca dos
 registros separados: dos DOI para el mismo contenido es lo que causó dos rechazos en Preprints.org
 en julio, y además parte las citas.
