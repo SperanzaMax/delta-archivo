@@ -1,21 +1,42 @@
 # Envío a Research Square — el paper de la ventana
 
-Mismo formato que los **tres** envíos anteriores de esta línea, que salieron publicados sin
-fricción. Éste sería el **cuarto**:
+## ✅ ENVIADO EL 2026-09-04 a las 07:43 (GMT-3) · RSID `rs-10929866`
 
-| # | paper | DOI |
-|---|---|---|
-| 1 | Geometric Indexing Does Not Improve Versioned Memory Retrieval | `10.21203/rs.3.rs-10669947` |
-| 2 | Where Abstention Lives | `10.21203/rs.3.rs-10839567/v1` |
-| 3 | Similarity Finds the Fact, Not the Version | `10.21203/rs.3.rs-10896018/v1` |
+| campo | valor |
+|---|---|
+| **RSID** | `rs-10929866` |
+| **estado** | **Prescreening** (hasta 72 h hábiles; el del sello tardó día y medio) |
+| **DOI** | *Available once preprint is posted* |
+| panel | https://www.researchsquare.com/article/rs-10929866/private/article-overview |
 
-**Un solo registro**, inglés como principal y el español como material suplementario. Nunca dos
-registros separados: dos DOI para el mismo contenido es lo que causó dos rechazos en Preprints.org
-en julio, y además parte las citas.
+Es el **cuarto** preprint de esta línea. Lo que se cargó, exacto:
 
-⚠️ **TechRxiv quedó descartado el 3-sep:** su sitio avisa *«Submissions are temporarily closed»* por
-una migración de plataforma. Research Square es la única puerta abierta que da DOI sin depender de un
-endorsement.
+| sección | qué se puso |
+|---|---|
+| 1. manuscrito | `ventana_en.pdf`, 10 páginas |
+| 2. título | el de abajo, título y subtítulo unidos por dos puntos |
+| 3. article type | Research Article |
+| 4. area of study | Computer Science → Artificial Intelligence and Machine Learning |
+| 5. autor | Maximiliano Rodrigo Speranza · Independent Researcher · **`mrsperanza@frba.utn.edu.ar`** · ORCID · corresponding |
+| 6. abstract | el de `abstract_rs.txt`, 4618 de 5000 caracteres |
+| 7. keywords | los diez de abajo |
+| 8. figuras | salteada, van dentro del PDF |
+| 9. suplementario | `ventana_es.pdf`, «Complete Spanish-language version of the manuscript» |
+| 10. institución | salteada. La UTN **no** patrocinó ni va como afiliación |
+| 11. funding | salteada, no hay |
+| 12. ethics | guardada sin marcar: ni sujetos humanos ni vertebrados |
+| 13. competing interests | «No, I declare that authors have no interests…» |
+| 14. submit | términos + CC BY 4.0, con código de 6 dígitos por mail |
+
+**★ El mail del autor pasó a ser el INSTITUCIONAL, por pedido de Maxi durante la carga.** Los dos
+`.tex` se editaron y los dos PDF se **recompilaron antes de subirlos**, así que el registro y el
+manuscrito dicen lo mismo. Los tres preprints anteriores llevan el Gmail; desde éste es
+`mrsperanza@frba.utn.edu.ar`. ⚠️ **`ventana_arxiv.tar.gz` sigue teniendo el Gmail**: hay que
+regenerarlo antes del envío a arXiv.
+
+**El código de 6 dígitos se leyó del Gmail con el conector**, no hizo falta que lo pasara a mano.
+Expira en 10 minutos y la sesión del navegador aguantó sin problema, así que el envío entero se puede
+hacer de una sentada.
 
 ---
 
