@@ -82,3 +82,37 @@ instrumento sobre ellos y guardar la salida, igual que se hizo hoy con
   en una sesión y **baja cada JSON apenas aparece**, porque las sesiones se mueren a los ~60 min.
 - Los tres preprints publicados: `rs-10669947` (gemación), `rs-10839567` (trípode),
   `rs-10896018` (sello de orden).
+
+---
+
+## ✅ 2026-09-04 · LA COLUMNA `AUC(a)` DEL ATRACTOR, VERIFICADA 9 DE 9
+
+**Diferencia máxima contra lo publicado: `0.0000`.** La tabla principal del atractor queda verificada
+entera: RECUP 9/9, `a > 0` 9/9 y ahora **AUC(a) 9/9**.
+
+**El blanco era el ERROR, no la ausencia**, y no fue una interpretación: el `config` de las nueve
+unidades dice `blanco='error'`, y `entrenar.py:290` lo construye como `(lg_arg != tgt)`, o sea «¿el
+argmax del modelo, ignorando la cabeza, difiere del target?». Por eso el paper habla de AUC «on their
+own target».
+
+Instrumento en `micro_lm/auc_atractor.py`, salida en `micro_lm/auc_atractor_8000.json`, **con el
+vector de 8.000 logits por unidad guardado** para no volver a pasar por los checkpoints. Ese archivado
+es exactamente lo que faltó la primera vez y dejó la columna sin rastrear. 47 minutos de CPU con
+`taskset -c 0-1`.
+
+### ★ Y un lateral que puede tocar la constante `q`
+
+La correlación entre la **tasa de error** de la unidad y su **AUC(a)** es **r = −0,9892** sobre las
+nueve, con `frac_error` yendo de `0.4074` en la útil a `0.8197` en la más degenerada.
+
+Se lee así, y el propio código ya lo anticipaba en un comentario de `entrenar.py`: cuando la
+recuperación falla, el blanco de la cabeza se satura hacia 1, y **un blanco casi constante no deja
+señal para aprender a discriminar**. Mala recuperación → blanco saturado → cabeza sin gradiente útil →
+AUC ≈ 0,5.
+
+⚠️ **Es una observación, no un resultado.** n = 9, las unidades difieren en más de una cosa a la vez, y
+no hay control. Para que sea un resultado hay que **fijar la recuperación y mover sólo la saturación
+del blanco**. Pero si aguanta, es la primera explicación mecánica que aparece para la degeneración de
+la cabeza, y toca directamente el frente de `q ≈ 0,50`.
+
+**Lo que le queda al atractor para poder enviarse:** la versión en castellano. Los números ya están.
