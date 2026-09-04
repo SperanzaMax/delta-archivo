@@ -76,7 +76,7 @@ Por último probamos si el acceso predice el comportamiento, y damos un negativo
 \texttt{mamba-130m} sobre la misma tarea con el componente discriminante afuera de la ventana cuesta
 $+0{,}167$, $+0{,}181$ y $+0{,}141$ de abstención correcta en el paso $100$ ---tres semillas de tres
 por encima de nuestro umbral pre-registrado--- y \textbf{nada en absoluto para el paso $400$}.
-Nuestro modelo chico, de dos bloques, no se recupera nunca; el de $24$ capas se recupera rápido.
+Nuestro modelo chico, de cuatro bloques, no se recupera nunca; el de $24$ capas se recupera rápido.
 \textbf{Donde no quedan capas con que pagar, la ventana pone un techo; donde quedan, pone un peaje.}
 La afirmación fuerte vale entonces para memoria consultada desde una capa temprana, y no como
 predicción de comportamiento para un modelo profundo entrenado hasta converger.
@@ -84,8 +84,8 @@ predicción de comportamiento para un modelo profundo entrenado hasta converger.
 Por último preguntamos con qué frecuencia aparece esta configuración cuando nadie la está
 armando. Sobre cuatro corpus de preguntas ---SQuAD, Natural Questions, TriviaQA y HotpotQA, $33{.}585$
 preguntas--- entre el $90\%$ y el $100\%$ de las preguntas reales tienen sus partes discriminantes más
-separadas que el alcance medido, y empeora con la dificultad de la pregunta hasta llegar a
-$\mathbf{1{,}0000}$ en las multi-hop. La configuración que nuestra tarea sintética fue construida para
+separadas que el alcance medido, con las dos definiciones que se pueden calcular sin anotación, y
+empeora con la dificultad de la pregunta hasta llegar a $\mathbf{1{,}0000}$ en las multi-hop. La configuración que nuestra tarea sintética fue construida para
 estudiar es el caso ordinario, no un caso de borde.
 
 Damos el diagnóstico como una receta que no necesita entrenamiento. Se cambia un token de la consulta
@@ -293,13 +293,14 @@ dos textos.
 & $d{=}1$ & $d{=}2$ & $d{=}3$ & $d{=}5$ & $d{=}7$ & $d{=}8$ \\
 \midrule
 salida de \texttt{conv1d} & $0{,}8$--$3{,}7$ & $0{,}5$--$1{,}6$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ & $\mathbf{0{,}0}$ \\
-salida de la capa & $9\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ & $9\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ \\
+salida de la capa, mediana & $0{,}164$ & $0{,}043$ & $0{,}022$ & $0{,}018$ & $0{,}040$ & $0{,}012$ \\
+\quad rango en las $10$ celdas & $0{,}09$--$0{,}96$ & $0{,}02$--$0{,}06$ & $0{,}01$--$0{,}05$ & $0{,}01$--$0{,}04$ & $0{,}01$--$0{,}10$ & $0{,}01$--$0{,}02$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-La salida de la capa se mueve en \emph{todas} las distancias, $80$ celdas de $80$, así que el estado
-sí ve la secuencia entera. La salida de la convolución vale cero exacto más allá de su alcance.
+La salida de la capa se mueve en \emph{todas} las distancias, $80$ celdas de $80$, y el movimiento más
+chico de las ochenta es $6{,}3\!\times\!10^{-3}$, así que el estado sí ve la secuencia entera. La salida de la convolución vale cero exacto más allá de su alcance.
 \textbf{Eso es la disociación.} El modelo ve el contexto y la consulta que lee su estado no lo ve.
 
 \textbf{Un hallazgo incidental, informado con su incertidumbre.} Habíamos predicho movimiento en
@@ -445,7 +446,7 @@ profundidad:
 \toprule
 & profundidad & efecto de dejar la parte discriminante afuera de la ventana \\
 \midrule
-modelo chico, $26{.}000$ pasos & $2$ bloques & \textbf{permanente}: $0{,}544$, $0{,}678$, $0{,}506$ contra $0{,}993$, $0{,}980$, $1{,}000$ \\
+modelo chico, $26{.}000$ pasos & $4$ bloques & \textbf{permanente}: $0{,}544$, $0{,}678$, $0{,}506$ contra $0{,}993$, $0{,}980$, $1{,}000$ \\
 \texttt{mamba-130m}, $800$ pasos & $24$ capas & \textbf{transitorio}: $+0{,}16$ en el paso $100$, cero desde el $400$ \\
 \bottomrule
 \end{tabular}
@@ -496,9 +497,12 @@ HotpotQA & multi-hop, dos saltos inferenciales & $\mathbf{1{,}0000}$ & $0{,}9624
 \end{tabular}
 \end{center}
 
-Los $n$ son $10{.}570$, $3{.}610$, $12{.}000$ y $7{.}405$ preguntas, y el umbral es el alcance que
-\emph{medimos} en Mamba, que es $2$. Con el alcance nominal de $3$ los valores son $0{,}9144$,
-$0{,}9900$, $0{,}9837$ y $0{,}9997$.
+Los $n$ de $X_1$ son $10{.}570$, $3{.}610$, $12{.}000$ y $7{.}405$ preguntas. Los de $X_3$ son
+$6{.}610$, ---, $8{.}326$ y $5{.}269$, o sea entre el $62\%$ y el $71\%$ de cada corpus, porque $X_3$
+queda definida sólo cuando la pregunta tiene un interrogativo y después un token con mayúscula; en
+Natural Questions, que está todo en minúscula, no queda definida nunca. El umbral es el alcance que
+\emph{medimos} en Mamba, que es $2$. Con el alcance nominal de $3$ los valores de $X_1$ son
+$0{,}9144$, $0{,}9900$, $0{,}9837$ y $0{,}9997$.
 
 \paragraph{Tres cosas que esto dice.}
 
@@ -516,6 +520,18 @@ $0{,}18$ tokens del final en Natural Questions y a $1{,}25$--$1{,}34$ en los otr
 final casi siempre está \emph{adentro} de la ventana y todo lo demás afuera. Ésa es la geometría de
 nuestra tarea sintética ---entidad adentro, relación afuera--- apareciendo en lenguaje que nadie
 escribió para este experimento.
+
+\paragraph{La definición acota el número por arriba, y decimos por cuánto.} $X_1$ supone que las dos
+partes que hay que combinar son las palabras de contenido de los extremos, y eso la vuelve una cota
+superior. El supuesto contrario, que son las dos \emph{últimas} palabras de contenido, es una cota
+inferior, y da $0{,}186$, $0{,}211$, $0{,}295$ y $0{,}264$. Esa versión hay que calcularla sobre
+\emph{palabras} de contenido y no sobre piezas del BPE: en tres de los cuatro corpus los dos últimos
+\emph{tokens} de contenido pertenecen a la misma palabra entre el $90\%$ y el $94\%$ de las veces, así
+que una versión en sub-tokens de la misma cantidad mide el ancho de una sola palabra y no acota nada.
+Cuál de los dos números es el correcto depende de qué dos partes discriminan de verdad, y nuestros
+corpus no anotan eso. $X_3$, la distancia del interrogativo a la entidad, es el proxy más cercano a la
+cantidad que queremos, y queda entre $0{,}90$ y $0{,}96$. Informamos el intervalo y no la punta que
+más nos conviene.
 
 \paragraph{No hay forma cerrada, y importa hacia qué lado falla.} Es tentador ajustar una normal y
 leer $1 - \Phi\!\left(\frac{\text{alcance}-\mu}{\sigma}\right)$. Ninguna de las doce distribuciones es

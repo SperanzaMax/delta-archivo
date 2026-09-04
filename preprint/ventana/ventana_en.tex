@@ -73,7 +73,7 @@ the filler separates distance from lexical content.
 Finally we test whether access predicts behaviour, and report a negative. Fine-tuning
 \texttt{mamba-130m} on the same task with the discriminating component outside the window costs
 $+0.167$, $+0.181$ and $+0.141$ of correct abstention at step $100$ --- three seeds out of three above
-our pre-registered threshold --- and \textbf{nothing at all by step $400$}. Our small model, two
+our pre-registered threshold --- and \textbf{nothing at all by step $400$}. Our small model, four
 blocks deep, never recovers; the $24$-layer model recovers quickly. \textbf{Where there are no layers
 left to pay with, the window sets a ceiling; where there are, it sets a toll.} The strong claim
 therefore holds for memory consulted from an early layer, and not as a behavioural prediction for a
@@ -82,8 +82,8 @@ deep model trained to convergence.
 Finally we ask how often this configuration arises when nobody is arranging it. Across four
 question-answering corpora --- SQuAD, Natural Questions, TriviaQA and HotpotQA, $33{,}585$ questions ---
 between $90\%$ and $100\%$ of real questions have their discriminating parts further apart than the
-measured reach, and it worsens with question difficulty, reaching $\mathbf{1.0000}$ on multi-hop
-questions. The configuration our synthetic task was built to study is the ordinary case, not a corner
+measured reach, on both definitions that can be computed without annotation, and it worsens with
+question difficulty, reaching $\mathbf{1.0000}$ on multi-hop questions. The configuration our synthetic task was built to study is the ordinary case, not a corner
 case.
 
 We give the diagnosis as a recipe that requires no training: change one token of the query and see
@@ -280,13 +280,14 @@ of the convolution output and of the layer output. Ten read positions, two texts
 & $d{=}1$ & $d{=}2$ & $d{=}3$ & $d{=}5$ & $d{=}7$ & $d{=}8$ \\
 \midrule
 \texttt{conv1d} output & $0.8$--$3.7$ & $0.5$--$1.6$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ & $\mathbf{0.0}$ \\
-layer output & $9\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ & $9\!\times\!10^{-2}$ & $1\!\times\!10^{-2}$ \\
+layer output, median & $0.164$ & $0.043$ & $0.022$ & $0.018$ & $0.040$ & $0.012$ \\
+\quad range over $10$ cells & $0.09$--$0.96$ & $0.02$--$0.06$ & $0.01$--$0.05$ & $0.01$--$0.04$ & $0.01$--$0.10$ & $0.01$--$0.02$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-The layer output moves at \emph{every} distance, $80$ cells out of $80$: the state does see the whole
-sequence. The convolution output is exactly zero beyond its reach. \textbf{That is the dissociation.}
+The layer output moves at \emph{every} distance, $80$ cells out of $80$, the smallest movement over
+all of them being $6.3\!\times\!10^{-3}$: the state does see the whole sequence. The convolution output is exactly zero beyond its reach. \textbf{That is the dissociation.}
 The model sees the context; the query that reads its state does not.
 
 \textbf{An incidental finding, reported with its uncertainty.} We had predicted movement at $d=3$,
@@ -429,7 +430,7 @@ model is the point, and it is a controlled one, since the two vehicles differ in
 \toprule
 & depth & effect of keeping the discriminating part outside the window \\
 \midrule
-small model, $26{,}000$ steps & $2$ blocks & \textbf{permanent}: $0.544$, $0.678$, $0.506$ against $0.993$, $0.980$, $1.000$ \\
+small model, $26{,}000$ steps & $4$ blocks & \textbf{permanent}: $0.544$, $0.678$, $0.506$ against $0.993$, $0.980$, $1.000$ \\
 \texttt{mamba-130m}, $800$ steps & $24$ layers & \textbf{transient}: $+0.16$ at step $100$, zero from step $400$ \\
 \bottomrule
 \end{tabular}
@@ -480,8 +481,11 @@ HotpotQA & multi-hop, two inferential steps & $\mathbf{1.0000}$ & $0.9624$ \\
 \end{tabular}
 \end{center}
 
-$n$ is $10{,}570$, $3{,}610$, $12{,}000$ and $7{,}405$ questions respectively, and the threshold is
-the reach we \emph{measured} in Mamba, which is $2$. At the nominal reach of $3$ the figures are
+$n$ for $X_1$ is $10{,}570$, $3{,}610$, $12{,}000$ and $7{,}405$ questions respectively. For $X_3$ it
+is $6{,}610$, ---, $8{,}326$ and $5{,}269$, that is $62\%$ to $71\%$ of each corpus, because $X_3$ is
+defined only when the question contains an interrogative followed by a later capitalised token; in
+Natural Questions, which is lowercased throughout, it is never defined. The threshold is the reach we
+\emph{measured} in Mamba, which is $2$. At the nominal reach of $3$ the figures for $X_1$ are
 $0.9144$, $0.9900$, $0.9837$ and $0.9997$.
 
 \paragraph{Three things this says.}
@@ -501,6 +505,17 @@ $0.18$ tokens from the end in Natural Questions and $1.25$--$1.34$ in the others
 is almost always \emph{inside} the window and everything else is outside. That is the geometry of our
 synthetic task --- entity inside, relation outside --- appearing in language nobody wrote for this
 experiment.
+
+\paragraph{The definition bounds the number from above, and we say by how much.} $X_1$ assumes the
+two parts that must be combined are the outermost content words, which makes it an upper bound. The
+opposite assumption, that they are the two \emph{last} content words, is a lower bound, and it gives
+$0.186$, $0.211$, $0.295$ and $0.264$. That version has to be computed over content \emph{words} and
+not over BPE pieces: in three of the four corpora the last two content \emph{tokens} belong to the
+same word $90\%$ to $94\%$ of the time, so a sub-token version of the same quantity measures the width
+of a single word and bounds nothing. Which figure is the right one depends on which two parts actually
+discriminate, and our corpora do not annotate that. $X_3$, the interrogative-to-entity distance, is
+the proxy closest to the quantity we mean, and it sits at $0.90$ to $0.96$. We report the bracket
+rather than the most favourable end of it.
 
 \paragraph{A closed form is not available, and it matters which way it fails.} It is tempting to fit
 a normal and read off $1 - \Phi\!\left(\frac{\text{reach}-\mu}{\sigma}\right)$. None of the twelve
