@@ -1,0 +1,52 @@
+PARA: docentes e investigadores de la UTN-BA
+ENVIAR DESDE: mrsperanza@frba.utn.edu.ar
+ASUNTO: Un trabajo que subí, y una consulta puntual sobre arXiv
+-----------------------------------------------------------------
+NOTA: mandar DESPUES de que TechRxiv asigne el DOI, y reemplazar [DOI] por el link real.
+Va uno por persona, no con copia a todos. Un pedido que llega en lista se contesta menos.
+-----------------------------------------------------------------
+
+Hola [NOMBRE], cómo estás.
+
+Te escribo desde mi correo institucional, que me dieron esta semana. Estoy trabajando en una línea de
+investigación sobre memoria en modelos de lenguaje y acabo de subir un trabajo. Te dejo el link por si
+te interesa mirarlo, y también porque tengo una consulta al final.
+
+  [DOI]
+
+El resultado, en dos líneas. Los modelos de espacio de estados, que son la alternativa a los
+Transformers que hoy usan Mamba y Qwen3-Next, arman la consulta con la que buscan en su memoria usando
+una convolución corta, de cuatro posiciones. Lo que medí es que la parte de la pregunta que cae fuera
+de esa ventana no llega debilitada, llega en CERO EXACTO, y el modelo contesta igual, con total
+confianza, usando sólo la parte que sí puede ver.
+
+Lo verifiqué en dos modelos públicos de Mamba, de 130 y 370 millones de parámetros, y después medí
+cuán seguido pasa esto en preguntas reales. Sobre cuatro corpus y 33.585 preguntas, entre el 90 y el
+100 por ciento de las preguntas que la gente hace tienen sus partes discriminantes más separadas que
+esa ventana. En las preguntas de razonamiento en dos pasos da 1,0000 exacto, o sea todas.
+
+El trabajo también informa un resultado NEGATIVO, que es lo que más me interesa dejar sentado: en un
+modelo de 24 capas eso no se traduce en una falla, porque la profundidad lo compensa. Está todo
+pre-registrado, con los criterios congelados y hasheados antes de correr los experimentos, y el código
+y los datos crudos son públicos.
+
+Ahora la consulta. Quiero subirlo también a arXiv, que es donde esta comunidad lee, y desde enero de
+este año piden que a los autores nuevos los avale alguien que ya haya publicado ahí. No es una revisión
+del trabajo ni implica ninguna responsabilidad sobre el contenido, arXiv lo aclara expresamente: sólo
+certifica que el artículo corresponde a la categoría.
+
+El requisito es más amplio de lo que parece. Alcanza con haber subido tres trabajos a CUALQUIERA de
+las categorías de Computer Science de arXiv, no hace falta que sean de aprendizaje automático. Sirve
+ingeniería de software, bases de datos, redes, robótica, seguridad, visión.
+
+Así que la pregunta es doble. Si vos publicaste en arXiv en alguna de esas áreas en los últimos cinco
+años, con un clic alcanza. Y si no, ¿se te ocurre alguien de la facultad que sí?
+
+Mi código es QPVI87 y se otorga entrando a https://arxiv.org/auth/endorse?x=QPVI87
+
+Cualquier cosa te lo explico en dos minutos, y si querés te paso el PDF en castellano, que lo tengo
+escrito en los dos idiomas.
+
+Gracias,
+Maximiliano Rodrigo Speranza
+ORCID 0009-0005-0413-8554

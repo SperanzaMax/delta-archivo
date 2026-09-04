@@ -79,6 +79,13 @@ left to pay with, the window sets a ceiling; where there are, it sets a toll.} T
 therefore holds for memory consulted from an early layer, and not as a behavioural prediction for a
 deep model trained to convergence.
 
+Finally we ask how often this configuration arises when nobody is arranging it. Across four
+question-answering corpora --- SQuAD, Natural Questions, TriviaQA and HotpotQA, $33{,}585$ questions ---
+between $90\%$ and $100\%$ of real questions have their discriminating parts further apart than the
+measured reach, and it worsens with question difficulty, reaching $\mathbf{1.0000}$ on multi-hop
+questions. The configuration our synthetic task was built to study is the ordinary case, not a corner
+case.
+
 We give the diagnosis as a recipe that requires no training: change one token of the query and see
 whether retrieval moves. If it does not, that token is invisible to the search, and any confidence the
 model expresses about it is unearned --- though, as our negative shows, invisible to one layer's query
@@ -126,6 +133,10 @@ $r = 0.978$ in both, with a control that separates distance from lexical content
 \item \textbf{Access does not imply behaviour, and we report that as a negative.} A component that is
 provably invisible to one layer's query still gets learned, only more slowly. The effect is
 $+0.16$ at step $100$ across three seeds and gone by step $400$ (Result 6).
+
+\item \textbf{The configuration is the common case, not a corner case.} Across four QA corpora and
+$33{,}585$ questions, $90$--$100\%$ of real questions have their discriminating parts beyond the
+measured reach, rising to $1.0000$ on multi-hop questions (Result 7).
 
 \item \textbf{A diagnosis that costs nothing.} Replace one token of a query and check whether
 retrieval moves. It requires no training, no gradient and no labels, and it applies to any model that
@@ -437,6 +448,75 @@ a shallower model could all move this. What the negative does establish is that 
 is not enough}: a component that is provably invisible to one layer's query can still govern the
 answer, and any claim that a model ``cannot use'' such a component has to be tested behaviourally
 rather than inferred from the convolution.
+
+\section{Result 7: in real questions, the discriminating parts are almost always outside the window}
+
+Everything above was measured on a closed synthetic language where the generator fixes the distance.
+The obvious question is what that distance looks like when nobody is fixing it. We measured it.
+
+\paragraph{What is measured.} The distance $X$ between the parts of a question that have to be
+combined, in tokens of the Mamba BPE. That distance has to be \emph{defined}, and the definition
+decides the number, so we report three and believe only what survives all three:
+
+\begin{itemize}
+\item $X_1$, the span from the first to the last content word;
+\item $X_2$, from the last content word to the end of the question;
+\item $X_3$, from the interrogative to the last capitalised token, a proxy for the entity.
+\end{itemize}
+
+Content words are everything outside a closed list of function words. Four corpora, chosen to differ
+in who wrote the questions and why.
+
+\begin{center}
+\begin{tabular}{llcc}
+\toprule
+corpus & who wrote the questions & $P(X_1 > 2)$ & $P(X_3 > 2)$ \\
+\midrule
+SQuAD & annotators looking at a paragraph & $0.9625$ & $0.9045$ \\
+\textbf{Natural Questions} & \textbf{real Google searches} & $\mathbf{0.9978}$ & --- \\
+TriviaQA & trivia written by humans & $0.9943$ & $0.9104$ \\
+HotpotQA & multi-hop, two inferential steps & $\mathbf{1.0000}$ & $0.9624$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+$n$ is $10{,}570$, $3{,}610$, $12{,}000$ and $7{,}405$ questions respectively, and the threshold is
+the reach we \emph{measured} in Mamba, which is $2$. At the nominal reach of $3$ the figures are
+$0.9144$, $0.9900$, $0.9837$ and $0.9997$.
+
+\paragraph{Three things this says.}
+
+\textbf{It replicates.} Between $90\%$ and $100\%$ of real questions have their discriminating parts
+further apart than the reach of the query-forming convolution, across four corpora written for
+different purposes. Natural Questions carries the most weight here, because those are queries people
+actually typed into a search engine rather than items produced for a benchmark.
+
+\textbf{It gets worse with difficulty.} $0.9625 \to 0.9943 \to 0.9978 \to 1.0000$, from SQuAD to
+HotpotQA. Of $7{,}405$ multi-hop questions, not one has its content parts within two tokens. The
+regime where one would most want the model to reason carefully is the regime where its query sees
+least.
+
+\textbf{$X_2$ confirms the mechanism rather than contradicting it.} The last content word sits
+$0.18$ tokens from the end in Natural Questions and $1.25$--$1.34$ in the others, so the final piece
+is almost always \emph{inside} the window and everything else is outside. That is the geometry of our
+synthetic task --- entity inside, relation outside --- appearing in language nobody wrote for this
+experiment.
+
+\paragraph{A closed form is not available, and it matters which way it fails.} It is tempting to fit
+a normal and read off $1 - \Phi\!\left(\frac{\text{reach}-\mu}{\sigma}\right)$. None of the twelve
+distributions is normal: skewness runs from $+0.93$ to $+3.71$ and excess kurtosis up to $+20.95$,
+all with a heavy right tail, as a distance must, since it is bounded below and unbounded above. The
+right tail is precisely the region $X > \text{reach}$ that the quantity is about, so a normal fitted
+to the centre would understate exactly the part that decides. The empirical distribution needs no
+assumption: the figures above are counts.
+
+\paragraph{What this does not show.} These are syntactic proxies, not the true semantic parts of a
+question, and in Natural Questions $X_3$ could not be computed at all because search queries are not
+capitalised. More importantly, this measures the \emph{geometry of the language}, not the behaviour of
+a model: Result 6 established that being outside the window delays learning rather than preventing it.
+What it does establish is that the configuration our synthetic task was built to study is not a corner
+case. It is the ordinary case.
+
 
 \section{The diagnosis, as a recipe}
 

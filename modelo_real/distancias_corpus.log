@@ -1,0 +1,66 @@
+
+=== SQuAD (anotadores sobre un parrafo) · 10570 preguntas
+  X1  n= 10551  media   8.67  sd  4.32  mediana   8.0  p90  14.0  max   34
+        P(X > 2) = 0.9625    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9144    <- fraccion que cae AFUERA con alcance 3
+        asimetria +0.93 (normal = 0)  ·  curtosis +1.34 (normal = 0)
+  X2  n= 10551  media   1.25  sd  0.66  mediana   1.0  p90   2.0  max    8
+        P(X > 2) = 0.0592    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0187    <- fraccion que cae AFUERA con alcance 3
+        asimetria +3.18 (normal = 0)  ·  curtosis +13.01 (normal = 0)
+  X3  n=  6610  media   7.35  sd  4.06  mediana   7.0  p90  13.0  max   32
+        P(X > 2) = 0.9045    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.8139    <- fraccion que cae AFUERA con alcance 3
+        asimetria +0.94 (normal = 0)  ·  curtosis +1.18 (normal = 0)
+Generating train split:   0%|          | 0/87925 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 87925/87925 [00:00<00:00, 1424559.17 examples/s]
+Generating validation split:   0%|          | 0/3610 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 3610/3610 [00:00<00:00, 751398.81 examples/s]
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'mandarjoshi/trivia_qa' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+
+=== Natural Questions (busquedas REALES de Google) · 3610 preguntas
+  X1  n=  3610  media   7.48  sd  2.51  mediana   7.0  p90  11.0  max   22
+        P(X > 2) = 0.9978    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9900    <- fraccion que cae AFUERA con alcance 3
+        asimetria +1.08 (normal = 0)  ·  curtosis +2.09 (normal = 0)
+  X2  n=  3610  media   0.18  sd  0.52  mediana   0.0  p90   1.0  max    6
+        P(X > 2) = 0.0069    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0019    <- fraccion que cae AFUERA con alcance 3
+        asimetria +3.71 (normal = 0)  ·  curtosis +19.31 (normal = 0)
+  X3: sin datos
+Generating train split:   0%|          | 0/138384 [00:00<?, ? examples/s]Generating train split:  11%|█         | 15000/138384 [00:00<00:00, 140976.79 examples/s]Generating train split:  27%|██▋       | 37000/138384 [00:00<00:00, 183636.25 examples/s]Generating train split:  43%|████▎     | 60000/138384 [00:00<00:00, 196894.38 examples/s]Generating train split:  59%|█████▉    | 82000/138384 [00:00<00:00, 202925.36 examples/s]Generating train split:  81%|████████  | 112000/138384 [00:00<00:00, 196862.32 examples/s]Generating train split:  97%|█████████▋| 134000/138384 [00:00<00:00, 202107.54 examples/s]Generating train split: 100%|██████████| 138384/138384 [00:00<00:00, 196872.15 examples/s]
+Generating validation split:   0%|          | 0/17944 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 17944/17944 [00:00<00:00, 183929.32 examples/s]
+Generating test split:   0%|          | 0/17210 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 17210/17210 [00:00<00:00, 511040.59 examples/s]
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'hotpotqa/hotpot_qa' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+
+=== TriviaQA (preguntas de trivia, escritas por humanos) · 12000 preguntas
+  X1  n= 11999  media  14.23  sd  8.60  mediana  12.0  p90  24.0  max  163
+        P(X > 2) = 0.9943    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9837    <- fraccion que cae AFUERA con alcance 3
+        asimetria +2.77 (normal = 0)  ·  curtosis +20.61 (normal = 0)
+  X2  n= 11999  media   1.32  sd  0.89  mediana   1.0  p90   2.0  max   16
+        P(X > 2) = 0.0950    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0311    <- fraccion que cae AFUERA con alcance 3
+        asimetria +3.35 (normal = 0)  ·  curtosis +20.95 (normal = 0)
+  X3  n=  8326  media  11.02  sd  7.86  mediana  10.0  p90  20.0  max  132
+        P(X > 2) = 0.9104    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.8727    <- fraccion que cae AFUERA con alcance 3
+        asimetria +2.36 (normal = 0)  ·  curtosis +14.44 (normal = 0)
+Generating train split:   0%|          | 0/90447 [00:00<?, ? examples/s]Generating train split:   4%|▍         | 4000/90447 [00:00<00:02, 35292.07 examples/s]Generating train split:  11%|█         | 10000/90447 [00:00<00:01, 42153.16 examples/s]Generating train split:  17%|█▋        | 15000/90447 [00:00<00:01, 41480.31 examples/s]Generating train split:  24%|██▍       | 22000/90447 [00:00<00:01, 38617.04 examples/s]Generating train split:  30%|██▉       | 27000/90447 [00:00<00:01, 37687.01 examples/s]Generating train split:  34%|███▍      | 31000/90447 [00:00<00:01, 35629.94 examples/s]Generating train split:  40%|███▉      | 36000/90447 [00:00<00:01, 36577.61 examples/s]Generating train split:  48%|████▊     | 43000/90447 [00:01<00:01, 42294.15 examples/s]Generating train split:  56%|█████▌    | 50224/90447 [00:01<00:00, 46168.00 examples/s]Generating train split:  62%|██████▏   | 56224/90447 [00:01<00:00, 47840.48 examples/s]Generating train split:  69%|██████▉   | 62224/90447 [00:01<00:00, 47935.76 examples/s]Generating train split:  75%|███████▌  | 68224/90447 [00:01<00:00, 47780.82 examples/s]Generating train split:  82%|████████▏ | 74224/90447 [00:01<00:00, 49142.70 examples/s]Generating train split:  90%|████████▉ | 81224/90447 [00:01<00:00, 50162.51 examples/s]Generating train split:  96%|█████████▋| 87224/90447 [00:01<00:00, 52093.57 examples/s]Generating train split: 100%|██████████| 90447/90447 [00:01<00:00, 45676.98 examples/s]
+Generating validation split:   0%|          | 0/7405 [00:00<?, ? examples/s]Generating validation split:  68%|██████▊   | 5000/7405 [00:00<00:00, 41329.22 examples/s]Generating validation split: 100%|██████████| 7405/7405 [00:00<00:00, 46174.78 examples/s]
+
+=== HotpotQA (multi-hop, dos saltos) · 7405 preguntas
+  X1  n=  7405  media  16.99  sd  6.82  mediana  16.0  p90  26.0  max   72
+        P(X > 2) = 1.0000    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9997    <- fraccion que cae AFUERA con alcance 3
+        asimetria +1.23 (normal = 0)  ·  curtosis +2.79 (normal = 0)
+  X2  n=  7405  media   1.34  sd  0.79  mediana   1.0  p90   2.0  max    9
+        P(X > 2) = 0.0905    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0240    <- fraccion que cae AFUERA con alcance 3
+        asimetria +2.79 (normal = 0)  ·  curtosis +10.79 (normal = 0)
+  X3  n=  5269  media  13.87  sd  7.21  mediana  13.0  p90  23.0  max   75
+        P(X > 2) = 0.9624    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9433    <- fraccion que cae AFUERA con alcance 3
+        asimetria +0.93 (normal = 0)  ·  curtosis +2.38 (normal = 0)

@@ -1,0 +1,49 @@
+=== SQuAD (anotadores sobre un parrafo) · 10570 preguntas
+  X1  n= 10551  media   8.67  sd  4.32  mediana   8.0  p90  14.0  max   34
+        P(X > 2) = 0.9625    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9144    <- fraccion que cae AFUERA con alcance 3
+        asimetria +0.93 (normal = 0)  ·  curtosis +1.34 (normal = 0)
+  X2  n= 10551  media   1.25  sd  0.66  mediana   1.0  p90   2.0  max    8
+        P(X > 2) = 0.0592    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0187    <- fraccion que cae AFUERA con alcance 3
+        asimetria +3.18 (normal = 0)  ·  curtosis +13.01 (normal = 0)
+  X3  n=  6610  media   7.35  sd  4.06  mediana   7.0  p90  13.0  max   32
+        P(X > 2) = 0.9045    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.8139    <- fraccion que cae AFUERA con alcance 3
+        asimetria +0.94 (normal = 0)  ·  curtosis +1.18 (normal = 0)
+=== Natural Questions (busquedas REALES de Google) · 3610 preguntas
+  X1  n=  3610  media   7.48  sd  2.51  mediana   7.0  p90  11.0  max   22
+        P(X > 2) = 0.9978    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9900    <- fraccion que cae AFUERA con alcance 3
+        asimetria +1.08 (normal = 0)  ·  curtosis +2.09 (normal = 0)
+  X2  n=  3610  media   0.18  sd  0.52  mediana   0.0  p90   1.0  max    6
+        P(X > 2) = 0.0069    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0019    <- fraccion que cae AFUERA con alcance 3
+        asimetria +3.71 (normal = 0)  ·  curtosis +19.31 (normal = 0)
+  X3: sin datos
+=== TriviaQA (preguntas de trivia, escritas por humanos) · 12000 preguntas
+  X1  n= 11999  media  14.23  sd  8.60  mediana  12.0  p90  24.0  max  163
+        P(X > 2) = 0.9943    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9837    <- fraccion que cae AFUERA con alcance 3
+        asimetria +2.77 (normal = 0)  ·  curtosis +20.61 (normal = 0)
+  X2  n= 11999  media   1.32  sd  0.89  mediana   1.0  p90   2.0  max   16
+        P(X > 2) = 0.0950    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0311    <- fraccion que cae AFUERA con alcance 3
+        asimetria +3.35 (normal = 0)  ·  curtosis +20.95 (normal = 0)
+  X3  n=  8326  media  11.02  sd  7.86  mediana  10.0  p90  20.0  max  132
+        P(X > 2) = 0.9104    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.8727    <- fraccion que cae AFUERA con alcance 3
+        asimetria +2.36 (normal = 0)  ·  curtosis +14.44 (normal = 0)
+=== HotpotQA (multi-hop, dos saltos) · 7405 preguntas
+  X1  n=  7405  media  16.99  sd  6.82  mediana  16.0  p90  26.0  max   72
+        P(X > 2) = 1.0000    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9997    <- fraccion que cae AFUERA con alcance 3
+        asimetria +1.23 (normal = 0)  ·  curtosis +2.79 (normal = 0)
+  X2  n=  7405  media   1.34  sd  0.79  mediana   1.0  p90   2.0  max    9
+        P(X > 2) = 0.0905    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.0240    <- fraccion que cae AFUERA con alcance 3
+        asimetria +2.79 (normal = 0)  ·  curtosis +10.79 (normal = 0)
+  X3  n=  5269  media  13.87  sd  7.21  mediana  13.0  p90  23.0  max   75
+        P(X > 2) = 0.9624    <- fraccion que cae AFUERA con alcance 2
+        P(X > 3) = 0.9433    <- fraccion que cae AFUERA con alcance 3
+        asimetria +0.93 (normal = 0)  ·  curtosis +2.38 (normal = 0)

@@ -81,6 +81,13 @@ Nuestro modelo chico, de dos bloques, no se recupera nunca; el de $24$ capas se 
 La afirmación fuerte vale entonces para memoria consultada desde una capa temprana, y no como
 predicción de comportamiento para un modelo profundo entrenado hasta converger.
 
+Por último preguntamos con qué frecuencia aparece esta configuración cuando nadie la está
+armando. Sobre cuatro corpus de preguntas ---SQuAD, Natural Questions, TriviaQA y HotpotQA, $33{.}585$
+preguntas--- entre el $90\%$ y el $100\%$ de las preguntas reales tienen sus partes discriminantes más
+separadas que el alcance medido, y empeora con la dificultad de la pregunta hasta llegar a
+$\mathbf{1{,}0000}$ en las multi-hop. La configuración que nuestra tarea sintética fue construida para
+estudiar es el caso ordinario, no un caso de borde.
+
 Damos el diagnóstico como una receta que no necesita entrenamiento. Se cambia un token de la consulta
 y se mira si la recuperación se mueve. Si no se mueve, ese token es invisible para la búsqueda, y la
 confianza que el modelo muestre sobre él no está ganada.
@@ -129,6 +136,10 @@ $r = 0{,}978$ en los dos, con un control que separa la distancia del contenido l
 demostrablemente invisible para la consulta de una capa se aprende igual, sólo que más lento. El
 efecto es $+0{,}16$ en el paso $100$ en tres semillas de tres y desaparece para el paso $400$
 (Resultado 6).
+
+\item \textbf{La configuración es el caso común, no un caso de borde.} Sobre cuatro corpus de
+preguntas y $33{.}585$ preguntas, entre el $90$ y el $100\%$ de las reales tienen sus partes
+discriminantes más allá del alcance medido, y llega a $1{,}0000$ en las multi-hop (Resultado 7).
 
 \item \textbf{Un diagnóstico que no cuesta nada.} Reemplazar un token de la consulta y ver si la
 recuperación se mueve. No necesita entrenamiento, ni gradiente, ni etiquetas, y se aplica a cualquier
@@ -453,6 +464,74 @@ tarea más difícil o un modelo menos profundo podrían mover esto. Lo que el ne
 que \emph{medir el acceso no alcanza}: un componente demostrablemente invisible para la consulta de
 una capa puede igual gobernar la respuesta, y cualquier afirmación de que un modelo «no puede usar»
 ese componente hay que probarla en el comportamiento y no deducirla de la convolución.
+
+\section{Resultado 7. En preguntas reales, las partes discriminantes casi siempre caen afuera de la ventana}
+
+Todo lo anterior se midió sobre un idioma sintético cerrado donde el generador fija la distancia. La
+pregunta obvia es cómo se ve esa distancia cuando nadie la fija. La medimos.
+
+\paragraph{Qué se mide.} La distancia $X$ entre las partes de una pregunta que hay que combinar, en
+tokens del BPE de Mamba. Esa distancia hay que \emph{definirla}, y la definición decide el número, así
+que informamos tres y creemos sólo lo que sobrevive a las tres:
+
+\begin{itemize}
+\item $X_1$, el tramo de la primera a la última palabra de contenido;
+\item $X_2$, de la última palabra de contenido al final de la pregunta;
+\item $X_3$, del interrogativo al último token capitalizado, como aproximación a la entidad.
+\end{itemize}
+
+Las palabras de contenido son todo lo que queda fuera de una lista cerrada de palabras funcionales.
+Cuatro corpus, elegidos por diferir en quién escribió las preguntas y para qué.
+
+\begin{center}
+\begin{tabular}{llcc}
+\toprule
+corpus & quién escribió las preguntas & $P(X_1 > 2)$ & $P(X_3 > 2)$ \\
+\midrule
+SQuAD & anotadores mirando un párrafo & $0{,}9625$ & $0{,}9045$ \\
+\textbf{Natural Questions} & \textbf{búsquedas reales de Google} & $\mathbf{0{,}9978}$ & --- \\
+TriviaQA & trivia escrita por humanos & $0{,}9943$ & $0{,}9104$ \\
+HotpotQA & multi-hop, dos saltos inferenciales & $\mathbf{1{,}0000}$ & $0{,}9624$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Los $n$ son $10{.}570$, $3{.}610$, $12{.}000$ y $7{.}405$ preguntas, y el umbral es el alcance que
+\emph{medimos} en Mamba, que es $2$. Con el alcance nominal de $3$ los valores son $0{,}9144$,
+$0{,}9900$, $0{,}9837$ y $0{,}9997$.
+
+\paragraph{Tres cosas que esto dice.}
+
+\textbf{Replica.} Entre el $90\%$ y el $100\%$ de las preguntas reales tienen sus partes
+discriminantes más separadas que el alcance de la convolución que forma la consulta, en cuatro corpus
+escritos con propósitos distintos. Natural Questions es el que más pesa, porque son consultas que la
+gente efectivamente escribió en un buscador y no ítems producidos para un benchmark.
+
+\textbf{Empeora con la dificultad.} $0{,}9625 \to 0{,}9943 \to 0{,}9978 \to 1{,}0000$, de SQuAD a
+HotpotQA. De $7{.}405$ preguntas multi-hop, ni una tiene sus partes de contenido dentro de dos tokens.
+El régimen donde uno más querría que el modelo razone con cuidado es aquel donde su consulta ve menos.
+
+\textbf{$X_2$ confirma el mecanismo en vez de contradecirlo.} La última palabra de contenido queda a
+$0{,}18$ tokens del final en Natural Questions y a $1{,}25$--$1{,}34$ en los otros, así que la pieza
+final casi siempre está \emph{adentro} de la ventana y todo lo demás afuera. Ésa es la geometría de
+nuestra tarea sintética ---entidad adentro, relación afuera--- apareciendo en lenguaje que nadie
+escribió para este experimento.
+
+\paragraph{No hay forma cerrada, y importa hacia qué lado falla.} Es tentador ajustar una normal y
+leer $1 - \Phi\!\left(\frac{\text{alcance}-\mu}{\sigma}\right)$. Ninguna de las doce distribuciones es
+normal: la asimetría va de $+0{,}93$ a $+3{,}71$ y el exceso de curtosis llega a $+20{,}95$, todas con
+cola pesada a la derecha, como corresponde a una distancia, que está acotada por abajo y no por
+arriba. La cola derecha es precisamente la región $X > \text{alcance}$ de la que trata la cantidad, así
+que una normal ajustada al centro subestimaría justo la parte que decide. La distribución empírica no
+necesita ningún supuesto: los valores de arriba son conteos.
+
+\paragraph{Lo que esto no muestra.} Son aproximaciones sintácticas y no las verdaderas partes
+semánticas de una pregunta, y en Natural Questions $X_3$ no se pudo calcular porque las consultas de
+búsqueda no llevan mayúsculas. Más importante, esto mide la \emph{geometría del idioma} y no el
+comportamiento de un modelo: el Resultado 6 estableció que estar afuera de la ventana demora el
+aprendizaje en vez de impedirlo. Lo que sí establece es que la configuración que nuestra tarea
+sintética fue construida para estudiar no es un caso de borde. Es el caso ordinario.
+
 
 \section{El diagnóstico, como receta}
 
