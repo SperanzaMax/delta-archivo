@@ -1,0 +1,40 @@
+PARA: docentes e investigadores de la UTN-BA · UNO POR PERSONA, sin copia a todos
+ENVIAR DESDE: mrsperanza@frba.utn.edu.ar
+ASUNTO: Consulta sobre arXiv, y un trabajo que subí
+----------------------------------------------------------------------
+Mandar DESPUES del DOI. Reemplazar [DOI] por el link.
+Esta es la version CORTA. La larga, con mas detalle del resultado, esta en 4_facultad_con_doi.txt
+----------------------------------------------------------------------
+
+Hola [NOMBRE], cómo estás.
+
+Te escribo desde mi correo institucional, que me dieron esta semana. Acabo de subir un trabajo de
+investigación y tengo una consulta puntual al final.
+
+  [DOI]
+
+En dos líneas: los modelos de espacio de estados, que son la alternativa a los Transformers que usan
+hoy Mamba y Qwen3-Next, arman la consulta con la que buscan en su memoria usando una convolución de
+cuatro posiciones. Medí que la parte de la pregunta que cae fuera de esa ventana no llega debilitada,
+llega en cero exacto, y el modelo contesta igual con total confianza usando sólo lo que sí puede ver.
+Después medí cuán seguido pasa eso en preguntas reales, y sobre 33.585 preguntas de cuatro corpus da
+entre el 90 y el 100 por ciento.
+
+La consulta. Quiero subirlo también a arXiv y desde enero piden que a los autores nuevos los avale
+alguien que ya haya publicado ahí. No es una revisión ni implica responsabilidad sobre el contenido,
+arXiv lo aclara: sólo certifica que el artículo corresponde a la categoría, y se hace con un clic.
+
+Alcanza con haber subido tres trabajos a cualquier categoría de Computer Science de arXiv, no hace
+falta que sean de aprendizaje automático. Sirve ingeniería de software, bases de datos, redes,
+robótica, seguridad o visión.
+
+Así que van dos preguntas. Si publicaste en arXiv en alguna de esas áreas en los últimos cinco años,
+¿me darías el aval? Y si no, ¿se te ocurre alguien de la facultad que sí?
+
+Mi código es QPVI87 y se otorga en https://arxiv.org/auth/endorse?x=QPVI87
+
+Si te interesa mirarlo, lo tengo escrito también en castellano y te lo paso.
+
+Gracias,
+Maximiliano Rodrigo Speranza
+ORCID 0009-0005-0413-8554
