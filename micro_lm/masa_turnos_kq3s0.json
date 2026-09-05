@@ -1,0 +1,54 @@
+{
+ "ckpt": "ckpts/kq3_s0.pkl",
+ "config": {
+  "pasos": 26000,
+  "kernel_q": 5,
+  "donde": "lat2",
+  "nivel": 3,
+  "d": 128,
+  "capas": 4,
+  "ses_extra": null
+ },
+ "celdas": [
+  {
+   "masa_extra": 0.6454139103492101,
+   "proporcion": 0.8856987020681606,
+   "masa_correcta": 0.31711593953271705,
+   "recup": 1.0,
+   "indice": 0.7287059457602559,
+   "n": 24,
+   "ses_extra": 8,
+   "barajado": false
+  },
+  {
+   "masa_extra": 0.6119995613892873,
+   "proporcion": 0.8858213868976216,
+   "masa_correcta": 0.35094012568394345,
+   "recup": 0.9583333333333334,
+   "indice": 0.690883704594975,
+   "n": 24,
+   "ses_extra": 8,
+   "barajado": true
+  },
+  {
+   "masa_extra": 0.8559319401780764,
+   "proporcion": 0.9632695187565913,
+   "masa_correcta": 0.12913482822477818,
+   "recup": 0.6666666666666666,
+   "indice": 0.8885695265048265,
+   "n": 24,
+   "ses_extra": 26,
+   "barajado": false
+  },
+  {
+   "masa_extra": 0.8552522187431654,
+   "proporcion": 0.9626021839901954,
+   "masa_correcta": 0.12638901670773825,
+   "recup": 0.7083333333333334,
+   "indice": 0.8884794081787337,
+   "n": 24,
+   "ses_extra": 26,
+   "barajado": true
+  }
+ ]
+}
