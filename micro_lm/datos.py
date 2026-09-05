@@ -42,8 +42,20 @@ def _tok(texto, largo):
 TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3}
 
 
+# ARCHIVO LARGO (2026-09-05). Base del turno del episodio PRINCIPAL cuando hay sesiones extra.
+# `ord` tiene 64 filas y desde hoy la indexacion fuera de rango da NaN en vez de clampear en
+# silencio (`modelo.sello`), asi que los turnos tienen que caber. Con `n_sesiones=4` y `E_MAX=10` el
+# episodio principal usa 40 turnos como maximo, de 24 a 63, y las sesiones EXTRA sortean en 0..23.
+#
+# Eso no es una concesion al tope, es la HIPOTESIS: el archivo largo queda marcado como anterior, que
+# es exactamente lo que el sello de orden deberia poder usar para descartarlo. Medido el 5-sep sobre
+# checkpoints entrenados, hoy NO lo usa (0,0059 contra 0,0039, identico). La pregunta de la campania
+# es si entrenando lo aprende.
+TURNO_BASE = 24
+
+
 def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False,
-         con_origen=False, formas_q=("directa",), con_formas=False):
+         con_origen=False, formas_q=("directa",), con_formas=False, n_ses_extra=0):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
 
     Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
@@ -51,7 +63,12 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
     identidad, la desagregacion que pide la §6— y no cambia nada del muestreo: `episodio` ya se
     llamaba igual, sólo se le pide que devuelva lo que ya tenia calculado.
     """
-    S, N = n_sesiones, n_sesiones * E_MAX
+    # Las sesiones EXTRA son episodios completos de OTRAS conversaciones que se archivan y cuyas
+    # consultas se descartan. Van por el MISMO forward que las del episodio, asi que sus entradas
+    # las escribe el modelo con los pesos de ESE paso — que es la unica forma honesta de tener un
+    # archivo largo durante el entrenamiento: un pool precomputado quedaria congelado en los pesos
+    # del momento en que se genero.
+    S, N = n_sesiones + n_ses_extra, (n_sesiones + n_ses_extra) * E_MAX
     ses = np.full((B, S, T_SES), PAD, np.int32)
     cortes = np.zeros((B, S, E_MAX), np.int32)
     mask = np.zeros((B, N), bool)
@@ -92,7 +109,7 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                 continue
             (q, r, t), i_q = con_resp[int(rng.integers(len(con_resp)))]
         forma_q[b] = I.FORMAS_Q.index(formas_ep[i_q]) if i_q < len(formas_ep) else 0
-        turno = 0
+        turno = TURNO_BASE if n_ses_extra else 0
         for s, enunciados in enumerate(sesiones):
             toks = [I.STOI["BOS"]]
             puestos = 0
@@ -111,6 +128,23 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
             ses[b, s, :len(toks)] = toks
             TRUNC["enunciados"] += len(enunciados)
             TRUNC["truncados"] += len(enunciados) - puestos
+        for k in range(n_ses_extra):
+            s_ex = n_sesiones + k
+            ses_ex, _ = I.episodio(rng, nivel=nivel, n_hechos=n_hechos, n_sesiones=1,
+                                   p_pregunta_vieja=p_vieja, p_nose=0.0)
+            toks = [I.STOI["BOS"]]
+            for e, enunciado in enumerate(ses_ex[0][:E_MAX]):
+                ids = I.a_ids(enunciado)
+                if len(toks) + len(ids) >= T_SES:
+                    break
+                toks += ids
+                cortes[b, s_ex, e] = len(toks) - 1
+                mask[b, s_ex * E_MAX + e] = True
+                # turno VIEJO: por debajo de TURNO_BASE, o sea anterior a todo el episodio
+                turnos[b, s_ex * E_MAX + e] = int(rng.integers(0, TURNO_BASE))
+                # origen -1: ninguna entrada extra es el hecho preguntado
+            ses[b, s_ex, :len(toks)] = toks
+
         ids_q = I.a_ids("BOS " + q)[:T_Q]
         consulta[b, :len(ids_q)] = ids_q
         pos_q[b] = len(ids_q) - 1

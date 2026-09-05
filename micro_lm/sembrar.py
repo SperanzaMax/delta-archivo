@@ -28,8 +28,12 @@ import pickle
 
 # Claves que describen la corrida de la que nos bifurcamos, no el modelo. Se borran para que la
 # guarda de identidad de `entrenar.py` no compare la corrida nueva contra la vieja.
+# `ses_extra` (2026-09-05): cambiar el tamanio del archivo ES una bifurcacion —es otra tarea, y la
+# guarda de `entrenar.py` aborta si no coincide—, asi que va aca. Sembrar desde un checkpoint de
+# archivo corto hacia uno largo es justamente lo que la campania del archivo largo quiere poder hacer,
+# y este es el unico lugar donde queda DECLARADO en el checkpoint (`sembrado_de`) en vez de en silencio.
 BIFURCA = ("perdida_cabeza", "blanco", "horizonte", "pasos",
-           "rec_l", "rec_m", "rec_f", "rec_ce")
+           "rec_l", "rec_m", "rec_f", "rec_ce", "ses_extra")
 
 
 def main():

@@ -60,7 +60,7 @@ _PERDIDA_CABEZA = "bce"   # 2026-08-29: forma de la perdida de la cabeza — bce
 
 
 def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None,
-            formas_q=None, por_forma=False):
+            formas_q=None, por_forma=False, n_ses_extra=0):
     """Devuelve un dict de metricas. Las dos caras de la abstencion van SEPARADAS:
 
       `nose`         acierta NOSE cuando la respuesta no esta en el archivo (lo que se quiere);
@@ -78,7 +78,7 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     for _ in range(n):
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, forma = DAT.lote(
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose,
-            formas_q=fq, con_formas=True)
+            formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra)
         fn = pred_fn or predecir
         pred = np.array(fn(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
                            jnp.array(mask), jnp.array(cons), jnp.array(pos)))
@@ -473,10 +473,20 @@ def main():
                          "las cambia de lugar (relacion a 1, entidad a 3); `lejana` pone la "
                          "relacion a 4. Con una sola forma NO se toca el rng y las corridas viejas "
                          "se reproducen bit a bit (verificado con hash del lote).")
+    ap.add_argument("--ses-extra", type=int, default=0,
+                    help="ARCHIVO LARGO (2026-09-05). Cuantas sesiones de OTRAS conversaciones se "
+                         "archivan ademas de las del episodio. Cada una aporta hasta E_MAX=10 "
+                         "entradas, asi que --ses-extra 36 lleva el archivo de 40 a 400 slots. Van "
+                         "por el MISMO forward, o sea que sus entradas las escribe el modelo con los "
+                         "pesos de ese paso, y llevan turnos POR DEBAJO de los del episodio: el "
+                         "archivo largo queda marcado como anterior. Medido el 5-sep sobre "
+                         "checkpoints entrenados (INFORME_DILUCION_20260905.md), con archivo de 400 "
+                         "la exactitud cae a 0,0605 y el sello de orden NO usa esa marca. La "
+                         "pregunta de la campania es si entrenando asi lo aprende")
     ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7, 9),
                     help="kernel de `convq`, la conv que forma la query en `--donde lat2` "
                          "(INFORME_QUERY_CIEGA_20260901.md). Con 3 la ENTIDAD entra en la ventana "
-                         "(distancia 1) y la RELACION queda AFUERA (distancia 3) en el 100 % de las "
+                         "(distancia 1) y la RELACION queda AFUERA (distancia 3) en el 100 %% de las "
                          "consultas, medido: la sensibilidad de la busqueda a la relacion es 0,0000 "
                          "exacto. Con 5 la relacion queda cubierta siempre. Arranca en [1,0,...,0] "
                          "sea cual sea el kernel, asi que `lat2` sigue conteniendo a `pre` como caso "
@@ -704,6 +714,13 @@ def main():
         # CAMBIA LA FORMA de `convq`, asi que sin esta guarda el error seria un shape mismatch
         # cripitico en medio del primer paso en vez de un mensaje. Las corridas anteriores a hoy no
         # tienen la clave y son todas kernel 3, de ahi el default en el `.get`.
+        # `ses_extra` (2026-09-05): misma familia que `kernel_q` y `formas_q`. Cambiar el tamanio del
+        # archivo a mitad de una corrida la parte en dos tareas distintas sin avisar. Las corridas
+        # anteriores a hoy no tienen la clave y son todas archivo corto, de ahi el default en 0.
+        if ck["config"].get("ses_extra", 0) != a.ses_extra:
+            sys.exit(f"ABORTA: el checkpoint se entreno con ses_extra="
+                     f"{ck['config'].get('ses_extra', 0)} y se pidio ses_extra={a.ses_extra}. "
+                     f"El archivo tiene otro tamanio: es otra tarea, no la misma corrida.")
         if ck["config"].get("kernel_q", 3) != a.kernel_q:
             sys.exit(f"ABORTA: el checkpoint se entreno con kernel_q="
                      f"{ck['config'].get('kernel_q', 3)} y se pidio kernel_q={a.kernel_q}. "
@@ -863,7 +880,7 @@ def main():
     for s in range(paso0 + 1, fin + 1):
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
             rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
-            p_nose=p_nose_tr, formas_q=FORMAS_Q)
+            p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),
                                      jnp.array(pos), jnp.array(tgt))
@@ -874,7 +891,21 @@ def main():
             trunc = DAT.tasa_truncados()            # la compuerta, en el registro permanente
             ev = np.random.default_rng(90000 + a.semilla)
             m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
-                        pred_fn=fn_pred, formas_q=FORMAS_Q, por_forma=len(FORMAS_Q) > 1)
+                        pred_fn=fn_pred, formas_q=FORMAS_Q, por_forma=len(FORMAS_Q) > 1,
+                        n_ses_extra=a.ses_extra)
+            # ARCHIVO LARGO (2026-09-05): las dos condiciones se evaluan SIEMPRE, entrene con el
+            # archivo que entrene. Sin esto no se puede leer si lo aprendido en archivo largo se
+            # paga en el corto, que es el criterio de riesgo de la campania, ni si el control
+            # transfiere hacia arriba. Cuesta una evaluacion mas y evita tener que volver a los
+            # checkpoints despues.
+            if a.ses_extra:
+                m["cruzada_corto"] = evaluar(params, np.random.default_rng(91000 + a.semilla),
+                                             nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
+                                             pred_fn=fn_pred, formas_q=FORMAS_Q, n_ses_extra=0)
+            else:
+                m["cruzada_largo"] = evaluar(params, np.random.default_rng(91000 + a.semilla),
+                                             nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
+                                             pred_fn=fn_pred, formas_q=FORMAS_Q, n_ses_extra=36)
             # `p_nose` va en CADA evaluacion y no solo en la config, porque la guarda de identidad
             # del checkpoint no lo compara: una corrida puede reanudarse con otro valor. Eso es
             # deliberado —el curriculum de dos fases entrena primero sin preguntas sin respuesta y
