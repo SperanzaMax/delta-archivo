@@ -72,6 +72,19 @@ BLANCO="${BLANCO:-ausencia}"
 # un token afuera de la ventana y la busqueda no la puede ver. Viaja igual que BLANCO.
 FORMAS_Q="${FORMAS_Q:-directa}"
 KERNEL_Q="${KERNEL_Q:-3}"
+# 2026-09-05 · PREREG_ARCHIVO_LARGO (SHA c769a4ef). Cuantas sesiones de OTRAS conversaciones entran
+# al archivo. Viaja igual que KERNEL_Q, y por la misma razon: sin exportarlo, la campania del archivo
+# largo correria con archivo corto y el JSON mostraria una sola curva donde hubo dos tareas. La
+# guarda de identidad de `entrenar.py` lo bloquea al reanudar, asi que el error se veria en el
+# SEGUNDO tramo — que es tarde, pero al menos se veria.
+SES_EXTRA="${SES_EXTRA:-0}"
+# 2026-09-05 · el OOM de la primera T4. Con 40 sesiones el forward procesa B x S secuencias y a
+# batch 64 la T4 muere pidiendo 63,73 GiB. MICRO_BATCH parte el paso y promedia gradientes, asi que
+# el batch EFECTIVO no cambia —verificado: 1,49e-08 de diferencia relativa en los pesos— y
+# BATCH_EVAL baja el de las evaluaciones, que es donde reventó. Los defaults en 0 dejan el
+# comportamiento de siempre para todas las campanias anteriores.
+MICRO_BATCH="${MICRO_BATCH:-0}"
+BATCH_EVAL="${BATCH_EVAL:-0}"
 PERDIDA_CABEZA="${PERDIDA_CABEZA:-bce}"
 # 2026-08-30 · PREREG_RECOMPENSA_L. Los pesos de `recompensa` dejaron de ser constantes de modulo y
 # tienen que VIAJAR hasta la VM: editarlos a mano en la PC no cambiaba lo que corria en Colab, porque
@@ -111,7 +124,7 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -163,6 +176,8 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--p-nose', '$P_NOSE', '--abst', '$ABST', '--donde', '$DONDE',
        '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO', '--blanco', '$BLANCO',
        '--kernel-q', '$KERNEL_Q',
+       '--ses-extra', '$SES_EXTRA',
+       '--micro-batch', '$MICRO_BATCH', '--batch-eval', '$BATCH_EVAL',
        '--formas-q', '$FORMAS_Q',
        '--perdida-cabeza', '$PERDIDA_CABEZA',
        '--rec-l', '$REC_L', '--rec-m', '$REC_M', '--rec-f', '$REC_F', '--rec-ce', '$REC_CE',

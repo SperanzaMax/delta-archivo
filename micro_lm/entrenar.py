@@ -473,6 +473,17 @@ def main():
                          "las cambia de lugar (relacion a 1, entidad a 3); `lejana` pone la "
                          "relacion a 4. Con una sola forma NO se toca el rng y las corridas viejas "
                          "se reproducen bit a bit (verificado con hash del lote).")
+    ap.add_argument("--micro-batch", type=int, default=0,
+                    help="ARCHIVO LARGO (2026-09-05). Parte cada paso en micro-lotes de este tamanio "
+                         "y PROMEDIA los gradientes, o sea deja el batch EFECTIVO igual y baja la "
+                         "memoria. Hace falta porque el forward procesa B x S secuencias: con "
+                         "--ses-extra 26 son 40 sesiones y a batch 64 la T4 muere con "
+                         "RESOURCE_EXHAUSTED pidiendo 63,73 GiB. `batch` tiene que ser multiplo. "
+                         "0 lo apaga y el paso es exactamente el de siempre.")
+    ap.add_argument("--batch-eval", type=int, default=0,
+                    help="batch de las EVALUACIONES. 0 usa 64, el de siempre. Se separa de --batch "
+                         "porque `evaluar` arma sus propios lotes y con archivo largo revienta antes "
+                         "que el entrenamiento: el OOM del 5-sep fue en `jit_predecir`.")
     ap.add_argument("--ses-extra", type=int, default=0,
                     help="ARCHIVO LARGO (2026-09-05). Cuantas sesiones de OTRAS conversaciones se "
                          "archivan ademas de las del episodio. Cada una aporta hasta E_MAX=10 "
@@ -621,6 +632,11 @@ def main():
     n = M.contar(params)
     print(f"parametros: {n:,} ({n * 4 / 1e6:.1f} MB en fp32)\n", flush=True)
 
+    # Con archivo largo la evaluacion tiene que bajar el batch por la misma razon que el paso, y se
+    # sube `n` para que la cantidad de preguntas evaluadas no cambie: 8 x 64 = 512 siempre.
+    B_EVAL = a.batch_eval or 64
+    N_EVAL = max(1, 512 // B_EVAL)
+
     HOR = a.horizonte if a.horizonte > 0 else a.pasos
     warmup = min(500, max(1, HOR // 10))
     sched = optax.warmup_cosine_decay_schedule(0.0, a.lr, warmup, HOR, a.lr * 0.1)
@@ -640,10 +656,33 @@ def main():
     cortes_vigente = sorted(float(x) for x in a.cortes_vigente.split(",") if x.strip())
     cortes_hechos = set()
 
+    # MICRO-LOTES (2026-09-05). El gradiente del lote entero es el PROMEDIO de los gradientes de sus
+    # partes cuando la perdida es una media y las partes son del mismo tamanio, asi que partir el
+    # paso deja el resultado igual salvo redondeo, y baja la memoria pico por el factor K. Es lo que
+    # permite correr el archivo largo en una T4 sin bajar el batch efectivo, que cambiaria la
+    # optimizacion y rompería la comparacion contra el control.
+    MB = a.micro_batch
+    if MB and a.batch % MB:
+        sys.exit(f"ABORTA: --batch {a.batch} no es multiplo de --micro-batch {MB}.")
+
     @jax.jit
     def paso(params, state, ses, cortes, turnos, mask, cons, pos, tgt):
-        (l, acc), g = jax.value_and_grad(fn_perd, has_aux=True)(
-            params, ses, cortes, turnos, mask, cons, pos, tgt)
+        if MB and MB < a.batch:
+            K = a.batch // MB
+
+            def uno(_, i):
+                cor = lambda x: jax.lax.dynamic_slice_in_dim(x, i * MB, MB, 0)
+                (l, acc), g = jax.value_and_grad(fn_perd, has_aux=True)(
+                    params, cor(ses), cor(cortes), cor(turnos), cor(mask), cor(cons), cor(pos),
+                    cor(tgt))
+                return None, (l, acc, g)
+
+            _, (ls, accs, gs) = jax.lax.scan(uno, None, jnp.arange(K))
+            l, acc = ls.mean(), accs.mean()
+            g = jax.tree.map(lambda x: x.mean(0), gs)
+        else:
+            (l, acc), g = jax.value_and_grad(fn_perd, has_aux=True)(
+                params, ses, cortes, turnos, mask, cons, pos, tgt)
         up, state = opt.update(g, state, params)
         return optax.apply_updates(params, up), state, l, acc
 
@@ -904,7 +943,7 @@ def main():
             ev = np.random.default_rng(90000 + a.semilla)
             m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
                         pred_fn=fn_pred, formas_q=FORMAS_Q, por_forma=len(FORMAS_Q) > 1,
-                        n_ses_extra=a.ses_extra)
+                        n_ses_extra=a.ses_extra, B=B_EVAL, n=N_EVAL)
             # ARCHIVO LARGO (2026-09-05): las dos condiciones se evaluan SIEMPRE, entrene con el
             # archivo que entrene. Sin esto no se puede leer si lo aprendido en archivo largo se
             # paga en el corto, que es el criterio de riesgo de la campania, ni si el control
@@ -917,7 +956,8 @@ def main():
             else:
                 m["cruzada_largo"] = evaluar(params, np.random.default_rng(91000 + a.semilla),
                                              nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
-                                             pred_fn=fn_pred, formas_q=FORMAS_Q, n_ses_extra=36)
+                                             pred_fn=fn_pred, formas_q=FORMAS_Q, n_ses_extra=26,
+                                             B=B_EVAL, n=N_EVAL)
             # `p_nose` va en CADA evaluacion y no solo en la config, porque la guarda de identidad
             # del checkpoint no lo compara: una corrida puede reanudarse con otro valor. Eso es
             # deliberado —el curriculum de dos fases entrena primero sin preguntas sin respuesta y
