@@ -1,0 +1,75 @@
+{
+ "prereg": "f4d91c12",
+ "distractor": "disjunto",
+ "piso": 0.4065,
+ "NMUE": 512,
+ "POOL": 4096,
+ "res": {
+  "ckpts/kq3_s0.pkl": {
+   "kernel_q": 5,
+   "donde": "lat2",
+   "filas": [
+    {
+     "X": 0,
+     "n": 512,
+     "exactitud": 1.0,
+     "RECUP": 0.841796875,
+     "n_con_hecho": 512,
+     "masa_ganadora": 0.9854428134858608,
+     "entropia": 0.06830569479712212,
+     "segundos": 34.3
+    },
+    {
+     "X": 40,
+     "n": 512,
+     "exactitud": 0.978515625,
+     "RECUP": 0.744140625,
+     "n_con_hecho": 512,
+     "masa_ganadora": 0.8568515120423399,
+     "entropia": 0.5251977990001251,
+     "segundos": 32.5
+    },
+    {
+     "X": 120,
+     "n": 512,
+     "exactitud": 0.666015625,
+     "RECUP": 0.685546875,
+     "n_con_hecho": 512,
+     "masa_ganadora": 0.6831560955615714,
+     "entropia": 1.1283815947917901,
+     "segundos": 32.8
+    },
+    {
+     "X": 360,
+     "n": 512,
+     "exactitud": 0.30859375,
+     "RECUP": 0.6640625,
+     "n_con_hecho": 512,
+     "masa_ganadora": 0.5400274454441387,
+     "entropia": 1.9159375362360151,
+     "segundos": 33.6
+    },
+    {
+     "X": 1080,
+     "n": 512,
+     "exactitud": 0.140625,
+     "RECUP": 0.568359375,
+     "n_con_hecho": 512,
+     "masa_ganadora": 0.39855190380330896,
+     "entropia": 2.943505728848322,
+     "segundos": 34.4
+    },
+    {
+     "X": 3240,
+     "n": 512,
+     "exactitud": 0.083984375,
+     "RECUP": 0.458984375,
+     "n_con_hecho": 512,
+     "masa_ganadora": 0.2540676488279132,
+     "entropia": 4.243370188050903,
+     "segundos": 37.3
+    }
+   ]
+  }
+ }
+}

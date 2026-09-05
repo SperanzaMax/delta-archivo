@@ -1,0 +1,26 @@
+
+==============================================================================
+ckpts/kq3_s0.pkl  ·  nivel 3 · donde=lat2 · kernel_q=5 · V=242
+  pool de distractores: (4096, 128) en 44.7s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     1.0000   0.8555    0.9855    0.0679
+      40       80     0.7832   0.5039    0.8123    0.5912
+     120      160     0.3008   0.3320    0.6418    1.0702  <- bajo el piso trivial
+     360      400     0.0605   0.1387    0.4721    1.6620  <- bajo el piso trivial
+    1080     1120     0.0137   0.0273    0.2875    2.4770  <- bajo el piso trivial
+    3240     3280     0.0039   0.0117    0.1509    3.4495  <- bajo el piso trivial
+
+==============================================================================
+ckpts/v3_s0.pkl  ·  nivel 3 · donde=lat2 · kernel_q=3 · V=242
+  pool de distractores: (4096, 128) en 37.6s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     1.0000   0.9121    1.0000    0.0003
+      40       80     0.6699   0.5801    0.9476    0.1478
+     120      160     0.3223   0.3477    0.8490    0.3822  <- bajo el piso trivial
+     360      400     0.0957   0.1797    0.6453    0.9183  <- bajo el piso trivial
+    1080     1120     0.0195   0.0898    0.3707    1.8119  <- bajo el piso trivial
+    3240     3280     0.0059   0.0332    0.1819    2.8141  <- bajo el piso trivial
+
+guardado en dilucion.json

@@ -261,6 +261,25 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     return h
 
 
+def sello(a, turnos):
+    """La clave lleva el SELLO DE ORDEN, `ord[turnos]`. Esta funcion existe por una sola razon.
+
+    2026-09-05. `ord` tiene N_TURNOS=64 filas y la indexacion de JAX **clampea sin avisar**:
+    verificado, los turnos 63, 64, 65 y 200 devuelven TODOS la fila 63. O sea que pasado el turno 64
+    el mecanismo que resuelve el conflicto de versiones —el que fue de 0,4570 a 0,9956 y tiene DOI—
+    colapsa a una constante y el modelo no tiene forma de saberlo. Hoy no se ve porque el banco
+    archiva 40 entradas como maximo (4 sesiones x E_MAX 10); con memoria larga se ve siempre.
+
+    Con `mode="fill"` y `fill_value=nan` el resultado es **identico bit a bit** mientras los indices
+    sean validos (verificado, diferencia maxima 0.0, asi que ningun checkpoint ni ninguna medicion
+    publicada cambia) y se vuelve NaN en cuanto se pasan. El fallo deja de ser silencioso.
+
+    Esto NO arregla el tope: `ord` sigue teniendo 64 filas y un archivo mas largo sigue sin poder
+    sellarse. Extrapolar el sello es un cambio de arquitectura y va con su propio pre-registro.
+    """
+    return jnp.take(a["ord"], turnos, axis=0, mode="fill", fill_value=jnp.nan)
+
+
 def escribir(params, sesiones, cortes):
     """Procesa las sesiones y archiva un vector por enunciado.
 
@@ -284,7 +303,7 @@ def escribir(params, sesiones, cortes):
 def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre"):
     """Lee el archivo mientras procesa la consulta. Devuelve logits (B, T, V)."""
     a = params["arch"]
-    ak = archivo @ a["kw"] + a["ord"][turnos]
+    ak = archivo @ a["kw"] + sello(a, turnos)
     av = archivo @ a["vw"]
     penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]          # entradas vacias no compiten
 
@@ -308,7 +327,7 @@ def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, d
     tres veces mas corto que el de un valor (norma 0,367 contra 1,011, medido el 17-ago).
     """
     a_p = params["arch"]
-    ak = archivo @ a_p["kw"] + a_p["ord"][turnos]
+    ak = archivo @ a_p["kw"] + sello(a_p, turnos)
     av = archivo @ a_p["vw"]
     penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]
 

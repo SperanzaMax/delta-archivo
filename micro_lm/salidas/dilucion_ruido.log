@@ -1,0 +1,14 @@
+
+==============================================================================
+[distractor=ruido] ckpts/kq3_s0.pkl  ·  nivel 3 · donde=lat2 · kernel_q=5 · V=242
+  pool de distractores: (4096, 128) en 45.0s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     1.0000   0.8555    0.9855    0.0679
+      40       80     1.0000   0.9102    0.9636    0.1761
+     120      160     0.9922   0.8711    0.9341    0.3281
+     360      400     0.8320   0.8711    0.8915    0.5791
+    1080     1120     0.4082   0.8184    0.8001    1.1388
+    3240     3280     0.2441   0.7852    0.6715    2.0659  <- bajo el piso trivial
+
+guardado en dilucion.json

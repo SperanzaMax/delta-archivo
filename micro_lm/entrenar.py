@@ -482,7 +482,7 @@ def main():
                          "sea cual sea el kernel, asi que `lat2` sigue conteniendo a `pre` como caso "
                          "particular. CAMBIA LA FORMA de `convq`: los checkpoints de kernel distinto "
                          "no son compatibles y la guarda de identidad lo aborta.")
-    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2"),
+    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2", "attn"),
                     help="en que punto del bloque 0 entra la lectura del archivo "
                          "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
                          "emb[x], que es lo que se venia haciendo y deja la query como funcion pura "
@@ -495,7 +495,12 @@ def main():
                          "lat2 = igual que lat pero con conv PROPIA para la query (`convq`), "
                          "inicializada en [1,0,0] — arranca siendo exactamente `pre` y el modelo "
                          "decide por gradiente cuanto contexto usa, con lo cual no puede ser "
-                         "estructuralmente peor. Corrige el acoplamiento diagnosticado el 22-ago")
+                         "estructuralmente peor. Corrige el acoplamiento diagnosticado el 22-ago; "
+                         "attn = ACCESO GLOBAL, la query se forma con atencion causal "
+                         "completa en vez de la conv corta, con CERO parametros nuevos "
+                         "(q=k=v=x) para que la comparacion contra lat2 sea a igual tamanio. "
+                         "Existia en modelo.py desde el 4-sep y el CLI no lo ofrecia, asi que "
+                         "el acceso global se podia MEDIR y no ENTRENAR")
     ap.add_argument("--reinit-adam", action="store_true",
                     help="reinicia el estado de Adam al reanudar. La condicion `cabeza` lo hace sola "
                          "porque el arbol de params cambia de forma; este flag existe para que "
