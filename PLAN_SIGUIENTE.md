@@ -206,3 +206,40 @@ F-3 obliga a informar **siempre** los falsos negativos del filtro, cumpla o no l
 
 ⚠️ **La relación con TELAR-03 está declarada y NO asumida.** Son dos bancos distintos y que los dos
 tengan un techo no prueba que sea el mismo techo. Compararlos es un experimento aparte.
+
+---
+
+## ✅ 2026-09-05 tarde · LA CAMPAÑA DEL ARCHIVO LARGO QUEDA LISTA PARA LANZAR
+
+`PREREG_ARCHIVO_LARGO.md`, SHA **`c769a4ef`**. Script `micro_lm/campania_archivo_largo.sh`, 6
+unidades, reparto de 2 por cuenta con el control y su tratada siempre separados.
+
+**Qué se congeló.** Siembra desde `kq3_s0/s1/s2` (26.000 pasos, kernel 5, las que ya resuelven la
+tarea con archivo corto) y 6000 pasos con `--ses-extra 26` contra `0`. La pregunta no es si puede
+aprender la tarea —eso ya está contestado— sino **si un modelo que la sabe aprende a hacerla con un
+archivo grande**.
+
+**Presupuesto MEDIDO, no estimado.** El costo por paso va con el número de **sesiones**, no de
+entradas: `--ses-extra` 0 · 8 · 26 cuesta **1,00× · 2,81× · 6,96×**. A 0,22 s/paso en T4 la tratada
+sale ~1,53 s/paso → **~2,5 h por unidad**, ~0,4 h el control, **~8,7 h la campaña**. Con 36 no
+entraba.
+
+**Dos cosas quedaron medidas antes de gastar un solo paso de GPU:**
+
+1. **El sello de orden no está haciendo nada.** `masa_turnos.py` con su control de barajado, sobre
+   `kq3_s0` y archivo de 300 casilleros: índice de masa **0,8886 con el sello real contra 0,8885
+   barajado**. La preferencia leve por las entradas del episodio es **por contenido**, no por
+   antigüedad. Es el Resultado 3 del 5-sep replicado con otro instrumento y, ahora sí, con el control
+   que lo adjudica.
+2. **Encuentra pero lee mal.** RECUP **0,6667** con sólo **0,1291** de masa en la entrada correcta:
+   la dilución del *valor* vista por dentro. Y la línea de partida de la campaña, medida en sus
+   propias condiciones: `kq3_s0` recién sembrado da **vigente 0,1820** con archivo largo y **1,0000**
+   con el corto.
+
+> ⚠️ **Dos bugs encontrados por el smoke, y el segundo habría quemado una cuenta.** La guarda de
+> `ses_extra` abortaba la siembra, que es el camino que la campaña usa (arreglado con tres casos:
+> clave presente se compara, ausente y sembrado pasa, ausente y no sembrado vale 0). Y **ni
+> `campania_archivo_largo.sh` ni `campania_magnitud_q.sh` pasaban `--d 128 --capas 4`**, con el
+> default de `entrenar.py` en 192/6: las dos habrían abortado en su primer tramo, sobre la primera VM
+> pedida. La de `q` estaba declarada «lista para lanzar» desde el 4-sep. **Un script de campaña no
+> está listo hasta que se corrió su primer tramo de verdad**, aunque sea de un paso en CPU.
