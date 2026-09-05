@@ -717,10 +717,22 @@ def main():
         # `ses_extra` (2026-09-05): misma familia que `kernel_q` y `formas_q`. Cambiar el tamanio del
         # archivo a mitad de una corrida la parte en dos tareas distintas sin avisar. Las corridas
         # anteriores a hoy no tienen la clave y son todas archivo corto, de ahi el default en 0.
-        if ck["config"].get("ses_extra", 0) != a.ses_extra:
-            sys.exit(f"ABORTA: el checkpoint se entreno con ses_extra="
-                     f"{ck['config'].get('ses_extra', 0)} y se pidio ses_extra={a.ses_extra}. "
-                     f"El archivo tiene otro tamanio: es otra tarea, no la misma corrida.")
+        # La comparacion tiene TRES casos y no dos, porque `sembrar.py` BORRA la clave a proposito
+        # (esta en `BIFURCA`): cambiar el tamanio del archivo es justamente la bifurcacion que la
+        # campania quiere hacer. Con `.get(..., 0)` a secas, sembrar desde `kq3_sX` y pedir
+        # --ses-extra 26 abortaria en el primer tramo, antes de entrenar un paso.
+        #   · clave presente        -> se compara (todo checkpoint escrito desde hoy la lleva);
+        #   · ausente y SEMBRADO    -> es la bifurcacion declarada, pasa;
+        #   · ausente y NO sembrado -> checkpoint viejo, era archivo corto: se compara contra 0.
+        # Es el patron de `blanco` pero mas estricto: alli un ckpt viejo sin la clave pasa siempre,
+        # y aca solo pasa si trae `sembrado_de`, o sea si alguien declaro la bifurcacion.
+        _ck_extra = ck["config"].get("ses_extra")
+        if _ck_extra is None and "sembrado_de" not in ck:
+            _ck_extra = 0
+        if _ck_extra is not None and _ck_extra != a.ses_extra:
+            sys.exit(f"ABORTA: el checkpoint se entreno con ses_extra={_ck_extra} y se pidio "
+                     f"ses_extra={a.ses_extra}. El archivo tiene otro tamanio: es otra tarea, no la "
+                     f"misma corrida. Si la bifurcacion es a proposito, va por `sembrar.py`.")
         if ck["config"].get("kernel_q", 3) != a.kernel_q:
             sys.exit(f"ABORTA: el checkpoint se entreno con kernel_q="
                      f"{ck['config'].get('kernel_q', 3)} y se pidio kernel_q={a.kernel_q}. "

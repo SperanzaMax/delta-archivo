@@ -52,7 +52,7 @@ correr() {
   fi
 
   python "$AQUI/entrenar.py" \
-      --abst token --rec-ce "$ce" --rec-l 0 --rec-m 0.5 --rec-f 0.2 \
+      --abst token --rec-ce "$ce" --rec-l 0 --rec-m 0.5 --rec-f 0.2 --d 128 --capas 4 \
       --pasos "$PASOS" --horizonte 12000 --semilla "$sem" \
       --ckpt "$CK/$u.pkl" \
       --salida "$SAL/$u.json" \
