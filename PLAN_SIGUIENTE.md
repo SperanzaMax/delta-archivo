@@ -125,3 +125,55 @@ Colab.
 > campaña, que es exactamente para lo que sirve la regla.
 
 **Lo que le queda al atractor para poder enviarse:** la versión en castellano. Los números ya están.
+
+---
+
+## ✅ 2026-09-04 · CONTROL DE ACCESO GLOBAL · la atención completa MATA el corte
+
+Nivel 1 del híbrido, hecho y medido. Instrumento en `micro_lm/control_attn.py`, salida en
+`micro_lm/control_attn.json` y `micro_lm/salidas/control_attn.log`.
+
+**Qué se agregó.** Un `donde="attn"` en `modelo.py` que arma la query de lectura con **atención causal
+completa** en vez de la conv corta. **Cero parámetros nuevos** (atención por similitud, `q=k=v=x`),
+porque con proyecciones propias harían falta 3·D² = 49.152 params, el 5,7 % del modelo, y la
+comparación contra `lat2` dejaría de ser a igual tamaño. No se reusaron `wq`/`wk` del bloque, que es
+el acoplamiento que `DIAGNOSTICO_CONV_COMPARTIDA_20260822.md` ya diagnosticó como defecto en `lat`.
+
+**Guarda de identidad, verificada.** 865.651 params y 70 hojas antes y después, pesos iniciales
+idénticos bit a bit, y los cuatro `donde` existentes dan **0.000e+00** de diferencia contra una copia
+del modelo previo.
+
+### El resultado, sobre checkpoints ENTRENADOS
+
+| | `lat2` (conv corta) | `attn` (acceso global) |
+|---|---|---|
+| `v3_s0`, kernel 3 (alcance 2) | se mueve en d=1,2 · **cero exacto en d=3..6, 0 de 120** | **se mueve en las seis, 120/120** |
+| `kq3_s0`, kernel 5 (alcance 4) | se mueve en d=1..4 · **cero exacto en d=5,6, 0 de 120** | **se mueve en las seis, 120/120** |
+
+**Dos cosas quedan medidas.** El corte cae exactamente en el alcance y se corre con el kernel, lo que
+replica el Resultado 1 con un instrumento distinto y datos aleatorios en vez del generador del idioma.
+Y **la atención completa elimina el corte**, que es la afirmación que se venía sosteniendo por
+argumento y no estaba medida en ningún lado.
+
+> **No es un descubrimiento, es un control.** El resultado es el esperado. Su valor es que convierte
+> una frase de razonamiento en una medición por intervención, y le contesta por adelantado a un
+> revisor la pregunta de si la causa es la ventana o algo más del montaje.
+
+### ⚠ El error de la primera versión, que vale como lección
+
+Se corrió primero **sin entrenar**, razonando que la ley es arquitectónica. Dio cero exacto también en
+d=1 y d=2, donde tenía que moverse. La causa es de diseño y está en el propio código: **`convq`
+arranca en `[1,0,...,0]`** para que `lat2` contenga a `pre` como caso particular, así que sin entrenar
+la conv es la identidad, `lat2` es `pre` y la ventana efectiva es 0.
+
+> **La ventana no es puramente arquitectónica. Existe sólo si el entrenamiento abrió los taps.** En
+> `v3_s0` los abrió, con max|peso| por tap `0.718 · 0.223 · 0.469`. Cualquier medición de la ventana
+> tiene que hacerse sobre checkpoints entrenados.
+
+### La instrucción de diseño que sale, que es lo que el proyecto persigue
+
+> Si un modelo consulta una memoria desde una capa temprana, esa capa necesita **acceso global** a la
+> secuencia. Una convolución corta vuelve invisible una parte de la consulta, el fallo es **silencioso**,
+> y se corrige poniendo atención completa exactamente ahí.
+
+Accionable por quien entrena un modelo grande, sin necesidad de reproducir nada de este banco.

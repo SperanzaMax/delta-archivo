@@ -151,6 +151,30 @@ def delta_mixer(blk, x):
     return out
 
 
+def attn_causal(x):
+    """Query de lectura con acceso GLOBAL causal, para el control del 2026-09-04.
+
+    La ley de la ventana dice que la query que lee el archivo solo ve el alcance de la conv corta que
+    la forma, y que lo que cae afuera da sensibilidad 0,000000 EXACTO. La afirmacion de que «una capa
+    de atencion completa no tiene esta limitacion» se venia sosteniendo por argumento y NO estaba
+    medida en ningun lado. Esta funcion existe para medirla por intervencion.
+
+    Es atencion causal por similitud, SIN proyecciones nuevas: q = k = v = x. Eso es deliberado y no
+    una simplificacion perezosa. Con proyecciones propias haria falta agregar 3 x D^2 = 49.152 params
+    (el 5,7 % del modelo) y la comparacion contra `lat2` dejaria de ser a igual tamanio, que es
+    justamente la disciplina del paper. Sin ellas el arbol NO cambia de forma, los checkpoints viejos
+    siguen cargando y la unica diferencia entre condiciones es lo que la query ALCANZA A VER.
+
+    Reusar `wq`/`wk` del bloque tampoco servia: es el mismo acoplamiento que
+    `DIAGNOSTICO_CONV_COMPARTIDA_20260822.md` ya diagnostico como defecto de diseño en `lat`, donde
+    el mixer y la query pelean por el mismo peso con balances opuestos.
+    """
+    T, D = x.shape
+    sim = (x @ x.T) / jnp.sqrt(D)
+    sim = jnp.where(jnp.tril(jnp.ones((T, T), bool)), sim, -1e9)
+    return jax.nn.softmax(sim, -1) @ x
+
+
 def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     """Pasa la secuencia por los bloques; si hay `lectura`, la inyecta en `bloque`.
 
@@ -220,6 +244,15 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
             # Con `convq` propia e inicializada en [1,0,0], `lat2` arranca siendo EXACTAMENTE `pre` y
             # el modelo decide por gradiente cuanto contexto quiere. 3 x D = 384 params, 0,044 %.
             h = h + lectura(convk(blk["convq"], ln(blk["ln1"], h)))
+        elif lectura is not None and i == bloque and donde == "attn":
+            # ACCESO GLOBAL (2026-09-04). Identico a `lat2` salvo en como se forma la query de la
+            # lectura: en vez de una conv causal de KQ taps, atencion causal completa, con lo cual la
+            # query en cada posicion ve TODA la secuencia anterior y no solo su ventana.
+            #
+            # Es el control que le falta a la ley de la ventana. Si el corte exacto sobrevive aca, la
+            # causa no era el alcance. Si desaparece, la causa queda probada por intervencion y no
+            # por argumento, que es como esta hoy.
+            h = h + lectura(jax.vmap(attn_causal)(ln(blk["ln1"], h)))
         h = h + jax.vmap(delta_mixer, in_axes=(None, 0))(blk, conv3(blk["conv"], ln(blk["ln1"], h)))
         if lectura is not None and i == bloque and donde == "post":
             h = h + lectura(ln(blk["ln2"], h))

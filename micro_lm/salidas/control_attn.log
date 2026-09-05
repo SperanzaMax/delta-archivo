@@ -1,0 +1,46 @@
+
+==========================================================================
+ckpts/v3_s0.pkl   kernel_q=3 (alcance 2)   donde nativo=lat2
+  convq entrenada, max|peso| por tap: [0.7181, 0.2226, 0.4686]
+
+  --- donde = lat2
+     dist     TV media       TV max   con TV>0   veredicto
+        1     0.062660     0.191857     120/120   se mueve      <- adentro
+        2     0.079419     0.455694     120/120   se mueve      <- adentro
+        3     0.000000     0.000000       0/120   CERO EXACTO   <- afuera
+        4     0.000000     0.000000       0/120   CERO EXACTO   <- afuera
+        5     0.000000     0.000000       0/120   CERO EXACTO   <- afuera
+        6     0.000000     0.000000       0/120   CERO EXACTO   <- afuera
+
+  --- donde = attn
+     dist     TV media       TV max   con TV>0   veredicto
+        1     0.013442     0.076921     120/120   se mueve    
+        2     0.013186     0.059689     120/120   se mueve    
+        3     0.016563     0.106349     120/120   se mueve    
+        4     0.011999     0.062923     120/120   se mueve    
+        5     0.011533     0.087080     120/120   se mueve    
+        6     0.012672     0.049358     120/120   se mueve    
+
+==========================================================================
+ckpts/kq3_s0.pkl   kernel_q=5 (alcance 4)   donde nativo=lat2
+  convq entrenada, max|peso| por tap: [0.7102, 0.2128, 0.3037, 0.2488, 0.2842]
+
+  --- donde = lat2
+     dist     TV media       TV max   con TV>0   veredicto
+        1     0.044432     0.112834     120/120   se mueve      <- adentro
+        2     0.037746     0.082529     120/120   se mueve      <- adentro
+        3     0.030833     0.100037     120/120   se mueve      <- adentro
+        4     0.027524     0.095335     120/120   se mueve      <- adentro
+        5     0.000000     0.000000       0/120   CERO EXACTO   <- afuera
+        6     0.000000     0.000000       0/120   CERO EXACTO   <- afuera
+
+  --- donde = attn
+     dist     TV media       TV max   con TV>0   veredicto
+        1     0.010305     0.060618     120/120   se mueve    
+        2     0.010718     0.120126     120/120   se mueve    
+        3     0.010947     0.063416     120/120   se mueve    
+        4     0.010401     0.064778     120/120   se mueve    
+        5     0.009711     0.053865     120/120   se mueve    
+        6     0.009805     0.034299     120/120   se mueve    
+
+guardado en control_attn.json
