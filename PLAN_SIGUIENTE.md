@@ -177,3 +177,32 @@ la conv es la identidad, `lat2` es `pre` y la ventana efectiva es 0.
 > y se corrige poniendo atención completa exactamente ahí.
 
 Accionable por quien entrena un modelo grande, sin necesidad de reproducir nada de este banco.
+
+---
+
+## 2026-09-04 · DOS CAMPAÑAS PREREGISTRADAS Y SIN CORRER
+
+Las dos quedan listas para lanzar. **Ninguna se lanzó**, porque consumen cuentas de Colab y esa
+decisión es de Maxi.
+
+### `PREREG_MAGNITUD_Q.md` · SHA `44c550e2` · la constante `q`
+
+Seis unidades, `--rec-ce` ∈ {1,0 control · 0,50 · **0,29**} × origen ∈ {`b3_s3`, `b3_s6`}. El 0,29
+sale de `1/3,5`, el ratio de gradientes **medido** en `INFORME_RECOMPENSA_L_20260830.md`. Cuatro
+criterios, con Q-4 de riesgo sobre RECUP. Cláusula de abandono hacia el castigo superlineal en la
+confianza. Script en `micro_lm/campania_magnitud_q.sh`, siembra con `sembrar.py` y reanuda si la
+sesión de Colab se cae.
+
+### `PREREG_FILTRADO_PREVIO.md` · SHA `3b7032b0` · filtrar antes de buscar
+
+Nace de la pregunta de Maxi sobre el ADN. La revisión dejó que **la velocidad no es el cuello** (128
+millones de operaciones son microsegundos, y si lo fuera está resuelto por HNSW e IVF) y que lo que se
+rompe es **la precisión**, por dilución del softmax. Y que la lección real del ADN no es buscar rápido
+sino **no tener que buscar**, porque la cromatina precompila la accesibilidad. La otra lección, la
+coincidencia combinatoria, **ya está aplicada** y es el sello de orden.
+
+Barrido de `N` con lectura completa contra lectura filtrada a las `k` mejores, a igual presupuesto.
+F-3 obliga a informar **siempre** los falsos negativos del filtro, cumpla o no la hipótesis.
+
+⚠️ **La relación con TELAR-03 está declarada y NO asumida.** Son dos bancos distintos y que los dos
+tengan un techo no prueba que sea el mismo techo. Compararlos es un experimento aparte.
