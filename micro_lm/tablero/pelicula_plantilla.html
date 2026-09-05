@@ -1,0 +1,638 @@
+<title>Película de pesos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --fondo:#E7EAEE; --panel:#FBFCFD; --panel2:#F1F3F6; --borde:#CDD4DC; --borde2:#DDE2E8;
+  --tinta:#141A21; --tinta2:#48535F; --tinta3:#6D7987;
+  --pos:#2F6FED; --neg:#D8452F; --acento:#9A6A08; --acento-fuerte:#C98A15;
+  --seq:#1E5FA8; --vacio:#C4CCD5;
+  --sombra:0 1px 2px rgba(16,24,32,.06), 0 8px 24px rgba(16,24,32,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --fondo:#0D1116; --panel:#151B23; --panel2:#1B222B; --borde:#2A343F; --borde2:#232C36;
+    --tinta:#E7ECF1; --tinta2:#A6B2BF; --tinta3:#7C8896;
+    --pos:#6B9BFF; --neg:#FF7A5E; --acento:#E8B34A; --acento-fuerte:#E8B34A;
+    --seq:#79A9E8; --vacio:#2E3843;
+    --sombra:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --fondo:#0D1116; --panel:#151B23; --panel2:#1B222B; --borde:#2A343F; --borde2:#232C36;
+  --tinta:#E7ECF1; --tinta2:#A6B2BF; --tinta3:#7C8896;
+  --pos:#6B9BFF; --neg:#FF7A5E; --acento:#E8B34A; --acento-fuerte:#E8B34A;
+  --seq:#79A9E8; --vacio:#2E3843;
+  --sombra:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--fondo); color:var(--tinta);
+  font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.55; margin:0;
+  padding:28px 20px 64px;
+}
+.envoltorio{max-width:1180px; margin:0 auto; display:flex; flex-direction:column; gap:22px}
+
+/* --- encabezado --- */
+header{display:flex; flex-direction:column; gap:10px}
+.ojal{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--tinta3);
+}
+h1{
+  font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif; font-weight:700;
+  font-size:clamp(30px,4.6vw,46px); line-height:1.04; margin:0; letter-spacing:-.015em;
+  text-wrap:balance;
+}
+.bajada{max-width:62ch; color:var(--tinta2); margin:0; font-size:16px}
+.fichas{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
+.ficha{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--tinta2);
+  background:var(--panel); border:1px solid var(--borde2); border-radius:3px;
+  padding:3px 8px; font-variant-numeric:tabular-nums;
+}
+.ficha b{color:var(--tinta); font-weight:600}
+
+/* --- película --- */
+.escenario{
+  background:var(--panel); border:1px solid var(--borde); border-radius:6px;
+  box-shadow:var(--sombra); overflow:hidden;
+}
+.lienzo-caja{position:relative; background:var(--panel); padding:0}
+canvas{display:block; width:100%; height:auto}
+.tira-etiquetas{
+  display:flex; gap:0; padding:0 12px 10px; border-bottom:1px solid var(--borde2);
+  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:10.5px; color:var(--tinta3);
+  letter-spacing:.04em; text-transform:uppercase;
+}
+.tira-etiquetas span{flex:1 1 0; text-align:center; min-width:0; overflow:hidden; white-space:nowrap}
+.tira-etiquetas span.hito{color:var(--tinta2); font-weight:600}
+
+/* --- transporte --- */
+.transporte{
+  display:flex; align-items:center; gap:14px; padding:12px 14px;
+  border-top:1px solid var(--borde2); background:var(--panel2); flex-wrap:wrap;
+}
+button{
+  font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600; font-size:13px;
+  letter-spacing:.03em; text-transform:uppercase;
+  background:var(--panel); color:var(--tinta); border:1px solid var(--borde);
+  border-radius:4px; padding:7px 14px; cursor:pointer; transition:background .12s,border-color .12s;
+}
+button:hover{background:var(--panel2); border-color:var(--tinta3)}
+button:focus-visible{outline:2px solid var(--acento-fuerte); outline-offset:2px}
+button[aria-pressed="true"]{background:var(--tinta); color:var(--panel); border-color:var(--tinta)}
+input[type=range]{flex:1 1 220px; min-width:160px; accent-color:var(--acento-fuerte); cursor:pointer}
+input[type=range]:focus-visible{outline:2px solid var(--acento-fuerte); outline-offset:3px}
+.lectura{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-variant-numeric:tabular-nums;
+  color:var(--tinta2); white-space:nowrap;
+}
+.lectura b{color:var(--tinta); font-weight:600}
+.velocidades{display:flex; gap:4px}
+.velocidades button{padding:6px 9px; font-size:11.5px}
+
+/* --- rejilla de paneles --- */
+.rejilla{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px}
+.panel{
+  background:var(--panel); border:1px solid var(--borde); border-radius:6px;
+  padding:16px 16px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;
+}
+.panel.ancho{grid-column:1/-1}
+.panel h2{
+  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:13px; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase; margin:0; color:var(--tinta);
+}
+.panel p.nota{margin:0; font-size:13px; color:var(--tinta2); max-width:60ch}
+.panel svg{display:block; width:100%; height:auto; overflow:visible}
+.leyenda{display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--tinta2)}
+.leyenda i{display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:5px;
+  vertical-align:-1px; font-style:normal}
+
+/* --- diálogo --- */
+.dialogo{display:flex; flex-direction:column; gap:8px; font-size:14px}
+.turno{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; line-height:1.6;
+  background:var(--panel2); border-left:2px solid var(--borde); padding:8px 10px; border-radius:0 3px 3px 0;
+  overflow-wrap:anywhere;
+}
+.turno.pregunta{border-left-color:var(--acento-fuerte)}
+.respuesta{
+  display:flex; align-items:baseline; gap:10px; font-family:"IBM Plex Mono",monospace;
+  font-size:13px; color:var(--tinta2);
+}
+.respuesta b{
+  font-size:22px; color:var(--tinta); font-weight:600;
+  font-family:"IBM Plex Mono",monospace;
+}
+.sello{
+  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; padding:2px 7px; border-radius:3px; font-weight:600;
+}
+.sello.bien{background:color-mix(in srgb,var(--pos) 16%,transparent); color:var(--pos)}
+.sello.mal{background:color-mix(in srgb,var(--neg) 14%,transparent); color:var(--neg)}
+
+/* --- tabla --- */
+details{background:var(--panel); border:1px solid var(--borde); border-radius:6px; padding:0}
+summary{
+  cursor:pointer; padding:13px 16px; font-family:"IBM Plex Sans Condensed",sans-serif;
+  font-weight:600; font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+}
+summary:focus-visible{outline:2px solid var(--acento-fuerte); outline-offset:-2px}
+.tabla-caja{overflow-x:auto; padding:0 16px 16px}
+table{border-collapse:collapse; width:100%; font-family:"IBM Plex Mono",monospace; font-size:12px}
+th,td{text-align:right; padding:5px 10px; font-variant-numeric:tabular-nums; white-space:nowrap}
+th{color:var(--tinta3); font-weight:500; border-bottom:1px solid var(--borde); text-align:right}
+th:first-child,td:first-child{text-align:left}
+tbody tr:nth-child(even){background:var(--panel2)}
+
+/* --- pie --- */
+footer{color:var(--tinta2); font-size:13px; display:flex; flex-direction:column; gap:8px;
+  border-top:1px solid var(--borde); padding-top:16px}
+footer b{color:var(--tinta); font-weight:600}
+footer code{font-family:"IBM Plex Mono",monospace; font-size:12px; background:var(--panel2);
+  padding:1px 5px; border-radius:3px}
+@media (prefers-reduced-motion:reduce){ *{transition:none !important} }
+</style>
+
+<div class="envoltorio">
+
+<header>
+  <div class="ojal">micro-LM · delta-archivo · 2026-09-05</div>
+  <h1>Película de pesos</h1>
+  <p class="bajada">Los pesos de verdad del micro-LM mientras aprende, cuadro por cuadro. Nada
+  acá es una maqueta: cada línea que se mueve es un número que salió del entrenamiento, medido cada
+  20 pasos y guardado por <code style="font-family:'IBM Plex Mono',monospace">micro_lm/pelicula.py</code>.</p>
+  <div class="fichas" id="fichas"></div>
+</header>
+
+<section class="escenario">
+  <div class="lienzo-caja"><canvas id="lienzo" width="2320" height="960"></canvas></div>
+  <div class="leyenda" style="padding:10px 14px 0">
+    <span><i style="background:var(--pos)"></i>positivo</span>
+    <span><i style="background:var(--neg)"></i>negativo</span>
+    <span id="pie-vista" style="color:var(--tinta3)">Se está dibujando el peso, con su signo.</span>
+  </div>
+  <div class="transporte">
+    <button id="reproducir" type="button">▶ Reproducir</button>
+    <input type="range" id="barra" min="0" max="100" value="0" step="0.5" aria-label="Paso del entrenamiento">
+    <span class="lectura">paso <b id="lec-paso">0</b> de <b id="lec-total">0</b></span>
+    <span class="velocidades" role="group" aria-label="Velocidad">
+      <button type="button" data-vel="0.5">0,5×</button>
+      <button type="button" data-vel="1" aria-pressed="true">1×</button>
+      <button type="button" data-vel="3">3×</button>
+    </span>
+    <span class="velocidades" role="group" aria-label="Qué se dibuja">
+      <button type="button" data-vista="peso" aria-pressed="true">Peso</button>
+      <button type="button" data-vista="delta">Cuánto cambió</button>
+    </span>
+  </div>
+</section>
+
+<div class="rejilla">
+
+  <section class="panel">
+    <h2>La lectura del archivo</h2>
+    <p class="nota">El softmax con el que el modelo elige qué entrada del archivo leer, capturado
+    desde adentro de su propio forward. Empieza repartido y tiene que terminar clavado en la entrada
+    correcta; en esta corrida corta se clava, pero no siempre en la que hay que leer.</p>
+    <svg id="svg-atencion" viewBox="0 0 460 150" role="img" aria-labelledby="t-aten"></svg>
+    <div class="leyenda">
+      <span><i style="background:var(--seq)"></i>casillero escrito</span>
+      <span><i style="background:var(--vacio)"></i>casillero vacío</span>
+      <span><i style="background:var(--acento-fuerte)"></i>la entrada correcta</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Lo que se le dijo, y lo que contesta</h2>
+    <div class="dialogo" id="dialogo"></div>
+  </section>
+
+  <section class="panel">
+    <h2>La ventana de la consulta</h2>
+    <p class="nota">Los cinco taps de <code style="font-family:'IBM Plex Mono',monospace">convq</code>,
+    la convolución que arma la pregunta. Arranca en [1, 0, 0, 0, 0] —ciega a todo lo que no sea el
+    último token— y cada tap que se levanta es un token más de la pregunta que entra a la búsqueda.
+    El contorno marca dónde terminan a los 26.000 pasos.</p>
+    <svg id="svg-taps" viewBox="0 0 460 150" role="img" aria-label="Magnitud media de cada tap"></svg>
+    <div class="leyenda">
+      <span><i style="background:var(--seq)"></i>en este paso</span>
+      <span><i style="background:transparent;border:1.5px dashed var(--tinta3)"></i>a los 26.000 pasos</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Compuerta de escritura β</h2>
+    <p class="nota">Cuánto pisa cada bloque su propio estado en la regla delta. Arranca en 0,5 en los
+    cuatro y el entrenamiento los separa.</p>
+    <svg id="svg-beta" viewBox="0 0 460 150" role="img" aria-label="Beta medio por bloque"></svg>
+  </section>
+
+  <section class="panel ancho">
+    <h2>Lo que se ve en esta corrida</h2>
+    <p class="nota" style="max-width:78ch">Tres cosas que salen de los números de arriba y no de una
+    interpretación: se pueden seguir con la barra.</p>
+    <ol style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:8px;
+               font-size:14px; color:var(--tinta2); max-width:78ch">
+      <li><b style="color:var(--tinta)">La lectura se clava, y en el casillero equivocado.</b>
+      Arranca repartida (0,459 en el casillero 4), cerca del <b>paso 200</b> se para justo en la
+      entrada correcta con <b>0,9955</b>, y desde el <b>paso 300</b> queda en <b>1,0000 exacto</b>
+      sobre el casillero 3, que no es el que contesta la pregunta.</li>
+      <li><b style="color:var(--tinta)">Contesta <code style="font-family:'IBM Plex Mono',monospace">NOSE</code>
+      a todo desde el paso 100.</b> Es el atractor mudo que la línea ya tenía medido como estado
+      absorbente: abstenerse paga más que un mecanismo a medio aprender.</li>
+      <li><b style="color:var(--tinta)">La ventana todavía no se abrió.</b> Los taps terminan en
+      [0,995 · 0 · 0 · 0 · 0], contra [0,385 · 0,053 · 0,073 · 0,045 · 0,053] del checkpoint de
+      26.000 pasos. Mil pasos son el arranque, no el final.</li>
+    </ol>
+  </section>
+
+  <section class="panel ancho">
+    <h2>Pérdida y exactitud del lote</h2>
+    <p class="nota">Las dos van en gráficos separados a propósito: tienen escalas distintas y
+    superponerlas en un eje doble haría parecer que se cruzan en algún lado.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px">
+      <svg id="svg-perdida" viewBox="0 0 460 170" role="img" aria-label="Pérdida contra pasos"></svg>
+      <svg id="svg-acc" viewBox="0 0 460 170" role="img" aria-label="Exactitud contra pasos"></svg>
+    </div>
+  </section>
+
+</div>
+
+<details>
+  <summary>Los números, cuadro por cuadro</summary>
+  <div class="tabla-caja"><table id="tabla"></table></div>
+</details>
+
+<footer id="pie"></footer>
+
+</div>
+
+<script>
+const DATOS = /*__DATOS__*/ null;
+const REFERENCIA = /*__REF__*/ null;
+</script>
+<script>
+(() => {
+  const D = DATOS, C = D.config, F = D.cuadros, M = D.muestra, R = REFERENCIA;
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const fmt = (x, n = 4) => x.toLocaleString("es-AR", {minimumFractionDigits: n, maximumFractionDigits: n});
+
+  /* ---------- fichas del encabezado ---------- */
+  document.getElementById("fichas").innerHTML = [
+    [`${C.params.toLocaleString("es-AR")}`, "parámetros"],
+    [`${C.d}`, "dimensión"], [`${C.capas}`, "bloques"],
+    [`kernel ${C.kernel_q}`, "de la consulta"], [`${C.pasos}`, "pasos"],
+    [`${F.length}`, "cuadros medidos"], [`semilla ${C.semilla}`, ""],
+    [`nivel ${C.nivel}`, "del idioma"],
+  ].map(([a, b]) => `<span class="ficha"><b>${a}</b>${b ? " " + b : ""}</span>`).join("");
+
+  /* ---------- la película: columnas del camino de un dato ---------- */
+  // Sólo el ESPINAZO secuencial. wq/wk/wv corren en paralelo dentro del mezclador, así que
+  // dibujarlos como columnas seguidas sería mentir: se muestra el camino del valor (wv), que es el
+  // que sale al residuo, más las dos capas del MLP.
+  const ESPINA = [];
+  ESPINA.push({m: "emb", desde: "tokens", hasta: "d"});
+  for (let i = 0; i < C.capas; i++) {
+    ESPINA.push({m: `b${i}.wv`, desde: `bloque ${i}`, hasta: "mezcla"});
+    ESPINA.push({m: `b${i}.m1`, desde: "", hasta: "MLP"});
+    ESPINA.push({m: `b${i}.m2`, desde: "", hasta: `salida ${i}`});
+  }
+  ESPINA.push({m: "head", desde: "", hasta: "vocabulario"});
+
+  const K = C.k, NCOL = ESPINA.length + 1;
+  // Escala por matriz: el máximo |peso| que esa matriz alcanza en toda la película. Así el grosor
+  // es comparable entre cuadros (que es el punto) y no se re-normaliza en cada uno.
+  const ESCALA = {}, ESCALA_D = {};
+  for (const t of ESPINA) {
+    let mx = 1e-9, md = 1e-9;
+    const w0 = F[0].pesos[t.m];
+    for (const f of F) f.pesos[t.m].forEach((v, k) => {
+      mx = Math.max(mx, Math.abs(v));
+      md = Math.max(md, Math.abs(v - w0[k]));
+    });
+    ESCALA[t.m] = mx; ESCALA_D[t.m] = md;
+  }
+  // `delta` dibuja cuanto se movio cada peso DESDE EL PASO 0, con su signo: azul es un peso que
+  // crecio, rojo uno que se achico. Es el mismo dato, mirado como diferencia — que es lo que hace
+  // visible el aprendizaje cuando los pesos son chicos y se mueven poco en terminos absolutos.
+  let VISTA = "peso";
+
+  const lienzo = document.getElementById("lienzo"), ctx = lienzo.getContext("2d");
+  const W = lienzo.width, H = lienzo.height, MX = 74, MY = 52, PIE = 62;
+  const xs = i => MX + i * (W - 2 * MX) / (NCOL - 1);
+  const ys = j => MY + j * (H - MY - PIE - MY) / (K - 1);
+
+  const ROTULOS = ["tokens"].concat(ESPINA.map(t => t.hasta));
+
+  function interpolar(u) {                       // u ∈ [0, F.length-1]
+    const i = Math.min(F.length - 1, Math.floor(u)), j = Math.min(F.length - 1, i + 1);
+    return {a: F[i], b: F[j], t: u - i};
+  }
+  const mezcla = (a, b, t) => a + (b - a) * t;
+
+  function dibujar(u) {
+    const {a, b, t} = interpolar(u);
+    ctx.clearRect(0, 0, W, H);
+    const cpos = css("--pos"), cneg = css("--neg"), cnodo = css("--tinta3"), cpanel = css("--panel");
+
+    ESPINA.forEach((tr, col) => {
+      const pa = a.pesos[tr.m], pb = b.pesos[tr.m], w0 = F[0].pesos[tr.m];
+      const esc = VISTA === "delta" ? ESCALA_D[tr.m] : ESCALA[tr.m];
+      const x0 = xs(col), x1 = xs(col + 1);
+      for (let r = 0; r < K; r++) for (let c = 0; c < K; c++) {
+        const k = r * K + c;
+        const w = mezcla(pa[k], pb[k], t) - (VISTA === "delta" ? w0[k] : 0);
+        const n = Math.abs(w) / esc;
+        if (n < 0.06) continue;                  // por debajo del 6 % del máximo no se dibuja
+        ctx.strokeStyle = w >= 0 ? cpos : cneg;
+        ctx.globalAlpha = Math.min(0.85, Math.pow(n, 1.4) * 0.95 + 0.05);
+        ctx.lineWidth = 0.7 + Math.pow(n, 1.6) * 5.5;
+        ctx.beginPath(); ctx.moveTo(x0, ys(r)); ctx.lineTo(x1, ys(c)); ctx.stroke();
+      }
+    });
+
+    ctx.globalAlpha = 1;
+    for (let col = 0; col < NCOL; col++) for (let j = 0; j < K; j++) {
+      ctx.beginPath(); ctx.arc(xs(col), ys(j), 7, 0, 6.2832);
+      ctx.fillStyle = cpanel; ctx.fill();
+      ctx.lineWidth = 1.8; ctx.strokeStyle = cnodo; ctx.stroke();
+    }
+
+    // los rotulos van en el lienzo y no en una tira aparte: asi caen exactamente debajo de su
+    // columna, que es lo unico que los hace utiles
+    ctx.textAlign = "center";
+    ctx.font = '600 21px "IBM Plex Sans Condensed", sans-serif';
+    const hito = c => c === 0 || c === NCOL - 1 || (c - 1) % 3 === 2;
+    ROTULOS.forEach((r, c) => {
+      ctx.fillStyle = hito(c) ? css("--tinta2") : css("--tinta3");
+      ctx.fillText(r, xs(c), H - 26);
+    });
+  }
+
+  /* ---------- paneles ---------- */
+  const SV = "http://www.w3.org/2000/svg";
+  const el = (n, at) => { const e = document.createElementNS(SV, n);
+    for (const k in at) e.setAttribute(k, at[k]); return e; };
+
+  // -- lectura del archivo ------------------------------------------------
+  const sAt = document.getElementById("svg-atencion");
+  const NSL = M.slots, ocupados = new Set(M.ocupados), correctos = new Set(M.correctos);
+  const AW = 460, AH = 150, ABASE = 116, ATOP = 14, aw = (AW - 30) / NSL;
+  const barrasAt = [];
+  sAt.appendChild(el("line", {x1: 14, y1: ABASE, x2: AW - 14, y2: ABASE,
+    stroke: "var(--borde)", "stroke-width": 1}));
+  for (let i = 0; i < NSL; i++) {
+    const r = el("rect", {x: 15 + i * aw, y: ABASE - 1, width: Math.max(1.5, aw - 1.6), height: 1,
+      rx: 1.2, fill: ocupados.has(i) ? "var(--seq)" : "var(--vacio)"});
+    sAt.appendChild(r); barrasAt.push(r);
+  }
+  const iCorr = correctos.size ? [...correctos][0] : 0;
+  const marca = el("text", {x: 15 + iCorr * aw + aw / 2, y: ABASE + 16,
+    "text-anchor": "middle", "font-size": 9.5, "font-family": "IBM Plex Sans Condensed, sans-serif",
+    "letter-spacing": ".05em", fill: "var(--acento)"});
+  marca.textContent = "▲ correcta";
+  sAt.appendChild(marca);
+  const valAt = el("text", {x: 15, y: 12, "font-size": 12, "font-family": "IBM Plex Mono, monospace",
+    fill: "var(--tinta)"});
+  sAt.appendChild(valAt);
+  const ejeAt = el("text", {x: AW - 14, y: ABASE + 30, "text-anchor": "end", "font-size": 10,
+    "font-family": "IBM Plex Sans Condensed, sans-serif", fill: "var(--tinta3)"});
+  ejeAt.textContent = `${NSL} casilleros · ${M.ocupados.length} escritos`;
+  sAt.appendChild(ejeAt);
+
+  function pintarAtencion(v) {
+    const mx = Math.max(...v, 1e-6);
+    v.forEach((p, i) => {
+      const h = Math.max(1, (p / Math.max(mx, 0.15)) * (ABASE - ATOP));
+      barrasAt[i].setAttribute("y", ABASE - h);
+      barrasAt[i].setAttribute("height", h);
+      barrasAt[i].setAttribute("fill", correctos.has(i) ? "var(--acento-fuerte)"
+        : ocupados.has(i) ? "var(--seq)" : "var(--vacio)");
+    });
+    const pc = [...correctos].reduce((s, i) => s + v[i], 0);
+    valAt.textContent = `${fmt(pc * 100, 1)} % de la masa en la entrada correcta` +
+      (R ? ` · a los ${R.pasos.toLocaleString("es-AR")} pasos, ${fmt(R.masa_correcta * 100, 1)} %` : "");
+  }
+
+  // -- barras genéricas (taps y beta) --------------------------------------
+  function barras(svg, etiquetas, alto, ref) {
+    const w = 460, base = alto - 34, top = 16, n = etiquetas.length;
+    const bw = Math.min(56, (w - 40) / n - 12);
+    const paso = (w - 40) / n, rects = [], txts = [];
+    svg.appendChild(el("line", {x1: 20, y1: base, x2: w - 20, y2: base,
+      stroke: "var(--borde)", "stroke-width": 1}));
+    const fantasmas = [];
+    etiquetas.forEach((lab, i) => {
+      const x = 20 + paso * i + (paso - bw) / 2;
+      if (ref) {
+        const f = el("rect", {x: x - 3, width: bw + 6, rx: 3, fill: "none",
+          stroke: "var(--tinta3)", "stroke-width": 1.4, "stroke-dasharray": "4 3",
+          y: base - 1, height: 1});
+        svg.appendChild(f); fantasmas.push(f);
+      }
+      const r = el("rect", {x, y: base - 1, width: bw, height: 1, rx: 3, fill: "var(--seq)"});
+      svg.appendChild(r); rects.push(r);
+      const t = el("text", {x: x + bw / 2, y: base + 15, "text-anchor": "middle", "font-size": 10.5,
+        "font-family": "IBM Plex Sans Condensed, sans-serif", fill: "var(--tinta3)"});
+      t.textContent = lab; svg.appendChild(t);
+      const v = el("text", {x: x + bw / 2, y: base - 6, "text-anchor": "middle", "font-size": 11,
+        "font-family": "IBM Plex Mono, monospace", fill: "var(--tinta2)"});
+      svg.appendChild(v); txts.push(v);
+    });
+    if (ref) return (vals, esc, dec) => {
+      ref.forEach((v, i) => {
+        const h = Math.max(1, (v / esc) * (base - top));
+        fantasmas[i].setAttribute("y", base - h); fantasmas[i].setAttribute("height", h);
+      });
+      vals.forEach((v, i) => {
+        const h = Math.max(1, (v / esc) * (base - top));
+        rects[i].setAttribute("y", base - h); rects[i].setAttribute("height", h);
+        txts[i].setAttribute("y", base - h - 5);
+        txts[i].textContent = fmt(v, dec);
+      });
+    };
+    return (vals, esc, dec) => {
+      vals.forEach((v, i) => {
+        const h = Math.max(1, (v / esc) * (base - top));
+        rects[i].setAttribute("y", base - h); rects[i].setAttribute("height", h);
+        txts[i].setAttribute("y", base - h - 5);
+        txts[i].textContent = fmt(v, dec);
+      });
+    };
+  }
+  const escTaps = Math.max(...F.flatMap(f => f.taps), ...(R ? R.taps : [])) * 1.15;
+  const pintarTaps = barras(document.getElementById("svg-taps"),
+    F[0].taps.map((_, i) => i === 0 ? "ahora" : `−${i}`), 150, R ? R.taps : null);
+  const pintarBeta = barras(document.getElementById("svg-beta"),
+    F[0].beta.map((_, i) => `bloque ${i}`), 150);
+
+  // -- curvas con playhead --------------------------------------------------
+  function curva(svg, vals, etiquetaY, color, dec) {
+    const w = 460, h = 170, L = 46, R = 12, T = 14, B = 34;
+    const xmax = F[F.length - 1].paso || 1;
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    const y0 = Math.min(lo, dec === 2 ? 0 : lo), y1 = hi + (hi - y0) * 0.12 || 1;
+    const X = p => L + (p / xmax) * (w - L - R);
+    const Y = v => h - B - ((v - y0) / (y1 - y0 || 1)) * (h - T - B);
+    [0, 0.5, 1].forEach(f => {
+      const v = y0 + (y1 - y0) * f;
+      svg.appendChild(el("line", {x1: L, y1: Y(v), x2: w - R, y2: Y(v),
+        stroke: "var(--borde2)", "stroke-width": 1}));
+      const t = el("text", {x: L - 7, y: Y(v) + 3.5, "text-anchor": "end", "font-size": 10,
+        "font-family": "IBM Plex Mono, monospace", fill: "var(--tinta3)"});
+      t.textContent = fmt(v, dec); svg.appendChild(t);
+    });
+    const d = F.map((f, i) => `${i ? "L" : "M"}${X(f.paso).toFixed(1)} ${Y(vals[i]).toFixed(1)}`).join(" ");
+    svg.appendChild(el("path", {d, fill: "none", stroke: color, "stroke-width": 2,
+      "stroke-linejoin": "round", "stroke-linecap": "round"}));
+    const ejx = el("text", {x: w - R, y: h - 10, "text-anchor": "end", "font-size": 10,
+      "font-family": "IBM Plex Sans Condensed, sans-serif", fill: "var(--tinta3)"});
+    ejx.textContent = `${xmax} pasos`; svg.appendChild(ejx);
+    const ejy = el("text", {x: L - 7, y: T - 2, "text-anchor": "end", "font-size": 10,
+      "font-family": "IBM Plex Sans Condensed, sans-serif", "letter-spacing": ".05em",
+      fill: "var(--tinta3)"});
+    ejy.textContent = etiquetaY; svg.appendChild(ejy);
+    const linea = el("line", {y1: T - 4, y2: h - B, stroke: "var(--acento-fuerte)",
+      "stroke-width": 1.5, "stroke-dasharray": "3 3", x1: L, x2: L});
+    const punto = el("circle", {r: 4.5, fill: color, stroke: "var(--panel)", "stroke-width": 2,
+      cx: L, cy: Y(vals[0])});
+    const eti = el("text", {x: L, y: T - 5, "font-size": 11.5, "text-anchor": "middle",
+      "font-family": "IBM Plex Mono, monospace", fill: "var(--tinta)"});
+    svg.appendChild(linea); svg.appendChild(punto); svg.appendChild(eti);
+    return (u) => {
+      const {a, b, t} = interpolar(u);
+      const p = mezcla(a.paso, b.paso, t), v = mezcla(vals[F.indexOf(a)], vals[F.indexOf(b)], t);
+      const x = X(p);
+      linea.setAttribute("x1", x); linea.setAttribute("x2", x);
+      punto.setAttribute("cx", x); punto.setAttribute("cy", Y(v));
+      eti.setAttribute("x", Math.max(L + 18, Math.min(w - R - 18, x)));
+      eti.textContent = fmt(v, dec);
+    };
+  }
+  const pintarPerdida = curva(document.getElementById("svg-perdida"),
+    F.map(f => f.perdida), "pérdida", "var(--neg)", 3);
+  const pintarAcc = curva(document.getElementById("svg-acc"),
+    F.map(f => f.acc), "exactitud", "var(--pos)", 3);
+
+  // -- diálogo ---------------------------------------------------------------
+  const dlg = document.getElementById("dialogo");
+  const limpia = s => s.replace(/^BOS /, "").replace(/ \?$/, " ?").trim();
+  const turnos = M.sesiones.filter(s => limpia(s).length > 0)
+    .map(s => `<div class="turno">${limpia(s)}</div>`).join("");
+  dlg.innerHTML = turnos +
+    `<div class="turno pregunta">${limpia(M.pregunta)}</div>` +
+    `<div class="respuesta">contesta <b id="pred">—</b><span class="sello" id="sello"></span></div>` +
+    `<p class="nota" style="margin-top:2px">La respuesta correcta es
+      <code style="font-family:'IBM Plex Mono',monospace">${D.respuesta_correcta ?? "—"}</code>,
+      el valor que se dijo en el casillero marcado. Todo el episodio se le dijo en una sesión que
+      después se borra: cuando llega la pregunta, el estado ya no existe y lo único que queda es
+      el archivo.</p>` +
+    (R ? `<p class="nota">El mismo ejemplo, leído por el checkpoint de
+      <b>${R.pasos.toLocaleString("es-AR")} pasos</b>
+      (<code style="font-family:'IBM Plex Mono',monospace">${R.ckpt.split("/").pop()}</code>):
+      contesta <b>${R.pred}</b>.</p>` : "");
+  const elPred = document.getElementById("pred"), elSello = document.getElementById("sello");
+
+  // -- tabla ------------------------------------------------------------------
+  document.getElementById("tabla").innerHTML =
+    `<thead><tr><th>paso</th><th>pérdida</th><th>exactitud</th><th>masa en la correcta</th>` +
+    F[0].taps.map((_, i) => `<th>tap ${i}</th>`).join("") + `<th>contesta</th></tr></thead><tbody>` +
+    F.map(f => {
+      const pc = M.correctos.reduce((s, i) => s + f.atencion[i], 0);
+      return `<tr><td>${f.paso}</td><td>${fmt(f.perdida, 3)}</td><td>${fmt(f.acc, 3)}</td>` +
+        `<td>${fmt(pc, 4)}</td>` + f.taps.map(t => `<td>${fmt(t, 4)}</td>`).join("") +
+        `<td>${f.pred}</td></tr>`;
+    }).join("") + `</tbody>`;
+
+  // -- pie ---------------------------------------------------------------------
+  document.getElementById("pie").innerHTML = `
+    <p><b>Qué es real y qué está recortado.</b> Cada cuadro son los pesos del modelo en ese paso,
+    sin retoque. De cada matriz se dibuja una submatriz de <b>${K}×${K}</b> —${K} de ${C.d} unidades,
+    el <b>${(100 * K / C.d).toFixed(1)} %</b>— con índices sorteados <b>una sola vez</b> y fijos en
+    toda la película: si cambiaran entre cuadros, el movimiento que se ve sería el del muestreo y no
+    el del aprendizaje. Los cuadros se midieron cada ${C.cada} pasos y entre uno y otro la animación
+    <b>interpola en línea recta</b>; los puntos medidos son los ${F.length} de la tabla.</p>
+    <p><b>Qué muestra el espinazo.</b> El camino secuencial de un dato: <code>emb</code> → por cada
+    bloque el valor de la regla delta (<code>wv</code>) y las dos capas del MLP → <code>head</code>.
+    <code>wq</code> y <code>wk</code> corren en paralelo adentro del mezclador, así que dibujarlos
+    como columnas seguidas sería falso y no están. Azul es peso positivo, rojo negativo, y el grosor
+    es <code>|peso|</code> contra el máximo que esa matriz alcanza en toda la película.</p>
+    ${R ? `<p><b>La referencia del final.</b> El contorno de los taps, el porcentaje de masa y la
+    respuesta del modelo entrenado salen de <code>${R.ckpt}</code> —${R.pasos.toLocaleString("es-AR")}
+    pasos, misma arquitectura, mismo kernel— medido hoy sobre <b>este mismo episodio</b>: la muestra se
+    regenera con la misma semilla y el mismo procedimiento, así que es la misma pregunta y el mismo
+    archivo. Script <code>micro_lm/referencia_pelicula.py</code>.</p>` : ""}
+    <p><b>Límite declarado.</b> Es una corrida corta de ${C.pasos} pasos en CPU hecha para mirarse,
+    con la misma pérdida, el mismo generador y el mismo optimizador que <code>entrenar.py</code>,
+    pero sin el currículum de mezcla. <b>No es un checkpoint de campaña</b> y ninguno de los números
+    publicados del proyecto sale de acá.</p>`;
+
+  /* ---------- transporte ---------- */
+  const barra = document.getElementById("barra"), btn = document.getElementById("reproducir");
+  const lecPaso = document.getElementById("lec-paso");
+  document.getElementById("lec-total").textContent = F[F.length - 1].paso;
+  barra.max = F.length - 1; barra.step = 0.02;
+
+  // El reloj va por temporizador y no por requestAnimationFrame: en una pestaña de fondo, con
+  // ahorro de energia o en un visor incrustado, el rAF se estrangula y la pelicula queda quieta sin
+  // avisar. 30 ms alcanza de sobra para lo que se dibuja.
+  let u = 0, corriendo = false, vel = 1, reloj = null;
+  const CPS = 7;                         // cuadros por segundo a 1x: la pelicula entera en ~7 s
+
+  function pintar(u) {
+    const {a, b, t} = interpolar(u);
+    dibujar(u);
+    pintarAtencion(a.atencion.map((v, i) => mezcla(v, b.atencion[i], t)));
+    pintarTaps(a.taps.map((v, i) => mezcla(v, b.taps[i], t)), escTaps, 4);
+    pintarBeta(a.beta.map((v, i) => mezcla(v, b.beta[i], t)), 1, 4);
+    pintarPerdida(u); pintarAcc(u);
+    lecPaso.textContent = Math.round(mezcla(a.paso, b.paso, t));
+    const cuadro = t < 0.5 ? a : b;
+    elPred.textContent = cuadro.pred;
+    const bien = String(cuadro.pred) === String(D.respuesta_correcta);
+    elSello.textContent = bien ? "acierta" : "todavía no";
+    elSello.className = "sello " + (bien ? "bien" : "mal");
+  }
+
+  function tic() {
+    u += 0.03 * CPS * vel;
+    if (u >= F.length - 1) u = 0;        // repite: la pelicula es corta y se mira en bucle
+    barra.value = u; pintar(u);
+  }
+  function arrancar() {
+    if (reloj) clearInterval(reloj);
+    corriendo = true; btn.textContent = "❚❚ Pausa";
+    reloj = setInterval(tic, 30);
+  }
+  function parar() {
+    corriendo = false; btn.textContent = "▶ Reproducir";
+    if (reloj) { clearInterval(reloj); reloj = null; }
+  }
+  btn.addEventListener("click", () => corriendo ? parar() : arrancar());
+  barra.addEventListener("input", () => { parar(); u = +barra.value; pintar(u); });
+  document.querySelectorAll("[data-vel]").forEach(b => b.addEventListener("click", () => {
+    vel = +b.dataset.vel;
+    document.querySelectorAll("[data-vel]").forEach(o =>
+      o.setAttribute("aria-pressed", o === b ? "true" : "false"));
+  }));
+  document.querySelectorAll("[data-vista]").forEach(b => b.addEventListener("click", () => {
+    VISTA = b.dataset.vista;
+    document.querySelectorAll("[data-vista]").forEach(o =>
+      o.setAttribute("aria-pressed", o === b ? "true" : "false"));
+    document.getElementById("pie-vista").textContent = VISTA === "delta"
+      ? "Se está dibujando cuánto cambió cada peso desde el paso 0, con su signo."
+      : "Se está dibujando el peso, con su signo.";
+    pintar(u);
+  }));
+
+  pintar(0);
+  const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!quieto) setTimeout(arrancar, 600);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => pintar(u));
+})();
+</script>
