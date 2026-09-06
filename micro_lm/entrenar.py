@@ -638,6 +638,9 @@ def main():
     _ABST = a.abst
     _PERT = a.pert
     M.SELLO = a.sello          # antes de init_params, como M.KQ: decide como se indexa `ord`
+    if a.pert and a.sello == "abs":
+        print("AVISO: --pert con --sello abs. Es una combinacion valida (aisla el aporte del bit), "
+              "pero no es la condicion principal del PREREG_SELLO_RELATIVO.")
     _BLANCO = a.blanco
     FORMAS_Q = tuple(x.strip() for x in a.formas_q.split(",") if x.strip())
     for f in FORMAS_Q:
@@ -756,11 +759,16 @@ def main():
         # relativa como absoluta sin decir una palabra, y el JSON mostraria una sola curva. Los
         # checkpoints anteriores al 6-sep no traen las claves y todos ellos son `abs` sin bit, que
         # son los defaults.
-        if ck["config"].get("sello", "abs") != a.sello:
-            sys.exit(f"ABORTA: el checkpoint se entreno con sello={ck['config'].get('sello', 'abs')} "
+        # OJO: se pregunta por PRESENCIA, no con `.get(k, default)`. `sembrar.py` BORRA estas claves
+        # justamente para declarar que la corrida nueva bifurca, y con `.get` el default las
+        # resucitaria y la siembra abortaria siempre contra si misma. Lo encontro el primer tramo de
+        # verdad de la campania del sello relativo (6-sep), que es para lo que se corre un smoke.
+        # Un checkpoint YA entrenado con una condicion si trae la clave, y ahi la guarda muerde.
+        if "sello" in ck["config"] and ck["config"]["sello"] != a.sello:
+            sys.exit(f"ABORTA: el checkpoint se entreno con sello={ck['config']['sello']} "
                      f"y se pidio sello={a.sello}. Es otra arquitectura, no la misma corrida.")
-        if bool(ck["config"].get("pert", False)) != bool(a.pert):
-            sys.exit(f"ABORTA: el checkpoint se entreno con pert={ck['config'].get('pert', False)} "
+        if "pert" in ck["config"] and bool(ck["config"]["pert"]) != bool(a.pert):
+            sys.exit(f"ABORTA: el checkpoint se entreno con pert={ck['config']['pert']} "
                      f"y se pidio pert={a.pert}. Es otra arquitectura, no la misma corrida.")
         if ck["config"].get("mezcla", "fija") != a.mezcla:
             sys.exit(f"ABORTA: el checkpoint se entreno con mezcla={ck['config'].get('mezcla', 'fija')} "

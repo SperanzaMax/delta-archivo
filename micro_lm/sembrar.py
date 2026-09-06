@@ -32,8 +32,11 @@ import pickle
 # guarda de `entrenar.py` aborta si no coincide—, asi que va aca. Sembrar desde un checkpoint de
 # archivo corto hacia uno largo es justamente lo que la campania del archivo largo quiere poder hacer,
 # y este es el unico lugar donde queda DECLARADO en el checkpoint (`sembrado_de`) en vez de en silencio.
+# `sello` y `pert` (2026-09-06): cambian COMO se indexa `ord` y que ve la lectura, o sea la
+# arquitectura del sello. Sembrar de `abs` a `rel` es exactamente lo que la campania del sello
+# relativo necesita, y va declarado en `sembrado_de` como todo lo demas.
 BIFURCA = ("perdida_cabeza", "blanco", "horizonte", "pasos",
-           "rec_l", "rec_m", "rec_f", "rec_ce", "ses_extra")
+           "rec_l", "rec_m", "rec_f", "rec_ce", "ses_extra", "sello", "pert")
 
 
 def main():
@@ -60,6 +63,19 @@ def main():
     if a.sin_cabeza and "abst" in params:
         params.pop("abst")
         cfg.pop("abst", None)
+
+    # EL BIT DE PERTENENCIA TIENE QUE EXISTIR EN LOS PARAMS (2026-09-06). Los checkpoints
+    # anteriores al 6-sep no lo tienen, y `modelo.marca_pert` devuelve 0.0 cuando falta —que es lo
+    # correcto para no romper lo viejo, pero seria un desastre acá: la campania correria con
+    # `--pert` puesto y el bit JAMAS entraria, en silencio, y el negativo seria del instrumento.
+    # Se agrega en CERO, que es el mismo valor con el que nace en `init_params`, asi sembrar no
+    # cambia ningun numero y el bit queda disponible para que el gradiente lo mueva.
+    if "arch" in params and "pert" not in params["arch"]:
+        import jax.numpy as jnp
+        arch = dict(params["arch"])
+        arch["pert"] = jnp.zeros(arch["kw"].shape[-1])
+        params["arch"] = arch
+        print("  `pert` no estaba en los params (checkpoint anterior al 6-sep): se agrega en CERO")
 
     cfg["horizonte"] = a.horizonte
     cfg["pasos"] = a.horizonte

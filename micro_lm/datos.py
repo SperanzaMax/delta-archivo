@@ -55,7 +55,8 @@ TURNO_BASE = 24
 
 
 def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False,
-         con_origen=False, formas_q=("directa",), con_formas=False, n_ses_extra=0):
+         con_origen=False, formas_q=("directa",), con_formas=False, n_ses_extra=0,
+         turno_base=None):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
 
     Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
@@ -109,7 +110,14 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                 continue
             (q, r, t), i_q = con_resp[int(rng.integers(len(con_resp)))]
         forma_q[b] = I.FORMAS_Q.index(formas_ep[i_q]) if i_q < len(formas_ep) else 0
-        turno = TURNO_BASE if n_ses_extra else 0
+        # TURNO_BASE es el default; `turno_base` lo sube para probar archivos que NO caben en las
+        # 64 filas de `ord` (2026-09-06, R-5 de `PREREG_SELLO_RELATIVO.md`). Con base 160, por
+        # ejemplo, el episodio va 160..199 y las ajenas se reparten en 0..159: el sello ABSOLUTO se
+        # sale de la tabla y da NaN —fallo ruidoso, como debe ser desde el 5-sep— mientras el
+        # RELATIVO sigue viendo distancias chicas para el episodio y satura sólo lo verdaderamente
+        # viejo. Es la diferencia entre un techo del archivo y una ventana de recencia.
+        base = TURNO_BASE if turno_base is None else int(turno_base)
+        turno = base if n_ses_extra else 0
         for s, enunciados in enumerate(sesiones):
             toks = [I.STOI["BOS"]]
             puestos = 0
@@ -141,7 +149,7 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
                 cortes[b, s_ex, e] = len(toks) - 1
                 mask[b, s_ex * E_MAX + e] = True
                 # turno VIEJO: por debajo de TURNO_BASE, o sea anterior a todo el episodio
-                turnos[b, s_ex * E_MAX + e] = int(rng.integers(0, TURNO_BASE))
+                turnos[b, s_ex * E_MAX + e] = int(rng.integers(0, base))
                 # origen -1: ninguna entrada extra es el hecho preguntado
             ses[b, s_ex, :len(toks)] = toks
 
