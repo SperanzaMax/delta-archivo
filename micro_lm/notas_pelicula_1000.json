@@ -1,0 +1,8 @@
+[
+ {"titulo": "La lectura se clava, y en el casillero equivocado.",
+  "texto": "Arranca repartida (0,459 en el casillero 4), cerca del <b>paso 200</b> se para justo en la entrada correcta con <b>0,9955</b>, y desde el <b>paso 300</b> queda en <b>1,0000 exacto</b> sobre el casillero 3, que no es el que contesta la pregunta."},
+ {"titulo": "Contesta NOSE a todo desde el paso 100.",
+  "texto": "Es el atractor mudo que la línea ya tenía medido como estado absorbente: abstenerse paga más que un mecanismo a medio aprender."},
+ {"titulo": "La ventana todavía no se abrió.",
+  "texto": "Los taps terminan en [0,995 · 0 · 0 · 0 · 0], contra [0,385 · 0,053 · 0,073 · 0,045 · 0,053] del checkpoint de 26.000 pasos. Mil pasos son el arranque, no el final."}
+]

@@ -175,6 +175,8 @@ footer code{font-family:"IBM Plex Mono",monospace; font-size:12px; background:va
     <span><i style="background:var(--pos)"></i>positivo</span>
     <span><i style="background:var(--neg)"></i>negativo</span>
     <span id="pie-vista" style="color:var(--tinta3)">Se está dibujando el peso, con su signo.</span>
+    <span id="pie-escala" style="color:var(--tinta3)">Cada capa contra su propio máximo: la
+      intensidad no se compara entre columnas.</span>
   </div>
   <div class="transporte">
     <button id="reproducir" type="button">▶ Reproducir</button>
@@ -188,6 +190,10 @@ footer code{font-family:"IBM Plex Mono",monospace; font-size:12px; background:va
     <span class="velocidades" role="group" aria-label="Qué se dibuja">
       <button type="button" data-vista="peso" aria-pressed="true">Peso</button>
       <button type="button" data-vista="delta">Cuánto cambió</button>
+    </span>
+    <span class="velocidades" role="group" aria-label="Escala">
+      <button type="button" data-escala="capa" aria-pressed="true">Escala por capa</button>
+      <button type="button" data-escala="comun">Escala común</button>
     </span>
   </div>
 </section>
@@ -317,6 +323,13 @@ const NOTAS = [{"titulo":"La lectura queda resuelta, y se ve el momento exacto."
     });
     ESCALA[t.m] = mx; ESCALA_D[t.m] = md;
   }
+  // ESCALA COMUN: un solo maximo para todas las matrices. Con la escala por capa cada columna se
+  // normaliza contra si misma, asi que se ve como cambia UNA columna en el tiempo pero comparar la
+  // intensidad ENTRE columnas no significa nada. Con la comun si: una columna palida es una columna
+  // cuyos pesos son chicos frente al mayor del modelo.
+  const MAX_G = Math.max(...Object.values(ESCALA));
+  const MAX_GD = Math.max(...Object.values(ESCALA_D));
+  let ESC_COMUN = false;
   // `delta` dibuja cuanto se movio cada peso DESDE EL PASO 0, con su signo: azul es un peso que
   // crecio, rojo uno que se achico. Es el mismo dato, mirado como diferencia — que es lo que hace
   // visible el aprendizaje cuando los pesos son chicos y se mueven poco en terminos absolutos.
@@ -342,7 +355,8 @@ const NOTAS = [{"titulo":"La lectura queda resuelta, y se ve el momento exacto."
 
     ESPINA.forEach((tr, col) => {
       const pa = a.pesos[tr.m], pb = b.pesos[tr.m], w0 = F[0].pesos[tr.m];
-      const esc = VISTA === "delta" ? ESCALA_D[tr.m] : ESCALA[tr.m];
+      const esc = ESC_COMUN ? (VISTA === "delta" ? MAX_GD : MAX_G)
+                            : (VISTA === "delta" ? ESCALA_D[tr.m] : ESCALA[tr.m]);
       const x0 = xs(col), x1 = xs(col + 1);
       for (let r = 0; r < K; r++) for (let c = 0; c < K; c++) {
         const k = r * K + c;
@@ -560,8 +574,19 @@ const NOTAS = [{"titulo":"La lectura queda resuelta, y se ve el momento exacto."
     <p><b>Qué muestra el espinazo.</b> El camino secuencial de un dato: <code>emb</code> → por cada
     bloque el valor de la regla delta (<code>wv</code>) y las dos capas del MLP → <code>head</code>.
     <code>wq</code> y <code>wk</code> corren en paralelo adentro del mezclador, así que dibujarlos
-    como columnas seguidas sería falso y no están. Azul es peso positivo, rojo negativo, y el grosor
-    es <code>|peso|</code> contra el máximo que esa matriz alcanza en toda la película.</p>
+    como columnas seguidas sería falso y no están. Azul es peso positivo, rojo negativo.</p>
+    <p><b>Cómo leer la intensidad, y cómo no.</b> Por defecto el grosor es <code>|peso|</code> contra
+    el máximo que alcanza <b>esa misma matriz</b> en toda la película. Eso sirve para ver cómo cambia
+    una columna en el tiempo y <b>no</b> para decir que una capa aprende más que otra: con cada
+    columna normalizada contra sí misma, comparar intensidades entre columnas no significa nada. Para
+    eso está <b>«Escala común»</b>, que usa un solo máximo para todo el modelo.</p>
+    <p><b>Una columna puede parecer más fuerte sin serlo.</b> En la última transición los pesos
+    grandes se concentran en unas pocas unidades de salida, así que muchas aristas largas convergen en
+    el mismo nodo y la tinta se apila ahí; en las capas del medio los pesos grandes caen cerca de la
+    diagonal y son trazos cortos y casi horizontales. Medido sobre esta película, la tinta por columna
+    es pareja —entre 0,15 y 0,29, con la última en 0,20— y las matrices que más se movieron respecto
+    de su valor inicial son la <b>primera</b> (el embedding, 4,13×) y las del medio (3,2-3,3×), no la
+    última (2,88×). La diferencia que se ve es de geometría del dibujo, no del modelo.</p>
     ${R ? `<p><b>La referencia del final.</b> El contorno de los taps, el porcentaje de masa y la
     respuesta del modelo entrenado salen de <code>${R.ckpt}</code> —${R.pasos.toLocaleString("es-AR")}
     pasos, misma arquitectura, mismo kernel— medido hoy sobre <b>este mismo episodio</b>: la muestra se
@@ -619,6 +644,15 @@ const NOTAS = [{"titulo":"La lectura queda resuelta, y se ve el momento exacto."
     vel = +b.dataset.vel;
     document.querySelectorAll("[data-vel]").forEach(o =>
       o.setAttribute("aria-pressed", o === b ? "true" : "false"));
+  }));
+  document.querySelectorAll("[data-escala]").forEach(b => b.addEventListener("click", () => {
+    ESC_COMUN = b.dataset.escala === "comun";
+    document.querySelectorAll("[data-escala]").forEach(o =>
+      o.setAttribute("aria-pressed", o === b ? "true" : "false"));
+    document.getElementById("pie-escala").textContent = ESC_COMUN
+      ? "Todas las capas contra un mismo máximo: la intensidad SÍ se compara entre columnas."
+      : "Cada capa contra su propio máximo: la intensidad no se compara entre columnas.";
+    pintar(u);
   }));
   document.querySelectorAll("[data-vista]").forEach(b => b.addEventListener("click", () => {
     VISTA = b.dataset.vista;
