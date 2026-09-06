@@ -66,6 +66,11 @@ def main():
     ap.add_argument("--nivel", type=int, default=None)
     ap.add_argument("--p-nose", type=float, default=None)
     ap.add_argument("--semilla", type=int, default=54321)
+    ap.add_argument("--ses-extra", type=int, default=None,
+                    help="sesiones de OTRAS conversaciones en el archivo. Sin esto el SER solo se "
+                         "podia medir con archivo CORTO (40 entradas), que es el regimen en el que "
+                         "el error de identidad ya esta en 0,0000; el regimen que importa para la "
+                         "memoria larga es el otro. Por default usa el del checkpoint.")
     ap.add_argument("--json", default=None,
                     help="ruta donde volcar los mismos numeros que se imprimen, para que una "
                          "campania de varias unidades no tenga que parsear stdout")
@@ -103,6 +108,7 @@ def main():
     # arriba describe para `_ABST`. Consecuencia grave: el SER nunca se habia medido sobre ninguna
     # unidad de kernel 5, o sea sobre el regimen donde la abstencion QUEDO RESUELTA.
     # Se lee de la config como en `masa_turnos.py` y `reloj_o_bandera.py`.
+    ses_extra = a.ses_extra if a.ses_extra is not None else cfg.get("ses_extra", 0)
     M.KQ = cfg.get("kernel_q", 3)
     # `sello`/`pert` viajan por el mismo motivo: desde el 6-sep cambian como se indexa `ord`.
     M.SELLO = cfg.get("sello", "abs")
@@ -119,7 +125,8 @@ def main():
     while vistos < a.n:
         B = min(a.B, a.n - vistos)
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, meta = DAT.lote(
-            rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_nose=p_nose, con_meta=True)
+            rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_nose=p_nose, con_meta=True,
+            n_ses_extra=ses_extra)
         pred = predecir(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
                         jnp.array(mask), jnp.array(cons), jnp.array(pos))
         for i in range(B):
@@ -150,7 +157,8 @@ def main():
 
     print(f"pesos: {a.pesos}")
     print(f"nivel {nivel} · semilla {cfg['semilla']} · paso {bulto.get('paso', '?')} · "
-          f"p_nose {p_nose} · n={n}\n")
+          f"p_nose {p_nose} · ses_extra {ses_extra} ({(4 + ses_extra) * DAT.E_MAX} casilleros) · "
+          f"n={n}\n")
     print(f"  acierto            {cuenta['acierto']/max(1,con_resp):.4f}   (sobre las {con_resp} que SÍ tenían respuesta)")
     if sin_resp:
         print(f"  nose               {cuenta['acierto_nose']/sin_resp:.4f}   "
