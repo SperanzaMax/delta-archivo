@@ -53,6 +53,12 @@ NOSE = I.STOI["NOSE"]
 # cambiar en el medio de una corrida, y por eso `main` lo deja asentado en el JSON de config: si
 # alguna vez una corrida sale con el valor que no era, el JSON es donde se ve.
 _DONDE = "pre"
+# BIT DE PERTENENCIA (2026-09-06). Cuando esta activo, la lectura recibe que entradas son de la
+# conversacion EN CURSO. Se deriva de la construccion del lote —las primeras `n_sesiones * E_MAX`
+# entradas son del episodio— y no del contenido ni del turno, que es justamente lo que se quiere
+# dejar de usar como pista. Con `_PERT = False` (el default) no se pasa nada y el modelo da los
+# numeros de siempre, bit a bit.
+_PERT = False
 FORMAS_Q = ("directa",)      # 2026-09-02, PREREG_CRUCE_FORMAS. Default = el idioma de siempre.
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
@@ -118,9 +124,18 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     return out
 
 
+def pert_de(mask):
+    """(B, N) con True en las entradas del episodio en curso. None cuando el bit esta apagado."""
+    if not _PERT:
+        return None
+    n_pri = 4 * DAT.E_MAX
+    m = jnp.zeros(mask.shape[-1], bool).at[:n_pri].set(True)
+    return jnp.broadcast_to(m, mask.shape)
+
+
 def logits_de(params, ses, cortes, turnos, mask, cons, pos):
     archivo = M.escribir(params, ses, cortes)
-    lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE)
+    lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE, pertenece=pert_de(mask))
     return jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
 
 
@@ -255,7 +270,8 @@ def _recompensa(lg, tgt, q, s=None):
 
 def _partes(params, ses, cortes, turnos, mask, cons, pos):
     archivo = M.escribir(params, ses, cortes)
-    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE, abst=_ABST)
+    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE, abst=_ABST,
+                                 pertenece=pert_de(mask))
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     a = jnp.take_along_axis(a, pos[:, None], axis=1)[:, 0]
     return lg, a
@@ -411,6 +427,14 @@ def main():
     ap.add_argument("--nivel", type=int, default=1)
     ap.add_argument("--pasos", type=int, default=20000)
     ap.add_argument("--batch", type=int, default=64)
+    ap.add_argument("--sello", choices=("abs", "rel"), default="abs",
+                    help="como se indexa `ord`. 'abs' = turno absoluto, lo de siempre. 'rel' = "
+                         "distancia a la consulta (turno_actual - turno_entrada), que ninguna fila "
+                         "puede convertir en marca de «ajeno» y vuelve el tope de 64 una ventana de "
+                         "recencia en vez de un techo del archivo (INFORME_GEOMETRIA_ORD_20260906)")
+    ap.add_argument("--pert", action="store_true",
+                    help="da explicito el bit de pertenencia a la conversacion en curso, en vez de "
+                         "que el modelo lo infiera de en que fila de `ord` cayo la entrada")
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--d", type=int, default=192)
     ap.add_argument("--capas", type=int, default=6)
@@ -594,6 +618,7 @@ def main():
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
     global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
+    global _PERT
     global FORMAS_Q
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
     _REC_RANK = a.rec_rank
@@ -611,6 +636,8 @@ def main():
               f"{'  <== POSITIVA: el silencio cobra premio' if r_mudo > 0 else ''}\n", flush=True)
     _DONDE = a.donde
     _ABST = a.abst
+    _PERT = a.pert
+    M.SELLO = a.sello          # antes de init_params, como M.KQ: decide como se indexa `ord`
     _BLANCO = a.blanco
     FORMAS_Q = tuple(x.strip() for x in a.formas_q.split(",") if x.strip())
     for f in FORMAS_Q:
@@ -723,6 +750,18 @@ def main():
         # entre cuentas, asi que un tramo al que se le olvida el flag continuaria una corrida
         # dinamica como fija sin decir nada, y el JSON mostraria una curva sola. Los checkpoints
         # anteriores al 23-ago no traen la clave y todos ellos son `fija`, que es el default.
+        # `sello` y `pert` van con el mismo criterio, y son los mas peligrosos de los tres
+        # (2026-09-06): cambian COMO se indexa `ord` y que informacion recibe la lectura, o sea la
+        # arquitectura misma. Un tramo al que se le olvida `--sello rel` continuaria una corrida
+        # relativa como absoluta sin decir una palabra, y el JSON mostraria una sola curva. Los
+        # checkpoints anteriores al 6-sep no traen las claves y todos ellos son `abs` sin bit, que
+        # son los defaults.
+        if ck["config"].get("sello", "abs") != a.sello:
+            sys.exit(f"ABORTA: el checkpoint se entreno con sello={ck['config'].get('sello', 'abs')} "
+                     f"y se pidio sello={a.sello}. Es otra arquitectura, no la misma corrida.")
+        if bool(ck["config"].get("pert", False)) != bool(a.pert):
+            sys.exit(f"ABORTA: el checkpoint se entreno con pert={ck['config'].get('pert', False)} "
+                     f"y se pidio pert={a.pert}. Es otra arquitectura, no la misma corrida.")
         if ck["config"].get("mezcla", "fija") != a.mezcla:
             sys.exit(f"ABORTA: el checkpoint se entreno con mezcla={ck['config'].get('mezcla', 'fija')} "
                      f"y se pidio mezcla={a.mezcla}. Es otra politica de muestreo, no la misma corrida.")

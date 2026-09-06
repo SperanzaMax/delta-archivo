@@ -33,7 +33,17 @@ def init_params(seed, V, D=192, NB=6, N_TURNOS=64):
          "head": {"w": glorot(ks[1], (D, V)), "b": jnp.zeros(V)},
          "arch": {"kw": glorot(ks[2], (D, D)), "vw": glorot(ks[3], (D, D)),
                   "qr": glorot(ks[4], (D, D)), "wo": glorot(ks[5], (D, D)),
-                  "ord": glorot(ks[6], (N_TURNOS, D))},
+                  "ord": glorot(ks[6], (N_TURNOS, D)),
+                  # BIT DE PERTENENCIA (2026-09-06). Un vector que se suma a la clave de las
+                  # entradas de la conversacion EN CURSO. Hoy el modelo infiere eso de en que fila
+                  # de `ord` cayo la entrada —por eso aprende una bandera y no sobrevive a que las
+                  # filas cambien de rango (`INFORME_GEOMETRIA_ORD_20260906.md`)—; darselo explicito
+                  # separa «de quien es» de «cuando fue», que hoy viven entrelazados en una sola
+                  # tabla de indices absolutos.
+                  # Arranca en CERO, con el mismo criterio que `convq` en [1,0,0] y que `v_nulo`:
+                  # con `pert` nulo la condicion nueva es IDENTICA a la vieja, asi que no puede ser
+                  # estructuralmente peor y todo lo que aparezca lo fue a buscar el gradiente.
+                  "pert": jnp.zeros(D)},
          # Cabeza de abstencion SEPARADA (2026-08-18): un escalar por posicion, con proyeccion
          # propia. Existe siempre en los params —asi el arbol no cambia de forma entre condiciones y
          # los checkpoints son intercambiables— pero sólo la usa `--abst cabeza`; en las otras dos
@@ -107,6 +117,22 @@ def ln(p, x):
 
 
 KQ = 3          # kernel de `convq` (lat2). 2026-09-01: 5 hace que la query vea la RELACION.
+
+# MODO DEL SELLO DE ORDEN (2026-09-06). "abs" es lo de siempre y el default: la entrada se sella con
+# `ord[turno_entrada]`, o sea con el valor ABSOLUTO del turno.
+#
+# El 6-sep quedo medido, por conducta y por pesos, que eso hace que el modelo aprenda una BANDERA en
+# vez de un reloj: `ord` termina con UNA marca de «ajeno» copiada en las 24 filas del bloque bajo
+# (coseno 0,86-0,90 entre ellas, norma doble, direccion opuesta), y correr el episodio dos lugares
+# —con el orden relativo intacto— tira la RECUP de 1,0000 a 0,64-0,78 y el acierto a 0,02-0,08.
+# Ver `INFORME_RELOJ_O_BANDERA_20260906.md` y `INFORME_GEOMETRIA_ORD_20260906.md`.
+#
+# "rel" sella con la DISTANCIA a la consulta, `turno_actual - turno_entrada`. Ninguna fila puede
+# significar «ajeno» porque el mismo turno absoluto cae en filas distintas segun cuando se pregunte.
+# El tope de 64 filas deja de ser un techo del archivo y pasa a ser una VENTANA DE RECENCIA de 64
+# turnos hacia atras: todo lo mas viejo satura en la ultima fila, que es la lectura semanticamente
+# correcta —«mas viejo que la ventana»— y no el clamp silencioso que era un bug hasta el 5-sep.
+SELLO = "abs"
 
 
 def conv3(w, x):
@@ -261,7 +287,7 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     return h
 
 
-def sello(a, turnos):
+def sello(a, turnos, mask=None):
     """La clave lleva el SELLO DE ORDEN, `ord[turnos]`. Esta funcion existe por una sola razon.
 
     2026-09-05. `ord` tiene N_TURNOS=64 filas y la indexacion de JAX **clampea sin avisar**:
@@ -276,8 +302,23 @@ def sello(a, turnos):
 
     Esto NO arregla el tope: `ord` sigue teniendo 64 filas y un archivo mas largo sigue sin poder
     sellarse. Extrapolar el sello es un cambio de arquitectura y va con su propio pre-registro.
+
+    2026-09-06, `SELLO = "rel"`: se sella con `turno_actual - turno_entrada` en vez del turno
+    absoluto. `turno_actual` se deriva del propio archivo (el siguiente al ultimo turno escrito), que
+    es lo que un sistema real sabe sin que nadie se lo diga. Las distancias mayores que la tabla
+    SATURAN en la ultima fila —«mas viejo que la ventana»—; es una decision declarada, no el clamp
+    silencioso de antes, y por eso no usa `mode="fill"`: aca salirse del rango tiene significado.
     """
-    return jnp.take(a["ord"], turnos, axis=0, mode="fill", fill_value=jnp.nan)
+    if SELLO == "abs":
+        return jnp.take(a["ord"], turnos, axis=0, mode="fill", fill_value=jnp.nan)
+    if SELLO != "rel":
+        raise ValueError(f"SELLO desconocido: {SELLO!r}")
+    N = a["ord"].shape[0]
+    vis = jnp.ones_like(turnos, bool) if mask is None else mask
+    # turno de la consulta: el siguiente al ultimo archivado. Las entradas vacias no cuentan.
+    t_q = jnp.max(jnp.where(vis, turnos, -1), axis=-1) + 1            # (B,)
+    d = jnp.clip(t_q[:, None] - turnos, 0, N - 1)                     # (B, N)
+    return jnp.take(a["ord"], d, axis=0, mode="clip")
 
 
 def escribir(params, sesiones, cortes):
@@ -300,10 +341,28 @@ def escribir(params, sesiones, cortes):
     return ent.reshape(B, S * E, D)
 
 
-def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre"):
-    """Lee el archivo mientras procesa la consulta. Devuelve logits (B, T, V)."""
+def marca_pert(a, pertenece):
+    """El bit de pertenencia, sumado a la clave de las entradas de la conversacion en curso.
+
+    Devuelve 0.0 —un escalar, que suma sin costo ni cambio de forma— cuando no se pide o cuando el
+    checkpoint es anterior al 6-sep y no tiene el parametro. Asi los checkpoints viejos siguen
+    cargando y todo llamador que no pase `pertenece` obtiene exactamente los numeros de antes.
+    """
+    if pertenece is None or "pert" not in a:
+        return 0.0
+    return pertenece[..., None] * a["pert"]
+
+
+def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre",
+              pertenece=None):
+    """Lee el archivo mientras procesa la consulta. Devuelve logits (B, T, V).
+
+    `pertenece` (B, N) marca que entradas son de la conversacion EN CURSO. Con None —el default y lo
+    que pasan todos los llamadores anteriores al 6-sep— no se suma nada y el resultado es identico
+    bit a bit al de siempre.
+    """
     a = params["arch"]
-    ak = archivo @ a["kw"] + sello(a, turnos)
+    ak = archivo @ a["kw"] + sello(a, turnos, mask_arch) + marca_pert(a, pertenece)
     av = archivo @ a["vw"]
     penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]          # entradas vacias no compiten
 
@@ -317,7 +376,7 @@ def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre
 
 
 def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre",
-                       abst="cabeza"):
+                       abst="cabeza", pertenece=None):
     """Igual que `responder`, mas el logit de la cabeza de abstencion. Devuelve (logits, a).
 
     `a` es (B, T): un escalar por posicion, con proyeccion propia desde el MISMO estado final que
@@ -327,7 +386,7 @@ def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, d
     tres veces mas corto que el de un valor (norma 0,367 contra 1,011, medido el 17-ago).
     """
     a_p = params["arch"]
-    ak = archivo @ a_p["kw"] + sello(a_p, turnos)
+    ak = archivo @ a_p["kw"] + sello(a_p, turnos, mask_arch) + marca_pert(a_p, pertenece)
     av = archivo @ a_p["vw"]
     penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]
 
