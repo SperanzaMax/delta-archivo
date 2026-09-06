@@ -165,7 +165,7 @@ footer code{font-family:"IBM Plex Mono",monospace; font-size:12px; background:va
   <h1>Película de pesos</h1>
   <p class="bajada">Los pesos de verdad del micro-LM mientras aprende, cuadro por cuadro. Nada
   acá es una maqueta: cada línea que se mueve es un número que salió del entrenamiento, medido cada
-  20 pasos y guardado por <code style="font-family:'IBM Plex Mono',monospace">micro_lm/pelicula.py</code>.</p>
+  <span id="cadencia">…</span> pasos y guardado por <code style="font-family:'IBM Plex Mono',monospace">micro_lm/pelicula.py</code>.</p>
   <div class="fichas" id="fichas"></div>
 </header>
 
@@ -232,23 +232,12 @@ footer code{font-family:"IBM Plex Mono",monospace; font-size:12px; background:va
     <svg id="svg-beta" viewBox="0 0 460 150" role="img" aria-label="Beta medio por bloque"></svg>
   </section>
 
-  <section class="panel ancho">
+  <section class="panel ancho" id="panel-notas" hidden>
     <h2>Lo que se ve en esta corrida</h2>
-    <p class="nota" style="max-width:78ch">Tres cosas que salen de los números de arriba y no de una
-    interpretación: se pueden seguir con la barra.</p>
-    <ol style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:8px;
-               font-size:14px; color:var(--tinta2); max-width:78ch">
-      <li><b style="color:var(--tinta)">La lectura se clava, y en el casillero equivocado.</b>
-      Arranca repartida (0,459 en el casillero 4), cerca del <b>paso 200</b> se para justo en la
-      entrada correcta con <b>0,9955</b>, y desde el <b>paso 300</b> queda en <b>1,0000 exacto</b>
-      sobre el casillero 3, que no es el que contesta la pregunta.</li>
-      <li><b style="color:var(--tinta)">Contesta <code style="font-family:'IBM Plex Mono',monospace">NOSE</code>
-      a todo desde el paso 100.</b> Es el atractor mudo que la línea ya tenía medido como estado
-      absorbente: abstenerse paga más que un mecanismo a medio aprender.</li>
-      <li><b style="color:var(--tinta)">La ventana todavía no se abrió.</b> Los taps terminan en
-      [0,995 · 0 · 0 · 0 · 0], contra [0,385 · 0,053 · 0,073 · 0,045 · 0,053] del checkpoint de
-      26.000 pasos. Mil pasos son el arranque, no el final.</li>
-    </ol>
+    <p class="nota" style="max-width:78ch">Sale de los números de arriba y no de una interpretación:
+    se puede seguir con la barra.</p>
+    <ol id="notas" style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:8px;
+               font-size:14px; color:var(--tinta2); max-width:78ch"></ol>
   </section>
 
   <section class="panel ancho">
@@ -275,12 +264,23 @@ footer code{font-family:"IBM Plex Mono",monospace; font-size:12px; background:va
 <script>
 const DATOS = /*__DATOS__*/ null;
 const REFERENCIA = /*__REF__*/ null;
+const NOTAS = /*__NOTAS__*/ null;
 </script>
 <script>
 (() => {
   const D = DATOS, C = D.config, F = D.cuadros, M = D.muestra, R = REFERENCIA;
   const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   const fmt = (x, n = 4) => x.toLocaleString("es-AR", {minimumFractionDigits: n, maximumFractionDigits: n});
+
+  /* ---------- notas de la corrida ---------- */
+  // Las notas viajan en su propio JSON y no escritas en la plantilla: cada pelicula muestra otra
+  // cosa, y una observacion pegada al HTML se vuelve mentira en cuanto cambian los datos.
+  if (NOTAS && NOTAS.length) {
+    document.getElementById("notas").innerHTML = NOTAS.map(n =>
+      `<li><b style="color:var(--tinta)">${n.titulo}</b> ${n.texto}</li>`).join("");
+    document.getElementById("panel-notas").hidden = false;
+  }
+  document.getElementById("cadencia").textContent = C.cada;
 
   /* ---------- fichas del encabezado ---------- */
   document.getElementById("fichas").innerHTML = [

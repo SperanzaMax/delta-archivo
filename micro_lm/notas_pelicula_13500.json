@@ -1,0 +1,10 @@
+[
+ {"titulo": "La lectura queda resuelta, y se ve el momento exacto.",
+  "texto": "Hasta el paso 6.000 la masa cae en casilleros que no contestan la pregunta. Cerca del <b>paso 7.500</b> se para en la entrada correcta con <b>1,0000 exacto</b> y ya no se mueve: 14 de los 28 cuadros terminan con la masa entera ahí."},
+ {"titulo": "Y aun así contesta NOSE.",
+  "texto": "Con la entrada correcta encontrada al 100 %, la respuesta sigue siendo <code style=\"font-family:'IBM Plex Mono',monospace\">NOSE</code> en 18 de 28 cuadros, y alterna con el valor correcto (35) sin estabilizarse. <b>Recuperar y contestar son dos capacidades distintas</b>, y acá se las ve separadas: la búsqueda ya está resuelta mientras la salida sigue en el atractor mudo."},
+ {"titulo": "La ventana nunca se abrió en esta corrida.",
+  "texto": "Los taps terminan en [0,895 · 0 · 0 · 0 · 0] después de 13.500 pasos, contra [0,385 · 0,053 · 0,073 · 0,045 · 0,053] del checkpoint de 26.000 que sirve de referencia. El tap 0 baja despacio —eso es weight decay, no gradiente— y los otros cuatro no arrancan. La ventana no se abre sola: hay que llegar hasta donde la abre."},
+ {"titulo": "La sesión de Colab se murió en el paso 13.500 de 26.000.",
+  "texto": "Lo que se ve es la mitad de la película pedida. No se perdió nada porque el JSON se baja en cada vuelta de polling, y por eso están los 28 cuadros y no cero."}
+]

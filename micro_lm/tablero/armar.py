@@ -22,6 +22,11 @@ def main():
     ap.add_argument("--plantilla", default=os.path.join(AQUI, "pelicula_plantilla.html"))
     ap.add_argument("--datos", default=os.path.join(AQUI, "..", "pelicula.json"))
     ap.add_argument("--referencia", default=os.path.join(AQUI, "..", "referencia_pelicula.json"))
+    ap.add_argument("--notas", default="",
+                    help="JSON con una lista de {titulo, texto}: lo que ESA pelicula muestra. Va "
+                         "aparte porque cada corrida muestra otra cosa y una observacion pegada al "
+                         "HTML se vuelve mentira en cuanto cambian los datos. Sin esto el panel no "
+                         "aparece.")
     ap.add_argument("--salida", default=os.path.join(AQUI, "pelicula_tablero.html"))
     a = ap.parse_args()
 
@@ -38,6 +43,14 @@ def main():
         s = s.replace(mr, json.dumps(r, separators=(",", ":"), ensure_ascii=False))
     else:
         s = s.replace(mr, "null")      # sin referencia el tablero se arma igual, sin esos paneles
+
+    mn = "/*__NOTAS__*/ null"
+    assert s.count(mn) == 1, "la plantilla no tiene la marca de notas"
+    if a.notas and os.path.exists(a.notas):
+        s = s.replace(mn, json.dumps(json.load(io.open(a.notas, encoding="utf-8")),
+                                     separators=(",", ":"), ensure_ascii=False))
+    else:
+        s = s.replace(mn, "null")
 
     io.open(a.salida, "w", encoding="utf-8").write(s)
     print(f"{len(d['cuadros'])} cuadros · hasta el paso {d['cuadros'][-1]['paso']} · "
