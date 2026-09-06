@@ -28,6 +28,7 @@ import jax.numpy as jnp
 import datos as DAT
 import idioma as I
 import entrenar as E
+import modelo as M
 
 
 def clasificar(pred_tok, tgt_tok, m):
@@ -95,6 +96,16 @@ def main():
     #    binario saldria de la cabeza lineal, que en estas unidades nunca se entreno.
     E._DONDE = cfg.get("donde", "pre")          # antes del primer trace de jax
     E._ABST = cfg.get("abst", "token")
+    # 2026-09-06 · TERCERA vez que este instrumento mide con una arquitectura que no es la del
+    # checkpoint. `kernel_q` decide la forma de `convq` y, desde el 1-sep, si la query alcanza a ver
+    # la RELACION: con el default 3 sobre pesos entrenados con 5 el modelo no falla, contesta MAL —
+    # `nose_ent` y `nose_rel` dan 0,0000 EXACTOS, que es justamente el sintoma que el comentario de
+    # arriba describe para `_ABST`. Consecuencia grave: el SER nunca se habia medido sobre ninguna
+    # unidad de kernel 5, o sea sobre el regimen donde la abstencion QUEDO RESUELTA.
+    # Se lee de la config como en `masa_turnos.py` y `reloj_o_bandera.py`.
+    M.KQ = cfg.get("kernel_q", 3)
+    # `sello`/`pert` viajan por el mismo motivo: desde el 6-sep cambian como se indexa `ord`.
+    M.SELLO = cfg.get("sello", "abs")
     usa_cabeza = E._ABST in ("cabeza", "slot")
     predecir = E.predecir_cabeza if usa_cabeza else E.predecir
     print(f"checkpoint: nivel {nivel} · lectura {E._DONDE} · abstencion {cfg.get('abst', 'token')}")
