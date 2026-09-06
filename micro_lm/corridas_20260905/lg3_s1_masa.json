@@ -1,0 +1,34 @@
+{
+ "ckpt": "ckpts/lg3_s1.pkl",
+ "config": {
+  "pasos": 2000,
+  "kernel_q": 5,
+  "donde": "lat2",
+  "nivel": 3,
+  "d": 128,
+  "capas": 4,
+  "ses_extra": 26
+ },
+ "celdas": [
+  {
+   "masa_extra": 0.22671438070635,
+   "proporcion": 0.9641176718895387,
+   "masa_correcta": 0.7220823301209344,
+   "recup": 1.0,
+   "indice": 0.23515218869707144,
+   "n": 36,
+   "ses_extra": 26,
+   "barajado": false
+  },
+  {
+   "masa_extra": 0.7764462721016672,
+   "proporcion": 0.9628240020898211,
+   "masa_correcta": 0.2091282300858034,
+   "recup": 0.3611111111111111,
+   "indice": 0.8064259619789091,
+   "n": 36,
+   "ses_extra": 26,
+   "barajado": true
+  }
+ ]
+}
