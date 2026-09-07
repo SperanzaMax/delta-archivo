@@ -1,0 +1,77 @@
+TinyLlama/TinyLlama-1.1B-Chat-v1.0 · 1.10 B CONGELADOS · piezas nuevas 2.11 M (0.192 %) · rango 256
+escritura en la capa 11 · lectura inyectada en la 2
+  paso    1 · perdida  6.9928 · acierto 0.0000 · BARAJADO 0.0000 · 3.7 s/paso
+  paso   10 · perdida  3.5352 · acierto 0.2500 · BARAJADO 0.2500 · 3.1 s/paso
+  paso   20 · perdida  3.2580 · acierto 0.0000 · BARAJADO 0.5000 · 3.1 s/paso
+  paso   30 · perdida  3.5438 · acierto 0.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso   40 · perdida  2.0161 · acierto 0.2500 · BARAJADO 0.2500 · 3.0 s/paso
+  paso   50 · perdida  2.2719 · acierto 0.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso   60 · perdida  2.8907 · acierto 0.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso   70 · perdida  2.9356 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso   80 · perdida  1.4362 · acierto 0.5000 · BARAJADO 0.5000 · 3.4 s/paso
+  paso   90 · perdida  2.3975 · acierto 0.0000 · BARAJADO 0.0000 · 3.4 s/paso
+  paso  100 · perdida  2.4014 · acierto 0.2500 · BARAJADO 0.2500 · 3.4 s/paso
+  paso  110 · perdida  2.7074 · acierto 0.0000 · BARAJADO 0.0000 · 3.3 s/paso
+  paso  120 · perdida  1.8057 · acierto 0.2500 · BARAJADO 0.2500 · 3.3 s/paso
+  paso  130 · perdida  2.4191 · acierto 0.2500 · BARAJADO 0.2500 · 3.3 s/paso
+  paso  140 · perdida  2.3624 · acierto 0.2500 · BARAJADO 0.2500 · 3.2 s/paso
+  paso  150 · perdida  2.2757 · acierto 0.0000 · BARAJADO 0.0000 · 3.2 s/paso
+  paso  160 · perdida  2.2577 · acierto 0.2500 · BARAJADO 0.2500 · 3.2 s/paso
+  paso  170 · perdida  2.5842 · acierto 0.0000 · BARAJADO 0.0000 · 3.2 s/paso
+  paso  180 · perdida  1.8444 · acierto 0.2500 · BARAJADO 0.2500 · 3.2 s/paso
+  paso  190 · perdida  2.4468 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  200 · perdida  1.8263 · acierto 0.2500 · BARAJADO 0.5000 · 3.1 s/paso
+  paso  210 · perdida  1.7868 · acierto 0.5000 · BARAJADO 0.5000 · 3.1 s/paso
+  paso  220 · perdida  2.4742 · acierto 0.2500 · BARAJADO 0.2500 · 3.1 s/paso
+  paso  230 · perdida  2.5594 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  240 · perdida  3.1837 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  250 · perdida  2.1679 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  260 · perdida  2.5473 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  270 · perdida  1.6626 · acierto 0.2500 · BARAJADO 0.7500 · 3.1 s/paso
+  paso  280 · perdida  2.1294 · acierto 0.2500 · BARAJADO 0.2500 · 3.1 s/paso
+  paso  290 · perdida  1.4234 · acierto 0.7500 · BARAJADO 0.5000 · 3.1 s/paso
+  paso  300 · perdida  2.0772 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  310 · perdida  1.7976 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  320 · perdida  1.6349 · acierto 0.5000 · BARAJADO 0.2500 · 3.1 s/paso
+  paso  330 · perdida  0.4443 · acierto 1.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  340 · perdida  0.6211 · acierto 0.7500 · BARAJADO 0.2500 · 3.1 s/paso
+  paso  350 · perdida  0.3476 · acierto 1.0000 · BARAJADO 0.2500 · 3.1 s/paso
+  paso  360 · perdida  9.7565 · acierto 0.0000 · BARAJADO 0.0000 · 3.1 s/paso
+  paso  370 · perdida  0.1138 · acierto 1.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  380 · perdida  1.1701 · acierto 0.5000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  390 · perdida  0.8592 · acierto 0.7500 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  400 · perdida  0.0682 · acierto 1.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  410 · perdida  0.1673 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  420 · perdida  0.0185 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  430 · perdida  0.0092 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  440 · perdida  0.0162 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  450 · perdida  0.0026 · acierto 1.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  460 · perdida  0.3750 · acierto 0.7500 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  470 · perdida  0.0363 · acierto 1.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  480 · perdida  0.0049 · acierto 1.0000 · BARAJADO 0.5000 · 3.0 s/paso
+  paso  490 · perdida  0.1706 · acierto 1.0000 · BARAJADO 0.5000 · 3.0 s/paso
+  paso  500 · perdida  0.0039 · acierto 1.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  510 · perdida  0.0064 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  520 · perdida  0.0167 · acierto 1.0000 · BARAJADO 0.5000 · 3.0 s/paso
+  paso  530 · perdida  0.0005 · acierto 1.0000 · BARAJADO 0.5000 · 3.0 s/paso
+  paso  540 · perdida  0.0052 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  550 · perdida  0.0011 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  560 · perdida  0.0093 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  570 · perdida  0.0065 · acierto 1.0000 · BARAJADO 0.2500 · 3.0 s/paso
+  paso  580 · perdida  0.0012 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  590 · perdida  0.0015 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+  paso  600 · perdida  0.0024 · acierto 1.0000 · BARAJADO 0.0000 · 3.0 s/paso
+
+  DIAGNOSTICO sobre el modelo ya entrenado:
+    con lectura        acierto 1.0000
+    lectura APAGADA    acierto 0.0000   <- si es igual, el archivo no se usa
+    barajado           acierto 0.0000
+    max|archivo - barajado| = 0.2759  (0 = el barajado NO cambia nada)
+    predicciones identicas con y sin barajar: 0.0000
+    objetivos: [17574, 323, 1459, 3956]
+    pred con: [17574, 323, 1459, 3956] · pred barajado: [3956, 17574, 323, 1459]
+    masa en la entrada 0 (la propia): 0.9897
+    masa maxima por muestra:          0.9897
+    entrada mas leida por muestra:    [0, 0, 0, 0]  (0 = la propia)
+
+listo en 29.9 min
