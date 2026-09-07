@@ -14,6 +14,7 @@ import jax, jax.numpy as jnp
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
+import conf_ckpt
 import datos as DAT, idioma as I, modelo as M
 
 XS = [int(x) for x in os.environ.get("XS", "0,40,120,360,1080,3240").split(",")]
@@ -139,15 +140,15 @@ if __name__ == "__main__":
         params = jax.tree_util.tree_map(jnp.asarray, bulto["params"])
         cfg = bulto["config"]; nivel = cfg["nivel"]
         DONDE = cfg.get("donde", "pre")
-        kq = cfg.get("kernel_q", 3) or 3
-        M.KQ = kq
+        conf_ckpt.aplicar(cfg)
         I.fijar_version(cfg.get("idioma", 3))
-        print(f"\n{'='*78}\n[distractor={DIST} turnos={TURNOS}] {ruta}  ·  nivel {nivel} · donde={DONDE} · kernel_q={kq} · V={I.V}")
+        print(f"\n{'='*78}\n[distractor={DIST} turnos={TURNOS}] {ruta}  ·  "
+              f"{conf_ckpt.descripcion(cfg)} · V={I.V}")
         t0 = time.time()
         pool_a, pool_t = construir_pool(params, nivel, POOL)
         print(f"  pool de distractores: {pool_a.shape} en {time.time()-t0:.1f}s")
         print(f"\n  {'X':>6} {'archivo':>8} {'exactitud':>10} {'RECUP':>8} {'masa gan':>9} {'entropia':>9}")
-        res[ruta] = {"kernel_q": kq, "donde": DONDE, "filas": []}
+        res[ruta] = {"kernel_q": M.KQ, "sello": M.SELLO, "donde": DONDE, "filas": []}
         for X in XS:
             t1 = time.time()
             r = celda(params, nivel, pool_a, pool_t, X, NMUE)

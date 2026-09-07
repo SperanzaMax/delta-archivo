@@ -7,15 +7,15 @@ procedimiento que `pelicula.py`, asi que es literalmente el mismo episodio y la 
 import json, pickle
 import numpy as np, jax.numpy as jnp
 
+import conf_ckpt
 import datos as DAT, idioma as I, modelo as M
 from pelicula import atencion_archivo
 
 CK = "ckpts/kq3_s0.pkl"
 b = pickle.load(open(CK, "rb"))
 cfg, params = b["config"], b["params"]
-M.KQ = cfg.get("kernel_q", 3)
-print(f"{CK} · paso {cfg.get('pasos')} · d={cfg['d']} capas={cfg['capas']} "
-      f"kernel_q={M.KQ} donde={cfg['donde']}")
+conf_ckpt.aplicar(cfg)
+print(f"{CK} · d={cfg['d']} capas={cfg['capas']} · {conf_ckpt.descripcion(cfg)}")
 
 mrng = np.random.default_rng(77)
 while True:

@@ -19,6 +19,7 @@ Uso:
 import argparse, json, pickle
 import numpy as np, jax, jax.numpy as jnp
 
+import conf_ckpt
 import datos as DAT, idioma as I, modelo as M
 
 
@@ -93,9 +94,8 @@ def main():
 
     b = pickle.load(open(a.ckpt, "rb"))
     cfg, params = b["config"], b["params"]
-    M.KQ = cfg.get("kernel_q", 3)
-    print(f"{a.ckpt} · paso {cfg.get('pasos')} · kernel_q={M.KQ} · donde={cfg['donde']} · "
-          f"nivel {cfg['nivel']} · entrenado con ses_extra={cfg.get('ses_extra', 0)}")
+    conf_ckpt.aplicar(cfg)
+    print(f"{a.ckpt} · {conf_ckpt.descripcion(cfg)}")
     print(f"{'extra':>6} {'entradas':>9} {'masa_extra':>11} {'proporcion':>11} {'indice':>8} "
           f"{'masa_corr':>10} {'recup':>7}")
     salida = {"ckpt": a.ckpt, "config": {k: cfg.get(k) for k in
