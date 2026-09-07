@@ -65,11 +65,21 @@ class Archivo(nn.Module):
         return self.wo(torch.einsum("btn,bnr->btr", p, av)), p
 
 
-def escribir(modelo, tok, frases, capa):
-    """Un vector por frase, tomado en su ULTIMO token. Es la politica del micro-LM."""
+def escribir(modelo, tok, frases, capa, estado=None):
+    """Un vector por frase, tomado en su ULTIMO token. Es la politica del micro-LM.
+
+    BUG del 6-sep: el hook de lectura seguia armado durante la escritura, asi que desde el paso 2
+    los vectores archivados se calculaban CON la lectura del archivo del paso anterior. Se apaga
+    explicitamente: escribir tiene que ser el modelo limpio.
+    """
     ids = tok(frases, return_tensors="pt", padding=True)
+    guardado = estado.get("archivo") if estado is not None else None
+    if estado is not None:
+        estado["archivo"] = None
     with torch.no_grad():
         o = modelo(**ids, output_hidden_states=True)
+    if estado is not None:
+        estado["archivo"] = guardado
     h = o.hidden_states[capa]                              # (B, T, d)
     ultimo = ids["attention_mask"].sum(1) - 1              # (B,)
     return h[torch.arange(len(frases)), ultimo]            # (B, d)
@@ -120,7 +130,8 @@ def main():
         if estado.get("archivo") is None:
             return salida
         h = salida[0] if isinstance(salida, tuple) else salida
-        lect, _ = arch.leer(h, estado["archivo"], estado["turnos"])
+        lect, masa = arch.leer(h, estado["archivo"], estado["turnos"])
+        estado["masa"] = masa
         h = h + lect
         return (h,) + salida[1:] if isinstance(salida, tuple) else h
 
@@ -143,8 +154,8 @@ def main():
         frases_q = [f"{ENTIDADES[i]} vive en {VALORES[vals[k]]}." for k, i in enumerate(idx)]
         frases_d = [f"{ENTIDADES[i]} vive en {VALORES[vals[a.batch + k]]}."
                     for k, i in enumerate(dis)]
-        vq = escribir(modelo, tok, frases_q, a.capa_escritura)          # (B, d)
-        vd = escribir(modelo, tok, frases_d, a.capa_escritura) if frases_d else None
+        vq = escribir(modelo, tok, frases_q, a.capa_escritura, estado)          # (B, d)
+        vd = escribir(modelo, tok, frases_d, a.capa_escritura, estado) if frases_d else None
         # archivo[i] = [hecho de i] + distractores comunes
         partes = [vq.unsqueeze(1)] + ([vd.unsqueeze(0).expand(a.batch, -1, -1)] if vd is not None else [])
         archivo = torch.cat(partes, dim=1)                              # (B, 1+D, d)
@@ -153,7 +164,13 @@ def main():
         # S2: se pregunta por cada una, en un forward INDEPENDIENTE.
         preg = [f"{ENTIDADES[i]} vive en" for i in idx]
         ids = tok(preg, return_tensors="pt", padding=True)
-        objetivo = torch.tensor([tok(f" {VALORES[vals[k]]}", add_special_tokens=False)["input_ids"][0]
+        # BUG del 6-sep, y el que invalidaba todo el experimento: `tok(" Cordoba")[0]` en Llama
+        # devuelve **29871, el token de espacio**, igual para los ocho valores. El objetivo era
+        # «predecir un espacio», que es trivial, se acierta 1,0000 y —lo importante— NO depende del
+        # archivo: por eso el control barajado no podia fallar por mas que se rediseñara el banco.
+        # Tres rediseños del control persiguiendo un defecto que estaba en el tokenizador.
+        # Se toma el PRIMER token de la palabra (indice 1), que son 8 distintos para 8 valores.
+        objetivo = torch.tensor([tok(f" {VALORES[vals[k]]}", add_special_tokens=False)["input_ids"][1]
                                  for k in range(a.batch)])
         estado["archivo"] = None if a.sin_archivo else archivo
         estado["turnos"] = turnos
@@ -182,6 +199,40 @@ def main():
             print(f"  paso {paso:4d} · perdida {perdida.item():7.4f} · acierto {acierto:.4f}"
                   f"{extra} · {(time.time()-t0)/paso:.1f} s/paso")
 
+    # DIAGNOSTICO (6-sep): el control barajado no discriminaba en tres diseños seguidos. Antes de
+    # volver a tocar el diseño hay que MIRAR: donde cae la masa de lectura, y que pasa si se apaga
+    # la lectura sobre el modelo ya entrenado. Si apagarla no cambia el acierto, la respuesta nunca
+    # vino del archivo y toda la discusion del barajado era sobre un canal que no se usa.
+    with torch.no_grad():
+        estado["archivo"] = archivo
+        lg_con = modelo(**ids).logits[torch.arange(len(preg)), ultimo]
+        m = estado.get("masa")
+        estado["archivo"] = None
+        lg_sin = modelo(**ids).logits[torch.arange(len(preg)), ultimo]
+    ac_con = (lg_con.argmax(-1) == objetivo).float().mean().item()
+    ac_sin = (lg_sin.argmax(-1) == objetivo).float().mean().item()
+    print(f"\n  DIAGNOSTICO sobre el modelo ya entrenado:")
+    print(f"    con lectura        acierto {ac_con:.4f}")
+    print(f"    lectura APAGADA    acierto {ac_sin:.4f}   <- si es igual, el archivo no se usa")
+    # ¿el barajado cambia realmente el tensor, y cambian las predicciones?
+    with torch.no_grad():
+        baraj = archivo.roll(1, dims=0)
+        dif = (archivo - baraj).abs().max().item()
+        estado["archivo"] = baraj
+        lg_b = modelo(**ids).logits[torch.arange(len(preg)), ultimo]
+        estado["archivo"] = archivo
+    ac_b = (lg_b.argmax(-1) == objetivo).float().mean().item()
+    iguales = (lg_b.argmax(-1) == lg_con.argmax(-1)).float().mean().item()
+    print(f"    barajado           acierto {ac_b:.4f}")
+    print(f"    max|archivo - barajado| = {dif:.4f}  (0 = el barajado NO cambia nada)")
+    print(f"    predicciones identicas con y sin barajar: {iguales:.4f}")
+    print(f"    objetivos: {objetivo.tolist()}")
+    print(f"    pred con: {lg_con.argmax(-1).tolist()} · pred barajado: {lg_b.argmax(-1).tolist()}")
+    if m is not None:
+        mm = m[torch.arange(len(preg)), ultimo]          # (B, N) en el ultimo token
+        print(f"    masa en la entrada 0 (la propia): {mm[:, 0].mean().item():.4f}")
+        print(f"    masa maxima por muestra:          {mm.max(-1).values.mean().item():.4f}")
+        print(f"    entrada mas leida por muestra:    {mm.argmax(-1).tolist()}  (0 = la propia)")
     print(f"\nlisto en {(time.time()-t0)/60:.1f} min"
           f"{'  (CONTROL sin archivo)' if a.sin_archivo else ''}")
 

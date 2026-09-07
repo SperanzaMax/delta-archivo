@@ -78,13 +78,6 @@ KERNEL_Q="${KERNEL_Q:-3}"
 # guarda de identidad de `entrenar.py` lo bloquea al reanudar, asi que el error se veria en el
 # SEGUNDO tramo — que es tarde, pero al menos se veria.
 SES_EXTRA="${SES_EXTRA:-0}"
-# 2026-09-06 · PREREG_SELLO_RELATIVO (SHA ae66e464). Como se indexa `ord` y si la lectura recibe el
-# bit de pertenencia. MISMA familia que KERNEL_Q y SES_EXTRA, y por la misma razon exacta: sin
-# viajar hasta aca, la campania del sello relativo correria con el sello ABSOLUTO y seria una copia
-# del control gastando seis unidades de GPU. La guarda de identidad lo bloquea recien en el SEGUNDO
-# tramo, asi que el chequeo tiene que ser ANTES, no despues.
-SELLO="${SELLO:-abs}"
-PERT="${PERT:-0}"
 # 2026-09-05 · el OOM de la primera T4. Con 40 sesiones el forward procesa B x S secuencias y a
 # batch 64 la T4 muere pidiendo 63,73 GiB. MICRO_BATCH parte el paso y promedia gradientes, asi que
 # el batch EFECTIVO no cambia —verificado: 1,49e-08 de diferencia relativa en los pesos— y
@@ -131,7 +124,7 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · sello $SELLO · pert $PERT · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
 
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
@@ -184,15 +177,12 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--mezcla', '$MEZCLA', '--mezcla-piso', '$MEZCLA_PISO', '--blanco', '$BLANCO',
        '--kernel-q', '$KERNEL_Q',
        '--ses-extra', '$SES_EXTRA',
-       '--sello', '$SELLO',
        '--micro-batch', '$MICRO_BATCH', '--batch-eval', '$BATCH_EVAL',
        '--formas-q', '$FORMAS_Q',
        '--perdida-cabeza', '$PERDIDA_CABEZA',
        '--rec-l', '$REC_L', '--rec-m', '$REC_M', '--rec-f', '$REC_F', '--rec-ce', '$REC_CE',
        '--rec-rank', '$REC_RANK',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
-if '$PERT' == '1':
-    cmd.append('--pert')
 if '$REINIT' == '1' and '$SEMBRADO' == '1':
     # Adam se reinicia SOLO al entrar en la fase (primer tramo, sembrado desde la base), nunca al
     # continuar un tramo posterior: reiniciarlo a mitad haria que la corrida deje de ser una sola.

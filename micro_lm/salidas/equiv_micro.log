@@ -1,0 +1,11 @@
+=== A · lote entero (batch 32) ===
+    ── eval: vigente 0.0028 · anterior 0.0172 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000
+listo: {'paso': 6, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.20000000000000004}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.002840909090909091, 'anterior': 0.017241379310344827, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0, 'cruzada_largo': {'vigente': 0.010069444444444443, 'anterior': 0.0, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0}}
+=== B · micro-lotes de 8 (batch efectivo 32) ===
+    ── eval: vigente 0.0028 · anterior 0.0172 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000
+listo: {'paso': 6, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.20000000000000004}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.002840909090909091, 'anterior': 0.017241379310344827, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0, 'cruzada_largo': {'vigente': 0.010069444444444443, 'anterior': 0.0, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0}}
+=== diferencia ===
+hojas 70 · max|dif| de los pesos 1.490e-08 · escala 1.000e+00 · relativo 1.49e-08
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+KeyError: 'vigente'

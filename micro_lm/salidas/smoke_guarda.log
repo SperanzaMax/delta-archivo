@@ -1,0 +1,18 @@
+=== 1. siembra desde kq3_s0 ===
+  claves de la corrida vieja borradas: {'perdida_cabeza': 'bce', 'blanco': 'ausencia', 'horizonte': 26000, 'pasos': 26000, 'rec_l': 0.5, 'rec_m': 0.5, 'rec_f': 0.2, 'rec_ce': 1.0}
+  params: ['abst', 'arch', 'blocks', 'emb', 'head', 'ln_f']
+  Adam, historia y rng se reinician: no le corresponden a la perdida nueva.
+=== 2. la guarda tiene que DEJAR PASAR la siembra con --ses-extra 26 ===
+MICRO-LM · nivel 3 · vocabulario 242 tokens · d=128 capas=4 · lectura lat2
+dispositivos: [CpuDevice(id=0)]  ->  hw=cpu:cpu
+parametros: 866,675 (3.5 MB en fp32)
+
+siembra declarada desde ckpts/kq3_s0.pkl (paso 26000): Adam arranca de cero
+
+REANUDA desde /tmp/claude-1000/-home-maxi/c4ec756a-487b-46e2-ac13-a130ae7eea6f/scratchpad/al26_prueba.pkl: paso 0 de 1 (0 evaluaciones ya hechas)
+
+    ── eval: vigente 0.1820 · anterior 0.4786 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000
+
+listo: {'paso': 1, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.18195090126092178, 'anterior': 0.4786172161172161, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0, 'cruzada_corto': {'vigente': 1.0, 'anterior': 1.0, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0}}
+=== 3. la guarda tiene que ABORTAR sobre un ckpt viejo NO sembrado ===
+ABORTA: el checkpoint se entreno con ses_extra=0 y se pidio ses_extra=26. El archivo tiene otro tamanio: es otra tarea, no la misma corrida. Si la bifurcacion es a proposito, va por `sembrar.py`.

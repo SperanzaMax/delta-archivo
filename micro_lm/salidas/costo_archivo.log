@@ -1,0 +1,4 @@
+parametros 865,651 · batch 16 · d=128 capas=4
+  ses-extra  0 · slots  40 · entradas/muestra    5.3 · compilacion    7.9s · paso  2.425s · ratio  1.00x
+  ses-extra  8 · slots 120 · entradas/muestra   53.8 · compilacion   12.0s · paso  6.803s · ratio  2.81x
+  ses-extra 26 · slots 300 · entradas/muestra  161.2 · compilacion   21.7s · paso 16.876s · ratio  6.96x

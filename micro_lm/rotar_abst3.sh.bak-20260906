@@ -49,12 +49,6 @@ export KERNEL_Q="${KERNEL_Q:-3}"   # 2026-09-01, INFORME_QUERY_CIEGA   # 2026-08
 # 2026-08-29, PREREG_PERDIDA_CABEZA. Misma familia que BLANCO y por la misma razon: sin
 # exportarla, el tramo usaria su default y las tres condiciones correrian IGUAL sin avisar.
 export PERDIDA_CABEZA="${PERDIDA_CABEZA:-bce}"
-# 2026-09-06 · PREREG_SELLO_RELATIVO. Sin exportarlos, `tramo_abst.sh` usa sus defaults y las seis
-# unidades corren con el sello ABSOLUTO, o sea son una copia del control ya corrido. Es exactamente
-# el error que se cazo con FORMAS_Q el 2-sep, mirando que la variable no apareciera en NINGUNO de
-# los dos scripts del pipeline.
-export SELLO="${SELLO:-abs}"
-export PERT="${PERT:-0}"
 export P_VIEJA="${P_VIEJA:-0.35}"
 export MEZCLA_PISO="${MEZCLA_PISO:-0.10}"
 # El horizonte de la curva de lr NO se exportaba, asi que `tramo_abst.sh` usaba su default de 20000
@@ -188,7 +182,7 @@ cli_de() {
   fi
 }
 
-echo "== rotador2 · familia '$PREFIJO' · p_nose $P_NOSE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · sello $SELLO · pert $PERT · unidades $UNIDADES · cuentas: ${CUENTAS[*]}"
+echo "== rotador2 · familia '$PREFIJO' · p_nose $P_NOSE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · unidades $UNIDADES · cuentas: ${CUENTAS[*]}"
 for v in $(seq 1 "$VUELTAS"); do
   for c in "${CUENTAS[@]}"; do
     FALTAN="$(pendientes)"

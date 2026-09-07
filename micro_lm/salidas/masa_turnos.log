@@ -1,0 +1,7 @@
+ckpts/kq3_s0.pkl · paso 26000 · kernel_q=5 · donde=lat2 · nivel 3 · entrenado con ses_extra=0
+ extra  entradas  masa_extra  proporcion   indice  masa_corr   recup
+     8       120      0.6454      0.8857   0.7287     0.3171  1.0000  sello real
+     8       120      0.6120      0.8858   0.6909     0.3509  0.9583  barajado
+    26       300      0.8559      0.9633   0.8886     0.1291  0.6667  sello real
+    26       300      0.8553      0.9626   0.8885     0.1264  0.7083  barajado
+-> masa_turnos_kq3s0.json

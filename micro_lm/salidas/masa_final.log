@@ -1,0 +1,15 @@
+ckpts/lg3_s0.pkl · paso 2000 · kernel_q=5 · donde=lat2 · nivel 3 · entrenado con ses_extra=26
+ extra  entradas  masa_extra  proporcion   indice  masa_corr   recup
+    26       300      0.1654      0.9641   0.1715     0.8003  1.0000  sello real
+    26       300      0.7652      0.9628   0.7947     0.2223  0.4444  barajado
+-> corridas_20260905/lg3_s0_masa.json
+ckpts/lg3_s1.pkl · paso 2000 · kernel_q=5 · donde=lat2 · nivel 3 · entrenado con ses_extra=26
+ extra  entradas  masa_extra  proporcion   indice  masa_corr   recup
+    26       300      0.2267      0.9641   0.2352     0.7221  1.0000  sello real
+    26       300      0.7764      0.9628   0.8064     0.2091  0.3611  barajado
+-> corridas_20260905/lg3_s1_masa.json
+ckpts/lg3_s2.pkl · paso 2000 · kernel_q=5 · donde=lat2 · nivel 3 · entrenado con ses_extra=26
+ extra  entradas  masa_extra  proporcion   indice  masa_corr   recup
+    26       300      0.2506      0.9641   0.2599     0.7092  1.0000  sello real
+    26       300      0.7542      0.9628   0.7833     0.2352  0.5556  barajado
+-> corridas_20260905/lg3_s2_masa.json

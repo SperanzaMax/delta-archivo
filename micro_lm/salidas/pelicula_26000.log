@@ -1,0 +1,58 @@
+== pelicula · cuenta A · sesion peli_1735 · 26000 pasos · cuadro cada 500
+   >> [peli_1735] gpu-t4-s-kkb-usw4a1-136qjs02lwnly | Hardware: T4 | Variant: GPU | Status: IDLE
+[colab] Uploaded '/tmp/tmp.jVIRSpAue2/micro.tgz' to '/content/micro.tgz'
+[CudaDevice(id=0)]
+lanzado pid 2921
+== polling cada 5 min; el JSON se baja en cada vuelta
+   [1] VIVO= True ULTIMO=   paso  1000 · perdida  4.443 · acc 0.2500 · 269.3s
+        bajado (88K)
+   [2] VIVO= True ULTIMO=   paso  2000 · perdida  4.432 · acc 0.2500 · 513.3s
+        bajado (144K)
+   [3] VIVO= True ULTIMO=   paso  3500 · perdida  3.910 · acc 0.2188 · 878.7s
+        bajado (224K)
+   [4] VIVO= True ULTIMO=   paso  4500 · perdida  3.569 · acc 0.2500 · 1122.3s
+        bajado (280K)
+   [5] VIVO= True ULTIMO=   paso  6000 · perdida  3.560 · acc 0.2500 · 1488.9s
+        bajado (364K)
+   [6] VIVO= True ULTIMO=   paso  7000 · perdida  2.729 · acc 0.3750 · 1733.9s
+        bajado (416K)
+   [7] VIVO= True ULTIMO=   paso  8500 · perdida  2.812 · acc 0.2500 · 2099.7s
+        bajado (500K)
+   [8] VIVO= True ULTIMO=   paso  9500 · perdida  2.715 · acc 0.2188 · 2343.7s
+        bajado (556K)
+   [9] VIVO= True ULTIMO=   paso 11000 · perdida  3.005 · acc 0.2188 · 2709.7s
+        bajado (640K)
+   [10] VIVO= True ULTIMO=   paso 12000 · perdida  2.924 · acc 0.1875 · 2953.7s
+        bajado (692K)
+   [11] VIVO= True ULTIMO=   paso 13500 · perdida  2.929 · acc 0.1562 · 3320.0s
+        bajado (776K)
+   [12] 
+   [13] 
+   [14] 
+   [15] 
+   [16] 
+   [17] 
+   [18] 
+   [19] 
+   [20] 
+   [21] 
+   [22] 
+   [23] 
+   [24] 
+   [25] 
+   [26] 
+   [27] 
+   [28] 
+   [29] 
+   [30] 
+   [31] 
+   [32] 
+   [33] 
+   [34] 
+   [35] 
+   [36] 
+   [37] 
+   [38] 
+   [39] 
+   [40] 
+== fin · /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/pelicula_26000.json (776K)

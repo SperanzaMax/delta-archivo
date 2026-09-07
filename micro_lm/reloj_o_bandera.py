@@ -154,8 +154,14 @@ def main():
         b = pickle.load(open(ruta, "rb"))
         cfg, params = b["config"], b["params"]
         M.KQ = cfg.get("kernel_q", 3)
-        print(f"\n{ruta} · paso {cfg.get('pasos')} · kernel_q={M.KQ} · donde={cfg['donde']} · "
-              f"nivel {cfg['nivel']} · entrenado con ses_extra={cfg.get('ses_extra', 0)}")
+        # 2026-09-06: los checkpoints de la campania del sello relativo son `sello=rel`. Sin leerlo
+        # de la config, este instrumento los mediria con la indexacion ABSOLUTA —o sea con una
+        # arquitectura que no es la suya— y el resultado no diria nada sobre la unidad medida. Misma
+        # familia que el `M.KQ` que le faltaba a `ser.py`, cazada el mismo dia.
+        M.SELLO = cfg.get("sello", "abs")
+        print(f"\n{ruta} · paso {b.get('paso')} · kernel_q={M.KQ} · donde={cfg['donde']} · "
+              f"sello={M.SELLO} · pert={cfg.get('pert', False)} · "
+              f"ses_extra={cfg.get('ses_extra', 0)}")
         conds = tuple(f"corr_{d}" for d in a.corrimientos) if a.corrimientos else CONDICIONES
         r = correr(params, cfg, a.ses_extra, a.lotes, a.batch, a.semilla, conds)
         print(f"{'condicion':>11} {'indice':>8} {'masa_corr':>10} {'recup':>7} {'acierto':>8} "

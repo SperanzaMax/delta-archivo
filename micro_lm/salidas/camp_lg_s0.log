@@ -1,0 +1,205 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/salidas/camp_lg_s0.log (rotador 874608)
+== rotador2 · familia 'lg' · p_nose 0.2 · mezcla fija · piso 0.10 · p_vieja 0.35 · unidades 3:0 · cuentas: H K L
+-- vuelta 1 · cuenta H · faltan: 3:0 · 17:33:52
+   >> OTORGADA en H (T4): [tr2_h_1733] gpu-t4-s-kkb-usw1b2-wp0u26t41vyz | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en H (desde el paso 250)
+== tramo · cuenta H · sesion tr2_h_1733 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.rm6yBXPkrX/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3457
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 250]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 250]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 500 y se guarda para continuar despues 
+VIVO= False ULTIMO= listo: {'paso': 500, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.2799999999999999, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9376116071428572, 'anterior': 0.9727891156462585, 'nose': 0.920754716981132, 'nose_ent': 0.9540229885057471, 'nose_rel': 0.8837209302325582, 'falsa_abst': 0.032942708333333334, 'abstencion': 0.224609375, 'cruzada_corto': {'vigente': 0.9768013349665906, 'anterior': 0.8870738636363636, 'nose': 0.1692099567099567, 'nose_ent': 0.2012820512820513, 'nose_rel': 0.12168560606060605, 'falsa_abst': 0.0, 'abstencion': 0.03125}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 500
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1733)
+   tramo de 3:0 cerrado en el paso 500 de 2000
+   tr2_h_1733 parada; pendientes ahora: 3:0
+-- vuelta 1 · cuenta K · faltan: 3:0 · 17:53:11
+   >> OTORGADA en K (T4): [tr2_k_1753] gpu-t4-s-kkb-usw1b2-2xxseabub3s8w | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en K (desde el paso 500)
+== tramo · cuenta K · sesion tr2_k_1753 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.7eTkbQ22yJ/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 794
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 500]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 500]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 750 y se guarda para continuar despues 
+VIVO= False ULTIMO= listo: {'paso': 750, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.2799999999999999, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9728794642857144, 'anterior': 1.0, 'nose': 0.9512578616352202, 'nose_ent': 0.853448275862069, 'nose_rel': 1.0, 'falsa_abst': 0.01908482142857143, 'abstencion': 0.212890625, 'cruzada_corto': {'vigente': 0.9800416960300682, 'anterior': 0.9678030303030303, 'nose': 0.43058712121212117, 'nose_ent': 0.5553685897435898, 'nose_rel': 0.28870400432900434, 'falsa_abst': 0.002551020408163265, 'abstencion': 0.0859375}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 750
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_k_1753)
+   tramo de 3:0 cerrado en el paso 750 de 2000
+   tr2_k_1753 parada; pendientes ahora: 3:0
+-- vuelta 1 · cuenta L · faltan: 3:0 · 18:12:22
+   >> OTORGADA en L (T4): [tr2_l_1812] gpu-t4-s-kkb-ass1c1-3b6b122g7qybq | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en L (desde el paso 750)
+== tramo · cuenta L · sesion tr2_l_1812 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.WTuax2APah/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1057
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1000 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1000 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1000 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 750]
+
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1000 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1000 y se guarda para continuar despues 
+VIVO= False ULTIMO= listo: {'paso': 1000, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.2799999999999999, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9850074404761905, 'anterior': 0.9540816326530612, 'nose': 0.9301886792452829, 'nose_ent': 0.867816091954023, 'nose_rel': 0.9534883720930233, 'falsa_abst': 0.008649553571428572, 'abstencion': 0.205078125, 'cruzada_corto': {'vigente': 0.9798872875092388, 'anterior': 0.8530618686868687, 'nose': 0.4755005411255411, 'nose_ent': 0.5532852564102564, 'nose_rel': 0.3637581168831169, 'falsa_abst': 0.0, 'abstencion': 0.08984375}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 1000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_1812)
+   tramo de 3:0 cerrado en el paso 1000 de 2000
+   tr2_l_1812 parada; pendientes ahora: 3:0
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta H · faltan: 3:0 · 18:42:52
+   >> OTORGADA en H (T4): [tr2_h_1842] gpu-t4-s-kkb-ass1c0-3htqlecndtkxu | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en H (desde el paso 1000)
+== tramo · cuenta H · sesion tr2_h_1842 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.pLtE4IlHoa/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 7725
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 1000]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 1000]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1250 y se guarda para continuar despues 
+VIVO= False ULTIMO= listo: {'paso': 1250, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9951636904761905, 'anterior': 1.0, 'nose': 0.9292452830188679, 'nose_ent': 0.8132183908045978, 'nose_rel': 0.9883720930232558, 'falsa_abst': 0.004185267857142857, 'abstencion': 0.19921875, 'cruzada_corto': {'vigente': 0.9654845390948623, 'anterior': 0.9521780303030303, 'nose': 0.407034632034632, 'nose_ent': 0.501522435897436, 'nose_rel': 0.30764339826839826, 'falsa_abst': 0.0023584905660377358, 'abstencion': 0.078125}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 1250
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1842)
+   tramo de 3:0 cerrado en el paso 1250 de 2000
+   tr2_h_1842 parada; pendientes ahora: 3:0
+-- vuelta 2 · cuenta K · faltan: 3:0 · 19:03:03
+   >> OTORGADA en K (T4): [tr2_k_1903] gpu-t4-s-kkb-usw1b0-21mpiamumyw06 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en K (desde el paso 1250)
+== tramo · cuenta K · sesion tr2_k_1903 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.nc0PbomZ7W/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3098
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 1250]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 1250]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1500 y se guarda para continuar despues 
+VIVO= False ULTIMO= listo: {'paso': 1500, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9880208333333333, 'anterior': 0.9795918367346939, 'nose': 0.9622641509433962, 'nose_ent': 0.9022988505747127, 'nose_rel': 1.0, 'falsa_abst': 0.00706845238095238, 'abstencion': 0.2109375, 'cruzada_corto': {'vigente': 0.965676869374402, 'anterior': 0.9035669191919191, 'nose': 0.4941964285714286, 'nose_ent': 0.5491185897435897, 'nose_rel': 0.46768127705627704, 'falsa_abst': 0.0, 'abstencion': 0.09765625}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 1500
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_k_1903)
+   tramo de 3:0 cerrado en el paso 1500 de 2000
+   tr2_k_1903 parada; pendientes ahora: 3:0
+-- vuelta 2 · cuenta L · faltan: 3:0 · 19:22:15
+   >> OTORGADA en L (T4): [tr2_l_1922] gpu-t4-s-kkb-ass1a2-1tupumvs2mhe1 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en L (desde el paso 1500)
+== tramo · cuenta L · sesion tr2_l_1922 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.yH6Q9P4KQo/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 5713
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 1500]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+   [checkpoint parcial guardado: paso 1500]
+VIVO= True ULTIMO= tramo: se corre hasta el paso 1750 y se guarda para continuar despues 
+VIVO= False ULTIMO= listo: {'paso': 1750, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9779761904761904, 'anterior': 1.0, 'nose': 0.9465408805031448, 'nose_ent': 0.9310344827586207, 'nose_rel': 0.9534883720930233, 'falsa_abst': 0.013727678571428571, 'abstencion': 0.216796875, 'cruzada_corto': {'vigente': 0.9626957563323133, 'anterior': 0.9054766414141415, 'nose': 0.5083874458874458, 'nose_ent': 0.609775641025641, 'nose_rel': 0.4076975108225108, 'falsa_abst': 0.007141653831343858, 'abstencion': 0.10546875}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 1750
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_1922)
+   tramo de 3:0 cerrado en el paso 1750 de 2000
+   tr2_l_1922 parada; pendientes ahora: 3:0
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta H · faltan: 3:0 · 19:52:47
+   >> OTORGADA en H (T4): [tr2_h_1952] gpu-t4-s-kkb-usw4a2-3o2rpk6qtljva | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en H (desde el paso 1750)
+== tramo · cuenta H · sesion tr2_h_1952 · lg3_s0 · +250 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.vn3krPFm6s/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1899
+== polling cada 2 min (presupuesto ~20 min)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+   [checkpoint parcial guardado: paso 1750]
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 1750 de 2000 (7 evaluaciones ya hechas) 
+VIVO= False ULTIMO= listo: {'paso': 2000, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.2799999999999999, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 1.0, 'anterior': 1.0, 'nose': 0.9465408805031446, 'nose_ent': 0.867816091954023, 'nose_rel': 0.9767441860465116, 'falsa_abst': 0.0, 'abstencion': 0.201171875, 'cruzada_corto': {'vigente': 0.965676869374402, 'anterior': 0.948626893939394, 'nose': 0.40608766233766236, 'nose_ent': 0.47884615384615387, 'nose_rel': 0.2899891774891775, 'falsa_abst': 0.002232142857142857, 'abstencion': 0.078125}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/lg3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 2000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1952)
+   tramo de 3:0 cerrado en el paso 2000 de 2000
+   tr2_h_1952 parada; pendientes ahora: 
+== todo completo
