@@ -102,6 +102,24 @@ def init_params(seed, V, D=192, NB=6, N_TURNOS=64):
             # `pre` como caso particular sea cual sea el kernel. Con KQ=3 el arbol es identico al de
             # antes, bit a bit, y los checkpoints viejos siguen cargando.
             "convq": jnp.stack([jnp.ones(D)] + [jnp.zeros(D)] * (KQ - 1)),
+            # PROYECCIONES PROPIAS PARA LA ATENCION DE LECTURA (2026-09-08, `--donde attnp`).
+            # Escalon 2 del Micro LM de Frontera, `PLAN_ESCALON2_ATTNP.md`.
+            #
+            # En IDENTIDAD y no en glorot, y es la decision que importa. Con identidad `attnp` en el
+            # paso 0 es EXACTAMENTE `attn`, asi que **contiene a `attn` como caso particular**, que
+            # es la propiedad que `lat2` tiene sobre `pre` y que a `attn` le falta sobre `pre`. Sin
+            # eso un resultado peor no se puede leer, que es el defecto que hundio a `post` el
+            # 22-ago y el limite que el §6 del informe del escalon 1 tuvo que declarar.
+            #
+            # Glorot ademas arrancaria la atencion en casi uniforme: medido el 8-sep sobre
+            # proyecciones aleatorias, brecha de logits 0,01 y 23,1 posiciones efectivas de 24.
+            #
+            # Se instancian en los CUATRO bloques para que el arbol no cambie de forma, mismo
+            # criterio que `convq` y `abst`. Sale gratis el mismo control que dio `convq`: los
+            # bloques 1-3 tienen gradiente cero garantizado, asi que son la trayectoria del weight
+            # decay puro. Aca importa mas, porque el atractor del decay sobre una identidad es la
+            # matriz NULA y una proyeccion atenuada se leeria como aprendizaje.
+            "wqr": jnp.eye(D), "wkr": jnp.eye(D), "wvr": jnp.eye(D),
             "wq": glorot(ks[b + 1], (D, D)), "wk": glorot(ks[b + 2], (D, D)),
             "wv": glorot(ks[b + 3], (D, D)), "beta": jnp.zeros(D) + 0.5,
             "m1": {"w": glorot(ks[b + 4], (D, 4 * D)), "b": jnp.zeros(4 * D)},
@@ -201,6 +219,23 @@ def attn_causal(x):
     return jax.nn.softmax(sim, -1) @ x
 
 
+def attn_causal_proy(blk, x):
+    """Como `attn_causal` pero con `wqr`/`wkr`/`wvr` propias. Ver `PLAN_ESCALON2_ATTNP.md`.
+
+    La diferencia con `attn_causal` es la unica que importa para el escalon 2: aca el modelo PUEDE
+    aprender a que atender, porque hay pesos entre `x` y el softmax. En `attn_causal` la similitud
+    sale de la geometria de las embeddings, que se optimiza para otra cosa, y la brecha de 3,13
+    hacia la propia posicion no es un peso que el gradiente pueda mover: sale de |x|^2/sqrt(D).
+
+    Con las tres en identidad esta funcion es IDENTICA a `attn_causal`, verificado bit a bit.
+    """
+    T, D = x.shape
+    q, k, v = x @ blk["wqr"], x @ blk["wkr"], x @ blk["wvr"]
+    sim = (q @ k.T) / jnp.sqrt(D)
+    sim = jnp.where(jnp.tril(jnp.ones((T, T), bool)), sim, -1e9)
+    return jax.nn.softmax(sim, -1) @ v
+
+
 def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     """Pasa la secuencia por los bloques; si hay `lectura`, la inyecta en `bloque`.
 
@@ -279,6 +314,11 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
             # causa no era el alcance. Si desaparece, la causa queda probada por intervencion y no
             # por argumento, que es como esta hoy.
             h = h + lectura(jax.vmap(attn_causal)(ln(blk["ln1"], h)))
+        elif lectura is not None and i == bloque and donde == "attnp":
+            # ACCESO GLOBAL CON PROYECCIONES PROPIAS (2026-09-08). Escalon 2. Identico a `attn`
+            # salvo que la atencion que forma la query tiene `wqr`/`wkr`/`wvr`, en identidad al
+            # empezar, asi que CONTIENE a `attn` como caso particular.
+            h = h + lectura(jax.vmap(attn_causal_proy, in_axes=(None, 0))(blk, ln(blk["ln1"], h)))
         h = h + jax.vmap(delta_mixer, in_axes=(None, 0))(blk, conv3(blk["conv"], ln(blk["ln1"], h)))
         if lectura is not None and i == bloque and donde == "post":
             h = h + lectura(ln(blk["ln2"], h))

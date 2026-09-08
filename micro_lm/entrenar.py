@@ -527,7 +527,7 @@ def main():
                          "sea cual sea el kernel, asi que `lat2` sigue conteniendo a `pre` como caso "
                          "particular. CAMBIA LA FORMA de `convq`: los checkpoints de kernel distinto "
                          "no son compatibles y la guarda de identidad lo aborta.")
-    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2", "attn"),
+    ap.add_argument("--donde", default="pre", choices=("pre", "post", "lat", "lat2", "attn", "attnp"),
                     help="en que punto del bloque 0 entra la lectura del archivo "
                          "(PREREG_QUERY_CONJUNTA.md). pre = antes de la conv y del mixer, sobre "
                          "emb[x], que es lo que se venia haciendo y deja la query como funcion pura "
