@@ -1,6 +1,6 @@
 # Memoria persistente y alucinaciones en modelos de lenguaje
 
-## Historia completa de mi investigación, del 7 de agosto al 7 de septiembre de 2026
+## Historia completa de mi investigación, del 7 de agosto al 8 de septiembre de 2026
 
 **Maximiliano Speranza** · investigador independiente · ORCID 0009-0005-0413-8554
 
@@ -391,6 +391,37 @@ La instrucción de diseño que sale. Si un modelo consulta una memoria desde una
 capa necesita **acceso global**. Una convolución corta vuelve invisible parte de la consulta, el fallo
 es **silencioso**, y se corrige poniendo atención completa ahí.
 
+### La cuarta precisión, del 8 de septiembre, y es la que cambia el enunciado
+
+El 8 de septiembre entrené por primera vez un modelo **con** acceso global desde el principio, y el
+resultado me obligó a corregir cómo yo venía explicando la ley.
+
+Mi predicción era que la atención completa iba a ganar por **pesar mejor** la relación. Escribí el
+criterio antes de correr nada, la razón entre la sensibilidad a la posición de la relación y la de una
+posición sin señal, y pedí que fuera al menos 1,5. **Dio 1,00, 1,01 y 0,94 en las tres semillas**,
+exactamente lo mismo que dan cuatro controles que nunca entrenaron con acceso global. Mi predicción
+quedó refutada por mi propio criterio.
+
+Y sin embargo el modelo con atención completa **rinde mejor** que el de kernel 5. Como el
+pre-registro me obligaba a buscar la causa alternativa antes de escribir nada, la busqué, y está
+medida.
+
+| | pico de sensibilidad | masa acumulada en 20 distancias | distancias con señal |
+|---|---|---|---|
+| kernel 5 | **0,0447** | 0,1432 | 4 de 20 |
+| atención completa | 0,0110 | **0,2021** | 20 de 20 |
+
+**La atención tiene un pico cuatro veces menor y una masa 1,41 veces mayor. Gana por área, no por
+altura.** Mi razón de selectividad comparaba dos distancias y por eso no podía ver lo que había
+cambiado, porque el kernel concentra mucho en cuatro posiciones y da cero exacto en el resto,
+mientras la atención reparte poco en todas.
+
+Lo que esto refina, y es lo que vale. **El corte del kernel 3 era binario.** Lo que arregla el acceso
+global no es pesar mejor la relación, es que **nada quede en cero**. Es un requisito de
+**cobertura**, no de foco. Enunciada así la ley es más fuerte y más fácil de aplicar, porque para
+cumplirla no hace falta que la arquitectura aprenda a mirar el lugar correcto, alcanza con que no
+tenga ningún lugar ciego.
+
 ---
 
 ## 9. El archivo largo, la última pared que encontré
@@ -460,10 +491,29 @@ calculado y no memorizado, y **sello relativo a la consulta**, que convierte el 
 **ventana de recencia** en vez de un techo del archivo.
 
 Lo implementé el 6 a la noche con su compuerta de cuatro comprobaciones que podían fallar, todas
-pasan. La campaña la corrí el 7 de septiembre, seis unidades completas en 2000 pasos. Los parciales
-del paso 1000 ya cumplían las dos predicciones centrales, con la diferencia de la condición corrida en
-**0,0000 exacto** y la geometría perdiendo el escalón mientras aparece la rampa. **La medición
-definitiva es lo primero que me queda pendiente.**
+pasan. La campaña la corrí el 7 de septiembre, seis unidades completas en 2000 pasos.
+
+### La medición definitiva, el 8 de septiembre, y el bit compra más de lo que yo esperaba
+
+**La pregunta del sello se contesta en las tres unidades sin bit**, y cierra. Mover la frontera
+manteniendo el orden relativo da recuperación **1,0000 exacto igual que el régimen real** en las tres
+semillas, mientras barajar los turnos la baja a 0,31 a 0,45 e invertir la pertenencia a 0,36 a 0,52.
+Es un **escalón**, no una pendiente, y confirma con el sello relativo ya entrenado lo que el 6 había
+medido sobre el absoluto. La consecuencia práctica es la misma. **Agrandar la tabla no sirve.**
+
+**Y las tres unidades con bit contestan otra pregunta.** Con el bit de pertenencia el modelo queda
+**inmune a las cinco perturbaciones**, con recuperación de 0,97 a 1,00 en todas y la condición
+invertida en **1,0000** contra 0,36 a 0,52 sin bit. Desacopla de quién es una entrada de cuándo fue,
+que era exactamente lo que yo había diseñado que hiciera.
+
+Tengo que declarar el corolario porque me cambia cómo se lee este banco. **Sobre las unidades con bit
+las condiciones de esta prueba dejan de ser un test del sello.** No es que la bandera desaparezca, es
+que el modelo tiene un tercer camino y ya no necesita la tabla para esto.
+
+**La contraparte de peso da lo mismo por otro lado.** Con el bit, las filas de la tabla pierden un
+30 % de norma, de 2,17 a 2,37 contra 3,14 a 3,49, y la varianza deja de concentrarse en una sola
+dirección, 0,59 a 0,66 contra 0,78 a 0,83. **El bit descarga la tabla.** Es la contraparte geométrica
+exacta de lo conductual, y son dos instrumentos independientes diciendo lo mismo.
 
 ---
 
@@ -603,6 +653,33 @@ estaba escrito antes.
 - **Los veredictos automáticos se verifican.** Seis veces el juez me imprimió una conclusión que sus
   propios números desmentían.
 
+### Las cuatro que agregué el 8 de septiembre, todas del mismo día
+
+Fue el día en que más aprendí sobre mis propios instrumentos, y las cuatro salieron de resultados que
+yo ya estaba a punto de contar como hallazgos.
+
+- **El signo de la primera componente principal de un SVD es arbitrario.** Mi medición de la
+  geometría daba rampa positiva en las tres unidades de una rama y negativa en las tres de la otra,
+  un tres contra tres perfecto que se leía como que el bit invierte el gradiente de recencia. En
+  valor absoluto las seis dan lo mismo. **Un tres contra tres perfecto en una cantidad cuyo signo no
+  está fijado no es un resultado, es una convención de la biblioteca.**
+- **Una función que reimplementa a otra no hereda sus defaults.** Mi instrumento del sello copiaba la
+  función de respuesta a mano para poder guardar la distribución de lectura, y al copiarla se quedó
+  sin el bit de pertenencia. Medí tres unidades con el bit apagado, o sea con una arquitectura que no
+  era la suya. La firma del error vale la pena reconocerla, **la recuperación aguantaba y la respuesta
+  se caía**, que es lo que pasa cuando a un modelo le sacás una entrada de la que aprendió a depender.
+  Mi regla de que todo instrumento lea su configuración quedó más ancha. **La configuración decide
+  variables globales y también argumentos de llamada.**
+- **Un instrumento cuyo resultado es el registro no puede escribir siempre al mismo archivo.**
+  Correrlo sobre una unidad nueva me pisó en silencio la medición de cuatro días antes. La recuperé
+  del historial de versiones.
+- **Un umbral pre-registrado necesita que su ruido esté medido.** Fijé el umbral de una predicción en
+  1,5 tomando como referencia un 1,12. Al correr el juez sobre los controles, uno dio **1,44**, o sea
+  un modelo que nunca vio la intervención quedaba a 0,06 de confirmar. Subí la muestra de 120 a 600
+  casos y ese 1,44 se volvió **1,05**, con los cuatro controles entre 0,94 y 1,05. Era ruido. **Lo
+  escribí como enmienda antes de mirar el resultado del experimento, que es la única forma en que
+  vale.**
+
 ---
 
 ## 16. Publicación
@@ -618,81 +695,151 @@ estaba escrito antes.
 
 ## 17. Lo que me queda abierto, en orden
 
-1. **Medir** las seis unidades de la campaña del sello relativo y escribir el informe. Es lo pago y
-   sin cobrar.
-2. **El invento**, lo único que queda de la alucinación en mi banco. Dos ataques conocidos y sin
-   combinar.
-3. **Fase 2 del sello relativo**, archivo de más de 64 turnos, condicionada a que cierren las dos
-   predicciones.
-4. **El régimen de 3280 entradas entrenado**, abierto desde el 5 de septiembre y ahora con predicción.
-5. **Escalar el banco sobre el transformer real**, meter versiones y abstención, y medir el SER en
+1. **El invento**, lo único que queda de la alucinación en mi banco. Dos ataques conocidos y sin
+   combinar, subir la proporción de preguntas sin respuesta y cambiar el blanco a error.
+2. **Fase 2 del sello relativo**, archivo de más de 64 turnos. Quedó habilitada, porque las dos
+   predicciones cerraron el 8 de septiembre.
+3. **Una perturbación que el bit de pertenencia no cubra**, si quiero seguir midiendo el sello. Con
+   el bit puesto, las cinco que tengo dejaron de morder.
+4. **El régimen de 3280 entradas entrenado**, abierto desde el 5 de septiembre.
+5. **Escalar el banco sobre el transformer real**, meter versiones y abstención, y medir el error en
    **vocabulario abierto**, que es donde el «no inventa» deja de estar garantizado por el banco.
-6. **La política de escritura**, la expulsión gateada por sorpresa, que nunca corrí. Su compuerta
-   abrió pero acotada, la sorpresa detecta lo que **ya está** en el archivo, no lo que no vale la pena
-   archivar.
+6. **La política de escritura**, la expulsión gateada por sorpresa, que nunca corrí.
+7. **Los 32 instrumentos** que mi auditoría todavía marca por no leer la arquitectura de su
+   configuración.
 
 ---
 
-## 18. La línea que abro. El Micro LM de Frontera
+## 18. La línea que abrí, y que a esta altura ya está corriendo
 
-Le puse el nombre el 7 de septiembre, y es lo que sigue.
+Le puse el nombre el 7 de septiembre.
 
 > lo que busco es crear un micro modelo de igual condición que lo hacen los modelos grandes de
 > frontera, para de esta forma poder descubrir cómo hacer que tengan memoria persistente incorporada
 > y eliminar las alucinaciones de este tipo de modelos
 
-Salió de una pregunta que me hice. ¿Los modelos de frontera usan kernel 3? No. Un transformer denso
-hace atención completa en cada capa, o sea la query ve toda la secuencia sin ventana, que es
-exactamente lo que midió mi control del 4 de septiembre. Por eso mi ley de la ventana se enuncia como
-condicional y su alcance son las arquitecturas de ventana local, los modelos lineales y los híbridos
-desplegados, y cualquier sistema que consulte memoria desde una capa temprana.
+### Lo primero, contestarme bien la pregunta de la que salió
 
-**El cambio de encuadre me cambia el criterio de diseño.** Mientras la atención completa era un
-control, la disciplina era comparar a igual tamaño. Como vehículo, la disciplina pasa a ser parecerse
-a un modelo de frontera, y varias decisiones que tomé bien bajo el criterio viejo quedan mal bajo el
-nuevo.
+Me pregunté si los modelos de frontera usan kernel 3 o 5. **No.** Un transformer denso hace atención
+completa en cada capa y no hay ninguna convolución formando la query.
 
-**Estado del código, verificado contra disco.** `--donde attn` ya existe y está expuesto en el CLI.
-Nunca entrené una unidad así, cero de 157 checkpoints. Mi control del 4 de septiembre midió atención
-completa sobre pesos entrenados con convolución, que es otra cosa.
+Pero el matiz es justo donde vive mi hallazgo. En la **capa cero** de un denso el estado de un token
+es su embedding más su posición, o sea la query es **función pura del token de su posición**, que es
+literalmente mi condición más pobre. Lo que le da a un denso una query compuesta no es un kernel más
+grande, es la **profundidad**, porque después de una sola capa de atención el estado ya mezcló todo el
+prefijo. Así que el análogo de mi ventana en un denso no es el alcance del kernel sino **cuántas capas
+de atención hay antes del punto donde se forma la query que consulta la memoria**, y el corte de cero
+exacto **no existe** en un transformer denso.
 
-**Las cinco diferencias con un modelo de frontera, y las dos que deciden.** La query de lectura, que
-es la única que la opción actual cubre. **El tronco**, que sigue siendo recurrente mientras un modelo
-de frontera es atención en todas las capas. **El vocabulario**, 242 tokens cerrados, y ésta es la
-crítica, porque el cero en error fuera de dominio es en parte propiedad de mi banco y **la alucinación
-que quiero eliminar no tiene casos**. Y después la escala y la ausencia de preentrenamiento, que son
-limitaciones declarables.
+Por eso mi ley se enuncia como condicional, y su alcance real es grande igual. Muerde en todo modelo
+que use atención **local** o **recurrencia**, y ahí es adonde se está moviendo frontera por costo,
+ventanas deslizantes, capas locales alternadas con globales, y los híbridos desplegados. Vale para esa
+mitad del campo, no para la otra, y prefiero decirlo así antes que estirarlo.
 
-**La decisión que tengo que revertir.** La atención de lectura la implementé sin proyecciones
-aprendidas para no cambiar la forma del árbol y mantener la comparación a igual tamaño. Correcto como
-control, brazo atado como vehículo, porque ningún transformer real lee su memoria con similitud cruda.
+### Y lo segundo, dónde está de verdad la modificación que busco
 
-**Lo que el cambio me regala.** Con tronco de atención el archivo **deja de poder estar compensando**
-el techo de capacidad de la regla delta. La atención resuelve lo que está dentro de la secuencia, así
-que el archivo sólo puede aportar lo que está **fuera**, o sea las sesiones anteriores, y cualquier
-ganancia pasa a ser memoria persistente genuina. Banco más limpio, no sólo más parecido. El precio es
-que saca la regla delta del tronco, que es el vehículo original de este repo.
+No está en la ventana. El cuello de un modelo denso son tres cosas distintas que conviene no mezclar.
+La ventana de contexto es finita y su corte es duro, lo que sale no se degrada, no está. Dentro de la
+ventana la atención se diluye. Y sobre todo, **los pesos no cambian**, o sea lo que el modelo aprendió
+en la conversación vive en las activaciones y se tira al terminar.
 
-**Los dos escalones, y el nombre se lo gana el segundo.** Primero, atención completa entrenada en el
-banco actual, que cierra la ley de la ventana por el otro lado y prueba que el kernel 5 era el mínimo
-que cubre la relación y no una solución afortunada. Segundo, el Micro LM de Frontera propiamente
-dicho, con tronco de atención, proyecciones propias, vocabulario abierto y entrenado desde cero con el
-archivo adentro, que es donde el invento pasa a tener casos reales.
+El tercero es el que nadie tiene resuelto y es el que yo ataco. La modificación es **darle al
+transformer un archivo direccionable con clave sellada, co-entrenado con el modelo** y no adosado
+encima. Lo que ya tengo medido y lo sostiene, que el archivo **no comprime ni desaloja** y puede
+crecer sin tocar un peso, que el sello de orden resuelve el conflicto de versiones, que el bit de
+pertenencia desacopla de quién es una entrada de cuándo fue, y que el cuello no es la velocidad sino
+la **precisión de la búsqueda**, donde lo que la rompe no es cuántos competidores hay sino qué dicen.
+
+Y las alucinaciones no van en paralelo, **son el mismo problema visto de dos lados**. Lo que yo leía
+como inventar era colisión de clave, o sea un error de indexación, o sea un problema de acceso de la
+consulta. Si el modelo recupera exactamente el hecho correcto no tiene que inventarlo, y si sabe que
+no lo tiene puede abstenerse.
+
+### El escalón 1, lanzado y medido el 8 de septiembre
+
+Nunca había entrenado una unidad con acceso global. Censo de mis 157 checkpoints, cero. Mi control
+del 4 de septiembre midió atención completa sobre pesos entrenados con convolución, que es otra cosa.
+
+Antes de gastar una GPU me hice una sospecha y la medí. Pensé que mi atención de lectura, que usa el
+mismo vector como consulta, clave y valor, iba a colapsar en la propia posición y ser una identidad
+disfrazada. **Me equivoqué.** Atiende de verdad, la propia posición se lleva 0,42 a 0,47 y quedan
+entre 9,6 y 11,3 posiciones efectivas de 24, el perfil es plano de la distancia 1 a la 23 y depende
+del contenido. Lo que sí queda en pie es que **sin proyecciones propias no puede aprender a qué
+atender**, sólo hereda la geometría de las embeddings.
+
+La comparación me salió gratis porque los dos brazos ya estaban corridos a 26.000 pasos con los mismos
+hiperparámetros. Esto es lo que va, sobre el caso difícil donde la respuesta no está.
+
+| paso | kernel 3 | kernel 5 | atención completa |
+|---|---|---|---|
+| 2.000 | 0,4223 | 0,3819 | 0,2724 |
+| 4.000 | 0,5737 | 0,6411 | 0,5331 |
+| 6.000 | 0,6045 | 0,7548 | **0,7642** |
+| 8.000 | 0,6360 | 0,7858 | **0,8833** |
+| 10.000 | 0,6427 | 0,8793 | **0,9435** |
+| 12.000 | 0,6544 | 0,9432 | **0,9841** |
+
+Todavía falta llegar a 26.000, así que esto no es el veredicto, pero la dirección ya no está en
+discusión. En el paso 12.000, que es donde la brecha entre mis dos brazos se vuelve inequívoca, la
+atención completa va en **0,9841** contra 0,9432 del kernel 5 y 0,6544 del kernel 3, con las tres
+semillas del mismo lado. **La atención completa no sólo alcanza al kernel 5, lo pasa desde el paso 8.000**, y deja
+al kernel 3 estancado en 0,64.
+
+Hay algo que no había previsto y que me parece el dato más honesto de la corrida. **Arranca más
+lento.** En el paso 2.000 va por debajo de los dos brazos, y recién los cruza entre el 4.000 y el
+6.000. Es consistente con lo que medí a la mañana, porque sin proyecciones propias el modelo tiene que
+aprender a atender moviendo la geometría de sus embeddings, que es un camino más largo. Si eso se
+confirma, es un argumento a favor del escalón 2 que no estaba en mi pre-registro.
+
+Y lo que me refutó mi propia predicción del mecanismo está contado arriba, en el §8. Gana por área y
+no por altura, y el requisito es de cobertura y no de foco.
+
+### El escalón 2, diseñado y esperando
+
+El escalón 1 no es el Micro LM de Frontera y no lo voy a llamar así. Es cerrar mi ley de la ventana
+por el otro lado.
+
+El escalón 2 sí lo es, y ya está diseñado con el parche exacto. Proyecciones propias para la atención
+de lectura, inicializadas **en la identidad y no al azar**, porque así la condición nueva contiene a
+la vieja como caso particular y un resultado peor se puede leer. Es la propiedad que hoy le falta a mi
+atención completa y es el defecto exacto que me hundió un experimento el 22 de agosto. Cuesta 196.608
+parámetros en el árbol y 49.152 efectivos, contados del árbol y no citados de un comentario viejo.
+
+Y lo que ese cambio me regala es lo que más me importa. **Con tronco de atención el archivo deja de
+poder estar compensando** el techo de capacidad de la regla delta, porque la atención resuelve todo lo
+que está dentro de la secuencia y al archivo sólo le queda aportar lo que está **fuera**, o sea las
+sesiones anteriores. Cualquier ganancia que quede ahí es memoria persistente genuina.
+
+Después queda el vocabulario, que es la diferencia que decide si el nombre se sostiene. Medí que de
+mis 242 tokens **158 son respuestas legales** contra un archivo de a lo sumo 40 entradas, así que
+margen para inventar hay, unos 120 valores que el modelo podría decir y no dice. Lo que me falta no es
+el margen sino la **forma**, porque mi respuesta es un solo token y la alucinación que importa en los
+grandes es composicional.
+
+**Nada que conserve el tronco recurrente o el vocabulario cerrado se llama de Frontera.**
 
 ---
 
 ## 19. Cierre
 
-En un mes pasé de una pregunta sin protocolo a un modelo entrenado desde cero que contesta sobre lo
-que se le dijo en una sesión anterior, sabe cuál versión rige después de una corrección, distingue
-entre archivo propio y ajeno, y avisa cuando el dato no está, con exactitud global de 0,988 a 0,993
-contra un piso trivial de 0,4065. Y el mecanismo ya lo vi funcionando sobre un transformer real
-congelado.
+En un mes y un día pasé de una pregunta sin protocolo a un modelo entrenado desde cero que contesta
+sobre lo que se le dijo en una sesión anterior, sabe cuál versión rige después de una corrección,
+distingue entre archivo propio y ajeno, avisa cuando el dato no está, y resiste que le muevan los
+turnos del archivo, con exactitud global de 0,988 a 0,993 contra un piso trivial de 0,4065. El
+mecanismo ya lo vi funcionando sobre un transformer real congelado, y hoy tengo corriendo la primera
+versión de mi modelo con el mismo acceso global que usan los grandes.
 
 Lo que más cambió no fue el resultado sino el diagnóstico. Entré creyendo que el problema era que el
 modelo inventa. Salgo sabiendo que **no inventa**, que atribuye mal, que atribuir mal era colisión de
 clave, que la colisión de clave era un problema de **acceso** de la consulta, y que el acceso se
 arregla con 1.280 parámetros.
+
+Y de los últimos dos días me llevo una corrección más, que es sobre mí. Tres veces tuve un resultado
+listo para contar y las tres se cayeron cuando fui a mirar el instrumento en vez del número. Un tres
+contra tres perfecto que era el signo arbitrario de una biblioteca, una caída de acierto que era yo
+midiendo un modelo sin la entrada de la que aprendió a depender, y un umbral que un control mío casi
+cruza por ruido de muestreo. **Ninguna de las tres la habría visto mirando el resultado.** Las vi
+mirando de dónde salía.
 
 Lo que busco sigue siendo lo mismo, y es la vara.
 
