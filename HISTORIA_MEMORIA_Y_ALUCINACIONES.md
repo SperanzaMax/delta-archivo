@@ -820,10 +820,44 @@ a punta, **0,98, 0,99 y 0,97** al cierre contra 0,94 a 1,05 de cuatro controles 
 acceso global, con mi umbral puesto en 1,5. Entrenó 26.000 pasos con acceso global y **no lo usó para
 pesar mejor**. Lo usó para no tener ceros.
 
-### El escalón 2, diseñado y esperando
+### El escalón 2, corrido el mismo día, y me dio vuelta una intuición
 
 El escalón 1 no es el Micro LM de Frontera y no lo voy a llamar así. Es cerrar mi ley de la ventana
-por el otro lado.
+por el otro lado. Y el escalón 2 lo corrí esa misma tarde.
+
+Le di a la atención de lectura sus propias proyecciones, inicializadas en la identidad para que la
+condición nueva contenga a la vieja. Escribí tres predicciones. **Se cumplió una y se cayeron dos, y
+las tres terminan diciendo lo mismo.**
+
+**Lo que el modelo hizo con la libertad es el hallazgo.** La semilla que funcionó no usó las
+proyecciones para enfocar. Las usó para **abrir**. Bajó el peso en su propia posición de 0,45 a
+**0,1057** y llevó la atención de 9,6 posiciones efectivas a **20,69 de 24**. **Cuando pudo elegir
+dónde mirar, eligió mirar en todos lados.** Es la confirmación más fuerte que tengo de que el
+requisito es de cobertura y no de foco, porque ya no sale de comparar arquitecturas que yo fijo sino
+de ver adónde va el gradiente cuando lo dejo elegir.
+
+**La predicción que se cumplió es la que más me importaba haber escrito antes.** Dejé por escrito
+que el techo **no** tenía que subir, y que si subía eso sería evidencia **contra** mi propia ley y
+no un éxito. Cerró en 0,9875 contra 0,9977. Mismo techo.
+
+**Y la que se cayó cerró una escapatoria que yo tenía.** En el escalón 1 la selectividad no se había
+movido, y yo podía decir que era porque no había parámetros que mover. Acá los parámetros están, son
+49.152, el gradiente los movió, y la selectividad quedó en 1,01 contra un umbral de 1,5 y controles
+en 0,94 a 1,05. Ya no hay excusa. **Mi tarea no premia discriminar.**
+
+**La contracara es seria y no la vi venir.** Con proyecciones libres la atención tiene dos atractores
+y la semilla decide en cuál cae. Dos de tres colapsaron a 1,41 y 2,08 posiciones efectivas, o sea
+aprendieron a mirar sólo su propia posición, y **gastaron los 26.000 pasos enteros sin salir de ahí**,
+terminando con `vigente` en 0,3141 y 0,2868 contra 1,0000 de su hermana. No era aprendizaje lento. No
+había que esperar, había que no caer.
+
+De eso sale una instrucción de diseño que me resulta contraintuitiva y que anoto igual. **Para una
+memoria consultada desde una capa temprana conviene la atención SIN proyecciones propias**, no porque
+sea más potente sino porque **no puede aprender a mirar mal**. La cobertura queda garantizada por
+construcción y llega al techo tres de tres, mientras que darle al modelo la capacidad de elegir abre
+un pozo del que no vuelve y en el que cae dos de tres.
+
+**La capacidad de aprender a atender es también la capacidad de aprender a no atender.**
 
 El escalón 2 sí lo es, y ya está diseñado con el parche exacto. Proyecciones propias para la atención
 de lectura, inicializadas **en la identidad y no al azar**, porque así la condición nueva contiene a
