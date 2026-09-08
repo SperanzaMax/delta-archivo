@@ -150,3 +150,13 @@ VIVO= True ULTIMO= ── eval: vigente 0.2165 · anterior 0.0491 · abstencion 
 VIVO= True ULTIMO= ── eval: vigente 0.2165 · anterior 0.0491 · abstencion 0.0020 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0033 
 VIVO= True ULTIMO= ── eval: vigente 0.3185 · anterior 0.0705 · abstencion 0.0098 · truncados 0.0000 · nose 0.0089 (ent 0.0000/rel 0.0143) · falsa_abst 0.0094 
 VIVO= True ULTIMO= ── eval: vigente 0.3185 · anterior 0.0705 · abstencion 0.0098 · truncados 0.0000 · nose 0.0089 (ent 0.0000/rel 0.0143) · falsa_abst 0.0094 
+   [checkpoint parcial guardado: paso 3500]
+VIVO= False ULTIMO= listo: {'paso': 4000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.32174502088295187, 'anterior': 0.11161616161616161, 'nose': 0.019748769748769747, 'nose_ent': 0.028125, 'nose_rel': 0.014705882352941176, 'falsa_abst': 0.01022897897897898, 'abstencion': 0.013671875, 'cruzada_largo': {'vigente': 0.02552503962836118, 'anterior': 0.0, 'nose': 0.0, 'nose_ent': 0.0, 'nose_rel': 0.0, 'falsa_abst': 0.0, 'abstencion': 0.0}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ap3_s8.pkl (13M)
+   ultimo paso registrado: "paso": 4000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_i_1801)
+   tramo de 3:8 cerrado en el paso 4000 de 4000
+   tr2_i_1801 parada; pendientes ahora: 
+== todo completo
