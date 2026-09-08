@@ -359,3 +359,39 @@ lanzado pid 649
 == polling cada 2 min (presupuesto ~40 min)
 VIVO= True ULTIMO= tramo: se corre hasta el paso 25500 y se guarda para continuar despues 
 VIVO= True ULTIMO= paso  24000  loss 2.3680  acc 0.3594  (247s) 
+VIVO= True ULTIMO= ── eval: vigente 0.3482 · anterior 0.1904 · abstencion 0.2617 · truncados 0.0000 · nose 0.4122 (ent 0.4241/rel 0.4325) · falsa_abst 0.1535 
+   [checkpoint parcial guardado: paso 24000]
+VIVO= True ULTIMO= paso  24500  loss 2.2417  acc 0.3594  (496s) 
+VIVO= True ULTIMO= ── eval: vigente 0.3597 · anterior 0.2154 · abstencion 0.2500 · truncados 0.0000 · nose 0.3999 (ent 0.4073/rel 0.4235) · falsa_abst 0.1463 
+VIVO= True ULTIMO= ── eval: vigente 0.3314 · anterior 0.2061 · abstencion 0.2793 · truncados 0.0000 · nose 0.4445 (ent 0.4429/rel 0.4710) · falsa_abst 0.1638 
+VIVO= True ULTIMO= ── eval: vigente 0.3314 · anterior 0.2061 · abstencion 0.2793 · truncados 0.0000 · nose 0.4445 (ent 0.4429/rel 0.4710) · falsa_abst 0.1638 
+   [checkpoint parcial guardado: paso 25000]
+VIVO= False ULTIMO= listo: {'paso': 25500, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.34021720646173514, 'anterior': 0.19042658730158732, 'nose': 0.39365969377062615, 'nose_ent': 0.4122405372405372, 'nose_rel': 0.4089695027195027, 'falsa_abst': 0.1341771349739541, 'abstencion': 0.2421875, 'cruzada_largo': {'vigente': 0.003205128205128205, 'anterior': 0.017857142857142856, 'nose': 0.34000169132996455, 'nose_ent': 0.38364552114552114, 'nose_rel': 0.3039758487126908, 'falsa_abst': 0.285098374551883, 'abstencion': 0.302734375}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ap3_s0.pkl (13M)
+   ultimo paso registrado: "paso": 25500
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1618)
+   tramo de 3:0 cerrado en el paso 25500 de 26000
+   tr2_h_1618 parada; pendientes ahora: 3:0
+-- vuelta 4 · cuenta K · faltan: 3:0 · 16:36:16
+   >> OTORGADA en K (T4): [tr2_k_1636] gpu-t4-s-kkb-ass1b0-34a3q7nfw2tit | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en K (desde el paso 25500)
+== tramo · cuenta K · sesion tr2_k_1636 · ap3_s0 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde attnp · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0
+[colab] Uploaded '/tmp/tmp.gUhsLh7NEj/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (13M)
+[colab] Uploaded '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ap3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 5953
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= W0908 19:37:13.009343    5977 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= False ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.3141278546370892, 'anterior': 0.19042658730158732, 'nose': 0.44029594745637934, 'nose_ent': 0.42811355311355315, 'nose_rel': 0.47520881895881895, 'falsa_abst': 0.1774264432967918, 'abstencion': 0.283203125, 'cruzada_largo': {'vigente': 0.006677350427350427, 'anterior': 0.03869047619047619, 'nose': 0.3961247170497645, 'nose_ent': 0.40173992673992676, 'nose_rel': 0.3872360826308195, 'falsa_abst': 0.3167204384650038, 'abstencion': 0.345703125}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ap3_s0.pkl (13M)
+   ultimo paso registrado: "paso": 26000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_k_1636)
+   tramo de 3:0 cerrado en el paso 26000 de 26000
+   tr2_k_1636 parada; pendientes ahora: 
+== todo completo

@@ -360,3 +360,19 @@ lanzado pid 1211
 == polling cada 2 min (presupuesto ~40 min)
 VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 24000 de 26000 (48 evaluaciones ya hechas) 
 VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 24000 de 26000 (48 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.3068 · anterior 0.0295 · abstencion 0.2656 · truncados 0.0000 · nose 0.4056 (ent 0.3485/rel 0.4588) · falsa_abst 0.1731 
+   [checkpoint parcial guardado: paso 24500]
+VIVO= True ULTIMO= ── eval: vigente 0.3068 · anterior 0.0295 · abstencion 0.2656 · truncados 0.0000 · nose 0.4056 (ent 0.3485/rel 0.4588) · falsa_abst 0.1731 
+VIVO= True ULTIMO= ── eval: vigente 0.3216 · anterior 0.0573 · abstencion 0.2285 · truncados 0.0000 · nose 0.3704 (ent 0.3072/rel 0.4375) · falsa_abst 0.1364 
+VIVO= True ULTIMO= ── eval: vigente 0.2846 · anterior 0.0295 · abstencion 0.2461 · truncados 0.0000 · nose 0.3782 (ent 0.3059/rel 0.4518) · falsa_abst 0.1576 
+VIVO= True ULTIMO= ── eval: vigente 0.2846 · anterior 0.0295 · abstencion 0.2461 · truncados 0.0000 · nose 0.3782 (ent 0.3059/rel 0.4518) · falsa_abst 0.1576 
+   [checkpoint parcial guardado: paso 25500]
+VIVO= False ULTIMO= listo: {'paso': 26000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.2867756078962975, 'anterior': 0.07118055555555555, 'nose': 0.36771496725793773, 'nose_ent': 0.32184686228803877, 'nose_rel': 0.41805555555555557, 'falsa_abst': 0.14881686491457513, 'abstencion': 0.236328125, 'cruzada_largo': {'vigente': 0.020363113897596655, 'anterior': 0.015625, 'nose': 0.4411026140155728, 'nose_ent': 0.3811603976948404, 'nose_rel': 0.5112233252858254, 'falsa_abst': 0.3339080225109637, 'abstencion': 0.380859375}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ap3_s1.pkl (13M)
+   ultimo paso registrado: "paso": 26000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_n_1617)
+   tramo de 3:1 cerrado en el paso 26000 de 26000
+   tr2_n_1617 parada; pendientes ahora: 
+== todo completo

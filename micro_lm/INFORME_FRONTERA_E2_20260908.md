@@ -10,18 +10,22 @@ mismo.**
 
 `nose_rel` por semilla, sin promediar, porque la media no describe a ninguna.
 
-| unidad | posiciones efectivas de la atención | `vigente` | `nose_rel` |
-|---|---|---|---|
-| `ap3_s0` | **1,41 de 24** | 0,4016 | 0,4139 |
-| `ap3_s1` | **2,08 de 24** | 0,3057 | 0,4989 |
-| `ap3_s2` | **20,69 de 24** | **1,0000** | **0,9875** |
-| `at3` (sin proyecciones, 3 de 3) | 9,6 a 11,3 | 1,0000 | 0,9977 |
+Las tres unidades cerraron los 26.000 pasos.
+
+| unidad | posiciones efectivas de la atención | `vigente` | `anterior` | `nose_rel` |
+|---|---|---|---|---|
+| `ap3_s0` | **1,41 de 24** | 0,3141 | 0,1904 | 0,4752 |
+| `ap3_s1` | **2,08 de 24** | 0,2868 | **0,0712** | 0,4181 |
+| `ap3_s2` | **20,69 de 24** | **1,0000** | **1,0000** | **0,9875** |
+| `at3` (sin proyecciones, 3 de 3) | 9,6 a 11,3 | 1,0000 | 1,0000 | 0,9977 |
 
 **Con proyecciones libres la atención de lectura tiene dos atractores y la semilla decide.** La
 correlación con el rendimiento es perfecta y no hay casos intermedios.
 
-**Y el colapso es permanente.** No es aprendizaje lento. Detectado en el paso 6.000, seguía igual en
-el 24.000 con `anterior` en 0,2061 y **0,0295**. Veinte mil pasos más no lo revierten.
+**Y el colapso es permanente, con el presupuesto entero gastado.** No es aprendizaje lento. Se
+detectó en el paso 6.000 y las dos unidades llegaron al 26.000 sin moverse de ahí, con `vigente` en
+0,3141 y 0,2868 contra 1,0000 de su hermana, y `anterior` en 0,1904 y 0,0712 contra 1,0000. **Veinte
+mil pasos más no revierten nada**, así que no había que esperar, había que no caer.
 
 ## 2. H3 · CONFIRMADA, y era la que había que escribir antes
 
