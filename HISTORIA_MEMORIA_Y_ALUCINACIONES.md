@@ -780,15 +780,25 @@ hiperparámetros. Esto es lo que va, sobre el caso difícil donde la respuesta n
 | 12.000 | 0,6544 | 0,9432 | **0,9841** |
 | 16.000 | 0,6506 | 0,9613 | **0,9910** |
 | 20.000 | 0,6471 | 0,9907 | **0,9930** |
+| **26.000** | **0,6430** | **0,9977** | **0,9977** |
 
-Falta el tramo final para el veredicto formal, pero la dirección ya no está en discusión. Las tres
-semillas van en 0,9886, 0,9904 y 1,0000, muy por encima del 0,80 con el que yo había escrito la
-refutación.
+**La campaña cerró completa el mismo 8 de septiembre.** Las tres semillas terminaron en 1,0000,
+0,9931 y 1,0000, muy por encima del 0,80 con el que yo había escrito la refutación. La predicción se
+cumplió.
 
-**Y hay algo en la forma de estas curvas que confirma el refinamiento mejor que el resultado.** Mi
-atención completa y mi kernel 5 **convergen al mismo techo**, con la diferencia bajando de 0,0975 en
-el paso 8.000 a 0,0023 en el 20.000. La atención llega antes, no llega más alto. El kernel 3, en
-cambio, se queda en 0,6471 y no llega nunca.
+**Pero lo que decide no es que gane, es que EMPATE EXACTO.** Mi atención completa y mi kernel 5
+terminan en el mismo número, **0,9977 contra 0,9977**, con una diferencia de 0,0000 en cuatro
+decimales, mientras el kernel 3 se queda 0,3547 abajo. La atención llega antes, no llega más alto.
+
+Es exactamente lo que predice la ley enunciada como cobertura. El kernel 5 tiene alcance 4 y **ya
+cubre** la relación, que cae a distancia 3, así que llega al techo. La atención cubre las 23
+posiciones, o sea cubre de más, **y cubrir de más no compra nada, cero exacto**. El kernel 3 tiene
+alcance 2, deja la relación afuera, y 26.000 pasos no lo arreglan.
+
+**El techo depende de si la posición relevante está cubierta, no de cuánto más se cubra.** Eso es lo
+que hace que la ley sea una condición binaria y no una escala, y ese empate en cuatro decimales
+terminó siendo la evidencia más limpia que me dio la campaña entera. No la esperaba, y vale más que
+el resultado que sí esperaba.
 
 Es exactamente lo que predice la ley enunciada como cobertura. El kernel 5 tiene alcance 4 y **ya
 cubre** la relación, que cae a distancia 3, así que alcanza el mismo techo. La atención cubre todo, o
@@ -805,7 +815,10 @@ aprender a atender moviendo la geometría de sus embeddings, que es un camino m�
 confirma, es un argumento a favor del escalón 2 que no estaba en mi pre-registro.
 
 Y lo que me refutó mi propia predicción del mecanismo está contado arriba, en el §8. Gana por área y
-no por altura, y el requisito es de cobertura y no de foco.
+no por altura, y el requisito es de cobertura y no de foco. La selectividad se mantuvo plana de punta
+a punta, **0,98, 0,99 y 0,97** al cierre contra 0,94 a 1,05 de cuatro controles que nunca vieron
+acceso global, con mi umbral puesto en 1,5. Entrenó 26.000 pasos con acceso global y **no lo usó para
+pesar mejor**. Lo usó para no tener ceros.
 
 ### El escalón 2, diseñado y esperando
 
