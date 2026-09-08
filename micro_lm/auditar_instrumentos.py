@@ -23,7 +23,17 @@ EXENTOS = {"entrenar.py", "auditar_instrumentos.py", "conf_ckpt.py"}
 
 
 def revisar(texto):
-    """Devuelve (carga_ckpt, corre_modelo, faltantes)."""
+    """Devuelve (carga_ckpt, corre_modelo, faltantes).
+
+    2026-09-08 · se agrega el chequeo del BIT DE PERTENENCIA, que es la otra mitad de la regla.
+    `conf_ckpt.aplicar` fija los globals del modulo y no puede fijar los ARGUMENTOS de llamada; el
+    bit vive en `modelo.responder(..., pertenece=)`. Un instrumento que reimplementa `responder`
+    para guardar la distribucion de lectura —hay varios— pierde el argumento en silencio y mide las
+    unidades `pert=True` con el bit apagado. Paso con `reloj_o_bandera.py` y se leia como hallazgo.
+
+    El chequeo es deliberadamente grosero: si el archivo arma su propia clave (`a["kw"]`) o llama a
+    `M.sello`, esta reimplementando la lectura y tiene que nombrar `marca_pert` o `pertenece`.
+    """
     carga = "pickle.load" in texto
     # el import de la casa es `import datos as DAT, idioma as I, modelo as M`, asi que `modelo` casi
     # nunca es el primer nombre de la linea: hay que buscarlo en cualquier posicion de la lista.
@@ -35,6 +45,10 @@ def revisar(texto):
         for nombre in conf_ckpt.GLOBALS:
             if not re.search(r"^\s*(?:M|modelo)\.%s\s*=" % nombre, texto, re.M):
                 faltan.append(nombre)
+    # el bit de pertenencia: sólo se le exige a quien reimplementa la lectura del archivo
+    reimplementa = re.search(r'\["kw"\]|M\.sello\(|modelo\.sello\(', texto) is not None
+    if reimplementa and not re.search(r"marca_pert|pertenece", texto):
+        faltan.append("PERT(arg)")
     return carga, corre, faltan
 
 
@@ -62,6 +76,8 @@ def main():
     for nombre, faltan in incompletos:
         print(f"  FALTA    {nombre:<32} {', '.join(faltan)}")
     print("\nArreglo: `import conf_ckpt` y `conf_ckpt.aplicar(cfg)` despues de leer el checkpoint.")
+    print("PERT(arg): el instrumento reimplementa la lectura y no suma `M.marca_pert`. "
+          "Ver `conf_ckpt.pertenece_de(cfg, mask)`.")
 
 
 if __name__ == "__main__":

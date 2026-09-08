@@ -22,6 +22,7 @@ import jax, jax.numpy as jnp
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 import modelo as M
+import conf_ckpt
 
 T = 24                    # largo de la consulta
 N_ARCH = 12               # entradas del archivo
@@ -72,11 +73,15 @@ if __name__ == "__main__":
     for ruta in CKPTS:
         b = pickle.load(open(ruta, "rb"))
         p, cfg = b["params"], b["config"]
+        # 2026-09-08 · el auditor lo marcaba: este instrumento media con los defaults del modulo
+        # (KQ=3, SELLO="abs") en vez de con la arquitectura del checkpoint. Sobre los `rel` del sello
+        # relativo eso habria medido una indexacion de `ord` que no es la suya. Regla del RETOMAR §3.
+        conf_ckpt.aplicar(cfg)
         V, D = p["emb"].shape[0], p["emb"].shape[1]
-        kq = cfg.get("kernel_q", 3) or 3
+        kq = M.KQ
         taps = [round(float(abs(np.asarray(p["blocks"][0]["convq"])[i]).max()), 4) for i in range(kq)]
-        print(f"\n{'='*74}\n{ruta}   kernel_q={kq} (alcance {kq-1})   donde nativo={cfg.get('donde')}"
-              f"\n  convq entrenada, max|peso| por tap: {taps}")
+        print(f"\n{'='*74}\n{ruta}   {conf_ckpt.descripcion(cfg)}"
+              f"\n  alcance de la ventana {kq-1}   convq entrenada, max|peso| por tap: {taps}")
         res[ruta] = {"kernel_q": kq, "taps": taps}
         for donde in ("lat2", "attn"):
             print(f"\n  --- donde = {donde}")

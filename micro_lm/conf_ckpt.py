@@ -52,3 +52,42 @@ def descripcion(cfg):
     return (f"kernel_q={p['KQ']} · sello={p['SELLO']} · donde={cfg.get('donde')} · "
             f"nivel={cfg.get('nivel')} · ses_extra={cfg.get('ses_extra', 0)} · "
             f"pert={cfg.get('pert', False)} · paso {cfg.get('pasos')}")
+
+
+# ---------------------------------------------------------------------------------------------
+# ARGUMENTOS que la config decide, y que `aplicar` NO puede cubrir · 2026-09-08
+#
+# `aplicar` fija los globals del modulo. Hoy aparecio la otra mitad del mismo defecto y hay que
+# nombrarla: `reloj_o_bandera.py` leia bien `sello` y `kernel_q` de la config y aun asi medio las
+# tres unidades `rp3` con una arquitectura que no era la suya, porque el bit de pertenencia no es
+# un global sino un ARGUMENTO de `modelo.responder`. La funcion `leer()` del instrumento
+# reimplementa `responder` a mano para guardar la distribucion de lectura, y al copiarla se quedo
+# sin `marca_pert`.
+#
+# Lo que costo: acierto 0,2969-0,5781 en la sonda contra `vigente` 0,9725-0,9824 en el propio
+# entrenamiento de esas mismas unidades. La recuperacion aguantaba y la respuesta se caia, que es
+# la firma de medir un modelo sin la entrada de la que aprendio a depender — y se leia como un
+# hallazgo sobre el bit de pertenencia.
+#
+# La regla del RETOMAR §3 queda mas ancha: **todo instrumento que carga un checkpoint tiene que
+# reproducir de su config todo lo que decide la arquitectura, sean globals del modulo o argumentos
+# de llamada.** Y el corolario, que es el que muerde: **una funcion que reimplementa `responder`
+# no hereda sus defaults**; cada vez que `responder` gana un argumento, esa copia queda vieja y en
+# silencio.
+
+def pertenece_de(cfg, mask):
+    """El argumento `pertenece` que le corresponde a este checkpoint, o None si no lleva bit.
+
+    Replica `entrenar.py:pert_de`: las primeras 4*E_MAX entradas del archivo son el episodio en
+    curso. Se pasa el `mask` sólo para tomarle la forma.
+    """
+    if not cfg.get("pert"):
+        return None
+    import numpy as np
+    import jax.numpy as jnp
+    import datos as DAT
+
+    n_pri = 4 * DAT.E_MAX
+    m = np.zeros(mask.shape[-1], bool)
+    m[:n_pri] = True
+    return jnp.array(np.broadcast_to(m, mask.shape))

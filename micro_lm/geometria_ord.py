@@ -61,11 +61,25 @@ def analizar(ord_tab):
         return float(np.corrcoef(xs, ys)[0, 1])
 
     # G-4: la 1a componente principal, proyectada contra el indice de turno
+    #
+    # 2026-09-08 · EL SIGNO DE `Vt[0]` ES ARBITRARIO. `np.linalg.svd` no fija ninguna convencion:
+    # `Vt[0]` y `-Vt[0]` son la misma componente y cual sale depende de detalles numericos de
+    # LAPACK. La primera medicion de las seis unidades del sello relativo dio rampa POSITIVA en las
+    # tres `rp` y NEGATIVA en las tres `rr`, y eso se leia como que el bit de pertenencia invierte
+    # el gradiente de recencia. Es un ARTEFACTO: en valor absoluto las seis dan 0,091-0,133, o sea
+    # lo mismo. Se fija el signo de forma determinista y ADEMAS se devuelve |rampa|, que es lo unico
+    # que se puede comparar entre checkpoints.
+    #
+    # La convencion no puede depender del indice de turno, que es justo la variable de interes:
+    # eso haria la rampa positiva por construccion. Se fija por la componente de mayor magnitud,
+    # que es la convencion estandar y es ciega a lo que se mide.
     idx_viva = np.where(viva)[0]
     X = ord_tab[idx_viva] - ord_tab[idx_viva].mean(0)
     if len(idx_viva) >= 3:
         _, _, Vt = np.linalg.svd(X, full_matrices=False)
-        proy = X @ Vt[0]
+        pc1 = Vt[0]
+        pc1 = pc1 * np.sign(pc1[np.argmax(np.abs(pc1))])
+        proy = X @ pc1
         rampa = float(np.corrcoef(idx_viva, proy)[0, 1]) if np.std(proy) > 1e-12 else float("nan")
         # cuanta varianza explica esa 1a componente
         s = np.linalg.svd(X, compute_uv=False)
@@ -78,7 +92,7 @@ def analizar(ord_tab):
         "cos_dentro_bajo": d_bajo, "cos_dentro_alto": d_alto, "cos_entre": entre,
         "brecha_G1": float(brecha),
         "corr_dist_bajo_G2": corr_distancia(bajo), "corr_dist_alto": corr_distancia(alto),
-        "rampa_pc1_G4": rampa, "var_pc1": var1,
+        "rampa_pc1_G4": rampa, "rampa_abs_G4": abs(rampa), "var_pc1": var1,
         "norma_media_bajo": float(normas[:UMBRAL].mean()),
         "norma_media_alto": float(normas[UMBRAL:].mean()),
     }
@@ -102,7 +116,7 @@ def main():
         nom = ruta.split("/")[-1].replace(".pkl", "")
         print(f"{nom:>14} {r['cos_dentro_bajo']:8.4f} {r['cos_dentro_alto']:8.4f} "
               f"{r['cos_entre']:8.4f} {r['brecha_G1']:9.4f} {r['corr_dist_bajo_G2']:9.4f} "
-              f"{r['rampa_pc1_G4']:8.4f} {r['var_pc1']:7.4f} {r['norma_media_bajo']:8.4f} "
+              f"{r['rampa_abs_G4']:8.4f} {r['var_pc1']:7.4f} {r['norma_media_bajo']:8.4f} "
               f"{r['norma_media_alto']:8.4f}")
     if a.salida:
         json.dump(todo, open(a.salida, "w"), indent=1)

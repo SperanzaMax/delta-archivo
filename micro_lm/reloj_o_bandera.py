@@ -73,10 +73,24 @@ def turnos_de(cond, t, mk, n_pri, rng):
     return np.where(mk, t2, 0)
 
 
-def leer(params, archivo, turnos, cons, mask, donde):
-    """`modelo.responder`, con la distribución de lectura guardada. Devuelve (logits, p)."""
+def leer(params, archivo, turnos, cons, mask, donde, pertenece=None):
+    """`modelo.responder`, con la distribución de lectura guardada. Devuelve (logits, p).
+
+    2026-09-08 · FALTABA `marca_pert`. Esta funcion reimplementa `responder` a mano para poder
+    guardar la distribucion de lectura, y al hacerlo se quedo sin el bit de pertenencia. Las tres
+    unidades `rp3` (entrenadas CON el bit) se midieron entonces con el bit APAGADO, o sea con una
+    arquitectura que no es la suya: acierto 0,2969-0,5781 en la sonda contra `vigente` 0,9725-0,9824
+    en su propio entrenamiento. La recuperacion aguantaba —la clave sigue llevando el sello— pero la
+    respuesta se caia, que es la firma exacta de medir un modelo sin la entrada de la que aprendio a
+    depender.
+
+    Es la misma familia que el `M.KQ` de `ser.py` y el `M.SELLO` de este mismo archivo (RETOMAR §3),
+    con una diferencia que vale anotar: `conf_ckpt.aplicar` NO lo cubre y no lo puede cubrir, porque
+    `pert` no es un global del modulo sino un ARGUMENTO de llamada. La regla del §3 hay que leerla
+    mas ancha: la config decide globals Y argumentos.
+    """
     a = params["arch"]
-    ak = archivo @ a["kw"] + M.sello(a, turnos)
+    ak = archivo @ a["kw"] + M.sello(a, turnos, mask) + M.marca_pert(a, pertenece)
     av = archivo @ a["vw"]
     penal = jnp.where(mask, 0.0, -1e9)[:, None, :]
     guardado = {}
@@ -106,7 +120,14 @@ def correr(params, cfg, ses_extra, lotes, B, semilla, conds=CONDICIONES):
         es_extra = np.zeros(t.shape[1], bool); es_extra[n_pri:] = True
         for cond in conds:
             tc = turnos_de(cond, t, mk, n_pri, np.random.default_rng(semilla + 7))
-            lg, p = leer(params, archivo, jnp.array(tc), jnp.array(q), jnp.array(mk), cfg["donde"])
+            # El bit va SOLO si el checkpoint se entreno con el. `pert_de` replica lo que hace
+            # `entrenar.py:pert_de`: las primeras 4*E_MAX entradas son el episodio en curso.
+            pert = None
+            if cfg.get("pert"):
+                m0 = np.zeros(mk.shape[-1], bool); m0[:n_pri] = True
+                pert = jnp.array(np.broadcast_to(m0, mk.shape))
+            lg, p = leer(params, archivo, jnp.array(tc), jnp.array(q), jnp.array(mk), cfg["donde"],
+                         pertenece=pert)
             pred = np.array(jnp.take_along_axis(lg, jnp.array(pq)[:, None, None], axis=1)
                             [:, 0, :].argmax(-1))
             p = np.array(p)[np.arange(B), np.array(pq)]              # (B, N)

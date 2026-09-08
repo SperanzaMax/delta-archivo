@@ -1,0 +1,120 @@
+{
+ "N": 120,
+ "T": 24,
+ "res": {
+  "ckpts/kq3_s0.pkl": {
+   "q=k=v=x": {
+    "peso_propia_pos": 0.4737090766429901,
+    "masa_fuera": 0.5262909531593323,
+    "max_de_los_otros": 0.06466083228588104,
+    "entropia": 2.2583088874816895,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 9.665017127990723,
+    "de_un_total_de": 24,
+    "sim_diagonal": 3.292030096054077,
+    "sim_otros": 0.1600184440612793,
+    "brecha_logits": 3.132011651992798
+   },
+   "wq/wk Glorot x1.0": {
+    "peso_propia_pos": 0.041159432381391525,
+    "masa_fuera": 0.958840548992157,
+    "max_de_los_otros": 0.06936240941286087,
+    "entropia": 3.13916015625,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 23.0866756439209,
+    "de_un_total_de": 24,
+    "sim_diagonal": -0.008705963380634785,
+    "sim_otros": 0.00107044936157763,
+    "brecha_logits": -0.009776412509381771
+   },
+   "wq/wk Glorot x0.5": {
+    "peso_propia_pos": 0.041561614722013474,
+    "masa_fuera": 0.9584384560585022,
+    "max_de_los_otros": 0.0475989505648613,
+    "entropia": 3.175601005554199,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 23.941205978393555,
+    "de_un_total_de": 24,
+    "sim_diagonal": -0.002176490845158696,
+    "sim_otros": 0.0002676123403944075,
+    "brecha_logits": -0.0024441031273454428
+   }
+  },
+  "ckpts/rp3_s0.pkl": {
+   "q=k=v=x": {
+    "peso_propia_pos": 0.42530393600463867,
+    "masa_fuera": 0.5746961236000061,
+    "max_de_los_otros": 0.06080397590994835,
+    "entropia": 2.4103102684020996,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 11.253811836242676,
+    "de_un_total_de": 24,
+    "sim_diagonal": 3.090216875076294,
+    "sim_otros": 0.17364460229873657,
+    "brecha_logits": 2.916572332382202
+   },
+   "wq/wk Glorot x1.0": {
+    "peso_propia_pos": 0.042111244052648544,
+    "masa_fuera": 0.9578887820243835,
+    "max_de_los_otros": 0.06710164994001389,
+    "entropia": 3.1450860500335693,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 23.2236328125,
+    "de_un_total_de": 24,
+    "sim_diagonal": -0.0026518404483795166,
+    "sim_otros": -0.009907708503305912,
+    "brecha_logits": 0.007255868054926395
+   },
+   "wq/wk Glorot x0.5": {
+    "peso_propia_pos": 0.04174938425421715,
+    "masa_fuera": 0.9582507014274597,
+    "max_de_los_otros": 0.047164689749479294,
+    "entropia": 3.175992012023926,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 23.95057487487793,
+    "de_un_total_de": 24,
+    "sim_diagonal": -0.0006629601120948792,
+    "sim_otros": -0.002476927125826478,
+    "brecha_logits": 0.0018139670137315989
+   }
+  },
+  "ckpts/v3_s0.pkl": {
+   "q=k=v=x": {
+    "peso_propia_pos": 0.47439464926719666,
+    "masa_fuera": 0.5256053805351257,
+    "max_de_los_otros": 0.07171297073364258,
+    "entropia": 2.2272627353668213,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 9.553481101989746,
+    "de_un_total_de": 24,
+    "sim_diagonal": 3.328961133956909,
+    "sim_otros": 0.1784881204366684,
+    "brecha_logits": 3.150473117828369
+   },
+   "wq/wk Glorot x1.0": {
+    "peso_propia_pos": 0.04260361194610596,
+    "masa_fuera": 0.9573964476585388,
+    "max_de_los_otros": 0.06898107379674911,
+    "entropia": 3.140321969985962,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 23.11333656311035,
+    "de_un_total_de": 24,
+    "sim_diagonal": 0.024167146533727646,
+    "sim_otros": -0.006890105549246073,
+    "brecha_logits": 0.03105725161731243
+   },
+   "wq/wk Glorot x0.5": {
+    "peso_propia_pos": 0.04195859283208847,
+    "masa_fuera": 0.9580413699150085,
+    "max_de_los_otros": 0.04753297194838524,
+    "entropia": 3.1756784915924072,
+    "entropia_uniforme": 3.1780538303479458,
+    "posiciones_efectivas": 23.943065643310547,
+    "de_un_total_de": 24,
+    "sim_diagonal": 0.0060417866334319115,
+    "sim_otros": -0.0017225263873115182,
+    "brecha_logits": 0.007764312904328108
+   }
+  }
+ }
+}
