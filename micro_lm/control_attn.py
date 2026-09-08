@@ -96,6 +96,11 @@ if __name__ == "__main__":
                       f"{'CERO EXACTO' if cero else 'se mueve':<12}{esperado}")
                 res[ruta][donde][d] = {"tv_media": media, "tv_max": mx, "n_no_cero": nz,
                                        "n": N, "cero_exacto": cero}
-    json.dump({"N": N, "entrenado": True, "res": res},
-              open(os.path.join(AQUI, "control_attn.json"), "w"), indent=1)
-    print("\nguardado en control_attn.json")
+    # 2026-09-08 · LA SALIDA VA A UN NOMBRE POR CORRIDA. Antes escribia siempre
+    # `control_attn.json` con SOLO los checkpoints de esa invocacion, asi que correrlo sobre una
+    # unidad nueva PISABA la medicion del 4-sep en silencio (paso hoy; se recupero de git). Un
+    # instrumento cuya salida es el registro de un resultado no puede tener un nombre fijo.
+    dest = os.environ.get("SALIDA") or os.path.join(
+        AQUI, "control_attn_%s.json" % __import__("datetime").date.today().strftime("%Y%m%d"))
+    json.dump({"N": N, "entrenado": True, "res": res}, open(dest, "w"), indent=1)
+    print("\nguardado en %s" % os.path.basename(dest))
