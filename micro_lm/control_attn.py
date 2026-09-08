@@ -26,7 +26,7 @@ import conf_ckpt
 
 T = 24                    # largo de la consulta
 N_ARCH = 12               # entradas del archivo
-N = int(os.environ.get("N", "120"))
+N = int(os.environ.get("N", "600"))   # enmienda 2 (8-sep): con 120 la sonda no separa 1,0 de 1,5
 DIST = [1, 2, 3, 4, 5, 6]
 CKPTS = sys.argv[1:] or ["ckpts/v3_s0.pkl", "ckpts/kq3_s0.pkl"]
 

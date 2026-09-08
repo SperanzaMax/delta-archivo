@@ -20,8 +20,8 @@ despues. No decide nada por su cuenta: lee los TV que ya midió `control_attn.py
 import json
 import sys
 
-UMBRAL = 1.5          # el de la enmienda, no se toca
-REFERENCIA = 1.12     # `attn` sobre pesos de `lat2` (kq3_s0, 4-sep): acceso presente, no aprendido
+UMBRAL = 1.5          # el de la enmienda 1, no se toca
+REFERENCIA = 1.00     # enmienda 2: cuatro controles con N=600 dan 0,94-1,05. Con N=120 el ruido llega a 1,44
 
 
 def sel_de(tv):
