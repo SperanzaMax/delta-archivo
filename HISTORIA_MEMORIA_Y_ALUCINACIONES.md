@@ -778,11 +778,24 @@ hiperparámetros. Esto es lo que va, sobre el caso difícil donde la respuesta n
 | 8.000 | 0,6360 | 0,7858 | **0,8833** |
 | 10.000 | 0,6427 | 0,8793 | **0,9435** |
 | 12.000 | 0,6544 | 0,9432 | **0,9841** |
+| 16.000 | 0,6506 | 0,9613 | **0,9910** |
+| 20.000 | 0,6471 | 0,9907 | **0,9930** |
 
-Todavía falta llegar a 26.000, así que esto no es el veredicto, pero la dirección ya no está en
-discusión. En el paso 12.000, que es donde la brecha entre mis dos brazos se vuelve inequívoca, la
-atención completa va en **0,9841** contra 0,9432 del kernel 5 y 0,6544 del kernel 3, con las tres
-semillas del mismo lado. **La atención completa no sólo alcanza al kernel 5, lo pasa desde el paso 8.000**, y deja
+Falta el tramo final para el veredicto formal, pero la dirección ya no está en discusión. Las tres
+semillas van en 0,9886, 0,9904 y 1,0000, muy por encima del 0,80 con el que yo había escrito la
+refutación.
+
+**Y hay algo en la forma de estas curvas que confirma el refinamiento mejor que el resultado.** Mi
+atención completa y mi kernel 5 **convergen al mismo techo**, con la diferencia bajando de 0,0975 en
+el paso 8.000 a 0,0023 en el 20.000. La atención llega antes, no llega más alto. El kernel 3, en
+cambio, se queda en 0,6471 y no llega nunca.
+
+Es exactamente lo que predice la ley enunciada como cobertura. El kernel 5 tiene alcance 4 y **ya
+cubre** la relación, que cae a distancia 3, así que alcanza el mismo techo. La atención cubre todo, o
+sea cubre de más, **y cubrir de más no compra techo**. El kernel 3 tiene alcance 2, deja la relación
+afuera, y ninguna cantidad de pasos lo arregla. **El techo depende de si la posición relevante está
+cubierta o no, y no de cuánto más se cubra.** Eso es lo que hace que la ley sea una condición binaria
+y no una escala. **La atención completa no sólo alcanza al kernel 5, lo pasa desde el paso 8.000**, y deja
 al kernel 3 estancado en 0,64.
 
 Hay algo que no había previsto y que me parece el dato más honesto de la corrida. **Arranca más
