@@ -392,6 +392,12 @@ def main():
             m.update(paso=paso, perdida=round(perdida.item(), 4),
                      s_paso=round((time.time() - t0) / paso, 2))
             hist.append(m)
+            # Volcado PARCIAL. Tres corridas se perdieron enteras hoy porque Colab reclamo la VM
+            # cerca de los 50 minutos y el json se escribia solo al final. Con esto, una corrida
+            # interrumpida deja igual su curva.
+            if a.salida and paso % 500 == 0:
+                json.dump({"args": vars(a), "hist": hist, "parcial": True},
+                          open(a.salida, "w"), indent=1)
             print(f"  paso {paso:4d} · perdida {m['perdida']:7.4f} · GLOBAL {m['global']:.4f} · "
                   f"acierto {m['acierto']:.4f} · vigente {m['vigente']:.4f} · "
                   f"nose {m['nose']:.4f} · invento {m['invento']:.4f} · {m['s_paso']:.1f} s/paso"
