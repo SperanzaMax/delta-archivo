@@ -400,7 +400,8 @@ def main():
                           open(a.salida, "w"), indent=1)
             print(f"  paso {paso:4d} · perdida {m['perdida']:7.4f} · GLOBAL {m['global']:.4f} · "
                   f"acierto {m['acierto']:.4f} · vigente {m['vigente']:.4f} · "
-                  f"nose {m['nose']:.4f} · invento {m['invento']:.4f} · {m['s_paso']:.1f} s/paso"
+                  f"nose {m['nose']:.4f} (rel {m['nose_rel']:.2f}/aus {m['nose_aus']:.2f}) · "
+                  f"invento {m['invento']:.4f} · {m['s_paso']:.1f} s/paso"
                   f"{'  (calentando, sin abstencion)' if calentando else ''}", flush=True)
 
     # ---- Los controles, sobre el modelo ya entrenado y en el MISMO lote ----
@@ -476,6 +477,12 @@ def medir(pred, objetivo, clases, tok_abs, set_val):
         "nose_rel": prom(cl == "nose_rel"),                          # la dura: entidad si, relacion no
         "nose_aus": prom(cl == "nose_aus"),
         "invento": float(np.isin(pred[sin_resp], list(set_val)).mean()) if sin_resp.sum() else 0.0,
+        # el sabor que importa: la entidad ESTA en el archivo con la otra relacion, asi que hay un
+        # valor a mano y decirlo es exactamente completar el hueco con lo que no corresponde
+        "invento_rel": (float(np.isin(pred[cl == "nose_rel"], list(set_val)).mean())
+                        if (cl == "nose_rel").sum() else float("nan")),
+        "invento_aus": (float(np.isin(pred[cl == "nose_aus"], list(set_val)).mean())
+                        if (cl == "nose_aus").sum() else float("nan")),
         "n": {c: int((cl == c).sum()) for c in ["una", "dos", "nose_rel", "nose_aus"]},
     }
 

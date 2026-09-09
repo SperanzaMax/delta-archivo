@@ -21,3 +21,34 @@ VIVO= True
 ULTIMO= paso 6200 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
 VIVO= True
 ULTIMO= paso 7100 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 8025 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 8950 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 9875 · perdida  0.0001 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 10900 · perdida  0.0004 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 11825 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 12825 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 13750 · perdida  0.0001 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 14675 · perdida  0.0001 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 15575 · perdida  0.0001 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 16475 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 17425 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 18350 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 19275 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= False
+ULTIMO= listo en 44.9 min
+[colab] Downloaded '/content/banco_ent15_s2.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_ent15_s2.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_ent15_s2.log'
+== banco_ent15_s2 LISTO

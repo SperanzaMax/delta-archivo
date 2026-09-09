@@ -21,3 +21,32 @@ VIVO= True
 ULTIMO= paso 6700 · perdida  0.0089 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
 VIVO= True
 ULTIMO= paso 7700 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 8700 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 9725 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 10725 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 11725 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 12725 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 13725 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 14725 · perdida  0.0135 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 15750 · perdida  0.0002 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 16750 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 17750 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 18750 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 19750 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= False
+ULTIMO= listo en 40.5 min
+[colab] Downloaded '/content/banco_ent15_s1.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_ent15_s1.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_ent15_s1.log'
+== banco_ent15_s1 LISTO

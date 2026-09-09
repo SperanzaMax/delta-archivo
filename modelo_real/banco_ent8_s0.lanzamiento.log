@@ -21,3 +21,28 @@ VIVO= True
 ULTIMO= paso 7125 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
 VIVO= True
 ULTIMO= paso 8150 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 9150 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 10250 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 11250 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 12325 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 13325 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 14325 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 15350 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 16350 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Connection was lost.
+VIVO= True
+ULTIMO= paso 19775 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= False
+ULTIMO= listo en 41.3 min
+[colab] Downloaded '/content/banco_ent8_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_ent8_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_ent8_s0.log'
+== banco_ent8_s0 LISTO
