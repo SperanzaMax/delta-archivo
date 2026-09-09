@@ -1,0 +1,18 @@
+== banco_val_s0 en la cuenta H · sesion NUEVA banco_h_1324 · 2000 pasos
+[colab] Creating session 'banco_h_1324'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.LrRYcuqaFh/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 2000 --cada 25 --salida /content/banco_val_s0.json --n-ent 8 --n-val 100 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 0 --p-una 1
+lanzado pid 1157
+VIVO= True
+ULTIMO= paso  575 · perdida  4.9929 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 1525 · perdida  1.5861 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Connection was lost.
+VIVO= False
+ULTIMO= listo en 4.3 min
+[colab] Downloaded '/content/banco_val_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_val_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_val_s0.log'
+== banco_val_s0 LISTO

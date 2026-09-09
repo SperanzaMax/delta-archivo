@@ -1,0 +1,54 @@
+== banco_arch4e60largo_s0 en la cuenta C · sesion NUEVA banco_c_1440 · 20000 pasos
+[colab] Creating session 'banco_c_1440'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.eoJUxTs4N6/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 20000 --cada 25 --salida /content/banco_arch4e60largo_s0.json --n-ent 60 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 0 --p-una 1
+lanzado pid 3889
+VIVO= True
+ULTIMO= paso  725 · perdida  1.6855 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 1675 · perdida  1.9338 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 2600 · perdida  1.8470 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 3550 · perdida  2.7026 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 4475 · perdida  0.3388 · GLOBAL 0.7500 · acierto 0.7500 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 5500 · perdida  0.0078 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 6600 · perdida  0.1795 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 7550 · perdida  0.7343 · GLOBAL 0.7500 · acierto 0.7500 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 8500 · perdida  0.0120 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 9475 · perdida  0.1381 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 10375 · perdida  0.0140 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 11300 · perdida  0.0287 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 12300 · perdida  0.0065 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 13250 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 14150 · perdida  0.0262 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 15100 · perdida  0.0001 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 16100 · perdida  0.0002 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 17100 · perdida  0.0000 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 18050 · perdida  0.0001 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 18975 · perdida  0.0014 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 19950 · perdida  0.0013 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= False
+ULTIMO= listo en 43.8 min
+[colab] Downloaded '/content/banco_arch4e60largo_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_arch4e60largo_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_arch4e60largo_s0.log'
+== banco_arch4e60largo_s0 LISTO

@@ -1,0 +1,22 @@
+== banco_base_s0 en la cuenta C · sesion NUEVA banco_c_1241 · 1200 pasos
+[colab] Creating session 'banco_c_1241'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.AXPnwkMACl/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 1200 --cada 25 --salida /content/banco_base_s0.json
+lanzado pid 2141
+VIVO= True
+ULTIMO= paso  125 · perdida  4.3635 · GLOBAL 0.2188 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.4 s/paso
+VIVO= True
+ULTIMO= paso  375 · perdida  3.6885 · GLOBAL 0.3750 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso  625 · perdida  3.4011 · GLOBAL 0.4062 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso  850 · perdida  3.0059 · GLOBAL 0.5000 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 1100 · perdida  3.4977 · GLOBAL 0.4375 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= False
+ULTIMO= listo en 10.0 min
+[colab] Downloaded '/content/banco_base_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_base_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_base_s0.log'
+== banco_base_s0 LISTO

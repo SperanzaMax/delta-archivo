@@ -1,0 +1,42 @@
+== banco_calor_s0 en la cuenta D · sesion NUEVA banco_d_1250 · 4000 pasos
+[colab] Creating session 'banco_d_1250'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.Bcy5uSvJLq/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 4000 --cada 25 --salida /content/banco_calor_s0.json --calentar 1500
+lanzado pid 580
+VIVO= True
+ULTIMO= paso  175 · perdida  4.6228 · GLOBAL 0.0312 · acierto 0.0312 · vigente 0.0000 · nose nan · invento 0.0000 · 0.4 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso  450 · perdida  4.7937 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.5 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso  700 · perdida  4.6329 · GLOBAL 0.0312 · acierto 0.0312 · vigente 0.0000 · nose nan · invento 0.0000 · 0.5 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso  950 · perdida  4.6858 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.5 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 1200 · perdida  4.7494 · GLOBAL 0.0625 · acierto 0.0625 · vigente 0.1053 · nose nan · invento 0.0000 · 0.5 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 1450 · perdida  4.8089 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.5 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 1725 · perdida  3.6725 · GLOBAL 0.3750 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 2000 · perdida  3.1300 · GLOBAL 0.4688 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 2250 · perdida  2.8158 · GLOBAL 0.5625 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 2525 · perdida  2.9694 · GLOBAL 0.4375 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 2800 · perdida  3.6793 · GLOBAL 0.3438 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 3075 · perdida  3.3642 · GLOBAL 0.3750 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 3325 · perdida  2.9725 · GLOBAL 0.3438 · acierto 0.0000 · vigente 0.0000 · nose 0.6875 · invento 0.3125 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 3600 · perdida  3.6670 · GLOBAL 0.2812 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 3875 · perdida  3.3218 · GLOBAL 0.3125 · acierto 0.0833 · vigente 0.1667 · nose 1.0000 · invento 0.0000 · 0.5 s/paso
+VIVO= False
+ULTIMO= listo en 30.9 min
+[colab] Downloaded '/content/banco_calor_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_calor_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_calor_s0.log'
+== banco_calor_s0 LISTO

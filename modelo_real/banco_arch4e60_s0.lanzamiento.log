@@ -1,0 +1,16 @@
+== banco_arch4e60_s0 en la cuenta N · sesion NUEVA banco_n_1426 · 2000 pasos
+[colab] Creating session 'banco_n_1426'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.MFgzIlSn7X/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 2000 --cada 25 --salida /content/banco_arch4e60_s0.json --n-ent 60 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 0 --p-una 1
+lanzado pid 2732
+VIVO= True
+ULTIMO= paso  700 · perdida  1.8056 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 1675 · perdida  1.9338 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= False
+ULTIMO= listo en 4.3 min
+[colab] Downloaded '/content/banco_arch4e60_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_arch4e60_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_arch4e60_s0.log'
+== banco_arch4e60_s0 LISTO

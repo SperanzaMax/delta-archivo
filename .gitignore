@@ -45,3 +45,8 @@ preprint/**/*.log
 preprint/**/*.out
 # Dumps intermedios de las sondas de deteccion: regenerables con sonda_calibra_ensamble.py --dump.
 micro_lm/dump/
+
+# LaTeX del explicativo del 9-sep: se conserva el .tex y el .pdf, no los intermedios.
+modelo_real/*.aux
+modelo_real/*.out
+modelo_real/explicativo.log

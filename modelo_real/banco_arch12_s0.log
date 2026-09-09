@@ -1,0 +1,101 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:   0%|          | 1/201 [00:00<00:39,  5.13it/s]Loading weights:   6%|▋         | 13/201 [00:00<00:03, 51.93it/s]Loading weights:  12%|█▏        | 24/201 [00:00<00:02, 69.51it/s]Loading weights:  18%|█▊        | 37/201 [00:00<00:01, 88.43it/s]Loading weights:  23%|██▎       | 47/201 [00:00<00:01, 85.01it/s]Loading weights:  29%|██▉       | 58/201 [00:00<00:01, 79.42it/s]Loading weights:  34%|███▍      | 68/201 [00:00<00:01, 75.51it/s]Loading weights:  38%|███▊      | 76/201 [00:01<00:01, 75.46it/s]Loading weights:  43%|████▎     | 86/201 [00:01<00:01, 71.47it/s]Loading weights:  48%|████▊     | 96/201 [00:01<00:01, 69.13it/s]Loading weights:  53%|█████▎    | 107/201 [00:01<00:01, 78.10it/s]Loading weights:  58%|█████▊    | 116/201 [00:01<00:01, 75.51it/s]Loading weights:  62%|██████▏   | 124/201 [00:01<00:01, 72.52it/s]Loading weights:  66%|██████▌   | 132/201 [00:01<00:01, 61.63it/s]Loading weights:  72%|███████▏  | 144/201 [00:02<00:00, 73.73it/s]Loading weights:  76%|███████▌  | 152/201 [00:02<00:00, 71.51it/s]Loading weights:  80%|███████▉  | 160/201 [00:02<00:00, 67.63it/s]Loading weights:  84%|████████▎ | 168/201 [00:02<00:00, 62.79it/s]Loading weights:  88%|████████▊ | 176/201 [00:02<00:00, 66.74it/s]Loading weights:  92%|█████████▏| 185/201 [00:02<00:00, 66.90it/s]Loading weights:  96%|█████████▌| 193/201 [00:02<00:00, 60.81it/s]Loading weights: 100%|██████████| 201/201 [00:02<00:00, 71.32it/s]
+DENSO · atencion completa en las 22 capas · sin conv corta
+TinyLlama/TinyLlama-1.1B-Chat-v1.0 · 1.10 B CONGELADOS · entrenables 2.11 M (0.192 %) · rango 256 · cuda
+escritura capa 11 · lectura capa 2 · 60 entidades · 8 valores · 1 relaciones · batch 4 · archivo 12 · 22 bloques
+abstencion 'None' -> 6213 · piso trivial de responder al azar 1/8 = 0.1250
+PISO DEL MUDO: abstenerse SIEMPRE da GLOBAL 0.0000. Por debajo de eso el modelo es peor que el silencio.
+  paso    1 · perdida  6.8189 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 1.6 s/paso
+  paso   25 · perdida  2.0368 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso   50 · perdida  2.2783 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso   75 · perdida  2.5374 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  100 · perdida  2.0742 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  125 · perdida  2.1834 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  150 · perdida  2.7915 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  175 · perdida  2.3571 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  200 · perdida  2.5287 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  225 · perdida  1.9218 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  250 · perdida  2.6249 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  275 · perdida  2.1609 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  300 · perdida  2.4592 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  325 · perdida  2.0566 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  350 · perdida  2.7688 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  375 · perdida  1.7225 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  400 · perdida  2.2376 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  425 · perdida  2.0687 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  450 · perdida  2.4241 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  475 · perdida  2.1906 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  500 · perdida  2.3722 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  525 · perdida  2.6152 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  550 · perdida  2.1592 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  575 · perdida  2.5956 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  600 · perdida  2.3594 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  625 · perdida  1.9517 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  650 · perdida  2.7086 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  675 · perdida  2.2911 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  700 · perdida  2.6142 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  725 · perdida  2.1482 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  750 · perdida  2.2613 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  775 · perdida  2.2111 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  800 · perdida  2.2220 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  825 · perdida  1.9987 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  850 · perdida  2.1557 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  875 · perdida  2.2869 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  900 · perdida  2.2285 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  925 · perdida  2.2549 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  950 · perdida  2.1535 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso  975 · perdida  1.9616 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1000 · perdida  2.2649 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1025 · perdida  1.9819 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1050 · perdida  2.1599 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1075 · perdida  2.1642 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1100 · perdida  1.9826 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1125 · perdida  1.8632 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1150 · perdida  1.7899 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1175 · perdida  1.7970 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1200 · perdida  1.9753 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1225 · perdida  2.3683 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1250 · perdida  1.9896 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1275 · perdida  1.9408 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1300 · perdida  2.1150 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1325 · perdida  2.1438 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1350 · perdida  1.9137 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1375 · perdida  1.8802 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1400 · perdida  2.1770 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1425 · perdida  2.1731 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1450 · perdida  2.2823 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1475 · perdida  2.1530 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1500 · perdida  2.3593 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1525 · perdida  2.2732 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1550 · perdida  2.4084 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1575 · perdida  2.3374 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1600 · perdida  2.3952 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1625 · perdida  2.0974 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1650 · perdida  1.9493 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1675 · perdida  2.2077 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1700 · perdida  2.1915 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1725 · perdida  1.7559 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1750 · perdida  2.1590 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1775 · perdida  2.3616 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1800 · perdida  2.1379 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1825 · perdida  2.3523 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1850 · perdida  1.8458 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1875 · perdida  2.2672 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1900 · perdida  2.1651 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1925 · perdida  2.3170 · GLOBAL 0.2500 · acierto 0.2500 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1950 · perdida  2.3231 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 1975 · perdida  2.2844 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+  paso 2000 · perdida  2.7080 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+
+  CONTROLES sobre el ultimo lote:
+    con archivo        GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000
+    BARAJADO           GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000
+    VACIO (ceros)      GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000
+    lectura APAGADA    GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000
+
+    BARAJADO alto = no lee el archivo · VACIO alto = contesta desde el preentrenamiento
+    (VACIO es el control que pedia el plan por vocabulario abierto)
+
+  escrito /content/banco_arch12_s0.json
+
+listo en 5.7 min

@@ -1,0 +1,324 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+
+\setmainfont{DejaVu Serif}[Scale=0.92]
+\setsansfont{DejaVu Sans}[Scale=0.92]
+\setmonofont{DejaVu Sans Mono}[Scale=0.84]
+
+\definecolor{azul}{HTML}{2a78d6}
+\definecolor{naranja}{HTML}{eb6834}
+\definecolor{tinta2}{HTML}{52514e}
+\definecolor{grisc}{HTML}{f0efec}
+
+\titleformat{\section}{\sffamily\Large\bfseries\color{azul}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries}{}{0em}{}
+\titlespacing{\section}{0pt}{18pt}{6pt}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyfoot[C]{\sffamily\small\color{tinta2}\thepage}
+\fancyhead[L]{\sffamily\footnotesize\color{tinta2}Memoria persistente en modelos de lenguaje}
+\fancyhead[R]{\sffamily\footnotesize\color{tinta2}9 de septiembre de 2026}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\destacado}[1]{%
+  \par\medskip\noindent\colorbox{grisc}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \vspace{2pt}#1\vspace{2pt}}}\par\medskip}
+
+\newcommand{\fig}[2]{\begin{center}\includegraphics[width=#2\linewidth]{figuras/#1}\end{center}}
+
+\begin{document}
+
+\begin{center}
+{\sffamily\bfseries\LARGE Qué hace cada modelo, explicado desde cero}\\[4pt]
+{\sffamily\large\color{tinta2} Micro LM, Micro LM de frontera, TinyLlama y Qwen}\\[10pt]
+{\sffamily\small\color{tinta2} Maximiliano Rodrigo Speranza · 9 de septiembre de 2026}
+\end{center}
+
+\vspace{6pt}
+\hrule
+\vspace{14pt}
+
+\section{El problema, en una frase}
+
+Un modelo de lenguaje como los que usa todo el mundo tiene un defecto raro. \textbf{Se olvida de lo
+que le dijiste.} Si hoy le contás algo sobre vos, mañana no lo sabe. Y tiene un segundo defecto que
+es peor, porque cuando no sabe algo \textbf{no se calla, inventa}, y lo inventa con la misma
+seguridad con la que dice las cosas ciertas.
+
+Los dos defectos parecen distintos y son el mismo. El modelo no tiene un lugar donde guardar lo que
+le pasó, así que cuando le preguntás algo que debería estar guardado, contesta con lo que más se le
+parece de todo lo que leyó alguna vez.
+
+\destacado{El objetivo de esta línea de investigación es una sola cosa. \textbf{Que un modelo de
+lenguaje no olvide nunca lo que le dijiste}, y que cuando no lo sepa, lo diga.}
+
+Para resolver eso hace falta entender cómo un modelo guarda y busca información adentro suyo. Y
+estudiar eso directamente en un modelo gigante es casi imposible, porque no se le puede apagar lo
+que ya sabe. Si le preguntás dónde vive Ana y contesta bien, no hay forma de saber si leyó lo que
+vos guardaste o si se acordó de alguna Ana que leyó en internet.
+
+Por eso hay cuatro modelos en juego, y cada uno cumple una función distinta.
+
+\section{Los cuatro modelos}
+
+\fig{01_arquitecturas.pdf}{1.0}
+
+Todos los modelos de lenguaje están hechos de bloques apilados. El texto entra por arriba, pasa por
+todos los bloques uno tras otro, y sale la respuesta. Lo que diferencia a un modelo de otro es
+cuántos bloques tiene y \textbf{cuánto puede mirar cada bloque}.
+
+Hay dos clases de bloque y la diferencia es toda la historia.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=4pt]
+\item \textbf{Atención completa.} El bloque puede mirar todo lo que vino antes. Es potente y es caro,
+porque el costo crece con el cuadrado de lo que hay que mirar.
+\item \textbf{Regla delta.} El bloque mantiene un resumen que va actualizando, y mira una ventanita.
+Es mucho más barato, y es lo que permite contextos larguísimos.
+\end{itemize}
+
+\subsection{Micro LM}
+
+Es un modelo entrenado desde cero, de \textbf{3,5 megabytes}. Para dar una idea, una foto del
+teléfono pesa más que eso. Sabe 242 palabras en total y contesta de a una palabra por vez.
+
+Suena a juguete y no lo es. \textbf{Es un instrumento de medición.} Como se entrena desde cero y no
+sabe nada del mundo, se le puede vaciar la memoria y comprobar que efectivamente contesta cero.
+Ese control, que en un modelo grande es imposible, es lo que vuelve interpretable todo lo demás.
+
+La analogía honesta es que el Micro LM no es un auto barato. Es un túnel de viento. Nadie maneja un
+túnel de viento hasta la esquina, y sin embargo los aviones se diseñan ahí.
+
+\subsection{Micro LM de frontera}
+
+Es el mismo modelo, con un cambio quirúrgico. En el Micro LM, cuando el modelo va a buscar algo en
+su archivo, la pregunta que formula para buscar \textbf{sale de una ventanita} y no ve la pregunta
+entera. En el Micro LM de frontera esa consulta pasa a mirar todo.
+
+Ese cambio se hizo para contestar una pregunta concreta, y la respuesta fue mejor que la esperada.
+
+\fig{02_cobertura.pdf}{0.82}
+
+Con una ventana demasiado corta el modelo acierta 0,6430, porque hay una pieza de la pregunta que le
+queda literalmente afuera del campo visual. No es que la ignore, no la puede ver. Con una ventana
+apenas más larga acierta 0,9977. Y con atención completa, que puede mirar absolutamente todo,
+acierta \textbf{exactamente lo mismo}, 0,9977.
+
+\destacado{Ese empate exacto es el resultado. \textbf{Lo que decide no es cuánto mira sino SI llega a
+mirar la pieza que importa.} Es una condición de sí o no, no una escala. Mirar de más no compra
+nada.}
+
+\subsection{TinyLlama}
+
+Es un modelo real, de verdad, con 1.100 millones de parámetros, entrenado por otra gente sobre
+textos reales. Sirve para responder la pregunta que el Micro LM no puede responder solo, que es si
+todo lo que se descubrió en el laboratorio también pasa afuera.
+
+Acá el modelo se \textbf{congela entero}. No se le toca ni un parámetro. Lo único que se entrena es
+un archivo externo que se le engancha, y que pesa el \textbf{0,192 por ciento} del modelo.
+
+\subsection{Qwen}
+
+Son modelos abiertos y actuales. Entran por una razón que apareció hoy mismo y que cambia el
+encuadre de todo el programa.
+
+\section{La frontera se mudó a nuestra arquitectura}
+
+Durante años los modelos grandes usaron atención completa en todas las capas. Eso cambió. Los
+modelos abiertos de frontera de 2026, que son Qwen3.5, Qwen3-Next, Kimi Linear y Kimi K3,
+\textbf{abandonaron la atención completa} y se pasaron a una mezcla con mayoría de capas de regla
+delta.
+
+\fig{07_qwen_capas.pdf}{1.0}
+
+Esto no sale de un artículo de divulgación. Sale del archivo de configuración del modelo, que
+cualquiera puede bajar y leer.
+
+\begin{center}\small\sffamily
+\begin{tabular}{ll}
+\toprule
+\texttt{num\_hidden\_layers} & 24 \\
+\texttt{full\_attention\_interval} & 4 \\
+\texttt{layer\_types} & 3 de regla delta y 1 de atención, repetido 6 veces \\
+\texttt{linear\_conv\_kernel\_dim} & \textbf{4}, que es el tamaño de la ventanita \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\destacado{La consecuencia importa. \textbf{El Micro LM dejó de ser una arquitectura vieja y pasó a
+ser una miniatura de lo que la frontera eligió.} Y la ley del empate exacto explica por qué el
+patrón de tres a uno funciona, que es porque hace falta que alguna capa alcance a mirar la pieza que
+importa, y poner más no compra nada.}
+
+\section{Lo que se midió hoy sobre un modelo real}
+
+\subsection{La tarea, que es la que más importa de todas}
+
+Se le dice un dato. Después se lo corrige. Después se le pregunta.
+
+\begin{center}\sffamily\small
+\begin{tabular}{ll}
+\toprule
+Primero se le dice & \texttt{Ana vive en Córdoba} \\
+Después se lo corrige & \texttt{Ana vive en Salta} \\
+Y se le pregunta & \texttt{¿Dónde vive Ana?} \\
+\midrule
+La respuesta correcta es & \texttt{Salta}, porque es la última \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Parece trivial y no lo es. Es exactamente lo que un asistente tiene que hacer bien para servir de
+algo, porque las cosas cambian y la versión vieja de un dato es peor que no tener el dato. Y es
+justamente lo que los modelos actuales hacen mal.
+
+Esta tarea estaba resuelta en el Micro LM desde hace semanas. \textbf{Nunca se había probado sobre
+un modelo real.}
+
+\subsection{El resultado}
+
+\fig{03_versiones.pdf}{0.92}
+
+El modelo arranca sin idea, cruza la línea del azar alrededor de los 2.000 pasos, y termina
+acertando la versión vigente \textbf{0,9366} de las veces. El piso es 0,5000, que es lo que daría
+tirar una moneda entre las dos versiones. La diferencia son 24,8 desviaciones estándar, o sea que la
+probabilidad de que esto sea casualidad es indistinguible de cero.
+
+\subsection{Y la prueba de que no está haciendo trampa}
+
+Un número solo no prueba nada. Podría estar adivinando por algún atajo. Así que sobre el modelo ya
+entrenado se le rompe el archivo de tres maneras distintas.
+
+\fig{04_controles.pdf}{0.82}
+
+\begin{itemize}[leftmargin=1.4em,itemsep=3pt]
+\item Con el archivo en su lugar acierta todo.
+\item Si se le dan los mismos datos \textbf{mezclados}, para que cada pregunta reciba el archivo de
+otra, cae a cero exacto.
+\item Si se le vacía el archivo, cero exacto.
+\item Si se le apaga la lectura, cero exacto.
+\end{itemize}
+
+\destacado{Cero exacto en los tres. \textbf{La respuesta sale del archivo y de ningún otro lado.} No
+se la sabía de antes, no la adivina, no hay atajo.}
+
+Y hay un detalle técnico que es el que vuelve válido todo esto. El archivo guarda, junto a cada dato,
+una marca de cuándo se dijo. En la versión anterior del experimento esa marca coincidía con el lugar
+que el dato ocupaba en la lista, así que era imposible saber si el modelo leía la marca o
+simplemente contaba lugares. Eso se arregló esta mañana. Ahora las marcas van desordenadas respecto
+del lugar, y el modelo igual acierta. \textbf{Está leyendo la marca de tiempo.}
+
+\section{La lección que salió cara}
+
+\fig{05_presupuesto.pdf}{0.66}
+
+Los dos números de este gráfico son el mismo modelo, la misma tarea y el mismo código. Lo único que
+cambia es cuánto tiempo se lo dejó estudiar.
+
+Con 2.000 pasos el resultado era 0,5595, indistinguible de tirar una moneda. Sobre ese número se
+construyeron durante la mañana \textbf{tres explicaciones equivocadas seguidas} de por qué la tarea
+no se podía aprender. Se llegó a describir un mecanismo detallado y convincente de por qué el modelo
+se quedaba mudo, y a diseñar un remedio para curarlo. Las tres explicaciones y el remedio se cayeron
+al correr la versión aburrida del experimento, que era simplemente dejarlo estudiar diez veces más.
+
+\destacado{Antes de explicar por qué algo no se aprende, correrlo con el tiempo que usa la tarea
+equivalente que ya funciona. \textbf{La hipótesis aburrida va primera.}}
+
+\section{Y después volvió a pasar dos veces}
+
+Con la tarea funcionando, la pregunta siguiente era qué ocurre cuando el mundo se agranda. Se pasó
+de ocho nombres distintos a sesenta, y de cuatro datos guardados a ocho. A 2.000 pasos las dos cosas
+parecían romper el modelo por completo, y durante un rato eso pasó por hallazgo.
+
+\fig{08_reloj.pdf}{0.86}
+
+No rompían nada. Las tres tareas llegan al mismo techo. Lo único que cambia es cuánto tardan.
+
+\begin{center}\small\sffamily
+\begin{tabular}{lccc}
+\toprule
+tarea & 2.000 pasos & 20.000 pasos & distancia al azar \\
+\midrule
+contestar la versión vigente & 0,5595 & \textbf{0,9366} & 24,8 $\sigma$ \\
+60 nombres, archivo de 8 & 0,1905 & \textbf{0,9900} & 74,2 $\sigma$ \\
+60 nombres, archivo de 4 & 0,2143 & \textbf{0,9838} & 73,6 $\sigma$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+En los tres casos los controles dan cero exacto, igual que antes. Si se mezcla el archivo, si se lo
+vacía o si se apaga la lectura, el modelo no contesta nada.
+
+\destacado{\textbf{Agrandar el problema no baja el techo, corre el reloj.} Ocho nombres llegan al
+techo cerca del paso 1.650. Sesenta nombres con un archivo del doble de grande llegan cerca del
+8.000. El mismo techo, más tiempo.}
+
+Vale la pena decir esto sin adornos. En un solo día se propusieron cuatro explicaciones distintas de
+un fenómeno que no existía, y las cuatro sonaban razonables. La única que resultó cierta era la que
+no explicaba nada, que era que faltaba tiempo. Es un recordatorio incómodo de lo fácil que es
+construir una teoría encima de una medición corta.
+
+\section{Por qué los Qwen y cuál conviene}
+
+Se midieron los tres candidatos, cargándolos y probándolos, no leyendo sus fichas.
+
+\begin{center}\small\sffamily
+\begin{tabular}{lccc}
+\toprule
+ & TinyLlama & Qwen3-0.6B & Qwen3.5-0.8B \\
+\midrule
+capas & 22 & 28 & 24 \\
+arquitectura & densa & densa & \textbf{híbrida} \\
+ventanita corta & no & no & \textbf{sí, de 4} \\
+se le puede enganchar el archivo & sí & sí & sí \\
+piezas del banco que le sirven & \textbf{161 de 161} & \textbf{161 de 161} & \textbf{161 de 161} \\
+licencia & abierta & abierta & abierta \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El dato que no estaba garantizado y que abarata todo es el de la anteúltima fila. \textbf{El mismo
+banco de pruebas corre en los tres modelos sin cambiar una línea de código.} Ya se verificó
+corriéndolo en los tres.
+
+Y eso deja armado un experimento que hasta hoy no existía. Qwen3.5 y Qwen3-0.6B son de la misma
+familia, del mismo tamaño y con la misma licencia, pero uno es híbrido y el otro es denso. Comparar
+esos dos aísla el efecto de la arquitectura sin ninguna otra diferencia de por medio.
+
+\destacado{La decisión es no cambiar de vehículo todavía. TinyLlama tiene el montaje validado y lo
+que falta es terminar de medir sobre él. Cuando eso cierre, el vehículo pasa a ser Qwen3.5 con
+Qwen3-0.6B de control, porque es el único que tiene adentro el mecanismo del que hablan todas estas
+leyes.}
+
+\section{Qué falta}
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=5pt]
+\item \textbf{Sacarle la marca de tiempo y ver que se rompe.} Hoy está probado que el modelo resuelve
+las versiones. Falta probar que las resuelve \textbf{gracias a la marca}, y para eso hay que sacarla
+y ver caer el resultado a la mitad. Es el experimento con más valor por peso de todos.
+\item \textbf{Repetirlo con otras dos semillas al azar.} Un resultado con una sola semilla no se
+publica.
+\item \textbf{Medir la abstención.} Todo lo de hoy mide si contesta bien. Falta medir si sabe callarse
+cuando no sabe, que es la otra mitad del objetivo.
+\item \textbf{Correr el banco completo, con todo junto y con el tiempo correcto.} Hoy cada pieza
+se midió por separado y todas llegan al techo. Falta la corrida con las cuatro cosas a la vez.
+\end{enumerate}
+
+\vspace{10pt}
+\hrule
+\vspace{8pt}
+{\footnotesize\color{tinta2}\sffamily
+Todos los números de este documento salen de corridas propias, con el código y los datos guardados
+en el repositorio del proyecto. Cada resultado se acompaña de sus controles. Las medias se calculan
+sobre todas las mediciones de la segunda mitad de cada corrida, nunca sobre la última, y se informa
+la distancia al piso en desviaciones estándar.}
+
+\end{document}

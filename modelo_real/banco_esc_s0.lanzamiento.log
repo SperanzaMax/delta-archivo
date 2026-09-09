@@ -1,0 +1,28 @@
+== banco_esc_s0 en la cuenta F · sesion NUEVA banco_f_1257 · 2000 pasos
+[colab] Creating session 'banco_f_1257'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.9wIe30MXyc/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 2000 --cada 25 --salida /content/banco_esc_s0.json --p-dos 0 --p-una 1
+lanzado pid 912
+VIVO= True
+ULTIMO= paso  150 · perdida  4.9035 · GLOBAL 0.0312 · acierto 0.0312 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso  400 · perdida  4.6843 · GLOBAL 0.0312 · acierto 0.0312 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso  650 · perdida  4.6090 · GLOBAL 0.0312 · acierto 0.0312 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso  875 · perdida  4.6223 · GLOBAL 0.0312 · acierto 0.0312 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 1125 · perdida  4.8258 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 1375 · perdida  4.6309 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 1600 · perdida  4.5556 · GLOBAL 0.0312 · acierto 0.0312 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= True
+ULTIMO= paso 1850 · perdida  4.9489 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.5 s/paso
+VIVO= False
+ULTIMO= listo en 16.8 min
+[colab] Downloaded '/content/banco_esc_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_esc_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_esc_s0.log'
+== banco_esc_s0 LISTO

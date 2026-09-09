@@ -1,0 +1,16 @@
+== banco_arch8_s0 en la cuenta K · sesion NUEVA banco_k_1339 · 2000 pasos
+[colab] Creating session 'banco_k_1339'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.jHwpXuLIo1/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 2000 --cada 25 --salida /content/banco_arch8_s0.json --n-ent 60 --n-val 8 --n-rel 1 --batch 4 --distractores 8 --arch 8 --p-dos 0 --p-una 1
+lanzado pid 445
+VIVO= True
+ULTIMO= paso  500 · perdida  2.1593 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1200 · perdida  1.8222 · GLOBAL 0.5000 · acierto 0.5000 · vigente nan · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 5.8 min
+[colab] Downloaded '/content/banco_arch8_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_arch8_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_arch8_s0.log'
+== banco_arch8_s0 LISTO

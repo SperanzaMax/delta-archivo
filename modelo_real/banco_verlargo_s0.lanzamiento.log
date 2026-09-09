@@ -1,0 +1,62 @@
+== banco_verlargo_s0 en la cuenta J · sesion NUEVA banco_j_1327 · 20000 pasos
+[colab] Creating session 'banco_j_1327'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.DFKOSNSVKI/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 20000 --cada 25 --salida /content/banco_verlargo_s0.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1 --p-una 0
+lanzado pid 813
+VIVO= True
+ULTIMO= paso  600 · perdida  2.3737 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 1400 · perdida  0.8940 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2175 · perdida  1.4795 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3025 · perdida  0.9162 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3975 · perdida  0.2197 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4750 · perdida  0.9302 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5525 · perdida  0.2783 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6325 · perdida  1.3467 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7100 · perdida  0.0039 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7825 · perdida  1.7777 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8575 · perdida  0.0024 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9500 · perdida  0.0092 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10250 · perdida  1.7476 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11000 · perdida  0.0185 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11750 · perdida  0.0615 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 12525 · perdida  0.0049 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13275 · perdida  0.0138 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14075 · perdida  0.0030 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14925 · perdida  0.0180 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15675 · perdida  0.0102 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 16425 · perdida  0.2178 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 17200 · perdida  0.0041 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 17975 · perdida  1.0220 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18925 · perdida  0.1332 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 19725 · perdida  0.0284 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 53.7 min
+[colab] Downloaded '/content/banco_verlargo_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_verlargo_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_verlargo_s0.log'
+== banco_verlargo_s0 LISTO
