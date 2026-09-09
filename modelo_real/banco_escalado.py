@@ -85,7 +85,7 @@ def escribir(modelo, tok, frases, capa, estado):
     return h[torch.arange(len(frases), device=h.device), ultimo]
 
 
-def lote(a, pool, g, calentando=False):
+def lote(a, pool, g, calentando=False, verdad=None):
     """Arma un paso. Devuelve las frases a escribir, los indices por muestra, turnos y objetivos.
 
     Cada muestra i es una de cuatro clases, y las cuatro conviven en el mismo lote:
@@ -105,6 +105,19 @@ def lote(a, pool, g, calentando=False):
     distractoras = perm[a.batch:].tolist()
 
     frases, turnos_f = [], []          # las frases del paso, y el turno de cada una
+    def sortear_val():
+        return int(torch.randint(0, len(VAL), (1,), generator=g))
+
+    def sortear_val_para(ent):
+        """Excluye la respuesta VERDADERA de esa entidad, para que el archivo contradiga siempre."""
+        if not verdad or ent not in verdad:
+            return sortear_val()
+        for _ in range(50):
+            v = sortear_val()
+            if VAL[v] != verdad[ent]:
+                return v
+        return sortear_val()
+
     def agregar(ent, rel, val, turno):
         frases.append(f"{ENT[ent]} {RELACIONES[rel]} {VAL[val]}.")
         turnos_f.append(turno)
@@ -138,7 +151,7 @@ def lote(a, pool, g, calentando=False):
             obj, corr = VAL[v2], i2
         elif u < a.p_dos + a.p_una:                        # UNA version
             clase = "una"
-            v = int(torch.randint(0, len(VAL), (1,), generator=g))
+            v = sortear_val_para(e)
             t = int(torch.randint(0, a.turnos, (1,), generator=g))
             i1 = agregar(e, rel, v, t)
             mios = [i1]
@@ -224,6 +237,13 @@ def main():
     ap.add_argument("--n-ent", type=int, default=None, help="usar solo las primeras N entidades")
     ap.add_argument("--n-val", type=int, default=None, help="usar solo los primeros N valores")
     ap.add_argument("--n-rel", type=int, default=len(RELACIONES), choices=[1, 2])
+    # PREREG_ARCHIVO_CONTRA_PREENTRENAMIENTO.md (9b14aa1f). Cambia las entidades inventadas por
+    # HITOS REALES sobre los que TinyLlama YA tiene una creencia, para que el archivo tenga que
+    # ganarle al preentrenamiento y no solo llenar un hueco vacio.
+    ap.add_argument("--mundo", default=None, choices=["real", "inventado"],
+                    help="real = 23 hitos con confianza medida de 0,55 a 0,98 · "
+                         "inventado = 15 de la misma forma con confianza ~0,20, el control")
+    ap.add_argument("--sondas", default="sondas_mundo.json")
     ap.add_argument("--salida", default=None)
     ap.add_argument("--sin-ord", action="store_true",
                     help="ABLACION: `ord` en cero y sin gradiente. Sin sello de orden las dos "
@@ -233,6 +253,24 @@ def main():
 
     mid = VEHICULOS.get(a.modelo, a.modelo)
     pool = json.load(open(a.pool))
+    verdad = None
+    if a.mundo:
+        sd = json.load(open(a.sondas))
+        RELACIONES = ["is in the city of"]
+        a.n_rel = 1
+        if a.mundo == "real":
+            pool["entidades"] = ["The " + e["entidad"] for e in sd["mundo"]]
+            # `verdad` mapea el indice de entidad -> su respuesta verdadera, para EXCLUIRLA al
+            # sortear. Asi el archivo contradice SIEMPRE, que es lo que el prereg pide medir.
+            verdad = {i: e["verdad"] for i, e in enumerate(sd["mundo"])}
+            conf = [e["confianza"] for e in sd["mundo"]]
+            print(f"MUNDO REAL · {len(pool['entidades'])} hitos · confianza previa del modelo "
+                  f"{min(conf):.4f} a {max(conf):.4f} (media {sum(conf)/len(conf):.4f})")
+        else:
+            pool["entidades"] = ["The " + e["entidad"] for e in sd["control"]]
+            conf = [e["confianza"] for e in sd["control"]]
+            print(f"MUNDO INVENTADO · {len(pool['entidades'])} entidades de control · "
+                  f"confianza previa {sum(conf)/len(conf):.4f}")
     if a.n_ent:
         pool["entidades"] = pool["entidades"][:a.n_ent]
     if a.n_val:
@@ -325,7 +363,7 @@ def main():
 
     for paso in range(1, a.pasos + 1):
         calentando = paso <= a.calentar
-        frases, turnos_f, dis_idx, propios, objetivos, clases, _ = lote(a, pool, g, calentando)
+        frases, turnos_f, dis_idx, propios, objetivos, clases, _ = lote(a, pool, g, calentando, verdad)
         idx, tur, _ = armar(propios, dis_idx, turnos_f, a.arch, g)
         V = escribir(modelo, tok, frases, a.capa_escritura, estado)     # (F, d)
         archivo = V[idx.to(dev)]                                        # (B, N, d)

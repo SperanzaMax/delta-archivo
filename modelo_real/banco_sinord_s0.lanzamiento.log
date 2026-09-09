@@ -1,0 +1,62 @@
+== banco_sinord_s0 en la cuenta D · sesion NUEVA banco_d_1557 · 20000 pasos
+[colab] Creating session 'banco_d_1557'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.YXOG1Ahzx0/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 20000 --cada 25 --salida /content/banco_sinord_s0.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1 --p-una 0 --sin-ord
+lanzado pid 3553
+VIVO= True
+ULTIMO= paso  550 · perdida  2.0039 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1300 · perdida  2.6381 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2050 · perdida  1.4809 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2850 · perdida  1.3588 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3675 · perdida  0.8299 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4500 · perdida  2.0447 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5275 · perdida  1.4642 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6050 · perdida  0.6927 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6800 · perdida  0.9570 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7575 · perdida  1.1463 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8325 · perdida  0.6840 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9100 · perdida  0.9850 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9875 · perdida  1.0517 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10625 · perdida  0.8366 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11450 · perdida  0.2902 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 12225 · perdida  0.5700 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13050 · perdida  1.1104 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13825 · perdida  0.3950 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14575 · perdida  1.7166 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15350 · perdida  1.0624 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 16100 · perdida  0.5670 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 16925 · perdida  0.3550 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 17750 · perdida  1.5494 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18525 · perdida  1.4254 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 19300 · perdida  0.4246 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 53.8 min
+[colab] Downloaded '/content/banco_sinord_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_sinord_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_sinord_s0.log'
+== banco_sinord_s0 LISTO

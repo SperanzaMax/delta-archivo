@@ -1,0 +1,221 @@
+{
+ "modelo": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+ "forma": "The {} is in the city of",
+ "mundo": [
+  {
+   "entidad": "Shibuya Crossing",
+   "verdad": "Tokyo",
+   "tok_verdad": 20377,
+   "confianza": 0.5543
+  },
+  {
+   "entidad": "Buckingham Palace",
+   "verdad": "London",
+   "tok_verdad": 4517,
+   "confianza": 0.7564
+  },
+  {
+   "entidad": "Bolshoi Theatre",
+   "verdad": "Moscow",
+   "tok_verdad": 25820,
+   "confianza": 0.7838
+  },
+  {
+   "entidad": "Vatican",
+   "verdad": "Rome",
+   "tok_verdad": 9184,
+   "confianza": 0.7844
+  },
+  {
+   "entidad": "Big Ben",
+   "verdad": "London",
+   "tok_verdad": 4517,
+   "confianza": 0.8194
+  },
+  {
+   "entidad": "Colosseum",
+   "verdad": "Rome",
+   "tok_verdad": 9184,
+   "confianza": 0.828
+  },
+  {
+   "entidad": "Brandenburg Gate",
+   "verdad": "Berlin",
+   "tok_verdad": 5115,
+   "confianza": 0.8457
+  },
+  {
+   "entidad": "Empire State Building",
+   "verdad": "New",
+   "tok_verdad": 1570,
+   "confianza": 0.8519
+  },
+  {
+   "entidad": "Arc de Triomphe",
+   "verdad": "Paris",
+   "tok_verdad": 3681,
+   "confianza": 0.8637
+  },
+  {
+   "entidad": "Kremlin",
+   "verdad": "Moscow",
+   "tok_verdad": 25820,
+   "confianza": 0.8792
+  },
+  {
+   "entidad": "Louvre",
+   "verdad": "Paris",
+   "tok_verdad": 3681,
+   "confianza": 0.8836
+  },
+  {
+   "entidad": "Reichstag",
+   "verdad": "Berlin",
+   "tok_verdad": 5115,
+   "confianza": 0.8952
+  },
+  {
+   "entidad": "Sorbonne",
+   "verdad": "Paris",
+   "tok_verdad": 3681,
+   "confianza": 0.9058
+  },
+  {
+   "entidad": "White House",
+   "verdad": "Washington",
+   "tok_verdad": 7660,
+   "confianza": 0.9197
+  },
+  {
+   "entidad": "Eiffel Tower",
+   "verdad": "Paris",
+   "tok_verdad": 3681,
+   "confianza": 0.927
+  },
+  {
+   "entidad": "Sydney Opera House",
+   "verdad": "Sydney",
+   "tok_verdad": 16198,
+   "confianza": 0.948
+  },
+  {
+   "entidad": "Trevi Fountain",
+   "verdad": "Rome",
+   "tok_verdad": 9184,
+   "confianza": 0.9528
+  },
+  {
+   "entidad": "Prado Museum",
+   "verdad": "Madrid",
+   "tok_verdad": 9669,
+   "confianza": 0.9555
+  },
+  {
+   "entidad": "Pantheon",
+   "verdad": "Rome",
+   "tok_verdad": 9184,
+   "confianza": 0.9574
+  },
+  {
+   "entidad": "Uffizi Gallery",
+   "verdad": "Florence",
+   "tok_verdad": 23998,
+   "confianza": 0.9657
+  },
+  {
+   "entidad": "Sagrada Familia",
+   "verdad": "Barcelona",
+   "tok_verdad": 12408,
+   "confianza": 0.9671
+  },
+  {
+   "entidad": "Tower Bridge",
+   "verdad": "London",
+   "tok_verdad": 4517,
+   "confianza": 0.9771
+  },
+  {
+   "entidad": "Rijksmuseum",
+   "verdad": "Amsterdam",
+   "tok_verdad": 17399,
+   "confianza": 0.9797
+  }
+ ],
+ "control": [
+  {
+   "entidad": "Zorlin Tower",
+   "top1": "Z",
+   "confianza": 0.1119
+  },
+  {
+   "entidad": "Kravec Palace",
+   "top1": "Kra",
+   "confianza": 0.0431
+  },
+  {
+   "entidad": "Bexil Bridge",
+   "top1": "B",
+   "confianza": 0.6191
+  },
+  {
+   "entidad": "Ondrel Gardens",
+   "top1": "O",
+   "confianza": 0.0463
+  },
+  {
+   "entidad": "Marnak Cathedral",
+   "top1": "Mar",
+   "confianza": 0.5421
+  },
+  {
+   "entidad": "Veskar Arena",
+   "top1": "V",
+   "confianza": 0.1666
+  },
+  {
+   "entidad": "Tulmen Fortress",
+   "top1": "T",
+   "confianza": 0.0634
+  },
+  {
+   "entidad": "Garrow Basilica",
+   "top1": "Rome",
+   "confianza": 0.0752
+  },
+  {
+   "entidad": "Pellin Observatory",
+   "top1": "P",
+   "confianza": 0.4628
+  },
+  {
+   "entidad": "Wynd Citadel",
+   "top1": "Wy",
+   "confianza": 0.0396
+  },
+  {
+   "entidad": "Threnn Aqueduct",
+   "top1": "Th",
+   "confianza": 0.1938
+  },
+  {
+   "entidad": "Ombra Pavilion",
+   "top1": "V",
+   "confianza": 0.018
+  },
+  {
+   "entidad": "Saskel Rotunda",
+   "top1": "S",
+   "confianza": 0.4289
+  },
+  {
+   "entidad": "Direnn Colonnade",
+   "top1": "D",
+   "confianza": 0.0401
+  },
+  {
+   "entidad": "Yulvar Amphitheatre",
+   "top1": "Y",
+   "confianza": 0.1945
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+== banco_verlargo_s2 en la cuenta F · sesion NUEVA banco_f_1558 · 20000 pasos
+[colab] Creating session 'banco_f_1558'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.LOnrXq6Qzk/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 2 --pasos 20000 --cada 25 --salida /content/banco_verlargo_s2.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1 --p-una 0
+lanzado pid 3752
+VIVO= True
+ULTIMO= paso  450 · perdida  2.7924 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 1175 · perdida  1.8874 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1900 · perdida  1.1559 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2650 · perdida  0.1164 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3375 · perdida  0.3629 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4125 · perdida  0.1758 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4850 · perdida  1.6767 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5575 · perdida  0.1256 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6325 · perdida  1.4888 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7050 · perdida  0.0138 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7800 · perdida  0.0310 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8525 · perdida  0.6028 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9275 · perdida  0.0117 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10000 · perdida  0.0092 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10725 · perdida  0.0132 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11475 · perdida  0.0083 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 12225 · perdida  0.3636 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 12975 · perdida  0.0113 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13700 · perdida  0.4330 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14450 · perdida  0.0007 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15200 · perdida  0.0743 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15925 · perdida  0.1348 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 16725 · perdida  0.2321 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 17475 · perdida  0.0031 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18200 · perdida  0.3166 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18950 · perdida  0.0062 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 19675 · perdida  0.2217 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 55.3 min
+[colab] Downloaded '/content/banco_verlargo_s2.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_verlargo_s2.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_verlargo_s2.log'
+== banco_verlargo_s2 LISTO

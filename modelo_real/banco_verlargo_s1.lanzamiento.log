@@ -1,0 +1,75 @@
+== banco_verlargo_s1 en la cuenta E · sesion NUEVA banco_e_1558 · 20000 pasos
+[colab] Creating session 'banco_e_1558'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.EVHz9d1eMP/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 1 --pasos 20000 --cada 25 --salida /content/banco_verlargo_s1.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1 --p-una 0
+lanzado pid 2148
+VIVO= True
+ULTIMO= paso  550 · perdida  2.2301 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1250 · perdida  1.9919 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1950 · perdida  1.2840 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2650 · perdida  1.0794 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3350 · perdida  0.6606 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4025 · perdida  0.1870 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4725 · perdida  0.4467 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5425 · perdida  0.7289 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6125 · perdida  0.1391 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6825 · perdida  0.2863 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7525 · perdida  0.0450 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8225 · perdida  0.0767 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8900 · perdida  2.2561 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9600 · perdida  0.2039 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10300 · perdida  0.0005 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11000 · perdida  0.7079 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11750 · perdida  0.0024 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 12450 · perdida  0.0044 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13150 · perdida  0.2869 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13850 · perdida  0.0544 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14600 · perdida  1.4429 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15275 · perdida  0.0925 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15975 · perdida  0.0020 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 16675 · perdida  0.0010 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 17350 · perdida  0.0262 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18100 · perdida  0.1303 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18800 · perdida  0.0007 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 19500 · perdida  0.0154 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan · invento 0.0000 · 0.2 s/paso
+[colab] Session 'banco_e_1558' appears to be lost (404/401). Cleaning up.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
+[colab] Session 'banco_e_1558' not found.
