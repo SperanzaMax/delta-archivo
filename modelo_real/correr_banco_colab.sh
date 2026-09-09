@@ -44,7 +44,7 @@ else
 fi
 
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"; rm -f "$lk"' EXIT
-tar czf "$TMP/banco.tgz" banco_escalado.py pool_tinyllama.json
+tar czf "$TMP/banco.tgz" banco_escalado.py pool_tinyllama.json sondas_mundo.json
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/banco.tgz" /content/banco.tgz || exit 1
 
 EXTRA_PY="$(printf "'%s', " "${EXTRA[@]:-}" | sed "s/'', $//")"
