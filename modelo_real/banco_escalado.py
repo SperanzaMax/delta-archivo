@@ -244,6 +244,9 @@ def main():
                     help="real = 23 hitos con confianza medida de 0,55 a 0,98 · "
                          "inventado = 15 de la misma forma con confianza ~0,20, el control")
     ap.add_argument("--sondas", default="sondas_mundo.json")
+    ap.add_argument("--reps", type=int, default=40,
+                    help="repeticiones por entidad en la evaluacion final, para que el acierto "
+                         "por entidad tenga n suficiente y H2 se pueda medir")
     ap.add_argument("--salida", default=None)
     ap.add_argument("--sin-ord", action="store_true",
                     help="ABLACION: `ord` en cero y sin gradiente. Sin sello de orden las dos "
@@ -253,7 +256,7 @@ def main():
 
     mid = VEHICULOS.get(a.modelo, a.modelo)
     pool = json.load(open(a.pool))
-    verdad = None
+    verdad, VAL_, CONF_ = None, {}, {}
     if a.mundo:
         sd = json.load(open(a.sondas))
         RELACIONES = ["is in the city of"]
@@ -263,11 +266,15 @@ def main():
             # `verdad` mapea el indice de entidad -> su respuesta verdadera, para EXCLUIRLA al
             # sortear. Asi el archivo contradice SIEMPRE, que es lo que el prereg pide medir.
             verdad = {i: e["verdad"] for i, e in enumerate(sd["mundo"])}
+            VAL_ = {i: e["verdad"] for i, e in enumerate(sd["mundo"])}
+            CONF_ = {i: e["confianza"] for i, e in enumerate(sd["mundo"])}
             conf = [e["confianza"] for e in sd["mundo"]]
             print(f"MUNDO REAL · {len(pool['entidades'])} hitos · confianza previa del modelo "
                   f"{min(conf):.4f} a {max(conf):.4f} (media {sum(conf)/len(conf):.4f})")
         else:
             pool["entidades"] = ["The " + e["entidad"] for e in sd["control"]]
+            VAL_ = {}
+            CONF_ = {i: e["confianza"] for i, e in enumerate(sd["control"])}
             conf = [e["confianza"] for e in sd["control"]]
             print(f"MUNDO INVENTADO · {len(pool['entidades'])} entidades de control · "
                   f"confianza previa {sum(conf)/len(conf):.4f}")
@@ -408,8 +415,37 @@ def main():
     print("\n    BARAJADO alto = no lee el archivo · VACIO alto = contesta desde el "
           "preentrenamiento\n    (VACIO es el control que pedia el plan por vocabulario abierto)")
 
+    # --- EVALUACION FINAL POR ENTIDAD (PREREG_ARCHIVO_CONTRA_PREENTRENAMIENTO, H2) ---
+    # Cada entidad se pregunta `--reps` veces con un valor distinto del archivo cada vez, para que
+    # el acierto por entidad tenga n suficiente y se pueda cruzar con su confianza previa.
+    por_ent = {}
+    if a.mundo:
+        with torch.no_grad():
+            for ei in range(len(pool["entidades"])):
+                ok = 0
+                for _ in range(a.reps):
+                    v = None
+                    while v is None or (verdad and VAL_[ei] == pool["valores"][v]):
+                        v = int(torch.randint(0, len(pool["valores"]), (1,), generator=g))
+                    fr = [f"{pool['entidades'][ei]} {RELACIONES[0]} {pool['valores'][v]}."]
+                    V1 = escribir(modelo, tok, fr, a.capa_escritura, estado)
+                    arc = V1.unsqueeze(1)                                  # (1, 1, d)
+                    tu = torch.zeros(1, 1, dtype=torch.long, device=dev)
+                    ids1 = tok([f"{pool['entidades'][ei]} {RELACIONES[0]}"],
+                               return_tensors="pt", padding=True).to(dev)
+                    estado["archivo"], estado["turnos"] = arc, tu
+                    lg = modelo(**ids1).logits[0, ids1["attention_mask"].sum(1)[0] - 1]
+                    ok += int(int(lg.argmax()) == TOK_VAL[pool["valores"][v]])
+                por_ent[pool["entidades"][ei]] = {"acierto": ok / a.reps, "n": a.reps,
+                                                  "confianza": CONF_.get(ei)}
+        estado["archivo"] = archivo
+        print(f"\n  POR ENTIDAD ({a.reps} repeticiones cada una):")
+        for k, v in sorted(por_ent.items(), key=lambda kv: -(kv[1]["confianza"] or 0)):
+            print(f"    c={v['confianza'] if v['confianza'] is not None else 0:.4f}  "
+                  f"acierto {v['acierto']:.3f}  {k}")
+
     if a.salida:
-        json.dump({"args": vars(a), "hist": hist, "controles": res},
+        json.dump({"args": vars(a), "hist": hist, "controles": res, "por_entidad": por_ent},
                   open(a.salida, "w"), indent=1)
         print(f"\n  escrito {a.salida}")
     print(f"\nlisto en {(time.time()-t0)/60:.1f} min")
