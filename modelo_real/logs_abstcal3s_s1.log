@@ -5,3 +5,9 @@
 entorno 2.11.0+cu128 5.16.1 True 
 cmd /usr/bin/python3 -u banco_escalado.py --semilla 1 --pasos 16000 --cada 25 --salida /content/banco_abstcal3s_s1.json --n-ent 15 --n-val 8 --n-rel 2 --batch 4 --distractores 8 --arch 8 --p-dos 0.25 --p-una 0.35 --p-nose-rel 0.20 --calentar 3000
 lanzado pid 796
+VIVO= True
+ULTIMO= paso  550 · perdida  2.1952 · GLOBAL 0.0000 · acierto 0.0000 · vigente nan · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 1325 · perdida  2.1688 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.5000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 2050 · perdida  1.9721 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso  (calentando, sin abstencion)

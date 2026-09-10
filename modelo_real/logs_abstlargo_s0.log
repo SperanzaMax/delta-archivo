@@ -7,3 +7,7 @@ cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 22000 --cada 25 --
 lanzado pid 1353
 VIVO= True
 ULTIMO= paso  575 · perdida  2.4994 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.1 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 1400 · perdida  1.6185 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.1 s/paso  (calentando, sin abstencion)
+VIVO= True
+ULTIMO= paso 2200 · perdida  2.5482 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.1 s/paso  (calentando, sin abstencion)
