@@ -1,0 +1,17 @@
+== banco_verlargo3s_s2 en la cuenta J · sesion NUEVA banco_j_0901 · 20000 pasos
+[colab] Creating session 'banco_j_0901'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.R7jHnFTYgI/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 2 --pasos 20000 --cada 25 --salida /content/banco_verlargo3s_s2.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1.0 --p-una 0.0
+lanzado pid 2294
+VIVO= True
+ULTIMO= paso  450 · perdida  2.7924 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1175 · perdida  1.8874 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1900 · perdida  1.1559 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2800 · perdida  0.3508 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3525 · perdida  0.0463 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso

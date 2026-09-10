@@ -49,3 +49,8 @@ VIVO= True
 ULTIMO= paso 15250 · perdida  0.0181 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose 1.0000 (rel 1.00/aus nan) · invento 0.0000 · 0.2 s/paso
 VIVO= True
 ULTIMO= paso 15975 · perdida  0.6826 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 45.4 min
+[colab] Downloaded '/content/banco_abstcal3s_s0.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abstcal3s_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abstcal3s_s0.log'
+== banco_abstcal3s_s0 LISTO

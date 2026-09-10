@@ -49,3 +49,18 @@ VIVO= True
 ULTIMO= paso 16875 · perdida  2.0471 · GLOBAL 0.2500 · acierto 1.0000 · vigente nan · nose 0.0000 (rel 0.00/aus 0.00) · invento 1.0000 · 0.1 s/paso
 VIVO= True
 ULTIMO= paso 17675 · perdida  1.2497 · GLOBAL 0.2500 · acierto 0.0000 · vigente 0.0000 · nose 0.5000 (rel 0.00/aus 1.00) · invento 0.5000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 18475 · perdida  0.6285 · GLOBAL 0.7500 · acierto 1.0000 · vigente 1.0000 · nose 0.5000 (rel 1.00/aus 0.00) · invento 0.5000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 19350 · perdida  0.6690 · GLOBAL 0.7500 · acierto 0.6667 · vigente nan · nose 1.0000 (rel 1.00/aus nan) · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 20150 · perdida  0.3909 · GLOBAL 0.7500 · acierto 0.6667 · vigente nan · nose 1.0000 (rel nan/aus 1.00) · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 20975 · perdida  0.7377 · GLOBAL 0.5000 · acierto 0.0000 · vigente 0.0000 · nose 0.6667 (rel 1.00/aus 0.00) · invento 0.3333 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 21775 · perdida  0.4638 · GLOBAL 0.7500 · acierto 1.0000 · vigente 1.0000 · nose 0.5000 (rel 0.00/aus 1.00) · invento 0.5000 · 0.1 s/paso
+VIVO= False
+ULTIMO= listo en 56.8 min
+[colab] Downloaded '/content/banco_abstlargo_s2.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abstlargo_s2.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abstlargo_s2.log'
+== banco_abstlargo_s2 LISTO

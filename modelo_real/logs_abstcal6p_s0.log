@@ -45,3 +45,12 @@ VIVO= True
 ULTIMO= paso 16200 · perdida  0.3766 · GLOBAL 0.7500 · acierto 0.6667 · vigente 0.0000 · nose 1.0000 (rel nan/aus 1.00) · invento 0.0000 · 0.2 s/paso
 VIVO= True
 ULTIMO= paso 17100 · perdida  1.2989 · GLOBAL 0.7500 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 (rel 1.00/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 17900 · perdida  0.4569 · GLOBAL 0.7500 · acierto 1.0000 · vigente nan · nose 0.5000 (rel 1.00/aus 0.00) · invento 0.5000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 18725 · perdida  1.6339 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 50.5 min
+[colab] Downloaded '/content/banco_abstcal6p_s0.json' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abstcal6p_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abstcal6p_s0.log'
+== banco_abstcal6p_s0 LISTO

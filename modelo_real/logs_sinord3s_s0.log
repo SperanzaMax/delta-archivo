@@ -1,0 +1,17 @@
+== banco_sinord3s_s0 en la cuenta K · sesion NUEVA banco_k_0901 · 20000 pasos
+[colab] Creating session 'banco_k_0901'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.WskKgPL8qV/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 20000 --cada 25 --salida /content/banco_sinord3s_s0.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1.0 --p-una 0.0 --sin-ord
+lanzado pid 1108
+VIVO= True
+ULTIMO= paso  550 · perdida  2.0039 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1300 · perdida  2.6381 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2050 · perdida  1.4809 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2825 · perdida  2.1802 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3550 · perdida  1.2127 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
