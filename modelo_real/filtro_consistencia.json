@@ -1,0 +1,728 @@
+{
+ "reales": [
+  {
+   "consistencia": 0.75,
+   "distintas": 2,
+   "modal": "Tokyo",
+   "conf_media": 0.5683302506804466,
+   "respuestas": [
+    "Tokyo",
+    "Tokyo",
+    "Sh",
+    "Tokyo",
+    "Sh",
+    "Tokyo",
+    "Tokyo",
+    "Tokyo"
+   ],
+   "entidad": "Shibuya Crossing",
+   "verdad": "Tokyo",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "London",
+   "conf_media": 0.7556335926055908,
+   "respuestas": [
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London"
+   ],
+   "entidad": "Buckingham Palace",
+   "verdad": "London",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Moscow",
+   "conf_media": 0.748431496322155,
+   "respuestas": [
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow"
+   ],
+   "entidad": "Bolshoi Theatre",
+   "verdad": "Moscow",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Rome",
+   "conf_media": 0.6619201153516769,
+   "respuestas": [
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome"
+   ],
+   "entidad": "Vatican",
+   "verdad": "Rome",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "London",
+   "conf_media": 0.8449488058686256,
+   "respuestas": [
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London"
+   ],
+   "entidad": "Big Ben",
+   "verdad": "London",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Rome",
+   "conf_media": 0.8377407565712929,
+   "respuestas": [
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome"
+   ],
+   "entidad": "Colosseum",
+   "verdad": "Rome",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Berlin",
+   "conf_media": 0.9030731320381165,
+   "respuestas": [
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin"
+   ],
+   "entidad": "Brandenburg Gate",
+   "verdad": "Berlin",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "New",
+   "conf_media": 0.8052551783621311,
+   "respuestas": [
+    "New",
+    "New",
+    "New",
+    "New",
+    "New",
+    "New",
+    "New",
+    "New"
+   ],
+   "entidad": "Empire State Building",
+   "verdad": "New",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Paris",
+   "conf_media": 0.8486392647027969,
+   "respuestas": [
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris"
+   ],
+   "entidad": "Arc de Triomphe",
+   "verdad": "Paris",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Moscow",
+   "conf_media": 0.7611910030245781,
+   "respuestas": [
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow",
+    "Moscow"
+   ],
+   "entidad": "Kremlin",
+   "verdad": "Moscow",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Paris",
+   "conf_media": 0.8192321825772524,
+   "respuestas": [
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris"
+   ],
+   "entidad": "Louvre",
+   "verdad": "Paris",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Berlin",
+   "conf_media": 0.8587602451443672,
+   "respuestas": [
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin",
+    "Berlin"
+   ],
+   "entidad": "Reichstag",
+   "verdad": "Berlin",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Paris",
+   "conf_media": 0.7947160117328167,
+   "respuestas": [
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris"
+   ],
+   "entidad": "Sorbonne",
+   "verdad": "Paris",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Washington",
+   "conf_media": 0.8170932717621326,
+   "respuestas": [
+    "Washington",
+    "Washington",
+    "Washington",
+    "Washington",
+    "Washington",
+    "Washington",
+    "Washington",
+    "Washington"
+   ],
+   "entidad": "White House",
+   "verdad": "Washington",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Paris",
+   "conf_media": 0.8984997943043709,
+   "respuestas": [
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris"
+   ],
+   "entidad": "Eiffel Tower",
+   "verdad": "Paris",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Sydney",
+   "conf_media": 0.9070612341165543,
+   "respuestas": [
+    "Sydney",
+    "Sydney",
+    "Sydney",
+    "Sydney",
+    "Sydney",
+    "Sydney",
+    "Sydney",
+    "Sydney"
+   ],
+   "entidad": "Sydney Opera House",
+   "verdad": "Sydney",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Rome",
+   "conf_media": 0.9061680808663368,
+   "respuestas": [
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome"
+   ],
+   "entidad": "Trevi Fountain",
+   "verdad": "Rome",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Madrid",
+   "conf_media": 0.8962722420692444,
+   "respuestas": [
+    "Madrid",
+    "Madrid",
+    "Madrid",
+    "Madrid",
+    "Madrid",
+    "Madrid",
+    "Madrid",
+    "Madrid"
+   ],
+   "entidad": "Prado Museum",
+   "verdad": "Madrid",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Rome",
+   "conf_media": 0.8547712676227093,
+   "respuestas": [
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome",
+    "Rome"
+   ],
+   "entidad": "Pantheon",
+   "verdad": "Rome",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Florence",
+   "conf_media": 0.954727403819561,
+   "respuestas": [
+    "Florence",
+    "Florence",
+    "Florence",
+    "Florence",
+    "Florence",
+    "Florence",
+    "Florence",
+    "Florence"
+   ],
+   "entidad": "Uffizi Gallery",
+   "verdad": "Florence",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Barcelona",
+   "conf_media": 0.9473496302962303,
+   "respuestas": [
+    "Barcelona",
+    "Barcelona",
+    "Barcelona",
+    "Barcelona",
+    "Barcelona",
+    "Barcelona",
+    "Barcelona",
+    "Barcelona"
+   ],
+   "entidad": "Sagrada Familia",
+   "verdad": "Barcelona",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "London",
+   "conf_media": 0.9181824773550034,
+   "respuestas": [
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London",
+    "London"
+   ],
+   "entidad": "Tower Bridge",
+   "verdad": "London",
+   "acierta": true
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Amsterdam",
+   "conf_media": 0.9359654784202576,
+   "respuestas": [
+    "Amsterdam",
+    "Amsterdam",
+    "Amsterdam",
+    "Amsterdam",
+    "Amsterdam",
+    "Amsterdam",
+    "Amsterdam",
+    "Amsterdam"
+   ],
+   "entidad": "Rijksmuseum",
+   "verdad": "Amsterdam",
+   "acierta": true
+  }
+ ],
+ "inventadas": [
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "Z",
+   "conf_media": 0.07588907657191157,
+   "respuestas": [
+    "Z",
+    "Z",
+    "Z",
+    "Z",
+    "Z",
+    "New",
+    "Z",
+    "Z"
+   ],
+   "entidad": "Zorlin Tower",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.375,
+   "distintas": 5,
+   "modal": "Kra",
+   "conf_media": 0.07556730229407549,
+   "respuestas": [
+    "Kra",
+    "Zag",
+    "K",
+    "Krak",
+    "Kra",
+    "Kra",
+    "Z",
+    "Krak"
+   ],
+   "entidad": "Kravec Palace",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "B",
+   "conf_media": 0.5306201465427876,
+   "respuestas": [
+    "B",
+    "B",
+    "B",
+    "B",
+    "B",
+    "B",
+    "B",
+    "B"
+   ],
+   "entidad": "Bexil Bridge",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "O",
+   "conf_media": 0.058585941325873137,
+   "respuestas": [
+    "O",
+    "O",
+    "K",
+    "O",
+    "O",
+    "O",
+    "O",
+    "O"
+   ],
+   "entidad": "Ondrel Gardens",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Mar",
+   "conf_media": 0.5251511633396149,
+   "respuestas": [
+    "Mar",
+    "Mar",
+    "Mar",
+    "Mar",
+    "Mar",
+    "Mar",
+    "Mar",
+    "Mar"
+   ],
+   "entidad": "Marnak Cathedral",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "V",
+   "conf_media": 0.16807629074901342,
+   "respuestas": [
+    "V",
+    "V",
+    "V",
+    "V",
+    "V",
+    "V",
+    "Goth",
+    "V"
+   ],
+   "entidad": "Veskar Arena",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "T",
+   "conf_media": 0.05534865893423557,
+   "respuestas": [
+    "T",
+    "Tul",
+    "T",
+    "T",
+    "T",
+    "T",
+    "T",
+    "T"
+   ],
+   "entidad": "Tulmen Fortress",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.625,
+   "distintas": 3,
+   "modal": "G",
+   "conf_media": 0.08769350638613105,
+   "respuestas": [
+    "Rome",
+    "G",
+    "G",
+    "Rome",
+    "G",
+    "G",
+    "L",
+    "G"
+   ],
+   "entidad": "Garrow Basilica",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "P",
+   "conf_media": 0.38445279002189636,
+   "respuestas": [
+    "P",
+    "La",
+    "P",
+    "P",
+    "P",
+    "P",
+    "P",
+    "P"
+   ],
+   "entidad": "Pellin Observatory",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "Wy",
+   "conf_media": 0.11286149313673377,
+   "respuestas": [
+    "Wy",
+    "Wy",
+    "Wy",
+    "Ly",
+    "Wy",
+    "Wy",
+    "Wy",
+    "Wy"
+   ],
+   "entidad": "Wynd Citadel",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "Th",
+   "conf_media": 0.20382040087133646,
+   "respuestas": [
+    "Th",
+    "Th",
+    "Th",
+    "Th",
+    "Th",
+    "Th",
+    "Th",
+    "Th"
+   ],
+   "entidad": "Threnn Aqueduct",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.375,
+   "distintas": 4,
+   "modal": "V",
+   "conf_media": 0.03983989357948303,
+   "respuestas": [
+    "V",
+    "P",
+    "V",
+    "Rome",
+    "V",
+    "Om",
+    "Om",
+    "Rome"
+   ],
+   "entidad": "Ombra Pavilion",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 1.0,
+   "distintas": 1,
+   "modal": "S",
+   "conf_media": 0.3248965423554182,
+   "respuestas": [
+    "S",
+    "S",
+    "S",
+    "S",
+    "S",
+    "S",
+    "S",
+    "S"
+   ],
+   "entidad": "Saskel Rotunda",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.375,
+   "distintas": 6,
+   "modal": "Dir",
+   "conf_media": 0.09604963497258723,
+   "respuestas": [
+    "D",
+    "Dir",
+    "F",
+    "C",
+    "T",
+    "Dir",
+    "Dir",
+    "Mar"
+   ],
+   "entidad": "Direnn Colonnade",
+   "verdad": null,
+   "acierta": null
+  },
+  {
+   "consistencia": 0.875,
+   "distintas": 2,
+   "modal": "Y",
+   "conf_media": 0.1414471436291933,
+   "respuestas": [
+    "Y",
+    "U",
+    "Y",
+    "Y",
+    "Y",
+    "Y",
+    "Y",
+    "Y"
+   ],
+   "entidad": "Yulvar Amphitheatre",
+   "verdad": null,
+   "acierta": null
+  }
+ ]
+}

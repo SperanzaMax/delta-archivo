@@ -93,6 +93,10 @@ for i in $(seq 1 60); do
   sleep 120
   OUT="$(timeout -k 20 180 "${CL[@]}" exec -s "$SESION" --timeout 120 -f "$TMP/ver.py" 2>&1 | tail -2)"
   echo "$OUT"
+  # Baja el parcial CADA VUELTA. El volcado del script se escribe en la VM, y cuatro veces hoy
+  # Colab reclamo la VM y se llevo el archivo con ella. Guardar alla no protege de eso; bajarlo si.
+  timeout -k 20 120 "${CL[@]}" download -s "$SESION" "/content/${UNI}.json" \
+      "$AQUI/${UNI}.parcial.json" >/dev/null 2>&1
   echo "$OUT" | grep -q "VIVO= False" && break
 done
 
