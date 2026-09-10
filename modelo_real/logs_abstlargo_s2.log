@@ -1,0 +1,9 @@
+== banco_abstlargo_s2 en la cuenta E · sesion NUEVA banco_e_0811 · 22000 pasos
+[colab] Creating session 'banco_e_0811'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.auBQc9ZOvj/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 2 --pasos 22000 --cada 25 --salida /content/banco_abstlargo_s2.json --n-ent 15 --n-val 8 --n-rel 2 --batch 4 --distractores 8 --arch 8 --p-dos 0.25 --p-una 0.35 --p-nose-rel 0.20 --calentar 3000
+lanzado pid 642
+VIVO= True
+ULTIMO= paso  625 · perdida  2.3303 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso  (calentando, sin abstencion)

@@ -1,0 +1,7 @@
+== banco_abstcal3s_s1 en la cuenta M · sesion NUEVA banco_m_0812 · 16000 pasos
+[colab] Creating session 'banco_m_0812'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.hTdxKkfEaT/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 1 --pasos 16000 --cada 25 --salida /content/banco_abstcal3s_s1.json --n-ent 15 --n-val 8 --n-rel 2 --batch 4 --distractores 8 --arch 8 --p-dos 0.25 --p-una 0.35 --p-nose-rel 0.20 --calentar 3000
+lanzado pid 796

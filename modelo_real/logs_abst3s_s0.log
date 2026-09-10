@@ -1,0 +1,9 @@
+== banco_abst3s_s0 en la cuenta I · sesion NUEVA banco_i_0812 · 16000 pasos
+[colab] Creating session 'banco_i_0812'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.auEo4GPhal/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 16000 --cada 25 --salida /content/banco_abst3s_s0.json --n-ent 15 --n-val 8 --n-rel 2 --batch 4 --distractores 8 --arch 8 --p-dos 0.25 --p-una 0.35 --p-nose-rel 0.20
+lanzado pid 2628
+VIVO= True
+ULTIMO= paso  600 · perdida  1.9747 · GLOBAL 0.5000 · acierto 0.0000 · vigente nan · nose 1.0000 (rel 1.00/aus 1.00) · invento 0.0000 · 0.1 s/paso

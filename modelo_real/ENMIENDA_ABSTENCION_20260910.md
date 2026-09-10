@@ -89,3 +89,49 @@ propio. Ninguna hipótesis se evalúa sobre un subconjunto elegido después de v
 La vara sigue siendo `GLOBAL = (acierto + acierto_nose)/n` contra el piso del mudo 0,4000. H1 sigue
 exigiendo las dos condiciones juntas, `GLOBAL` sobre el piso **y** `acierto` ≥ 0,80. H2 y H3 quedan
 como estaban.
+
+---
+
+# CORRECCIÓN de E-4 · el mismo día, con las corridas de hoy todavía sin resultado
+
+El texto de arriba queda como se congeló (SHA `f89071b6`). Esto se agrega después, y se agrega
+porque **el criterio que escribí en E-4 tiene exactamente el defecto que E-1 denuncia**. Se corrige
+ahora, con las doce corridas de hoy en marcha y ninguna con datos todavía, así que no hay forma de
+que la elección del criterio esté contaminada por el resultado que va a producir.
+
+## Lo que estaba mal, en dos pasos
+
+**1er intento, el de E-4.** `pico` = máximo de la media móvil, desestabilizada si el mínimo de la
+cola cae bajo 0,80 × pico. Aplicado a las 28 unidades guardadas del banco da **15 de 28**, y marca
+corridas que nunca aprendieron nada (`arch12_s0` con pico 0,2188). Compara un **máximo** contra un
+**mínimo** sobre hitos de cuatro muestras, o sea dos extremos de ruido, que es la misma familia de
+error que ayer nos costó seis conclusiones.
+
+**2do intento.** Promedios contra promedios con el mismo umbral 0,80. Da **0 de 13** y también está
+mal, ahora en la otra dirección. `ent15_s0` tiene el tramo medio en **1,0000 exacto sobre 800
+muestras** y la cola con hitos en 0,00 y 0,50. Un modelo al 100 % no produce un hito de cuatro de
+cuatro mal. La caída es real y el umbral proporcional no la ve.
+
+## El criterio que queda
+
+La cola contra el tramo medio como **dos proporciones**, con el n real de muestras detrás de cada
+tramo, y sin ningún umbral proporcional:
+
+    medio    hitos del 50 % al 75 % de la curva
+    cola     hitos del ultimo 10 %
+    aplica solo si `medio` >= 0,80  (una corrida que nunca llego al techo no se puede desestabilizar)
+    DESESTABILIZADA  si la caida es GRANDE (>= 0,05 absoluto) Y CLARA (z >= 3)
+
+Implementado en `desestabiliza.py`. La regla de manejo de E-4 no cambia: **se reportan las tres
+semillas sin descartar ninguna**, y la cantidad de corridas desestabilizadas se informa aparte.
+
+## Lo que da sobre las corridas de ayer, y cambia la lectura
+
+**1 de 13**, no 3 de 8. La única es `ent15_s0`, con una caída de +0,0926 y z = 8,72. Todas las demás
+que llegaron al techo terminan igual o mejor de lo que estaban, y cuatro de ellas **mejoran** en la
+cola. Lo que ayer se leyó como un fenómeno de 3 de 8 era, en su mayor parte, el ruido de una métrica
+de cuatro muestras leído como degradación, que es lo que
+`REGLA: cómo leer las curvas` ya decía y no aplicamos.
+
+**El fenómeno igual existe y hay que estudiarlo**, porque `ent15_s0` es genuino y no se explica por
+muestreo. Pero es raro, no frecuente, y esa diferencia decide si hace falta un remedio.
