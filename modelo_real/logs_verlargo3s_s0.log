@@ -1,0 +1,41 @@
+== banco_verlargo3s_s0 en la cuenta O · sesion NUEVA banco_o_0821 · 20000 pasos
+[colab] Creating session 'banco_o_0821'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.5Tan5Vwtp4/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 20000 --cada 25 --salida /content/banco_verlargo3s_s0.json --n-ent 8 --n-val 8 --n-rel 1 --batch 4 --distractores 4 --arch 4 --p-dos 1.0 --p-una 0.0
+lanzado pid 2434
+VIVO= True
+ULTIMO= paso  425 · perdida  2.0565 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1175 · perdida  1.7878 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.2500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 1900 · perdida  1.6585 · GLOBAL 0.5000 · acierto 0.5000 · vigente 0.5000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2625 · perdida  0.2385 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3350 · perdida  0.6562 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4050 · perdida  1.1224 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4775 · perdida  0.4368 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5475 · perdida  1.0030 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6175 · perdida  0.1397 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6900 · perdida  0.0115 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7600 · perdida  0.0649 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8325 · perdida  0.3723 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9050 · perdida  0.2401 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.7500 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9750 · perdida  0.0231 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10475 · perdida  0.0206 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11175 · perdida  0.0071 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11925 · perdida  0.1766 · GLOBAL 1.0000 · acierto 1.0000 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso

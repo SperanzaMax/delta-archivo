@@ -496,7 +496,8 @@ def main():
             print(f"    {nombre:18s} GLOBAL {m['global']:.4f} · acierto {m['acierto']:.4f} · "
                   f"vigente {m['vigente']:.4f} · nose {m['nose']:.4f} "
                   f"(rel {m['nose_rel']:.4f}/aus {m['nose_aus']:.4f}) · "
-                  f"invento {m['invento']:.4f} · n {sum(m['n'].values())} {m['n']}")
+                  f"invento {m['invento']:.4f} · mudez {m['mudez']:.4f} · "
+                  f"una {m['una']:.4f} · n {sum(m['n'].values())} {m['n']}")
         estado["archivo"], estado["turnos"] = archivo, tur.to(dev)
     except Exception as e:
         # Una evaluacion que explota NO puede llevarse la corrida de 70 minutos que ya termino.
@@ -526,6 +527,11 @@ def medir(pred, objetivo, clases, tok_abs, set_val):
         "global": float(ok.mean()),                                  # la metrica de Maxi
         "acierto": prom(con_resp),                                   # solo las que tienen respuesta
         "vigente": prom(dos),                                        # version ULTIMA en las de dos
+        "una": prom(cl == "una"),                                     # la clase facil, una sola version
+        # el simetrico de `invento`: callarse cuando SI habia respuesta. Sin esto no se puede
+        # separar «no encuentra» de «se callo de mas», y era el numero que faltaba para diagnosticar
+        # por que el acierto se queda corto.
+        "mudez": (float((pred[con_resp] == tok_abs).mean()) if con_resp.sum() else float("nan")),
         "nose": prom(sin_resp),                                      # abstiene cuando debe
         "nose_rel": prom(cl == "nose_rel"),                          # la dura: entidad si, relacion no
         "nose_aus": prom(cl == "nose_aus"),

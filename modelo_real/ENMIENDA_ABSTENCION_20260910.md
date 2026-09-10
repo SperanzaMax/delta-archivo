@@ -135,3 +135,37 @@ de cuatro muestras leído como degradación, que es lo que
 
 **El fenómeno igual existe y hay que estudiarlo**, porque `ent15_s0` es genuino y no se explica por
 muestreo. Pero es raro, no frecuente, y esa diferencia decide si hace falta un remedio.
+
+---
+
+# NOTA E-6 · el control BARAJADO no discrimina en la abstención, y es por construcción
+
+Se escribe con los tres puntos de `abst3s` cerrados y los otros nueve brazos todavía corriendo. Es
+un límite del **control**, no de una hipótesis, y sólo se ve con el n grande.
+
+| clase | con archivo | BARAJADO | dif |
+|---|---:|---:|---:|
+| `acierto` | 0,5930 · 0,6519 · 0,7000 | 0,0316 · 0,0478 · 0,0581 | **+0,56 a +0,64** |
+| `vigente` | 0,3254 · 0,3727 · 0,4275 | 0,0317 · 0,0182 · 0,0611 | +0,29 a +0,37 |
+| `nose_rel` | 0,7414 · 0,7100 · 0,6400 | 0,7845 · 0,7900 · 0,6700 | **−0,03 a −0,08** |
+| `nose_aus` | 0,7928 · 0,7395 · 0,6373 | 0,7928 · 0,7395 · 0,5588 | **+0,0000 exacto en 2 de 3** |
+
+**Para las respuestas el control funciona y decide**: barajar el archivo tira el acierto de 0,59-0,70
+a 0,03-0,06. El modelo lee el archivo.
+
+**Para la abstención el control no puede decir nada, y el +0,0000 exacto lo demuestra.** En
+`nose_aus` la entidad no está en el archivo propio, y tampoco está en el ajeno, así que **barajar no
+cambia cuál es la respuesta correcta**. En `nose_rel` el barajado incluso *ayuda*, porque se lleva el
+valor tentador y convierte un caso difícil en uno fácil.
+
+Con `n=4` esto era invisible: `nose_aus` daba `NaN` la mitad de las veces y el `GLOBAL` del brazo
+barajado se leía como «el control está en cero».
+
+**Lo que hace falta y no estaba medido.** El simétrico de `invento`: **`mudez`**, la fracción de
+casos **con** respuesta en los que el modelo emite el token de abstención. Sin ese número no se
+puede separar «no encuentra la respuesta» de «se calla de más», que es exactamente lo que hay que
+saber para entender por qué `acierto` se queda corto. Se agrega ahora junto con `una` (el acierto en
+la clase de una sola versión, hoy oculto dentro del promedio `acierto`).
+
+**Las trece unidades de hoy NO las traen**, porque ya estaban en vuelo cuando se agregaron. Quedan
+para la campaña que siga, y se dice acá para que nadie las busque en los json de hoy.
