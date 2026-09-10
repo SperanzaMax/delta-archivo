@@ -1,0 +1,7 @@
+== banco_abstlargo_s0 en la cuenta E · sesion NUEVA banco_e_2110 · 22000 pasos
+[colab] Creating session 'banco_e_2110'...
+[colab] Session READY.
+[colab] Uploaded '/tmp/tmp.KaVWSvhJUv/banco.tgz' to '/content/banco.tgz'
+entorno 2.11.0+cu128 5.16.1 True 
+cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 22000 --cada 25 --salida /content/banco_abstlargo_s0.json --n-ent 15 --n-val 8 --n-rel 2 --batch 4 --distractores 8 --arch 8 --p-dos 0.25 --p-una 0.35 --p-nose-rel 0.20 --calentar 3000
+lanzado pid 921

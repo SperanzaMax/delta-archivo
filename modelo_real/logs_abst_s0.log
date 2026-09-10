@@ -5,3 +5,50 @@
 entorno 2.11.0+cu128 5.16.1 True 
 cmd /usr/bin/python3 -u banco_escalado.py --semilla 0 --pasos 16000 --cada 25 --salida /content/banco_abst_s0.json --n-ent 15 --n-val 8 --n-rel 2 --batch 4 --distractores 8 --arch 8 --p-dos 0.25 --p-una 0.35 --p-nose-rel 0.20
 lanzado pid 1865
+VIVO= True
+ULTIMO= paso  550 · perdida  2.3392 · GLOBAL 0.2500 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 (rel 1.00/aus nan) · invento 0.0000 · 0.1 s/paso
+VIVO= True
+ULTIMO= paso 1275 · perdida  2.2042 · GLOBAL 0.2500 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 (rel nan/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2025 · perdida  2.3895 · GLOBAL 0.2500 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 (rel 1.00/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 2775 · perdida  2.5444 · GLOBAL 0.0000 · acierto 0.0000 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 3500 · perdida  0.8568 · GLOBAL 0.7500 · acierto 0.0000 · vigente nan · nose 1.0000 (rel 1.00/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 4300 · perdida  2.4989 · GLOBAL 0.2500 · acierto 0.3333 · vigente 1.0000 · nose 0.0000 (rel 0.00/aus nan) · invento 1.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5050 · perdida  1.6742 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 5800 · perdida  0.6811 · GLOBAL 0.7500 · acierto 0.7500 · vigente 0.6667 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 6550 · perdida  1.6429 · GLOBAL 0.2500 · acierto 0.3333 · vigente 0.0000 · nose 0.0000 (rel 0.00/aus nan) · invento 1.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 7300 · perdida  0.7277 · GLOBAL 0.7500 · acierto 0.7500 · vigente 1.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8050 · perdida  1.0806 · GLOBAL 0.5000 · acierto 1.0000 · vigente nan · nose 0.3333 (rel nan/aus 0.33) · invento 0.6667 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 8800 · perdida  0.7256 · GLOBAL 0.7500 · acierto 1.0000 · vigente nan · nose 0.6667 (rel 0.00/aus 1.00) · invento 0.3333 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 9525 · perdida  0.4058 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose 1.0000 (rel 1.00/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 10275 · perdida  0.2962 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose 1.0000 (rel 1.00/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11025 · perdida  0.9360 · GLOBAL 0.5000 · acierto 0.0000 · vigente 0.0000 · nose 0.6667 (rel 0.67/aus nan) · invento 0.3333 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 11775 · perdida  0.5003 · GLOBAL 0.7500 · acierto nan · vigente nan · nose 0.7500 (rel 0.75/aus nan) · invento 0.2500 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 12525 · perdida  1.1592 · GLOBAL 0.5000 · acierto 1.0000 · vigente 1.0000 · nose 0.3333 (rel 0.00/aus 1.00) · invento 0.6667 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 13275 · perdida  0.8676 · GLOBAL 0.5000 · acierto 0.0000 · vigente 0.0000 · nose 1.0000 (rel nan/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14025 · perdida  1.2280 · GLOBAL 0.2500 · acierto 0.3333 · vigente 0.3333 · nose 0.0000 (rel 0.00/aus nan) · invento 1.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 14750 · perdida  0.1368 · GLOBAL 1.0000 · acierto 1.0000 · vigente nan · nose 1.0000 (rel 1.00/aus 1.00) · invento 0.0000 · 0.2 s/paso
+VIVO= True
+ULTIMO= paso 15500 · perdida  2.9988 · GLOBAL 0.2500 · acierto 0.2500 · vigente 0.0000 · nose nan (rel nan/aus nan) · invento 0.0000 · 0.2 s/paso
+VIVO= False
+ULTIMO= listo en 43.5 min
+[colab] Downloaded '/content/banco_abst_s0.json' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abst_s0.json'
+[colab] Downloaded '/content/banco.log' to '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/modelo_real/banco_abst_s0.log'
+== banco_abst_s0 LISTO
