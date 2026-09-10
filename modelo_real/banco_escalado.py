@@ -230,6 +230,8 @@ def main():
     ap.add_argument("--p-una", type=float, default=0.30)
     ap.add_argument("--p-nose-rel", type=float, default=0.20)
     ap.add_argument("--cada", type=int, default=25)
+    ap.add_argument("--eval-n", type=int, default=512,
+                    help="muestras de la evaluacion final; 0 la apaga")
     ap.add_argument("--pool", default="pool_tinyllama.json")
     # Para la ESCALERA. El plan pedia cuatro cosas y se agregaron las cuatro de una, asi que si el
     # banco no aprende no se sabe cual la rompio. Con esto se sube un escalon por vez desde la
@@ -451,8 +453,59 @@ def main():
             print(f"    c={v['confianza'] if v['confianza'] is not None else 0:.4f}  "
                   f"acierto {v['acierto']:.3f}  {k}")
 
+    # --- EVALUACION FINAL SOBRE UN LOTE GRANDE (PREREG_ABSTENCION, enmienda del 10-sep) ---
+    # Hasta el 9-sep los cuatro brazos de control se median sobre el ULTIMO LOTE DE ENTRENAMIENTO,
+    # o sea n=4: la diferencia entre un control en 0,0000 y uno en 0,2500 era UNA muestra, y con
+    # `nose_rel` a p=0,20 la mitad de los hitos ni siquiera tenia un caso de la clase (de ahi los
+    # NaN). Aca se sortean `--eval-n` muestras frescas con un generador PROPIO —el del
+    # entrenamiento no se toca, asi que las corridas siguen siendo bit a bit las de ayer hasta este
+    # punto— y los cuatro brazos se corren sobre LAS MISMAS muestras, que es lo que hace
+    # comparables sus diferencias.
+    final = {}
+    try:
+      if a.eval_n:
+        ge = torch.Generator().manual_seed(10_000 + a.semilla)
+        BRAZOS = ("con archivo", "BARAJADO", "VACIO (ceros)", "lectura APAGADA")
+        acum = {k: {"pred": [], "obj": [], "cl": []} for k in BRAZOS}
+        hechas = 0
+        with torch.no_grad():
+            while hechas < a.eval_n:
+                frases, turnos_f, dis_idx, propios, objetivos, clases, _ = lote(a, pool, ge, False, verdad)
+                idx_e, tur_e, _ = armar(propios, dis_idx, turnos_f, a.arch, ge)
+                V_e = escribir(modelo, tok, frases, a.capa_escritura, estado)
+                arc0 = V_e[idx_e.to(dev)]
+                preg_e = [f"{pool['entidades'][e]} {RELACIONES[r]}" for (e, r, _) in propios]
+                ids_e = tok(preg_e, return_tensors="pt", padding=True).to(dev)
+                obj_e = torch.tensor([TOK_VAL.get(o, TOK_ABS) for o in objetivos], device=dev)
+                ult_e = ids_e["attention_mask"].sum(1) - 1
+                fila_e = torch.arange(len(preg_e), device=dev)
+                estado["turnos"] = tur_e.to(dev)
+                for nombre, arc in zip(BRAZOS, (arc0, arc0.roll(1, dims=0),
+                                                torch.zeros_like(arc0), None)):
+                    estado["archivo"] = arc
+                    lg = modelo(**ids_e).logits[fila_e, ult_e]
+                    acum[nombre]["pred"].append(lg.argmax(-1))
+                    acum[nombre]["obj"].append(obj_e)
+                    acum[nombre]["cl"].extend(clases)
+                hechas += len(preg_e)
+        print(f"\n  EVALUACION FINAL sobre {hechas} muestras frescas (los cuatro brazos, mismas muestras):")
+        for nombre in BRAZOS:
+            d_ = acum[nombre]
+            m = medir(torch.cat(d_["pred"]), torch.cat(d_["obj"]), d_["cl"], TOK_ABS, SET_VAL)
+            final[nombre] = m
+            print(f"    {nombre:18s} GLOBAL {m['global']:.4f} · acierto {m['acierto']:.4f} · "
+                  f"vigente {m['vigente']:.4f} · nose {m['nose']:.4f} "
+                  f"(rel {m['nose_rel']:.4f}/aus {m['nose_aus']:.4f}) · "
+                  f"invento {m['invento']:.4f} · n {sum(m['n'].values())} {m['n']}")
+        estado["archivo"], estado["turnos"] = archivo, tur.to(dev)
+    except Exception as e:
+        # Una evaluacion que explota NO puede llevarse la corrida de 70 minutos que ya termino.
+        import traceback; traceback.print_exc()
+        final = {"ERROR": repr(e)}
+
     if a.salida:
-        json.dump({"args": vars(a), "hist": hist, "controles": res, "por_entidad": por_ent},
+        json.dump({"args": vars(a), "hist": hist, "controles": res, "por_entidad": por_ent,
+                   "final": final},
                   open(a.salida, "w"), indent=1)
         print(f"\n  escrito {a.salida}")
     print(f"\nlisto en {(time.time()-t0)/60:.1f} min")
