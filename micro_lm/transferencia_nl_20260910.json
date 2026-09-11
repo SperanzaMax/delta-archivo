@@ -1,0 +1,307 @@
+{
+ "modelo": "nomic-embed-text",
+ "semilla": 20260910,
+ "temp": 32,
+ "filas": [
+  {
+   "X": 0,
+   "dist": "ruido",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.95703125,
+   "RECUP": 0.90625,
+   "masa_ganadora": 0.7558945279597538
+  },
+  {
+   "X": 360,
+   "dist": "ruido",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.9453125,
+   "RECUP": 0.94921875,
+   "masa_ganadora": 0.6441541279855301
+  },
+  {
+   "X": 1120,
+   "dist": "ruido",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.90625,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.5372983681518235
+  },
+  {
+   "X": 3280,
+   "dist": "ruido",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.828125,
+   "RECUP": 0.96484375,
+   "masa_ganadora": 0.36165566150248196
+  },
+  {
+   "X": 0,
+   "dist": "disjunto",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.95703125,
+   "RECUP": 0.90625,
+   "masa_ganadora": 0.7558945279597538
+  },
+  {
+   "X": 360,
+   "dist": "disjunto",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.890625,
+   "RECUP": 0.9296875,
+   "masa_ganadora": 0.4907542946348258
+  },
+  {
+   "X": 1120,
+   "dist": "disjunto",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.81640625,
+   "RECUP": 0.953125,
+   "masa_ganadora": 0.35310797229703894
+  },
+  {
+   "X": 3280,
+   "dist": "disjunto",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.5859375,
+   "RECUP": 0.91796875,
+   "masa_ganadora": 0.1838204182172376
+  },
+  {
+   "X": 0,
+   "dist": "real",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.95703125,
+   "RECUP": 0.90625,
+   "masa_ganadora": 0.7558945279597538
+  },
+  {
+   "X": 360,
+   "dist": "real",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.50390625,
+   "RECUP": 0.5,
+   "masa_ganadora": 0.2641413790088336
+  },
+  {
+   "X": 1120,
+   "dist": "real",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.26953125,
+   "RECUP": 0.23046875,
+   "masa_ganadora": 0.11832839105090898
+  },
+  {
+   "X": 3280,
+   "dist": "real",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.15234375,
+   "RECUP": 0.12109375,
+   "masa_ganadora": 0.044952611448593416
+  },
+  {
+   "X": 3240,
+   "dist": "ruido",
+   "K": 1,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.9453125,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.37745117053327704
+  },
+  {
+   "X": 3240,
+   "dist": "ruido",
+   "K": 2,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.98046875,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.37745117053327704
+  },
+  {
+   "X": 3240,
+   "dist": "ruido",
+   "K": 4,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.9765625,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.37745117053327704
+  },
+  {
+   "X": 3240,
+   "dist": "ruido",
+   "K": 8,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.97265625,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.37745117053327704
+  },
+  {
+   "X": 3240,
+   "dist": "ruido",
+   "K": 32,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.96484375,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.37745117053327704
+  },
+  {
+   "X": 3240,
+   "dist": "ruido",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.85546875,
+   "RECUP": 0.9453125,
+   "masa_ganadora": 0.37745117053327704
+  },
+  {
+   "X": 3240,
+   "dist": "disjunto",
+   "K": 1,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.8984375,
+   "RECUP": 0.8984375,
+   "masa_ganadora": 0.1741448326288264
+  },
+  {
+   "X": 3240,
+   "dist": "disjunto",
+   "K": 2,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.92578125,
+   "RECUP": 0.8984375,
+   "masa_ganadora": 0.1741448326288264
+  },
+  {
+   "X": 3240,
+   "dist": "disjunto",
+   "K": 4,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.87109375,
+   "RECUP": 0.8984375,
+   "masa_ganadora": 0.1741448326288264
+  },
+  {
+   "X": 3240,
+   "dist": "disjunto",
+   "K": 8,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.80078125,
+   "RECUP": 0.8984375,
+   "masa_ganadora": 0.1741448326288264
+  },
+  {
+   "X": 3240,
+   "dist": "disjunto",
+   "K": 32,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.66796875,
+   "RECUP": 0.8984375,
+   "masa_ganadora": 0.1741448326288264
+  },
+  {
+   "X": 3240,
+   "dist": "disjunto",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.57421875,
+   "RECUP": 0.8984375,
+   "masa_ganadora": 0.1741448326288264
+  },
+  {
+   "X": 3240,
+   "dist": "real",
+   "K": 1,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.0859375,
+   "RECUP": 0.0859375,
+   "masa_ganadora": 0.037567147057643524
+  },
+  {
+   "X": 3240,
+   "dist": "real",
+   "K": 2,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.0859375,
+   "RECUP": 0.0859375,
+   "masa_ganadora": 0.037567147057643524
+  },
+  {
+   "X": 3240,
+   "dist": "real",
+   "K": 4,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.12109375,
+   "RECUP": 0.0859375,
+   "masa_ganadora": 0.037567147057643524
+  },
+  {
+   "X": 3240,
+   "dist": "real",
+   "K": 8,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.140625,
+   "RECUP": 0.0859375,
+   "masa_ganadora": 0.037567147057643524
+  },
+  {
+   "X": 3240,
+   "dist": "real",
+   "K": 32,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.13671875,
+   "RECUP": 0.0859375,
+   "masa_ganadora": 0.037567147057643524
+  },
+  {
+   "X": 3240,
+   "dist": "real",
+   "K": 1000000000,
+   "temp": 32,
+   "n": 256,
+   "exactitud": 0.12890625,
+   "RECUP": 0.0859375,
+   "masa_ganadora": 0.037567147057643524
+  }
+ ]
+}

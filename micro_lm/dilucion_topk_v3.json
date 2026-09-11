@@ -1,0 +1,67 @@
+{
+ "ckpt": "ckpts/v3_s0.pkl",
+ "NMUE": 512,
+ "POOL": 4096,
+ "filas": [
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.99609375,
+   "RECUP": 0.978515625,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.999709055875428,
+   "entropia": 0.002391074215007505,
+   "K": 2,
+   "dist": "ruido",
+   "segundos": 38.0
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 1.0,
+   "RECUP": 0.978515625,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.999709055875428,
+   "entropia": 0.002391074215007505,
+   "K": 8,
+   "dist": "ruido",
+   "segundos": 36.4
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.880859375,
+   "RECUP": 0.978515625,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.999709055875428,
+   "entropia": 0.002391074215007505,
+   "K": "N",
+   "dist": "ruido",
+   "segundos": 36.0
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 1.0,
+   "RECUP": 0.990234375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.9333244828740135,
+   "entropia": 0.39472049497653217,
+   "K": 2,
+   "dist": "disjunto",
+   "segundos": 36.4
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.232421875,
+   "RECUP": 0.990234375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.9333244828740135,
+   "entropia": 0.39472049497653217,
+   "K": "N",
+   "dist": "disjunto",
+   "segundos": 36.2
+  }
+ ]
+}

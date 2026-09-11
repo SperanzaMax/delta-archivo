@@ -1,0 +1,103 @@
+{
+ "ckpt": "ckpts/kq3_s0.pkl",
+ "NMUE": 512,
+ "POOL": 4096,
+ "filas": [
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.677734375,
+   "RECUP": 0.458984375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.2540676488279132,
+   "entropia": 4.243370188050903,
+   "K": 1,
+   "dist": "disjunto",
+   "segundos": 38.5
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.83203125,
+   "RECUP": 0.458984375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.2540676488279132,
+   "entropia": 4.243370188050903,
+   "K": 2,
+   "dist": "disjunto",
+   "segundos": 36.3
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.748046875,
+   "RECUP": 0.458984375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.2540676488279132,
+   "entropia": 4.243370188050903,
+   "K": 4,
+   "dist": "disjunto",
+   "segundos": 36.7
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.638671875,
+   "RECUP": 0.458984375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.2540676488279132,
+   "entropia": 4.243370188050903,
+   "K": 8,
+   "dist": "disjunto",
+   "segundos": 37.0
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.419921875,
+   "RECUP": 0.458984375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.2540676488279132,
+   "entropia": 4.243370188050903,
+   "K": 32,
+   "dist": "disjunto",
+   "segundos": 37.3
+  },
+  {
+   "X": 3240,
+   "n": 512,
+   "exactitud": 0.083984375,
+   "RECUP": 0.458984375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.2540676488279132,
+   "entropia": 4.243370188050903,
+   "K": "N",
+   "dist": "disjunto",
+   "segundos": 37.0
+  },
+  {
+   "X": 1080,
+   "n": 512,
+   "exactitud": 0.87890625,
+   "RECUP": 0.568359375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.39855190380330896,
+   "entropia": 2.943505728848322,
+   "K": 2,
+   "dist": "disjunto",
+   "segundos": 34.4
+  },
+  {
+   "X": 1080,
+   "n": 512,
+   "exactitud": 0.140625,
+   "RECUP": 0.568359375,
+   "n_con_hecho": 512,
+   "masa_ganadora": 0.39855190380330896,
+   "entropia": 2.943505728848322,
+   "K": "N",
+   "dist": "disjunto",
+   "segundos": 34.0
+  }
+ ]
+}
