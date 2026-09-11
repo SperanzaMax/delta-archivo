@@ -62,6 +62,15 @@ export MEZCLA_PISO="${MEZCLA_PISO:-0.10}"
 # lr minima, que no es lo que la enmienda E-1 declaro. Cazado en el paso 1000 leyendo la config del
 # primer checkpoint, no el log del rotador (D-1 del 22-ago).
 export HORIZONTE="${HORIZONTE:-$PASOS}"
+# 2026-09-11 · PREREG_TOPK_ENTRENADO. Misma familia que SELLO y PERT: sin exportarlas, el tramo corre
+# el control denso con archivo corto y la campania seria una copia de `v3`.
+export TOPK="${TOPK:-0}"
+export TOPK_DESDE="${TOPK_DESDE:-0}"
+export RELLENO="${RELLENO:-0}"
+export RELLENO_DIST="${RELLENO_DIST:-real}"
+export RELLENO_TURNOS="${RELLENO_TURNOS:-solapado}"
+export RELLENO_CADA="${RELLENO_CADA:-1000}"
+export FOTOS="${FOTOS:-0}"
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PY="${PY:-/home/maxi/.venv-ligamento/bin/python}"   # 2026-08-25: lo usa completa() para leer el paso del checkpoint
@@ -188,7 +197,7 @@ cli_de() {
   fi
 }
 
-echo "== rotador2 · familia '$PREFIJO' · p_nose $P_NOSE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · sello $SELLO · pert $PERT · unidades $UNIDADES · cuentas: ${CUENTAS[*]}"
+echo "== rotador2 · familia '$PREFIJO' · p_nose $P_NOSE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · sello $SELLO · pert $PERT · topk $TOPK/$TOPK_DESDE · relleno $RELLENO ($RELLENO_DIST,$RELLENO_TURNOS) · fotos $FOTOS · unidades $UNIDADES · cuentas: ${CUENTAS[*]}"
 for v in $(seq 1 "$VUELTAS"); do
   for c in "${CUENTAS[@]}"; do
     FALTAN="$(pendientes)"

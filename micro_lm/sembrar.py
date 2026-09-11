@@ -36,7 +36,10 @@ import pickle
 # arquitectura del sello. Sembrar de `abs` a `rel` es exactamente lo que la campania del sello
 # relativo necesita, y va declarado en `sembrado_de` como todo lo demas.
 BIFURCA = ("perdida_cabeza", "blanco", "horizonte", "pasos",
-           "rec_l", "rec_m", "rec_f", "rec_ce", "ses_extra", "sello", "pert")
+           "rec_l", "rec_m", "rec_f", "rec_ce", "ses_extra", "sello", "pert",
+           # 2026-09-11: la lectura top-k y el relleno de archivo largo son bifurcaciones del mismo
+           # tipo que `ses_extra`: se siembra desde un checkpoint denso y se cambia como se lee.
+           "topk", "topk_desde", "relleno", "relleno_dist", "relleno_turnos")
 
 
 def main():

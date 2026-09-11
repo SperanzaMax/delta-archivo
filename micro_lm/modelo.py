@@ -10,6 +10,8 @@ Lo que hereda del brazo interno, ya medido:
   · la clave archivada lleva un SELLO DE ORDEN co-entrenado (E-I3: 0,4570 -> 0,9956; E-I3d: con el
     sello el modelo compara turnos, sin el se queda en el azar).
   · el archivo se baraja, para que la posicion en el tensor no codifique el rol.
+  · la lectura puede restringirse a las TOPK entradas de mayor puntaje (2026-09-11, `TOPK`); con
+    0 es el softmax completo de siempre.
 
 POLITICA DE ESCRITURA, declarada: se archiva **un vector por enunciado**, tomado en la posicion de su
 ultimo token. «Un hecho dicho = una entrada». Es la politica mas simple que existe y deja para
@@ -151,6 +153,37 @@ KQ = 3          # kernel de `convq` (lat2). 2026-09-01: 5 hace que la query vea 
 # turnos hacia atras: todo lo mas viejo satura en la ultima fila, que es la lectura semanticamente
 # correcta —«mas viejo que la ventana»— y no el clamp silencioso que era un bug hasta el 5-sep.
 SELLO = "abs"
+
+# LECTURA TOP-K (2026-09-11). 0 es lo de siempre y el default: softmax sobre TODAS las entradas del
+# archivo, bit a bit lo publicado. K > 0 restringe el softmax a las K entradas de mayor puntaje y
+# renormaliza entre ellas: la cola no entra en el promedio del valor leido.
+#
+# Sale de `dilucion_topk.py` (10-sep): sobre checkpoints entrenados con softmax completo, leer con
+# K=2 recupera la exactitud con 3.280 entradas de relleno sin tocar un peso (kq3_s0 ruido 0,2441 ->
+# 0,9961; v3_s0 disjunto 0,2324 -> 1,0000) y con K >= N reproduce exacto lo del 5-sep. Aca la misma
+# operacion entra en el ENTRENAMIENTO, que es lo que nadie hizo: E-I1 midio que con inyeccion
+# temprana densa y top-k empatan (1,0000 contra 0,9998), pero con archivo de 40 entradas.
+#
+# Se implementa como MASCARA sobre `sim` y no como gather de las K, a proposito: conserva la forma
+# (B, T, N), asi que `masa_nulo` del slot y todo instrumento que lea la distribucion siguen
+# funcionando, y es identica en numero —verificado, diferencia 0,0 exacta y masa fuera del top-k
+# 0,0— porque exp(-1e9 - max) es 0 en float32. El gradiente fluye SOLO a las K seleccionadas
+# (verificado); la seleccion en si no tiene gradiente, igual que en max-pooling o en el router de
+# un Switch Transformer. Es un global del modulo, como `KQ` y `SELLO`, para que `conf_ckpt.aplicar`
+# lo reponga en todo instrumento que cargue un checkpoint entrenado asi.
+#
+# OJO para quien lo cambie a mitad de una corrida: los `jax.jit` capturan el global al trazar, asi
+# que despues de cambiarlo hay que llamar a `jax.clear_caches()` (lo hace `entrenar.py`).
+TOPK = 0
+
+
+def atencion_archivo(sim):
+    """Distribucion de lectura sobre las entradas del archivo, (B, T, N). Ver `TOPK`."""
+    K = TOPK
+    if not K or K >= sim.shape[-1]:
+        return jax.nn.softmax(sim, -1)
+    umbral = jax.lax.top_k(sim, K)[0][..., -1:]              # el K-esimo mayor, (B, T, 1)
+    return jax.nn.softmax(jnp.where(sim >= umbral, sim, -1e9), -1)
 
 
 def conv3(w, x):
@@ -394,12 +427,19 @@ def marca_pert(a, pertenece):
 
 
 def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre",
-              pertenece=None):
+              pertenece=None, captura=None):
     """Lee el archivo mientras procesa la consulta. Devuelve logits (B, T, V).
 
     `pertenece` (B, N) marca que entradas son de la conversacion EN CURSO. Con None —el default y lo
     que pasan todos los llamadores anteriores al 6-sep— no se suma nada y el resultado es identico
     bit a bit al de siempre.
+
+    `captura` (2026-09-11): un dict al que la lectura le deja la distribucion `p` (B, T, N) que el
+    modelo USO. Es para las fotos de `entrenar.py --fotos` y sale de la regla de `conf_ckpt`: un
+    instrumento que reimplementa `responder` para mirar la distribucion se queda viejo en silencio
+    cada vez que `responder` gana un argumento (le paso a `reloj_o_bandera.py` con `pertenece` y a
+    `pelicula.py`, que recalcula el softmax completo y no veria el top-k). Con el gancho se captura
+    lo que se leyo, no una reconstruccion, y con None no cambia nada.
     """
     a = params["arch"]
     ak = archivo @ a["kw"] + sello(a, turnos, mask_arch) + marca_pert(a, pertenece)
@@ -409,14 +449,17 @@ def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre
     def lectura(h):
         q = h @ a["qr"]
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
-        return jnp.einsum("btn,bnd->btd", jax.nn.softmax(sim, -1), av) @ a["wo"]
+        p = atencion_archivo(sim)
+        if captura is not None:
+            captura["p"] = p
+        return jnp.einsum("btn,bnd->btd", p, av) @ a["wo"]
 
     h = tronco(params, consulta, lectura, bloque, donde)
     return ln(params["ln_f"], h) @ params["head"]["w"] + params["head"]["b"]
 
 
 def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre",
-                       abst="cabeza", pertenece=None):
+                       abst="cabeza", pertenece=None, captura=None):
     """Igual que `responder`, mas el logit de la cabeza de abstencion. Devuelve (logits, a).
 
     `a` es (B, T): un escalar por posicion, con proyeccion propia desde el MISMO estado final que
@@ -464,7 +507,9 @@ def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, d
     def lectura(h):
         q = h @ a_p["qr"]
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
-        p = jax.nn.softmax(sim, -1)
+        p = atencion_archivo(sim)
+        if captura is not None:
+            captura["p"] = p                     # ver `responder`: la distribucion que se USO
         if usa_slot:
             masa_nulo["p"] = p[..., -1]          # (B, T) — la masa que se fue a «nada»
         return jnp.einsum("btn,bnd->btd", p, av) @ a_p["wo"]

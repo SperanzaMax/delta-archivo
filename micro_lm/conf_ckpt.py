@@ -25,6 +25,7 @@ la clave y tiene que seguir midiendose como se midio.
 GLOBALS = {
     "KQ": ("kernel_q", 3),      # kernel de `convq` (lat2); 5 desde el 1-sep
     "SELLO": ("sello", "abs"),  # indexacion de `ord`; "rel" desde el 6-sep
+    "TOPK": ("topk", 0),        # lectura top-k del archivo (11-sep); 0 = softmax completo
 }
 
 
@@ -49,7 +50,7 @@ def aplicar(cfg, verboso=False):
 def descripcion(cfg):
     """Una linea para el encabezado de los instrumentos, con lo que decide la arquitectura."""
     p = {n: cfg.get(c, d) or d for n, (c, d) in GLOBALS.items()}
-    return (f"kernel_q={p['KQ']} · sello={p['SELLO']} · donde={cfg.get('donde')} · "
+    return (f"kernel_q={p['KQ']} · sello={p['SELLO']} · topk={p['TOPK']} · donde={cfg.get('donde')} · "
             f"nivel={cfg.get('nivel')} · ses_extra={cfg.get('ses_extra', 0)} · "
             f"pert={cfg.get('pert', False)} · paso {cfg.get('pasos')}")
 

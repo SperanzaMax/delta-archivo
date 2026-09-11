@@ -108,7 +108,17 @@ P_VIEJA="${P_VIEJA:-0.35}"
 # y las dos condiciones serian la misma corrida con dos nombres.
 MEZCLA_PISO="${MEZCLA_PISO:-0.10}"
 REINIT="${REINIT:-1}"
+# 2026-09-11 · PREREG_TOPK_ENTRENADO. Lectura top-k, relleno de archivo largo sin gradiente y las
+# fotos de la pelicula. Misma familia que SELLO y PERT: sin exportarlas el tramo corre el control.
+TOPK="${TOPK:-0}"
+TOPK_DESDE="${TOPK_DESDE:-0}"
+RELLENO="${RELLENO:-0}"
+RELLENO_DIST="${RELLENO_DIST:-real}"
+RELLENO_TURNOS="${RELLENO_TURNOS:-solapado}"
+RELLENO_CADA="${RELLENO_CADA:-1000}"
+FOTOS="${FOTOS:-0}"
 UNI="${PREFIJO}${NIVEL}_s${SEM}"
+FOTOS_JS="$CKPTS/${UNI}_fotos.json"      # la pelicula vive al lado del checkpoint, y viaja con el
 
 CK="$CKPTS/${UNI}.pkl"
 # Siembra: la primera vez se arranca desde el checkpoint BASE ya saturado, igual que hizo la
@@ -131,13 +141,18 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · sello $SELLO · pert $PERT · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · sello $SELLO · pert $PERT · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK · topk $TOPK desde $TOPK_DESDE · relleno $RELLENO ($RELLENO_DIST, $RELLENO_TURNOS, cada $RELLENO_CADA) · fotos $FOTOS"
 
-tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py
+# `conf_ckpt.py` y `dilucion.py` van desde el 11-sep: el relleno usa `dilucion.construir_pool`.
+tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py conf_ckpt.py dilucion.py
 timeout -k 30 300 "${CL[@]}" upload -s "$SESION" "$TMP/micro.tgz" /content/micro.tgz || exit 1
 if [ -f "$CK" ]; then
   echo "== subiendo checkpoint previo ($(du -h "$CK" | cut -f1))"
   timeout -k 30 420 "${CL[@]}" upload -s "$SESION" "$CK" /content/ck.pkl || exit 1
+  # La pelicula continua por tramos: `entrenar.py --fotos` lee /content/ck_fotos.json si existe.
+  if [ "$FOTOS" != "0" ] && [ -s "$FOTOS_JS" ]; then
+    timeout -k 30 420 "${CL[@]}" upload -s "$SESION" "$FOTOS_JS" /content/ck_fotos.json || exit 1
+  fi
 else
   # 2026-08-26 · LA SESION SE REUSA ENTRE UNIDADES DISTINTAS y queda VIVA entre tramos, asi que
   # /content/ck.pkl puede tener los pesos de OTRA unidad. Sin checkpoint local no se sube nada y el
@@ -146,12 +161,12 @@ else
   # checkpoint local que suba y lo pise. Con SEMBRAR=0 y primer tramo de una unidad, no lo hay.
   cat > "$TMP/limpiar.py" <<'PYLIMPIA'
 import os
-p = "/content/ck.pkl"
-if os.path.exists(p):
-    os.remove(p)
-    print("ck.pkl de otra unidad borrado")
-else:
-    print("no habia ck.pkl")
+for p in ("/content/ck.pkl", "/content/ck_fotos.json"):
+    if os.path.exists(p):
+        os.remove(p)
+        print(os.path.basename(p), "de otra unidad borrado")
+    else:
+        print("no habia", os.path.basename(p))
 PYLIMPIA
   echo "== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad"
   timeout -k 30 180 "${CL[@]}" exec -s "$SESION" --timeout 120 -f "$TMP/limpiar.py" 2>&1 | tail -1
@@ -190,6 +205,10 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--perdida-cabeza', '$PERDIDA_CABEZA',
        '--rec-l', '$REC_L', '--rec-m', '$REC_M', '--rec-f', '$REC_F', '--rec-ce', '$REC_CE',
        '--rec-rank', '$REC_RANK',
+       '--topk', '$TOPK', '--topk-desde', '$TOPK_DESDE',
+       '--relleno', '$RELLENO', '--relleno-dist', '$RELLENO_DIST',
+       '--relleno-turnos', '$RELLENO_TURNOS', '--relleno-cada', '$RELLENO_CADA',
+       '--fotos', '$FOTOS',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$PERT' == '1':
     cmd.append('--pert')
@@ -259,6 +278,12 @@ for _ in $(seq 1 $(( MIN / 2 ))); do
       mv "$TMP/ck_p.pkl" "$CK"
       echo "   [checkpoint parcial guardado: paso $(grep -o '"paso": [0-9]*' "$JS" 2>/dev/null | tail -1 | grep -o '[0-9]*')]"
     fi
+    # la pelicula baja con el mismo ritmo que el checkpoint: lo que se pierde si cae la VM es un
+    # intervalo, no la corrida
+    if [ "$FOTOS" != "0" ]; then
+      timeout -k 30 300 "${CL[@]}" download -s "$SESION" /content/ck_fotos.json "$TMP/fotos_p.json" >/dev/null 2>&1 \
+        && [ -s "$TMP/fotos_p.json" ] && mv "$TMP/fotos_p.json" "$FOTOS_JS"
+    fi
   fi
   { printf '%s\n' "$OUT" | grep '^@@JSON@@ ' || true; } | while read -r _ nombre resto; do
     printf '%s' "$resto" > "$SALIDA/$nombre"
@@ -274,6 +299,11 @@ if [ "$LISTO" = "1" ]; then
   echo "== bajando checkpoint"
   timeout -k 30 420 "${CL[@]}" download -s "$SESION" /content/ck.pkl "$TMP/ck.pkl" >/dev/null 2>&1 \
     && mv "$TMP/ck.pkl" "$CK" && echo "   checkpoint en $CK ($(du -h "$CK" | cut -f1))"
+  if [ "$FOTOS" != "0" ]; then
+    timeout -k 30 300 "${CL[@]}" download -s "$SESION" /content/ck_fotos.json "$TMP/fotos.json" >/dev/null 2>&1 \
+      && [ -s "$TMP/fotos.json" ] && mv "$TMP/fotos.json" "$FOTOS_JS" \
+      && echo "   pelicula en $FOTOS_JS ($(python3 -c "import json;print(len(json.load(open('$FOTOS_JS'))['cuadros']))" 2>/dev/null) cuadros)"
+  fi
   if [ -f "$JS" ]; then
     echo "   ultimo paso registrado: $(grep -o '"paso": [0-9]*' "$JS" | tail -1)"
   fi

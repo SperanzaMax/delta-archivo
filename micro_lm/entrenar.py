@@ -66,8 +66,12 @@ _PERDIDA_CABEZA = "bce"   # 2026-08-29: forma de la perdida de la cabeza — bce
 
 
 def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=None,
-            formas_q=None, por_forma=False, n_ses_extra=0):
+            formas_q=None, por_forma=False, n_ses_extra=0, relleno=None):
     """Devuelve un dict de metricas. Las dos caras de la abstencion van SEPARADAS:
+
+    `relleno` (2026-09-11): `(pool, X, modo)` agrega a cada lote X entradas del pool de OTROS
+    episodios, con la misma regla de turnos que `dilucion.celda`. Es la evaluacion en archivo largo
+    de la corrida que entrena con `--relleno`; con None es la de siempre.
 
       `nose`         acierta NOSE cuando la respuesta no esta en el archivo (lo que se quiere);
       `falsa_abst`   dice NOSE cuando la respuesta SI estaba (el costo de conseguirlo).
@@ -86,8 +90,12 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose,
             formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra)
         fn = pred_fn or predecir
+        ra = rt = None
+        if relleno is not None:
+            turnos, ra, rt = armar_relleno(rng, turnos, *relleno)
+            ra, rt = jnp.array(ra), jnp.array(rt)
         pred = np.array(fn(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
-                           jnp.array(mask), jnp.array(cons), jnp.array(pos)))
+                           jnp.array(mask), jnp.array(cons), jnp.array(pos), ra, rt))
         ok = pred == tgt
         sub = lambda m: ok[m].mean() if m.any() else np.nan
         col["vigente"].append(sub(tipo == 0))
@@ -124,6 +132,165 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     return out
 
 
+# --- LAS FOTOS DE LA CORRIDA (2026-09-11) --------------------------------------------------------
+# Pedido de Maxi: ver en el artefacto como fueron cambiando los pesos durante el entrenamiento REAL,
+# con mas de 200 cuadros. `pelicula.py` (5-sep) ya define el formato del cuadro pero corre su propio
+# loop sin curriculo ni tramos, y recalcula el softmax completo por afuera —con top-k dibujaria una
+# lectura que el modelo no hizo—. Aca el cuadro sale de la corrida de campania, la distribucion se
+# captura DESDE ADENTRO de `responder` (argumento `captura`), y el JSON crece por tramos: si el
+# archivo ya existe se continua, asi que una corrida partida entre cuentas deja UNA pelicula.
+#
+# `submatrices` y `leer` estan copiadas de `pelicula.py` y no importadas: `pelicula` importa
+# `entrenar`, y al reves seria un import circular con el modulo cargado dos veces.
+
+FOTOS_K = 12
+
+
+def _submatrices(params, rng, k=FOTOS_K):
+    NB = len(params["blocks"])
+    rutas = [("emb", ("emb",), "tokens -> d")]
+    for i in range(NB):
+        rutas += [(f"b{i}.wq", ("blocks", i, "wq"), f"bloque {i} · query"),
+                  (f"b{i}.wk", ("blocks", i, "wk"), f"bloque {i} · clave"),
+                  (f"b{i}.wv", ("blocks", i, "wv"), f"bloque {i} · valor"),
+                  (f"b{i}.m1", ("blocks", i, "m1", "w"), f"bloque {i} · MLP entrada"),
+                  (f"b{i}.m2", ("blocks", i, "m2", "w"), f"bloque {i} · MLP salida")]
+    rutas += [("arch.kw", ("arch", "kw"), "archivo · escribe la clave"),
+              ("arch.vw", ("arch", "vw"), "archivo · escribe el valor"),
+              ("arch.qr", ("arch", "qr"), "archivo · forma la consulta"),
+              ("arch.wo", ("arch", "wo"), "archivo · devuelve lo leido"),
+              ("head", ("head", "w"), "d -> vocabulario")]
+    plan = []
+    for nombre, ruta, etiqueta in rutas:
+        w = _leer(params, ruta)
+        f = np.sort(rng.choice(w.shape[0], min(k, w.shape[0]), replace=False))
+        c = np.sort(rng.choice(w.shape[1], min(k, w.shape[1]), replace=False))
+        plan.append({"nombre": nombre, "ruta": ruta, "etiqueta": etiqueta,
+                     "forma": list(w.shape), "filas": f, "cols": c})
+    return plan
+
+
+def _leer(params, ruta):
+    w = params
+    for p in ruta:
+        w = w[p]
+    return w
+
+
+@jax.jit
+def _foto_lectura(params, ses, cortes, turnos, mask, cons, pos, ra, rt):
+    cap = {}
+    lg = logits_de(params, ses, cortes, turnos, mask, cons, pos, ra, rt, captura=cap)
+    p = jnp.take_along_axis(cap["p"], pos[:, None, None], axis=1)[:, 0, :]
+    return lg, p, jnp.zeros(lg.shape[0])
+
+
+@jax.jit
+def _foto_lectura_cabeza(params, ses, cortes, turnos, mask, cons, pos, ra, rt):
+    cap = {}
+    lg, ab = _partes(params, ses, cortes, turnos, mask, cons, pos, ra, rt, captura=cap)
+    p = jnp.take_along_axis(cap["p"], pos[:, None, None], axis=1)[:, 0, :]
+    return lg, p, ab
+
+
+class Fotos:
+    def __init__(self, a, params, con_cabeza, hist):
+        self.a = a
+        self.ruta = a.fotos_salida or (
+            (a.ckpt[:-4] if a.ckpt and a.ckpt.endswith(".pkl") else a.ckpt) + "_fotos.json"
+            if a.ckpt else f"fotos_s{a.semilla}.json")
+        self.fn = _foto_lectura_cabeza if con_cabeza else _foto_lectura
+        self.plan = _submatrices(params, np.random.default_rng(12345))
+        # LA MUESTRA FIJA, como en `pelicula.py`: un episodio con respuesta (tipo vigente), sorteado
+        # con semilla fija, y el MISMO relleno fijo en todos los cuadros: si el relleno cambiara, el
+        # movimiento de la lectura seria el del muestreo y no el del aprendizaje.
+        mrng = np.random.default_rng(77)
+        while True:
+            s_, c, t, mk, q, pq, tg, tp, meta, orig, hq = DAT.lote(
+                mrng, 8, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=0.0, p_nose=0.0,
+                con_meta=True, con_origen=True, formas_q=FORMAS_Q, con_formas=False,
+                n_ses_extra=a.ses_extra)
+            i = int(np.argmax(tp == DAT.TIPOS["vigente"]))
+            if tp[i] == DAT.TIPOS["vigente"] and hq[i] >= 0:
+                break
+        self.i = i
+        self.muestra = [s_[i:i+1], c[i:i+1], t[i:i+1], mk[i:i+1], q[i:i+1], pq[i:i+1]]
+        self.n_propias = int(mk.shape[1])
+        correctos = [int(x) for x in np.where((orig[i] == hq[i]) & mk[i])[0]]
+        texto_ses = [" ".join(I.ITOS[int(z)] for z in fila if I.ITOS[int(z)] != ".")
+                     for fila in s_[i]]
+        texto_q = " ".join(I.ITOS[int(z)] for z in q[i] if I.ITOS[int(z)] != ".")
+        self.cab = {
+            "config": {k: v for k, v in vars(a).items()
+                       if isinstance(v, (int, float, str, bool)) or v is None},
+            "params": int(M.contar(params)), "k": FOTOS_K,
+            "capas": [{"nombre": it["nombre"], "etiqueta": it["etiqueta"], "forma": it["forma"]}
+                      for it in self.plan],
+            "muestra": {"sesiones": texto_ses, "pregunta": texto_q, "correctos": correctos,
+                        "slots": self.n_propias, "ocupados": [int(x) for x in np.where(mk[i])[0]],
+                        "relleno": int(a.relleno)},
+            "respuesta_correcta": I.ITOS[int(tg[i])],
+        }
+        self.cuadros = []
+        if os.path.exists(self.ruta):
+            try:
+                with open(self.ruta, encoding="utf-8") as f:
+                    self.cuadros = json.load(f).get("cuadros", [])
+                print(f"fotos: se continua {self.ruta} ({len(self.cuadros)} cuadros)", flush=True)
+            except (OSError, ValueError):
+                self.cuadros = []
+        print(f"fotos: cada {a.fotos} pasos -> {self.ruta} · pregunta: {texto_q} · "
+              f"slots correctos {correctos}", flush=True)
+
+    def cuadro(self, params, s, l, acc, pool):
+        a = self.a
+        pesos = {}
+        for it in self.plan:
+            w = np.asarray(_leer(params, it["ruta"]))[np.ix_(it["filas"], it["cols"])]
+            pesos[it["nombre"]] = [round(float(x), 4) for x in w.ravel()]
+        ses, cortes, turnos, mask, cons, pos = self.muestra
+        ra = rt = None
+        if pool is not None:
+            # relleno FIJO: misma semilla en cada cuadro, o sea los mismos indices del pool y los
+            # mismos turnos. El pool se refresca con los pesos, asi que el CONTENIDO de esas
+            # entradas si sigue al aprendizaje, que es lo que se quiere ver.
+            turnos, ra, rt = armar_relleno(np.random.default_rng(79), turnos, pool, a.relleno,
+                                           a.relleno_turnos)
+            ra, rt = jnp.array(ra), jnp.array(rt)
+        lg, p, ab = self.fn(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
+                            jnp.array(mask), jnp.array(cons), jnp.array(pos), ra, rt)
+        p = np.asarray(p[0]); lg = np.asarray(lg[0])
+        masa_slot = None
+        if _ABST == "slot" and p.shape[0] > self.n_propias + (a.relleno if pool is not None else 0):
+            masa_slot, p = float(p[-1]), p[:-1]           # la columna nula va ultima
+        prop = p[:self.n_propias]
+        rel = p[self.n_propias:]
+        c = {"paso": int(s), "perdida": round(float(l), 4), "acc": round(float(acc), 4),
+             "topk": int(M.TOPK), "pesos": pesos,
+             "taps": [round(float(np.abs(x).mean()), 5)
+                      for x in np.asarray(params["blocks"][0]["convq"])],
+             "beta": [round(float(jax.nn.sigmoid(b["beta"]).mean()), 4) for b in params["blocks"]],
+             "atencion": [round(float(x), 5) for x in prop],
+             "pred": I.ITOS[int(np.argmax(lg))]}
+        if rel.size:
+            top = np.argsort(-rel)[:5]
+            c["masa_relleno"] = round(float(rel.sum()), 5)
+            c["top_relleno"] = [[int(j), round(float(rel[j]), 5)] for j in top]
+        if self.fn is _foto_lectura_cabeza:
+            c["abst"] = round(float(ab[0]), 4)
+        if masa_slot is not None:
+            c["masa_slot"] = round(masa_slot, 5)
+        self.cuadros.append(c)
+        tmp = self.ruta + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(dict(self.cab, cuadros=self.cuadros), f, separators=(",", ":"))
+        os.replace(tmp, self.ruta)
+
+
+def preparar_fotos(a, params, con_cabeza, hist):
+    return Fotos(a, params, con_cabeza, hist)
+
+
 def pert_de(mask):
     """(B, N) con True en las entradas del episodio en curso. None cuando el bit esta apagado."""
     if not _PERT:
@@ -133,19 +300,68 @@ def pert_de(mask):
     return jnp.broadcast_to(m, mask.shape)
 
 
-def logits_de(params, ses, cortes, turnos, mask, cons, pos):
+# --- RELLENO DE ARCHIVO LARGO SIN GRADIENTE (2026-09-11) ----------------------------------------
+# `--ses-extra` agranda el archivo pasando sesiones extra por el tronco CON gradiente: con 26 son
+# 161 entradas y ya hizo falta partir el paso en micro-lotes. Llegar a las 3.280 del banco de
+# dilucion por esa via es imposible en una T4. Aca las entradas extra vienen de un POOL de vectores
+# ya escritos por el modelo —`dilucion.construir_pool`, el MISMO constructor que usa el banco— que
+# se refresca cada `--relleno-cada` pasos y entra al grafo como dato, o sea sin gradiente.
+#
+# `datos.lote` dice, con razon, que un pool precomputado «quedaria congelado en los pesos del
+# momento en que se genero»; por eso este se REESCRIBE cada `--relleno-cada` pasos (1000 por
+# defecto, y se puede bajar). El desfase que queda no es un atajo, es la situacion real: lo
+# archivado en conversaciones anteriores YA esta escrito con los pesos de entonces y no se
+# reescribe cuando llega una pregunta nueva. Lo que si recibe
+# gradiente es la LECTURA (`qr`, `kw`, `ord`, `pert`) sobre el archivo largo, que es lo que se
+# quiere que aprenda: a encontrar la entrada correcta entre miles.
+#
+# Los turnos del relleno siguen a `dilucion.celda` letra por letra, para que lo que se entrena sea
+# lo que el banco mide:  `solapado` sortea turnos en el mismo rango que el episodio (el sello no
+# puede separarlos); `viejo` los pone en 0..K-1 y corre el episodio a K..63 (el archivo largo es
+# literalmente «lo dicho antes», y el sello puede descartarlo).
+
+def armar_relleno(rng, turnos, pool, X, modo):
+    """Devuelve (turnos del episodio, relleno (B, X, D), turnos del relleno (B, X))."""
+    B = turnos.shape[0]
+    Tu = np.asarray(turnos)
+    idx = rng.integers(0, pool.shape[0], (B, X))
+    ra = pool[idx]
+    if modo == "viejo":
+        K = 64 - (int(Tu.max()) + 1)
+        Tu = Tu + K
+        rt = rng.integers(0, max(1, K), (B, X))
+    else:
+        hi = max(1, int(Tu.max()) + 1)
+        rt = rng.integers(0, hi, (B, X))
+    return Tu, ra.astype(np.float32), rt.astype(Tu.dtype)
+
+
+def con_relleno(archivo, turnos, mask, ra, rt):
+    """Pega el relleno al FINAL del archivo. `pert_de` marca las primeras 4*E_MAX, asi que el
+    episodio en curso sigue siendo el mismo y el relleno queda como ajeno, igual que en el banco."""
+    if ra is None:
+        return archivo, turnos, mask
+    archivo = jnp.concatenate([archivo, ra], axis=1)
+    turnos = jnp.concatenate([turnos, rt], axis=1)
+    mask = jnp.concatenate([mask, jnp.ones(rt.shape, bool)], axis=1)
+    return archivo, turnos, mask
+
+
+def logits_de(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None, captura=None):
     archivo = M.escribir(params, ses, cortes)
-    lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE, pertenece=pert_de(mask))
+    archivo, turnos, mask = con_relleno(archivo, turnos, mask, ra, rt)
+    lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE, pertenece=pert_de(mask),
+                     captura=captura)
     return jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
 
 
 @jax.jit
-def predecir(params, ses, cortes, turnos, mask, cons, pos):
-    return logits_de(params, ses, cortes, turnos, mask, cons, pos).argmax(-1)
+def predecir(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None):
+    return logits_de(params, ses, cortes, turnos, mask, cons, pos, ra, rt).argmax(-1)
 
 
-def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt):
-    lg = logits_de(params, ses, cortes, turnos, mask, cons, pos)
+def perdida(params, ses, cortes, turnos, mask, cons, pos, tgt, ra=None, rt=None):
+    lg = logits_de(params, ses, cortes, turnos, mask, cons, pos, ra, rt)
     if _PERDIDA_CABEZA == "recompensa":
         return _recompensa(lg, tgt, q=jax.nn.softmax(lg, -1)[:, NOSE],
                            s=lg[:, NOSE] - jax.nn.logsumexp(
@@ -268,26 +484,27 @@ def _recompensa(lg, tgt, q, s=None):
 # `NOSE` deja de ser una entrada del softmax de vocabulario y pasa a tener su propia salida binaria.
 # Las dos decisiones —«¿esta?» y «¿que valor?»— dejan de competir por la misma masa de probabilidad.
 
-def _partes(params, ses, cortes, turnos, mask, cons, pos):
+def _partes(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None, captura=None):
     archivo = M.escribir(params, ses, cortes)
+    archivo, turnos, mask = con_relleno(archivo, turnos, mask, ra, rt)
     lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE, abst=_ABST,
-                                 pertenece=pert_de(mask))
+                                 pertenece=pert_de(mask), captura=captura)
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     a = jnp.take_along_axis(a, pos[:, None], axis=1)[:, 0]
     return lg, a
 
 
 @jax.jit
-def predecir_cabeza(params, ses, cortes, turnos, mask, cons, pos):
-    lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos)
+def predecir_cabeza(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None):
+    lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos, ra, rt)
     # `NOSE` se excluye del argmax de valores: con la cabeza aparte, dejarlo seria darle dos rutas a
     # la misma decision y el contraste con `token` dejaria de ser limpio.
     lg = lg.at[:, NOSE].set(-jnp.inf)
     return jnp.where(a > 0.0, NOSE, lg.argmax(-1))
 
 
-def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt):
-    lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos)
+def perdida_cabeza(params, ses, cortes, turnos, mask, cons, pos, tgt, ra=None, rt=None):
+    lg, a = _partes(params, ses, cortes, turnos, mask, cons, pos, ra, rt)
     es_nose = (tgt == NOSE).astype(jnp.float32)
 
     # --- BLANCO DE LA CABEZA (2026-08-26, `ALTERNATIVAS_DETECCION_20260826.md` A5) --------------
@@ -518,6 +735,41 @@ def main():
                          "checkpoints entrenados (INFORME_DILUCION_20260905.md), con archivo de 400 "
                          "la exactitud cae a 0,0605 y el sello de orden NO usa esa marca. La "
                          "pregunta de la campania es si entrenando asi lo aprende")
+    ap.add_argument("--topk", type=int, default=0,
+                    help="LECTURA TOP-K (2026-09-11). El softmax de lectura del archivo se "
+                         "restringe a las K entradas de mayor puntaje y renormaliza entre ellas. "
+                         "0 es el softmax completo de siempre. Sale de `dilucion_topk.py` (10-sep): "
+                         "en INFERENCIA, K=2 recupera 0,2441 -> 0,9961 con 3.280 entradas sin tocar "
+                         "un peso. Aca entra en el entrenamiento. El gradiente fluye solo a las K "
+                         "elegidas: si la correcta no cae entre ellas, nada la levanta (E-I1 lo "
+                         "midio con inyeccion tardia, 0,0167). De ahi --topk-desde.")
+    ap.add_argument("--topk-desde", type=int, default=0,
+                    help="paso a partir del cual rige --topk; antes se lee con softmax completo. "
+                         "Es el curriculo de UN escalon: primero se forman las claves con gradiente "
+                         "denso, despues se cierra la lectura. 0 = top-k desde el primer paso.")
+    ap.add_argument("--relleno", type=int, default=0,
+                    help="ARCHIVO LARGO SIN GRADIENTE (2026-09-11). Entradas de OTROS episodios "
+                         "que se pegan al archivo en cada paso, tomadas de un pool escrito por el "
+                         "propio modelo (`dilucion.construir_pool`) y refrescado cada --relleno-cada "
+                         "pasos. Ver `armar_relleno`. 0 lo apaga. 3240 es el X del banco.")
+    ap.add_argument("--relleno-pool", type=int, default=4096, help="tamanio del pool")
+    ap.add_argument("--relleno-cada", type=int, default=1000,
+                    help="cada cuantos pasos se reescribe el pool con los pesos actuales")
+    ap.add_argument("--relleno-dist", default="real", choices=("real", "ruido", "disjunto"),
+                    help="distribucion del relleno, como DIST en dilucion.py. `disjunto` parte las "
+                         "entidades en dos mitades y deja la del episodio fijada para TODA la "
+                         "corrida (es lo que hace `construir_pool`).")
+    ap.add_argument("--relleno-turnos", default="solapado", choices=("solapado", "viejo"),
+                    help="turnos del relleno, como TURNOS en dilucion.py")
+    ap.add_argument("--fotos", type=int, default=0,
+                    help="LA PELICULA (2026-09-11, pedido de Maxi: mas de 200 cuadros de la "
+                         "corrida real). Cada tantos pasos guarda un cuadro con el formato de "
+                         "`pelicula.py`: submatrices fijas 12x12 de cada matriz del camino, taps "
+                         "de `convq`, beta por bloque, y la distribucion de lectura del archivo "
+                         "sobre UNA muestra fija capturada desde adentro de `responder` (con top-k "
+                         "y relleno incluidos). 0 lo apaga.")
+    ap.add_argument("--fotos-salida", default="",
+                    help="JSON de las fotos; por defecto <ckpt>_fotos.json o fotos_<semilla>.json")
     ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7, 9),
                     help="kernel de `convq`, la conv que forma la query en `--donde lat2` "
                          "(INFORME_QUERY_CIEGA_20260901.md). Con 3 la ENTIDAD entra en la ventana "
@@ -648,9 +900,20 @@ def main():
             sys.exit(f"ABORTA: forma de pregunta desconocida {f!r}; hay {I.FORMAS_Q}")
     M.KQ = a.kernel_q          # antes de init_params: decide la forma de `convq`
     _PERDIDA_CABEZA = a.perdida_cabeza
+    if a.topk < 0 or a.topk == 1 and a.relleno == 0 and a.ses_extra == 0:
+        print("AVISO: --topk 1 con archivo corto; K=1 fue PEOR que K=2 en todas las celdas del 10-sep.")
+    if a.relleno and a.relleno_turnos == "viejo" and a.ses_extra:
+        sys.exit("ABORTA: --relleno-turnos viejo con --ses-extra: el sello tiene 64 filas y las "
+                 "sesiones extra ya ocupan los turnos bajos; no queda lugar para lo viejo.")
+    # `M.TOPK` se fija ANTES de compilar nada y segun el paso en que se este: con --topk-desde y un
+    # tramo que reanuda mas alla del cruce, rige el top-k desde el primer paso del tramo.
+    M.TOPK = 0
 
     print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
-          f"· lectura {a.donde}", flush=True)
+          f"· lectura {a.donde}"
+          + (f" · top-{a.topk} desde el paso {a.topk_desde}" if a.topk else "")
+          + (f" · relleno {a.relleno} ({a.relleno_dist}, {a.relleno_turnos})" if a.relleno else ""),
+          flush=True)
     # El hardware va al JSON, no sólo al log. Cuando Colab raciona las T4 hay que aceptar el
     # acelerador que haya, y entonces «en qué corrió esta celda» deja de ser un detalle de
     # operación: es una variable que podría explicar una diferencia entre celdas, y sin registrarla
@@ -696,15 +959,16 @@ def main():
         sys.exit(f"ABORTA: --batch {a.batch} no es multiplo de --micro-batch {MB}.")
 
     @jax.jit
-    def paso(params, state, ses, cortes, turnos, mask, cons, pos, tgt):
+    def paso(params, state, ses, cortes, turnos, mask, cons, pos, tgt, ra=None, rt=None):
         if MB and MB < a.batch:
             K = a.batch // MB
 
             def uno(_, i):
                 cor = lambda x: jax.lax.dynamic_slice_in_dim(x, i * MB, MB, 0)
+                opc = lambda x: None if x is None else cor(x)
                 (l, acc), g = jax.value_and_grad(fn_perd, has_aux=True)(
                     params, cor(ses), cor(cortes), cor(turnos), cor(mask), cor(cons), cor(pos),
-                    cor(tgt))
+                    cor(tgt), opc(ra), opc(rt))
                 return None, (l, acc, g)
 
             _, (ls, accs, gs) = jax.lax.scan(uno, None, jnp.arange(K))
@@ -712,7 +976,7 @@ def main():
             g = jax.tree.map(lambda x: x.mean(0), gs)
         else:
             (l, acc), g = jax.value_and_grad(fn_perd, has_aux=True)(
-                params, ses, cortes, turnos, mask, cons, pos, tgt)
+                params, ses, cortes, turnos, mask, cons, pos, tgt, ra, rt)
         up, state = opt.update(g, state, params)
         return optax.apply_updates(params, up), state, l, acc
 
@@ -819,6 +1083,17 @@ def main():
             sys.exit(f"ABORTA: el checkpoint se entreno con ses_extra={_ck_extra} y se pidio "
                      f"ses_extra={a.ses_extra}. El archivo tiene otro tamanio: es otra tarea, no la "
                      f"misma corrida. Si la bifurcacion es a proposito, va por `sembrar.py`.")
+        # `topk`, `topk_desde` y el relleno (2026-09-11): misma familia y mismos tres casos que
+        # `ses_extra`. Cambiar como se lee el archivo a mitad de corrida es otra tarea sin avisar.
+        for k, d in (("topk", 0), ("topk_desde", 0), ("relleno", 0), ("relleno_dist", "real"),
+                     ("relleno_turnos", "solapado")):
+            _v = ck["config"].get(k)
+            if _v is None and "sembrado_de" not in ck:
+                _v = d
+            if _v is not None and _v != vars(a)[k]:
+                sys.exit(f"ABORTA: el checkpoint se entreno con {k}={_v} y se pidio "
+                         f"{k}={vars(a)[k]}. La lectura del archivo es otra: es otra tarea, no la "
+                         f"misma corrida. Si la bifurcacion es a proposito, va por `sembrar.py`.")
         if ck["config"].get("kernel_q", 3) != a.kernel_q:
             sys.exit(f"ABORTA: el checkpoint se entreno con kernel_q="
                      f"{ck['config'].get('kernel_q', 3)} y se pidio kernel_q={a.kernel_q}. "
@@ -975,22 +1250,80 @@ def main():
         else:
             mejor["seguidas"] += 1
 
+    # --- LECTURA TOP-K: el escalon del curriculo ---------------------------------------------
+    # Se fija segun el paso en que se ESTA, no segun el flag a secas: un tramo que reanuda pasado
+    # el cruce tiene que compilar ya con top-k. Y si el cruce cae dentro del tramo, se cambia el
+    # global y se vacian los caches de jit, porque los grafos compilados lo llevan horneado.
+    def fijar_topk(s):
+        quiere = a.topk if (a.topk and s >= a.topk_desde) else 0
+        if quiere != M.TOPK:
+            M.TOPK = quiere
+            jax.clear_caches()
+            print(f"  [paso {s}: lectura del archivo -> "
+                  f"{'top-' + str(quiere) if quiere else 'softmax completo'}; se recompila]",
+                  flush=True)
+    fijar_topk(paso0 + 1)
+
+    # --- RELLENO: el pool de archivo largo, escrito por el modelo y sin gradiente ---------------
+    pool = None
+    rel_rng = np.random.default_rng(3000 + a.semilla)
+
+    def refrescar_pool(s):
+        nonlocal pool
+        import dilucion as DIL
+        DIL.DIST = a.relleno_dist
+        t1 = time.time()
+        pool, _ = DIL.construir_pool(params, a.nivel, a.relleno_pool, semilla=777 + s)
+        print(f"  [paso {s}: pool de relleno {pool.shape} ({a.relleno_dist}) en "
+              f"{time.time() - t1:.1f}s]", flush=True)
+
+    if a.relleno:
+        refrescar_pool(paso0)
+        # El primer paso de cada tramo lo escribe con los pesos que llegan; despues, cada
+        # `relleno_cada`. Sobre 3.240 entradas la escritura son dos lotes de `escribir`.
+
+    def relleno_de(turnos):
+        if pool is None:
+            return turnos, None, None
+        tu, ra, rt = armar_relleno(rel_rng, turnos, pool, a.relleno, a.relleno_turnos)
+        return tu, jnp.array(ra), jnp.array(rt)
+
+    # --- LAS FOTOS (2026-09-11) ----------------------------------------------------------------
+    fotos = preparar_fotos(a, params, fn_pred is predecir_cabeza, hist) if a.fotos else None
+
     for s in range(paso0 + 1, fin + 1):
+        fijar_topk(s)
+        if pool is not None and s > paso0 + 1 and s % a.relleno_cada == 1:
+            refrescar_pool(s)
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
             rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
             p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra)
+        turnos, ra, rt = relleno_de(turnos)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),
-                                     jnp.array(pos), jnp.array(tgt))
+                                     jnp.array(pos), jnp.array(tgt), ra, rt)
         if s % 500 == 0:
             print(f"  paso {s:6d}  loss {float(l):.4f}  acc {float(acc):.4f}  "
                   f"({time.time()-t0:.0f}s)", flush=True)
+        if fotos is not None and (s % a.fotos == 0 or s == fin):
+            fotos.cuadro(params, s, l, acc, pool)
         if s % a.cada == 0 or s == fin:
             trunc = DAT.tasa_truncados()            # la compuerta, en el registro permanente
             ev = np.random.default_rng(90000 + a.semilla)
             m = evaluar(params, ev, nivel=a.nivel, p_vieja=a.p_vieja, p_nose=a.p_nose,
                         pred_fn=fn_pred, formas_q=FORMAS_Q, por_forma=len(FORMAS_Q) > 1,
                         n_ses_extra=a.ses_extra, B=B_EVAL, n=N_EVAL)
+            m["topk"] = M.TOPK          # que lectura rigio en ESTA evaluacion (curriculo)
+            if pool is not None:
+                # la misma pregunta con el archivo largo del entrenamiento; la de arriba es el
+                # archivo corto, o sea el cruce del 5-sep sale gratis en las dos direcciones
+                m["archivo_corto"] = {k: m[k] for k in ("vigente", "anterior", "nose")}
+                m_rel = evaluar(params, np.random.default_rng(92000 + a.semilla), nivel=a.nivel,
+                                p_vieja=a.p_vieja, p_nose=a.p_nose, pred_fn=fn_pred,
+                                formas_q=FORMAS_Q, n_ses_extra=a.ses_extra, B=B_EVAL, n=N_EVAL,
+                                relleno=(pool, a.relleno, a.relleno_turnos))
+                m.update({k: m_rel[k] for k in ("vigente", "anterior", "nose", "nose_ent",
+                                                 "nose_rel", "falsa_abst", "abstencion")})
             # ARCHIVO LARGO (2026-09-05): las dos condiciones se evaluan SIEMPRE, entrene con el
             # archivo que entrene. Sin esto no se puede leer si lo aprendido en archivo largo se
             # paga en el corto, que es el criterio de riesgo de la campania, ni si el control
