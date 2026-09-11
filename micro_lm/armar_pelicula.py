@@ -51,6 +51,12 @@ def empaquetar(ruta):
         "params": d.get("params"), "k": d.get("k", 12),
         "capas": d["capas"], "muestra": d["muestra"], "respuesta_correcta": d["respuesta_correcta"],
         "escala": [round(float(x), 5) for x in escala],
+        # 11-sep, pedido de Maxi al ver el bloque 1 -> bloque 2 casi sin lineas: `b2.wv` tiene UN peso
+        # de 1,37 (el mayor de todas) y la mediana mas alta de todas; con el umbral en el 25 % del
+        # maximo se dibujaba el 6 %. El visor corta por percentil de la matriz a lo largo de la
+        # pelicula (p60) y normaliza el grosor por el p97, asi un peso dominante no apaga al resto.
+        "p60": [round(float(np.percentile(np.abs(W[:, j]), 60)), 5) for j in range(m)],
+        "p97": [round(float(np.percentile(np.abs(W[:, j]), 97)), 5) for j in range(m)],
         "rms": [[round(float(x), 4) for x in fila] for fila in rms],
         "cuadros": meta, "n": n, "m": m,
         "blob": base64.b64encode(Q.tobytes()).decode("ascii"),
