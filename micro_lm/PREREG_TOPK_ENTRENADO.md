@@ -134,3 +134,39 @@ hallazgo: en frío no arranca en 3.000 pasos con ninguna de las dos lecturas.
   sesiones se desasignaron después. Se relanza con el rotador normal (un rotador por unidad,
   `lanzar_planb_0911.sh segundo`), con los checkpoints sembrados restaurados y sin cuadros
   heredados. Nada de lo medido cambia.
+
+## 8. ★ LA MÉTRICA INTERNA ESTABA INFLADA: el modelo aprende la ANTIGÜEDAD DE ESCRITURA del relleno (09:50)
+
+**Lo que se vio.** Paso 500 del plan B: las seis unidades dan `vigente` 0,905-1,000 en archivo
+largo (métrica interna, con el pool del entrenamiento). Demasiado bueno para 500 pasos, así que
+antes de anunciarlo se corrió el control (`controles_20260911/`, checkpoints `ts3_s0` y `ds3_s0`
+del paso 500, banco `dilucion.py` real + viejo, 256 muestras, X = 3.240):
+
+| pool escrito con | bit de pertenencia | ts3_s0 (top-2) | ds3_s0 (denso) |
+|---|---|---|---|
+| los pesos del propio checkpoint (fresco, = despliegue) | no | **0,0703** | **0,0234** |
+| los pesos del propio checkpoint (fresco) | sí, como en el entrenamiento | **0,0703** | **0,0234** |
+| los pesos del paso 0 (= lo que vio el entrenamiento) | sí | **0,9883** | **0,9922** |
+
+Idénticos al cuarto decimal con y sin el bit de pertenencia; **la única variable que mueve el
+resultado de 0,02 a 0,99 es con qué pesos se escribió el relleno.** El RECUP acompaña
+(0,035 → 0,957): la discriminación está en las claves. El modelo aprendió que «escrito con pesos
+viejos» significa «ajeno», que es una señal que existe sólo porque el pool se refresca cada 1.000
+pasos mientras los pesos siguen cambiando. **En despliegue el modelo está congelado y todo se
+escribe con los mismos pesos, así que esa señal no existe: la métrica interna no mide nada real.**
+
+**Consecuencias.**
+1. H1-H3 NO se pueden leer sobre la métrica interna. La métrica confirmatoria pasa a ser el banco
+   con pool fresco (+ bit de pertenencia, que sí es información de un sistema real).
+2. La campaña se recorta: `s1` y `s2` de las dos familias se pararon a las 09:45 (paso 2.000);
+   `ts3_s0` y `ds3_s0` siguen hasta el 8.000 sólo para completar la película (320 cuadros), que
+   sigue siendo el retrato real de una dinámica real, aunque parte de lo que aprende sea esto.
+3. **La trampa es general y va como hallazgo:** un archivo persistente co-entrenado cuyas entradas
+   viejas se escribieron con pesos anteriores le enseña al modelo a fechar las entradas por la
+   firma de los pesos. Cualquier diseño con memoria escrita por el propio modelo tiene que
+   controlar esto (evaluar siempre con archivo reescrito con los pesos actuales).
+4. Rediseño del relleno, a pre-registrar antes de correr: el relleno se escribe **con los pesos
+   actuales en cada paso** (sesiones extra sin gradiente, `stop_gradient`), aunque sea más corto
+   (p. ej. 400 entradas), y la generalización a 3.240 se mide en el banco con pool fresco. Antes,
+   una medida barata que decide si hace falta: `rp3_s0` (6-sep, sello relativo + pertenencia,
+   entrenado con 161 entradas frescas con gradiente) sobre el mismo banco.

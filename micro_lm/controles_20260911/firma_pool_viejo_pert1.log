@@ -1,0 +1,21 @@
+
+==============================================================================
+[distractor=real turnos=viejo] /tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/ts3_s0_p500.pkl  ·  kernel_q=5 · sello=rel · topk=2 · donde=lat2 · nivel=3 · ses_extra=0 · pert=True · paso 8000 · V=242
+  pool escrito con los pesos de /tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/sembrado_s0_p0.pkl (paso 0)
+  pool de distractores: (4096, 128) en 50.3s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.9531   0.8945    0.9925    0.0358
+    3240     3280     0.9883   0.9570    0.8171    0.8746
+
+==============================================================================
+[distractor=real turnos=viejo] /tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/ds3_s0_p500.pkl  ·  kernel_q=5 · sello=rel · topk=0 · donde=lat2 · nivel=3 · ses_extra=0 · pert=True · paso 8000 · V=242
+  pool escrito con los pesos de /tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/sembrado_s0_p0.pkl (paso 0)
+  pool de distractores: (4096, 128) en 41.2s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.9648   0.8281    0.9942    0.0240
+    3240     3280     0.9922   0.9688    0.9726    0.1178
+
+guardado en dilucion.json
+exit=0

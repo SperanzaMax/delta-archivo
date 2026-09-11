@@ -1,0 +1,21 @@
+
+==============================================================================
+[distractor=real turnos=viejo] /tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/ts3_s0_p500.pkl  ·  kernel_q=5 · sello=rel · topk=2 · donde=lat2 · nivel=3 · ses_extra=0 · pert=True · paso 8000 · V=242
+  pool de distractores: (4096, 128) en 38.0s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.9531   0.8945    0.9925    0.0358
+     360      400     0.3398   0.1797    0.5834    1.2091  <- bajo el piso trivial
+    3240     3280     0.0703   0.0352    0.2424    2.7861  <- bajo el piso trivial
+
+==============================================================================
+[distractor=real turnos=viejo] /tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/ds3_s0_p500.pkl  ·  kernel_q=5 · sello=rel · topk=0 · donde=lat2 · nivel=3 · ses_extra=0 · pert=True · paso 8000 · V=242
+  pool de distractores: (4096, 128) en 39.8s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.9648   0.8281    0.9942    0.0240
+     360      400     0.2383   0.1797    0.6707    1.0044  <- bajo el piso trivial
+    3240     3280     0.0234   0.0234    0.2795    2.5775  <- bajo el piso trivial
+
+guardado en dilucion.json
+exit=0

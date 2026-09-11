@@ -1,0 +1,84 @@
+{
+ "prereg": "f4d91c12",
+ "distractor": "real",
+ "turnos": "viejo",
+ "piso": 0.4065,
+ "NMUE": 256,
+ "POOL": 4096,
+ "res": {
+  "/tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/ts3_s0_p500.pkl": {
+   "kernel_q": 5,
+   "sello": "rel",
+   "donde": "lat2",
+   "filas": [
+    {
+     "X": 0,
+     "n": 256,
+     "exactitud": 0.953125,
+     "RECUP": 0.89453125,
+     "n_con_hecho": 256,
+     "masa_ganadora": 0.9924589660950005,
+     "entropia": 0.03577188653391524,
+     "segundos": 20.0
+    },
+    {
+     "X": 360,
+     "n": 256,
+     "exactitud": 0.33984375,
+     "RECUP": 0.1796875,
+     "n_con_hecho": 256,
+     "masa_ganadora": 0.5833812466007657,
+     "entropia": 1.2090601642557885,
+     "segundos": 21.0
+    },
+    {
+     "X": 3240,
+     "n": 256,
+     "exactitud": 0.0703125,
+     "RECUP": 0.03515625,
+     "n_con_hecho": 256,
+     "masa_ganadora": 0.24240803404245526,
+     "entropia": 2.786122896708548,
+     "segundos": 20.1
+    }
+   ]
+  },
+  "/tmp/claude-1000/-home-maxi/041348dd-41a4-4e19-ac6f-d1945bb549cd/scratchpad/ctrl_firma/ds3_s0_p500.pkl": {
+   "kernel_q": 5,
+   "sello": "rel",
+   "donde": "lat2",
+   "filas": [
+    {
+     "X": 0,
+     "n": 256,
+     "exactitud": 0.96484375,
+     "RECUP": 0.828125,
+     "n_con_hecho": 256,
+     "masa_ganadora": 0.9942122038919479,
+     "entropia": 0.024025535433905378,
+     "segundos": 17.0
+    },
+    {
+     "X": 360,
+     "n": 256,
+     "exactitud": 0.23828125,
+     "RECUP": 0.1796875,
+     "n_con_hecho": 256,
+     "masa_ganadora": 0.6706846541492268,
+     "entropia": 1.0044240651586733,
+     "segundos": 16.6
+    },
+    {
+     "X": 3240,
+     "n": 256,
+     "exactitud": 0.0234375,
+     "RECUP": 0.0234375,
+     "n_con_hecho": 256,
+     "masa_ganadora": 0.27951503166696057,
+     "entropia": 2.577509304275736,
+     "segundos": 18.8
+    }
+   ]
+  }
+ }
+}

@@ -34,6 +34,12 @@ _ENT_TODAS = tuple(I.ENTIDADES)
 # 0..K-1 y el episodio se corre a K..63, o sea el archivo largo es literalmente «lo dicho antes».
 # Si el sello sirve, el modelo tiene que poder descartarlos. Y el margen es 64 turnos y se acaba ahi.
 TURNOS = os.environ.get("TURNOS", "solapado")   # solapado | viejo
+# CONTROL 4 (2026-09-11). Los checkpoints entrenados con `--pert` aprendieron a depender del bit de
+# pertenencia (que entradas son de la conversacion en curso); medirlos sin el bit es medir al
+# modelo sin una entrada que tuvo, la leccion del 8-sep (`conf_ckpt.pertenece_de`). Con PERT=1 se
+# le pasa el bit como en el entrenamiento: las primeras 4*E_MAX entradas son propias, el relleno no.
+# Con PERT=0 (default) el banco es identico al de siempre y el json se llama igual.
+PERT = os.environ.get("PERT", "0") == "1"
 
 
 def construir_pool(params, nivel, n_obj, semilla=777):
@@ -102,7 +108,11 @@ def celda(params, nivel, pool_a, pool_t, X, n, semilla=31415):
             Oa = np.concatenate([Oa, np.full((b, X), -1, np.int32)], axis=1)
         jA, jT, jM = jnp.array(A), jnp.array(Tu), jnp.array(Mk)
         jc = jnp.array(cons)
-        lg = M.responder(params, jA, jT, jc, jM, donde=DONDE)
+        pert = None
+        if PERT:
+            pm = np.zeros(jM.shape[1], bool); pm[:4 * DAT.E_MAX] = True
+            pert = jnp.array(np.broadcast_to(pm, jM.shape))
+        lg = M.responder(params, jA, jT, jc, jM, donde=DONDE, pertenece=pert)
         pred = np.asarray(jnp.take_along_axis(lg, jnp.array(pos)[:, None, None], 1)[:, 0, :].argmax(-1))
         oks.append(pred == tgt)
         # ranking de la lectura en la posicion de maximo foco, igual que rank_hecho.py
@@ -157,6 +167,6 @@ if __name__ == "__main__":
             marca = "  <- bajo el piso trivial" if r["exactitud"] < PISO else ""
             print(f"  {X:>6} {X+40:>8} {r['exactitud']:>10.4f} {r['RECUP']:>8.4f} "
                   f"{r['masa_ganadora']:>9.4f} {r['entropia']:>9.4f}{marca}")
-    json.dump({"prereg": "f4d91c12", "distractor": DIST, "turnos": TURNOS, "piso": PISO, "NMUE": NMUE, "POOL": POOL, "res": res},
-              open(os.path.join(AQUI, f"dilucion_{DIST}_{TURNOS}.json"), "w"), indent=1)
+    json.dump({"prereg": "f4d91c12", "distractor": DIST, "turnos": TURNOS, "pert": PERT, "piso": PISO, "NMUE": NMUE, "POOL": POOL, "res": res},
+              open(os.path.join(AQUI, f"dilucion_{DIST}_{TURNOS}{'_pert' if PERT else ''}.json"), "w"), indent=1)
     print("\nguardado en dilucion.json")
