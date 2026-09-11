@@ -28,13 +28,14 @@ subprocess.run('tar xzf /content/micro.tgz -C /content/micro', shell=True, check
 nombres = "${NOMBRES[*]}".split()
 for b in nombres:
     os.replace('/content/' + b, '/content/micro/ckpts/' + b)
-env = dict(os.environ, DIST='real', TURNOS='viejo', PERT='1', XS='0,360,3240', NMUE='256')
+env = dict(os.environ, DIST='real', TURNOS='viejo', PERT='${PERT:-1}', XS='0,360,3240', NMUE='256')
 r = subprocess.run([sys.executable, 'dilucion.py'] + ['ckpts/' + b for b in nombres], cwd='/content/micro', env=env, capture_output=True, text=True)
 print(r.stdout[-6000:]); print(r.stderr[-2000:], file=sys.stderr)
-print('@@JSON@@ ' + json.dumps(json.load(open('/content/micro/dilucion_real_viejo_pert.json'))))
+import glob
+print('@@JSON@@ ' + json.dumps(json.load(open(sorted(glob.glob('/content/micro/dilucion_real_viejo*.json'), key=os.path.getmtime)[-1]))))
 PY
 OUT="$(timeout -k 30 900 "${CL[@]}" exec -s "$SESION" --timeout 840 -f "$TMP/correr.py" 2>&1)"
 printf '%s\n' "$OUT" | grep -avE "^@@JSON@@" | tail -30
-printf '%s\n' "$OUT" | grep -a "^@@JSON@@ " | sed 's/^@@JSON@@ //' > "$SAL/banco_fresco_$(date +%H%M).json"
-echo "== json en $SAL/banco_fresco_$(date +%H%M).json"
+printf '%s\n' "$OUT" | grep -a "^@@JSON@@ " | sed 's/^@@JSON@@ //' > "$SAL/banco_fresco_pert${PERT:-1}_$(date +%H%M).json"
+echo "== json en $SAL/banco_fresco_pert${PERT:-1}_$(date +%H%M).json"
 timeout -k 30 120 "${CL[@]}" stop -s "$SESION" >/dev/null 2>&1

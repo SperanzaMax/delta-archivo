@@ -12,7 +12,19 @@ uno_rot() {  # familia topk unidad cuentas...
     setsid nohup ./rotar_abst3.sh "$u" 2000 2000 250 "$@" > "$SAL/rotador_${fam}3_s${u##*:}.log" 2>&1 < /dev/null &
   echo "rotador ${fam}3_s${u##*:} pid $! cuentas $*"; sleep 3
 }
+if [ "${1:-}" = "" ]; then
 uno_rot tt 2 3:0 K C
 uno_rot tt 2 3:1 L D
 uno_rot tt 2 3:2 N I
 uno_rot rq 0 3:0 F J
+fi
+
+# --- 14:50 · segunda tanda de cuentas. Las cuatro VMs se cayeron dos veces a la vez (13:37 y 14:45) y
+# las listas de dos cuentas se agotaron. Se relanza con cuentas que hoy descansaron mas; los
+# checkpoints de la PC tienen el paso (1.250 / 1.500 / 1.250 / 1.500) y SEMBRAR=0 reanuda.
+if [ "${1:-}" = "relanzar" ]; then
+  uno_rot tt 2 3:0 A E
+  uno_rot tt 2 3:1 G H
+  uno_rot tt 2 3:2 M K
+  uno_rot rq 0 3:0 C L
+fi

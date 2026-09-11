@@ -238,3 +238,44 @@ horizonte 6.000, 2.000 pasos). Se corre el gemelo con `--topk 2` y nada más:
   dilución del softmax pega y la top-2 no, y es la única hipótesis que separa los brazos.
 - **H3''** con 40, `tt3` no queda más de 0,03 por debajo de `rp3` (0,9688).
 - **H4''** `rq3_s0` reproduce `rp3_s0` en la métrica interna (±0,03 al paso 2.000) y en el banco.
+
+## 11. ★★★ RESULTADO · LA COLISIÓN ESTÁ RESUELTA (16:05, con los datos a la vista)
+
+Banco `dilucion.py`, `DIST=real TURNOS=viejo PERT=1`, pool escrito con los pesos del propio
+checkpoint (`controles_20260911/banco_fresco_pert1_1550.json`), 256 muestras, paso 2.000:
+
+| unidad | lectura | 40 | 400 | **3.280** |
+|---|---|---|---|---|
+| `tt3_s0` | top-2 | 0,9297 | 0,9688 | **0,9297** |
+| `tt3_s1` | top-2 | 0,8750 | 0,9531 | **0,9375** |
+| `tt3_s2` | top-2 | 0,9766 | 0,9570 | **0,9375** |
+| `rq3_s0` (réplica de rp3_s0) | softmax | 0,9766 | 0,9375 | 0,0977 |
+| `rp3_s0` (6-sep) | softmax | 0,9688 | 0,8867 | 0,1016 |
+| `rp3_s1` | softmax | — | 0,9297 | 0,1055 |
+| `rp3_s2` | softmax | 0,9961 | 0,6172 | 0,0234 |
+
+- **H1'' CUMPLE:** con 400, 0,969 / 0,953 / 0,957 (≥ 0,85 en 3 de 3).
+- **H2'' CUMPLE, por ocho veces lo pedido:** con 3.280, media top-2 **0,935** contra media denso
+  **0,082** (cuatro unidades): **+0,853** (pedía ≥ 0,10).
+- **H3'' NO CUMPLE:** con 40, media top-2 0,927 contra denso 0,980: **−0,053** (pedía ≥ −0,03).
+  El costo en archivo corto existe y es chico; sale sobre todo de `tt3_s1` (0,875).
+- **H4'' CUMPLE:** `rq3_s0` reproduce a `rp3_s0` en la métrica interna (0,997 contra 0,982 al paso
+  2.000; 0,709 / 0,636 / 0,968 exactos al paso 250) y en el banco (0,9766 / 0,9375 / 0,0977 contra
+  0,9688 / 0,8867 / 0,1016).
+
+**Control sin el bit de pertenencia** (`banco_fresco_pert0_1601.json`): top-2 0,44 / 0,43 / 0,45 con
+400 y 0,20 / 0,18 / 0,21 con 3.280; denso 0,11 y 0,004. **El bit hace falta** (el modelo se entrenó
+con él, y es información que un sistema real tiene: qué entradas son de la conversación en curso),
+y aun sin él el top-2 le gana al denso por 0,20.
+
+**Lo que dice.** El 10-sep el top-2 en inferencia no rescataba `real` (0,035) porque el ranking
+estaba roto: el modelo no sabía descartar lo viejo. Entrenar con las entradas viejas escritas con
+los pesos actuales arregla el **ranking** (sello relativo + pertenencia); el top-2 arregla la
+**dilución del valor**. Con las dos piezas, un modelo entrenado con 161 entradas viejas contesta con
+3.280 entradas viejas reales, colisiones incluidas, y el mismo entrenamiento con lectura densa se
+queda en 0,08. Es el escenario de [[objetivo]]: la memoria de una persona que crece conversación
+tras conversación sobre las mismas cosas.
+
+**Desvíos declarados:** las VMs se cayeron dos veces (13:37 y 14:45) y las unidades se reanudaron
+desde checkpoints parciales en otras GPU; la reanudación es determinista en datos pero no bit a bit
+entre GPU (`tt3_s0` al paso 750: 0,934 antes, 0,901 después). No afecta la lectura del final.
