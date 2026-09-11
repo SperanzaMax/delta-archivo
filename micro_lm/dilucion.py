@@ -34,12 +34,17 @@ _ENT_TODAS = tuple(I.ENTIDADES)
 # 0..K-1 y el episodio se corre a K..63, o sea el archivo largo es literalmente «lo dicho antes».
 # Si el sello sirve, el modelo tiene que poder descartarlos. Y el margen es 64 turnos y se acaba ahi.
 TURNOS = os.environ.get("TURNOS", "solapado")   # solapado | viejo
+BLOQUES = 0
 # CONTROL 4 (2026-09-11). Los checkpoints entrenados con `--pert` aprendieron a depender del bit de
 # pertenencia (que entradas son de la conversacion en curso); medirlos sin el bit es medir al
 # modelo sin una entrada que tuvo, la leccion del 8-sep (`conf_ckpt.pertenece_de`). Con PERT=1 se
 # le pasa el bit como en el entrenamiento: las primeras 4*E_MAX entradas son propias, el relleno no.
 # Con PERT=0 (default) el banco es identico al de siempre y el json se llama igual.
 PERT = os.environ.get("PERT", "0") == "1"
+# BARRIDO DE K (2026-09-11, P2 del plan de la tarde). `KS=1,2,3,4,0` fuerza `M.TOPK` a cada valor
+# por encima de lo que diga el checkpoint (0 = softmax completo) y guarda una tanda de filas por K.
+# Sin KS, se lee como se entreno (lo que `conf_ckpt.aplicar` pone) y el json es identico al de siempre.
+KS = [int(k) for k in os.environ["KS"].split(",")] if os.environ.get("KS") else None
 
 
 def construir_pool(params, nivel, n_obj, semilla=777):
@@ -112,7 +117,7 @@ def celda(params, nivel, pool_a, pool_t, X, n, semilla=31415):
         if PERT:
             pm = np.zeros(jM.shape[1], bool); pm[:4 * DAT.E_MAX] = True
             pert = jnp.array(np.broadcast_to(pm, jM.shape))
-        lg = M.responder(params, jA, jT, jc, jM, donde=DONDE, pertenece=pert)
+        lg = M.responder(params, jA, jT, jc, jM, bloque=BLOQUES, donde=DONDE, pertenece=pert)
         pred = np.asarray(jnp.take_along_axis(lg, jnp.array(pos)[:, None, None], 1)[:, 0, :].argmax(-1))
         oks.append(pred == tgt)
         # ranking de la lectura en la posicion de maximo foco, igual que rank_hecho.py
@@ -150,6 +155,8 @@ if __name__ == "__main__":
         params = jax.tree_util.tree_map(jnp.asarray, bulto["params"])
         cfg = bulto["config"]; nivel = cfg["nivel"]
         DONDE = cfg.get("donde", "pre")
+        _bl = tuple(int(x) for x in str(cfg.get("bloques_lectura", "0")).split(",") if x.strip())
+        BLOQUES = _bl[0] if len(_bl) == 1 else _bl     # 11-sep: lectura en varios bloques
         conf_ckpt.aplicar(cfg)
         I.fijar_version(cfg.get("idioma", 3))
         print(f"\n{'='*78}\n[distractor={DIST} turnos={TURNOS}] {ruta}  ·  "
@@ -158,15 +165,21 @@ if __name__ == "__main__":
         pool_a, pool_t = construir_pool(params, nivel, POOL)
         print(f"  pool de distractores: {pool_a.shape} en {time.time()-t0:.1f}s")
         print(f"\n  {'X':>6} {'archivo':>8} {'exactitud':>10} {'RECUP':>8} {'masa gan':>9} {'entropia':>9}")
-        res[ruta] = {"kernel_q": M.KQ, "sello": M.SELLO, "donde": DONDE, "filas": []}
-        for X in XS:
-            t1 = time.time()
-            r = celda(params, nivel, pool_a, pool_t, X, NMUE)
-            r["segundos"] = round(time.time() - t1, 1)
-            res[ruta]["filas"].append(r)
-            marca = "  <- bajo el piso trivial" if r["exactitud"] < PISO else ""
-            print(f"  {X:>6} {X+40:>8} {r['exactitud']:>10.4f} {r['RECUP']:>8.4f} "
-                  f"{r['masa_ganadora']:>9.4f} {r['entropia']:>9.4f}{marca}")
+        res[ruta] = {"kernel_q": M.KQ, "sello": M.SELLO, "donde": DONDE, "topk": M.TOPK, "filas": []}
+        for K in (KS if KS is not None else [None]):
+            if K is not None:
+                M.TOPK = K
+                print(f"  -- K = {K if K else 'N (softmax completo)'}")
+            for X in XS:
+                t1 = time.time()
+                r = celda(params, nivel, pool_a, pool_t, X, NMUE)
+                r["segundos"] = round(time.time() - t1, 1)
+                if K is not None:
+                    r["K"] = K
+                res[ruta]["filas"].append(r)
+                marca = "  <- bajo el piso trivial" if r["exactitud"] < PISO else ""
+                print(f"  {X:>6} {X+40:>8} {r['exactitud']:>10.4f} {r['RECUP']:>8.4f} "
+                      f"{r['masa_ganadora']:>9.4f} {r['entropia']:>9.4f}{marca}")
     json.dump({"prereg": "f4d91c12", "distractor": DIST, "turnos": TURNOS, "pert": PERT, "piso": PISO, "NMUE": NMUE, "POOL": POOL, "res": res},
               open(os.path.join(AQUI, f"dilucion_{DIST}_{TURNOS}{'_pert' if PERT else ''}.json"), "w"), indent=1)
     print("\nguardado en dilucion.json")

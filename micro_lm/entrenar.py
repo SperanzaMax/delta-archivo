@@ -68,6 +68,11 @@ _PERT = False
 # `stop_gradient`: mismas entradas, mismos pesos, sin backward por ellas. Es la version barata de
 # «lo archivado en conversaciones anteriores ya esta escrito y no se reentrena».
 _SES_EXTRA_SIN_GRAD = False
+# LECTURA EN VARIOS BLOQUES y HECHOS ENCADENADOS (2026-09-11, PREREG_ENCADENADOS). `_BLOQUES` es un
+# entero (lo de siempre) o una tupla; `_P_COMPUESTA` la probabilidad de que un episodio traiga un
+# hecho de persona y su pregunta compuesta. Con 0 y 0, todo es bit a bit lo de antes.
+_BLOQUES = 0
+_P_COMPUESTA = 0.0
 FORMAS_Q = ("directa",)      # 2026-09-02, PREREG_CRUCE_FORMAS. Default = el idioma de siempre.
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
@@ -88,7 +93,7 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     Un modelo que contesta NOSE a todo tendria `nose` = 1,000, y por eso la segunda no es opcional.
     """
     col = {k: [] for k in ("vigente", "anterior", "nose", "nose_ent", "nose_rel",
-                           "falsa_abst", "abstencion")}
+                           "falsa_abst", "abstencion", "compuesta", "nose_comp")}
     fq = tuple(formas_q) if formas_q else ("directa",)
     # `por_forma` junta las mismas metricas separadas por forma de pregunta. Es lo que hace legible
     # el cruce del 2-sep: `nose_rel` y `nose_ent` tienen que INTERCAMBIARSE entre `directa` e
@@ -97,7 +102,7 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     for _ in range(n):
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, forma = DAT.lote(
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose,
-            formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra)
+            formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra, p_compuesta=_P_COMPUESTA)
         fn = pred_fn or predecir
         ra = rt = None
         if relleno is not None:
@@ -109,10 +114,12 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
         sub = lambda m: ok[m].mean() if m.any() else np.nan
         col["vigente"].append(sub(tipo == 0))
         col["anterior"].append(sub(tipo == 1))
-        col["nose"].append(sub(tipo >= 2))
+        col["nose"].append(sub(~np.isin(tipo, DAT.CON_RESPUESTA)))
         col["nose_ent"].append(sub(tipo == 2))
         col["nose_rel"].append(sub(tipo == 3))
-        hay = tipo < 2
+        col["compuesta"].append(sub(tipo == 4))
+        col["nose_comp"].append(sub(tipo == 5))
+        hay = np.isin(tipo, DAT.CON_RESPUESTA)
         col["falsa_abst"].append((pred[hay] == NOSE).mean() if hay.any() else np.nan)
         col["abstencion"].append((pred == NOSE).mean())
         if porf is not None:
@@ -128,10 +135,12 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
                 s2 = lambda m: ok[m & g].mean() if (m & g).any() else np.nan
                 porf[f]["vigente"].append(s2(tipo == 0))
                 porf[f]["anterior"].append(s2(tipo == 1))
-                porf[f]["nose"].append(s2(tipo >= 2))
+                porf[f]["nose"].append(s2(~np.isin(tipo, DAT.CON_RESPUESTA)))
                 porf[f]["nose_ent"].append(s2(tipo == 2))
                 porf[f]["nose_rel"].append(s2(tipo == 3))
-                h2 = (tipo < 2) & g
+                porf[f]["compuesta"].append(s2(tipo == 4))
+                porf[f]["nose_comp"].append(s2(tipo == 5))
+                h2 = np.isin(tipo, DAT.CON_RESPUESTA) & g
                 porf[f]["falsa_abst"].append((pred[h2] == NOSE).mean() if h2.any() else np.nan)
                 porf[f]["abstencion"].append((pred[g] == NOSE).mean())
     out = {k: float(np.nanmean(v)) for k, v in col.items()}
@@ -369,8 +378,8 @@ def escribir_partido(params, ses, cortes):
 def logits_de(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None, captura=None):
     archivo = escribir_partido(params, ses, cortes)
     archivo, turnos, mask = con_relleno(archivo, turnos, mask, ra, rt)
-    lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE, pertenece=pert_de(mask),
-                     captura=captura)
+    lg = M.responder(params, archivo, turnos, cons, mask, bloque=_BLOQUES, donde=_DONDE,
+                     pertenece=pert_de(mask), captura=captura)
     return jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
 
 
@@ -506,8 +515,8 @@ def _recompensa(lg, tgt, q, s=None):
 def _partes(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None, captura=None):
     archivo = escribir_partido(params, ses, cortes)
     archivo, turnos, mask = con_relleno(archivo, turnos, mask, ra, rt)
-    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE, abst=_ABST,
-                                 pertenece=pert_de(mask), captura=captura)
+    lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, bloque=_BLOQUES, donde=_DONDE,
+                                 abst=_ABST, pertenece=pert_de(mask), captura=captura)
     lg = jnp.take_along_axis(lg, pos[:, None, None], axis=1)[:, 0, :]
     a = jnp.take_along_axis(a, pos[:, None], axis=1)[:, 0]
     return lg, a
@@ -794,6 +803,13 @@ def main():
                          "sesiones de --ses-extra se escriben con los pesos actuales pero sin "
                          "gradiente (stop_gradient): mismo archivo que --ses-extra, sin el backward "
                          "por ellas. Ver `_SES_EXTRA_SIN_GRAD`.")
+    ap.add_argument("--p-compuesta", type=float, default=0.0,
+                    help="HECHOS ENCADENADOS (2026-09-11, PREREG_ENCADENADOS). Probabilidad de que un "
+                         "episodio traiga un hecho de persona y la pregunta compuesta «cual es la "
+                         "altura del director de barrio ?», que exige leer dos veces. 0 = nunca.")
+    ap.add_argument("--bloques-lectura", default="0",
+                    help="en que bloques se lee el archivo, p.ej. `0` (lo de siempre) o `0,2`: la "
+                         "misma lectura en dos bloques, con la query de cada uno. Ver modelo.tronco.")
     ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7, 9),
                     help="kernel de `convq`, la conv que forma la query en `--donde lat2` "
                          "(INFORME_QUERY_CIEGA_20260901.md). Con 3 la ENTIDAD entra en la ventana "
@@ -894,7 +910,7 @@ def main():
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
     global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
-    global _PERT, _SES_EXTRA_SIN_GRAD
+    global _PERT, _SES_EXTRA_SIN_GRAD, _BLOQUES, _P_COMPUESTA
     global FORMAS_Q
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
     _REC_RANK = a.rec_rank
@@ -914,6 +930,11 @@ def main():
     _ABST = a.abst
     _PERT = a.pert
     _SES_EXTRA_SIN_GRAD = a.ses_extra_sin_grad
+    _P_COMPUESTA = a.p_compuesta
+    _bl = tuple(int(x) for x in a.bloques_lectura.split(",") if x.strip())
+    _BLOQUES = _bl[0] if len(_bl) == 1 else _bl
+    if any(b >= a.capas for b in _bl):
+        sys.exit(f"ABORTA: --bloques-lectura {a.bloques_lectura} pide un bloque que no existe (capas={a.capas}).")
     M.SELLO = a.sello          # antes de init_params, como M.KQ: decide como se indexa `ord`
     if a.pert and a.sello == "abs":
         print("AVISO: --pert con --sello abs. Es una combinacion valida (aisla el aporte del bit), "
@@ -937,7 +958,9 @@ def main():
     print(f"MICRO-LM · nivel {a.nivel} · vocabulario {I.V} tokens · d={a.d} capas={a.capas} "
           f"· lectura {a.donde}"
           + (f" · top-{a.topk} desde el paso {a.topk_desde}" if a.topk else "")
-          + (f" · relleno {a.relleno} ({a.relleno_dist}, {a.relleno_turnos})" if a.relleno else ""),
+          + (f" · relleno {a.relleno} ({a.relleno_dist}, {a.relleno_turnos})" if a.relleno else "")
+          + (f" · bloques de lectura {a.bloques_lectura}" if a.bloques_lectura != "0" else "")
+          + (f" · compuestas {a.p_compuesta}" if a.p_compuesta else ""),
           flush=True)
     # El hardware va al JSON, no sólo al log. Cuando Colab raciona las T4 hay que aceptar el
     # acelerador que haya, y entonces «en qué corrió esta celda» deja de ser un detalle de
@@ -1111,7 +1134,8 @@ def main():
         # `topk`, `topk_desde` y el relleno (2026-09-11): misma familia y mismos tres casos que
         # `ses_extra`. Cambiar como se lee el archivo a mitad de corrida es otra tarea sin avisar.
         for k, d in (("topk", 0), ("topk_desde", 0), ("relleno", 0), ("relleno_dist", "real"),
-                     ("relleno_turnos", "solapado"), ("ses_extra_sin_grad", False)):
+                     ("relleno_turnos", "solapado"), ("ses_extra_sin_grad", False),
+                     ("bloques_lectura", "0"), ("p_compuesta", 0.0)):
             _v = ck["config"].get(k)
             if _v is None and "sembrado_de" not in ck:
                 _v = d
@@ -1322,7 +1346,7 @@ def main():
             refrescar_pool(s)
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
             rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
-            p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra)
+            p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra, p_compuesta=a.p_compuesta)
         turnos, ra, rt = relleno_de(turnos)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),
@@ -1395,6 +1419,8 @@ def main():
             extra = ("" if a.p_nose == 0 else
                      f" · nose {m['nose']:.4f} (ent {m['nose_ent']:.4f}/rel {m['nose_rel']:.4f})"
                      f" · falsa_abst {m['falsa_abst']:.4f}")
+            if a.p_compuesta:
+                extra = f" · compuesta {m['compuesta']:.4f} · nose_comp {m['nose_comp']:.4f}" + extra
             print(f"    ── eval: vigente {m['vigente']:.4f} · anterior {m['anterior']:.4f}"
                   f" · abstencion {m['abstencion']:.4f} · truncados {trunc:.4f}{extra}", flush=True)
             if a.mezcla == "dinamica":

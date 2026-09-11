@@ -262,9 +262,23 @@ def pregunta(rel, ent, cual="vigente", forma="directa"):
 
 # --- episodios -------------------------------------------------------------------------------
 
+# HECHOS ENCADENADOS (2026-09-11, PREREG_ENCADENADOS.md). Un hecho PERSONAL da un nombre («el
+# director de barrio es yamil»); si ademas se dice algo del nombre («la altura de yamil es 48»),
+# existe la pregunta compuesta «cual es la altura del director de barrio ?» -> 48, que solo se
+# contesta LEYENDO DOS VECES: primero el nombre, despues su altura. `RELS_PERSONA` son las
+# relaciones que un nombre puede tener; `del` ya estaba en FUNCIONALES, asi que V no cambia.
+RELS_PERSONA = ("altura", "clave")
+
+
+def pregunta_compuesta(rel2, rel, ent):
+    sust2, _, art2 = RELACIONES[rel2]
+    sust, _, _ = RELACIONES[rel]
+    return f"cual es {art2} {sust2} del {sust} de {ent} ?"
+
+
 def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
              p_nose=0.0, con_meta=False, con_origen=False, formas_q=("directa",),
-             con_formas=False):
+             con_formas=False, p_compuesta=0.0):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
 
     `sesiones` es una lista de listas de enunciados (una lista por sesion).
@@ -322,15 +336,42 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
     def _forma():
         return formas_q[0] if len(formas_q) == 1 else str(rng.choice(formas_q))
 
+    # --- la compuesta: solo si se pide, y toda llamada al rng queda adentro del `if` para que las
+    # corridas sin `p_compuesta` sigan siendo reproducibles bit a bit desde su semilla.
+    compuesta = None
+    if p_compuesta > 0 and rng.random() < p_compuesta:
+        personales = [(i, r, e, vs) for i, (r, e, vs) in enumerate(vals_por_hecho) if r in PERSONALES]
+        if personales:
+            i_p, rel_p, ent_p, vs_p = personales[int(rng.integers(0, len(personales)))]
+            nombre = vs_p[-1]                                   # el vigente: la compuesta es sobre lo que rige
+            rel2 = str(rng.choice(RELS_PERSONA))
+            if rng.random() < 0.5:
+                # el segundo hecho SI se dice: en la sesion del primero (nivel < 4) o en una posterior
+                num = str(rng.choice(POOL_NUM))
+                s_p = 0 if nivel < 4 else int(rng.integers(0, max(1, n_sesiones - 1)))
+                sesiones[s_p].append(rng.choice(formas(rel2, nombre, num, nivel)))
+                origen[s_p].append(len(vals_por_hecho))
+                vals_por_hecho.append((rel2, nombre, [num]))
+                compuesta = (pregunta_compuesta(rel2, rel_p, ent_p), num, "compuesta")
+            else:
+                # el segundo hecho NO se dice: la respuesta correcta es NOSE (falta un salto)
+                compuesta = (pregunta_compuesta(rel2, rel_p, ent_p), "NOSE", "nose_comp")
+
     consultas = []
     formas_usadas = []
     for rel, ent, versiones in vals_por_hecho:
+        if rel in RELS_PERSONA and ent in NOMBRES:
+            continue                                            # el hecho de persona no se pregunta suelto
         f = _forma()
         formas_usadas.append(f)
         if len(versiones) > 1 and rng.random() < p_pregunta_vieja:
             consultas.append((pregunta(rel, ent, "anterior", f), versiones[-2], "anterior"))
         else:
             consultas.append((pregunta(rel, ent, "vigente", f), versiones[-1], "vigente"))
+
+    if compuesta is not None:
+        formas_usadas.append("directa")
+        consultas.append(compuesta)
 
     if p_nose > 0 and rng.random() < p_nose:
         dichos = {(r, e) for r, e, _ in vals_por_hecho}

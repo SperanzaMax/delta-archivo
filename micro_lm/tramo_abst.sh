@@ -118,6 +118,8 @@ RELLENO_TURNOS="${RELLENO_TURNOS:-solapado}"
 RELLENO_CADA="${RELLENO_CADA:-1000}"
 FOTOS="${FOTOS:-0}"
 SES_EXTRA_SIN_GRAD="${SES_EXTRA_SIN_GRAD:-0}"
+P_COMPUESTA="${P_COMPUESTA:-0.0}"          # 2026-09-11 · PREREG_ENCADENADOS
+BLOQUES_LECTURA="${BLOQUES_LECTURA:-0}"
 UNI="${PREFIJO}${NIVEL}_s${SEM}"
 FOTOS_JS="$CKPTS/${UNI}_fotos.json"      # la pelicula vive al lado del checkpoint, y viaja con el
 
@@ -142,7 +144,7 @@ JS="$SALIDA/${UNI}.json"
 # `donde` va en el echo desde el 24-ago. No estaba, y es la variable cuyo error mas caro seria: una
 # familia corriendo con la arquitectura de otra se ve recien en la guarda de identidad del SEGUNDO
 # tramo, con 8000 pasos ya gastados. Es la misma leccion que la D-1 del 22-ago con el horizonte.
-echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · sello $SELLO · pert $PERT · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK · topk $TOPK desde $TOPK_DESDE · relleno $RELLENO ($RELLENO_DIST, $RELLENO_TURNOS, cada $RELLENO_CADA) · fotos $FOTOS · ses-extra-sin-grad $SES_EXTRA_SIN_GRAD"
+echo "== tramo · cuenta $CUENTA · sesion $SESION · $UNI · +$TRAMO de $PASOS pasos · p_nose $P_NOSE · abst $ABST · donde $DONDE · mezcla $MEZCLA · piso $MEZCLA_PISO · p_vieja $P_VIEJA · blanco $BLANCO · kq $KERNEL_Q · ses-extra $SES_EXTRA · sello $SELLO · pert $PERT · micro $MICRO_BATCH · b_eval $BATCH_EVAL · formas $FORMAS_Q · perdida $PERDIDA_CABEZA · sembrar $SEMBRAR · rec L=$REC_L M=$REC_M F=$REC_F CE=$REC_CE RANK=$REC_RANK · topk $TOPK desde $TOPK_DESDE · relleno $RELLENO ($RELLENO_DIST, $RELLENO_TURNOS, cada $RELLENO_CADA) · fotos $FOTOS · ses-extra-sin-grad $SES_EXTRA_SIN_GRAD · compuesta $P_COMPUESTA · bloques $BLOQUES_LECTURA"
 
 # `conf_ckpt.py` y `dilucion.py` van desde el 11-sep: el relleno usa `dilucion.construir_pool`.
 tar czf "$TMP/micro.tgz" -C "$AQUI" idioma.py datos.py modelo.py entrenar.py chequeo_padding.py conf_ckpt.py dilucion.py
@@ -210,6 +212,7 @@ cmd = [sys.executable, '-u', 'entrenar.py', '--nivel', '$NIVEL', '--semilla', '$
        '--relleno', '$RELLENO', '--relleno-dist', '$RELLENO_DIST',
        '--relleno-turnos', '$RELLENO_TURNOS', '--relleno-cada', '$RELLENO_CADA',
        '--fotos', '$FOTOS',
+       '--p-compuesta', '$P_COMPUESTA', '--bloques-lectura', '$BLOQUES_LECTURA',
        '--salida', '/content/salidas/${UNI}.json', '--ckpt', '/content/ck.pkl']
 if '$PERT' == '1':
     cmd.append('--pert')

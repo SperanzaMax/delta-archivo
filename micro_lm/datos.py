@@ -39,7 +39,9 @@ def _tok(texto, largo):
     return ids + [PAD] * (largo - len(ids))
 
 
-TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3}
+TIPOS = {"vigente": 0, "anterior": 1, "nose_ent": 2, "nose_rel": 3,
+         "compuesta": 4, "nose_comp": 5}     # 4 y 5: hechos encadenados (2026-09-11)
+CON_RESPUESTA = (0, 1, 4)                   # tipos cuya respuesta NO es NOSE
 
 
 # ARCHIVO LARGO (2026-09-05). Base del turno del episodio PRINCIPAL cuando hay sesiones extra.
@@ -56,7 +58,7 @@ TURNO_BASE = 24
 
 def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False,
          con_origen=False, formas_q=("directa",), con_formas=False, n_ses_extra=0,
-         turno_base=None):
+         turno_base=None, p_compuesta=0.0):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
 
     Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
@@ -95,7 +97,7 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
         sesiones, consultas, vals, origen, formas_ep = I.episodio(
             rng, nivel=nivel, n_hechos=n_hechos, n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
             p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True, con_origen=True,
-            formas_q=formas_q, con_formas=True)
+            formas_q=formas_q, con_formas=True, p_compuesta=p_compuesta)
         if not consultas:
             continue
         # La consulta sin respuesta se elige con probabilidad `p_nose` EXACTA, en vez de dejarla
@@ -104,11 +106,17 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
         sin_resp = [(c, i) for i, c in enumerate(consultas) if c[1] == "NOSE"]
         con_resp = [(c, i) for i, c in enumerate(consultas) if c[1] != "NOSE"]
         if sin_resp and rng.random() < p_nose:
-            (q, r, t), i_q = sin_resp[0]
+            # con hechos encadenados puede haber DOS sin respuesta (nose_comp y nose_ent/rel): se
+            # sortea entre ellas, y solo entonces, para no mover el rng de las corridas de siempre
+            (q, r, t), i_q = sin_resp[int(rng.integers(len(sin_resp)))] if len(sin_resp) > 1 else sin_resp[0]
         else:
             if not con_resp:
                 continue
-            (q, r, t), i_q = con_resp[int(rng.integers(len(con_resp)))]
+            comp = [x for x in con_resp if x[0][2] == "compuesta"]
+            if comp and rng.random() < 0.5:        # la compuesta pesa la mitad de los ejemplos con respuesta
+                (q, r, t), i_q = comp[0]           # (solo existe con p_compuesta > 0: el rng de antes no se toca)
+            else:
+                (q, r, t), i_q = con_resp[int(rng.integers(len(con_resp)))]
         forma_q[b] = I.FORMAS_Q.index(formas_ep[i_q]) if i_q < len(formas_ep) else 0
         # TURNO_BASE es el default; `turno_base` lo sube para probar archivos que NO caben en las
         # 64 filas de `ord` (2026-09-06, R-5 de `PREREG_SELLO_RELATIVO.md`). Con base 160, por

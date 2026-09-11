@@ -300,8 +300,16 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     siguen siendo intercambiables — `convq` mantiene esa propiedad porque existe en TODAS las
     condiciones y sólo `lat2` la lee.
     """
+    # LECTURA EN VARIOS BLOQUES (2026-09-11, PREREG_ENCADENADOS). `bloque` puede ser un entero (lo
+    # de siempre, bit a bit) o una tupla de bloques: la MISMA lectura —mismas claves y valores del
+    # archivo— se consulta en cada uno, con la query que forma ese bloque. Es lo que hace falta para
+    # ENCADENAR dos hechos: la query del bloque 0 se forma sobre el texto y no puede contener lo que
+    # el archivo devolvio en el token anterior; la del bloque 2 se forma sobre `h`, que ya lleva la
+    # primera lectura propagada por los mixers de los bloques 0 y 1.
+    bloques = (bloque,) if isinstance(bloque, int) else tuple(bloque)
     h = params["emb"][x]
     for i, blk in enumerate(params["blocks"]):
+        bloque = i if i in bloques else -1        # el bloque actual «es» el de lectura si esta en la tupla
         if lectura is not None and i == bloque and donde == "pre":
             h = h + lectura(ln(blk["ln1"], h))
         elif lectura is not None and i == bloque and donde == "lat":

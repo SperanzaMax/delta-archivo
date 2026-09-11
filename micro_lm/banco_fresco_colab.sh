@@ -28,7 +28,7 @@ subprocess.run('tar xzf /content/micro.tgz -C /content/micro', shell=True, check
 nombres = "${NOMBRES[*]}".split()
 for b in nombres:
     os.replace('/content/' + b, '/content/micro/ckpts/' + b)
-env = dict(os.environ, DIST='real', TURNOS='viejo', PERT='${PERT:-1}', XS='${XS:-0,360,3240}', NMUE='${NMUE:-256}', POOL='${POOL:-4096}')
+env = dict(os.environ, DIST='real', TURNOS='viejo', PERT='${PERT:-1}', XS='${XS:-0,360,3240}', NMUE='${NMUE:-256}', POOL='${POOL:-4096}', KS='${KS:-}')
 r = subprocess.run([sys.executable, 'dilucion.py'] + ['ckpts/' + b for b in nombres], cwd='/content/micro', env=env, capture_output=True, text=True)
 print(r.stdout[-6000:]); print(r.stderr[-2000:], file=sys.stderr)
 import glob
