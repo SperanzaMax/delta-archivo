@@ -99,3 +99,32 @@ en las tres distribuciones y los dos modos de turnos.
 - **E-3 · tp3_s0 y dp3_s0 se relanzaron a las 09:20** desde cero como rotadores de una unidad
   (los dos rotadores secuenciales de la primera tanda se habrían pisado con los de la segunda).
   Costó ~20 min de T4 y nada de datos: no había checkpoint todavía.
+
+## 7. RESULTADO DEL HITO 3.000 y PLAN B AMPLIADO (08:50 hora local, con las evaluaciones a la vista)
+
+**Seis de seis en el piso.** `vigente` en archivo largo 0,004-0,016 en el paso 3.000 (y 0,012-0,031
+en el 2.000), en archivo corto 0,000-0,012, en `tp3` Y en `dp3`. `nose` en 3.000: tp3 0,000 /
+0,249 / 0,000 · dp3 0,000 / 0,535 / 0,000 → el detector marca colapso en 2 de 3 en las DOS
+familias, pero lo que está midiendo no es el pozo del 8-sep sino que **nadie despegó**: la
+referencia desde cero con archivo corto (`kq3_s0`) ya estaba en 0,39 en el paso 1.000 y 0,61 en
+el 2.000. **El relleno de 3.240 entradas desde el paso 0 alarga la fase plana en las dos familias**,
+no sólo en la top-k: con el softmax denso la señal de la entrada correcta es ~1/3.280, y con top-2
+la correcta casi nunca cae entre las dos elegidas. H4 se activa, y el plan B del §3 (sólo
+`--topk-desde`) no alcanza porque el control denso tampoco arranca.
+
+Se paró la campaña a las 08:50 (los seis JSON con 3 evaluaciones y las películas de 20-30 cuadros
+quedan en `corridas_20260911/` y `ckpts/` como registro del arranque en frío).
+
+**Plan B ampliado, declarado antes de correrlo.** Se siembra desde el modelo denso con archivo
+corto ya entrenado (`kq3_s0-2`, 26.000 pasos, `sembrar.py`, Adam de cero, `sembrado_de`
+declarado), que es lo que hizo la campaña del sello relativo (`rp3` desde `kq3`), y se continúa
+**8.000 pasos** con el archivo largo:
+
+    ts3_sX  sembrado de kq3_sX · top-2 · relleno 3240 real viejo · sello rel · pert   (principal)
+    ds3_sX  sembrado de kq3_sX · softmax completo · el mismo relleno                (control)
+
+`--cada 500` (el detector vuelve al paso 2.500), `--fotos 25` (320 cuadros), tramos de 2.000.
+Las hipótesis H1-H3 se leen igual sobre `ts3`/`ds3` al paso 8.000. **Lo que cambia y queda dicho:**
+ya no es «desde cero con el top-k en el ADN» sino «un modelo que sabe leer un archivo corto
+aprende a leer uno largo con top-k». El desde-cero queda como pregunta abierta con su propio
+hallazgo: en frío no arranca en 3.000 pasos con ninguna de las dos lecturas.
