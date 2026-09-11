@@ -28,3 +28,10 @@ if [ "${1:-}" = "relanzar" ]; then
   uno_rot tt 2 3:2 M K
   uno_rot rq 0 3:0 C L
 fi
+
+# --- P4 (17:05): 52 sesiones viejas con gradiente, micro-batch 4.
+if [ "${1:-}" = "p4" ]; then
+  env "${COMUN[@]}" PREFIJO=tw TOPK=2 SES_EXTRA=52 MICRO_BATCH=4 BATCH_EVAL=4 MIN_POR_MIL=40 LOG_ROTADOR="$SAL/rotador_tw3_s0.log" \
+    setsid nohup ./rotar_abst3.sh 3:0 2000 1000 250 E G > "$SAL/rotador_tw3_s0.log" 2>&1 < /dev/null &
+  echo "rotador tw3_s0 pid $! cuentas E G"
+fi
