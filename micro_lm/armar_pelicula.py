@@ -25,6 +25,13 @@ def empaquetar(ruta):
         inicios = [i for i, c in enumerate(cuadros) if c["paso"] == cada]
         if inicios:
             cuadros = cuadros[inicios[-1]:]
+    # Reanudar un tramo desde un checkpoint anterior al ultimo cuadro bajado (13:37, tt3_s1 perdio la
+    # sesion en el paso 750 con fotos hasta mas adelante) vuelve a escribir los cuadros de ese hueco:
+    # se conserva el ULTIMO cuadro de cada paso, en orden.
+    ult = {}
+    for c in cuadros:
+        ult[c["paso"]] = c
+    cuadros = [ult[k] for k in sorted(ult)]
     nombres = [c["nombre"] for c in d["capas"]]
     n, m = len(cuadros), len(nombres)
     W = np.zeros((n, m, 144), np.float32)
@@ -34,12 +41,20 @@ def empaquetar(ruta):
             W[i, j, :len(v)] = v
     escala = np.abs(W).max(axis=(0, 2)) + 1e-9                     # (m,) fija por matriz
     Q = np.clip(np.round(W / escala[None, :, None] * 127), -127, 127).astype(np.int8)
+    # Las entradas VIEJAS pueden venir de un pool (`masa_relleno`, corridas ts3/ds3) o de las
+    # sesiones extra dentro de `atencion` (slots 40 en adelante, corridas tt3/rq3). Para el visor se
+    # unifican: `atencion` son los 40 slots propios y `masa_viejo` es toda la masa que se fue a lo
+    # ajeno, venga de donde venga.
+    PROPIOS = 40
     meta = []
     for c in cuadros:
-        meta.append({k: c.get(k) for k in ("paso", "perdida", "acc", "topk", "pred", "abst",
-                                              "masa_relleno", "top_relleno", "masa_slot")}
-                    | {"atencion": [round(x, 4) for x in c["atencion"]],
+        at = c["atencion"]
+        viejo = float(c.get("masa_relleno") or 0.0) + float(sum(at[PROPIOS:]))
+        meta.append({k: c.get(k) for k in ("paso", "perdida", "acc", "topk", "pred", "abst", "masa_slot")}
+                    | {"atencion": [round(x, 4) for x in at[:PROPIOS]], "masa_viejo": round(viejo, 5),
                        "taps": c["taps"], "beta": c["beta"]})
+    d["muestra"]["viejas"] = int(d["muestra"].get("relleno") or 0) + max(0, int(d["muestra"]["slots"]) - PROPIOS)
+    d["muestra"]["ocupados"] = [k for k in d["muestra"]["ocupados"] if k < PROPIOS]
     # rms por matriz y cuadro, aparte (una fila por cuadro), para la curva de deriva
     rms = np.sqrt((W ** 2).mean(axis=2))                             # (n, m)
     cfg = d.get("config", {})

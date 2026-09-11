@@ -1,8 +1,7 @@
 # INFORME · el top-k entrenado, el archivo largo en frío y LA FIRMA DE LOS PESOS · 2026-09-11
 
 Pre-registro `PREREG_TOPK_ENTRENADO.md` (`03b294f9`, enmiendas §6-§9 escritas antes de cada
-corrida). Este informe se escribe a las 10:40 con la campaña `tf3`/`df3` **en vuelo** (§5 queda
-abierta) y todo lo demás cerrado. Números en `corridas_20260911/`, `controles_20260911/`,
+corrida). Este informe se cerró a las 16:30 con la campaña `tt3`/`rq3` terminada y medida. Números en `corridas_20260911/`, `controles_20260911/`,
 `ckpts/*_fotos.json`.
 
 ## 1. Lo que se preguntó
@@ -59,27 +58,66 @@ los pesos actuales, con gradiente) en el mismo banco de pool fresco, PERT=1:
 Cuando lo viejo se escribe con los pesos actuales, el modelo aprende a descartarlo de verdad, en un
 banco que no comparte nada con el entrenamiento. No generaliza de 161 a 3.240; sí de 161 a 400.
 
-## 3. Lo que corre ahora (§9 del prereg)
+## 3. ★★★ EL RESULTADO · entrenado con top-2, la colisión deja de romperlo (16:05)
 
-`tf3_sX` (top-2) contra `df3_sX` (softmax), sembrados de `kq3_sX`, **`--ses-extra 36
---ses-extra-sin-grad`**: 400 entradas viejas escritas con los pesos actuales en cada paso, sin
-gradiente por ellas (verificado: gradiente 0,0 y valores idénticos). 8.000 pasos, 2,4 s/paso en T4.
-Las hipótesis se leen sólo sobre el banco de pool fresco: tf3 ≥ 0,90 con 400; con 3.280, tf3 le
-gana al denso por ≥ 0,10; generalización ≥ 0,50.
+La comparación limpia (prereg §10): el brazo denso ya existía y estaba publicado, `rp3_s0-2`
+(6-sep, sembrado de `kq3_sX`, sello relativo + pertenencia, 161 entradas viejas escritas con los
+pesos de cada paso, con gradiente, 2.000 pasos). Se corrió el gemelo con `--topk 2` y nada más
+(`tt3_s0-2`) más una réplica del denso con fotos (`rq3_s0`). Banco `dilucion.py`, real + viejo,
+pool escrito con los pesos del propio checkpoint, bit de pertenencia, 256 muestras:
+
+| lectura | unidad | 40 | 400 | **3.280** |
+|---|---|---|---|---|
+| top-2 | `tt3_s0` | 0,9297 | 0,9688 | **0,9297** |
+| top-2 | `tt3_s1` | 0,8750 | 0,9531 | **0,9375** |
+| top-2 | `tt3_s2` | 0,9766 | 0,9570 | **0,9375** |
+| softmax | `rq3_s0` (réplica) | 0,9766 | 0,9375 | 0,0977 |
+| softmax | `rp3_s0` | 0,9688 | 0,8867 | 0,1016 |
+| softmax | `rp3_s1` | — | 0,9297 | 0,1055 |
+| softmax | `rp3_s2` | 0,9961 | 0,6172 | 0,0234 |
+
+- **H2'' cumple por ocho veces lo pedido:** con 3.280, media top-2 **0,935** contra media denso
+  **0,082** (+0,853; el prereg pedía ≥ 0,10). Un modelo entrenado con 161 entradas viejas
+  generaliza a 3.280 con colisiones; el mismo entrenamiento con lectura densa no.
+- **H1'' cumple:** con 400, 0,95-0,97 en las tres.
+- **H3'' NO cumple:** con 40, 0,927 contra 0,980 (−0,053; toleraba 0,03). El costo en archivo
+  corto existe y es chico; sale sobre todo de `tt3_s1`.
+- **H4'' cumple:** `rq3_s0` reproduce a `rp3_s0` (0,709 / 0,636 / 0,968 exactos al paso 250;
+  0,9766 / 0,9375 / 0,0977 contra 0,9688 / 0,8867 / 0,1016 en el banco).
+- **Control sin el bit de pertenencia:** top-2 0,18-0,21 con 3.280, denso 0,004. El bit hace
+  falta, y es información que un sistema real tiene (qué es de la conversación en curso). Aun sin
+  él, el top-2 le gana al denso por 0,20.
+
+**Por qué ahora sí y el 10-sep no.** En inferencia el top-2 no rescataba `real` (0,035) porque el
+**ranking** estaba roto: el modelo no sabía descartar lo viejo. Entrenar con las entradas viejas
+adentro arregla el ranking (sello relativo + pertenencia); el top-2 arregla la **dilución del
+valor**. Dos problemas, dos piezas, y con las dos la memoria puede crecer conversación tras
+conversación sobre las mismas cosas.
+
+## 3b. Lo que costó llegar: la divergencia sin gradiente
+
+`tf3`/`df3` (400 entradas viejas frescas con `--ses-extra-sin-grad`) divergió: `cruzada_corto` 0,97
+→ 0,01 entre los pasos 500 y 1.000 en seis unidades. Diagnóstico (§10 del prereg, `xa`-`xd`): con
+gradiente por las viejas 1,000 (cabeza y token); sin gradiente oscila y cae. Lo viejo tiene que
+pasar por el tronco con gradiente; el atajo queda medido y desaconsejado.
 
 ## 4. La película
 
 `entrenar.py --fotos` guarda cada 25 pasos las 26 submatrices fijas de 12×12, la lectura del
 archivo sobre una pregunta fija capturada desde adentro de `responder`, taps, beta, pérdida y
 exactitud del lote. `armar_pelicula.py` cuantiza a int8 (1,2 MB por unidad, 320 cuadros). Visor en
-el artefacto `5c43008b…`, sección 8. Lo que ya se ve: el top-2 arranca con toda la masa en lo viejo
-y en 100 pasos tiene 0,60 en la entrada correcta; el denso contesta bien desde el paso 175 con
-0,3-0,6 de la masa todavía en lo viejo. Es la disociación entre recuperar y contestar, en directo.
+el artefacto `5c43008b…`, sección 8. La película publicada (v9) es la de `tt3_s0` y `rq3_s0`, la corrida válida: 250 cuadros cada una,
+sobre el diagrama de las quince capas, con corte por percentil por matriz. Empaquetada en
+`peliculas/pelicula_tt3rq3_20260911.json`. La de `ts3_s0`/`ds3_s0` (con la firma) queda en
+`peliculas/pelicula_ts3ds3_20260911.json`.
 
 ## 5. Pendiente
 
-- Cerrar `tf3`/`df3` y leer H1'-H4' (§9) en el banco de pool fresco, X = 360 y 3.240.
-- Republicar la película con las 320 fotos de `tf3_s0`/`df3_s0`.
-- Errores del día, para no repetirlos: los seis `sesion_fija` murieron de OOM porque los procesos
-  de la corrida en frío seguían vivos en las VMs reusadas; sin keep-alive las sesiones se
-  desasignan solas; `entrenar.py --fotos` continúa un `ck_fotos.json` ajeno que encuentre en la VM.
+- Escalar el entrenamiento (más entradas viejas con gradiente; costo ~2,4 s/paso con 161) y medir
+  hasta dónde generaliza. Entender o pagar el costo en archivo corto (−0,05).
+- La tercera semilla del barrido de inferencia. Por qué K=1 < K=2.
+- El escalón 3 (vocabulario abierto) con TinyStories en castellano: prereg propio.
+- Operación, para no repetir: `rotar_abst3.sh` es secuencial (un rotador por unidad); matar el
+  tramo en la PC no mata el `entrenar.py` en la VM (OOM al reusar); sin keep-alive las sesiones se
+  desasignan; `--fotos` continúa un `ck_fotos.json` ajeno; las VMs se cayeron dos veces a la vez
+  hoy, y la reanudación no es bit a bit entre GPU.
