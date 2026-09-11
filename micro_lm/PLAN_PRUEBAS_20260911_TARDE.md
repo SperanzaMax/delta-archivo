@@ -81,3 +81,17 @@ sola (0,27 ms); 3.280 = 4,4× menos que 40 enunciados como texto; cruza al texto
 replicado por lote en la T4 (limitación del piloto, no del mecanismo).
 
 **P4** (`tw3_s0`, 52 sesiones viejas con gradiente) en vuelo.
+
+**P2b · el barrido de K en inferencia sobre `tt3` (19:00, 512 muestras, pool fresco, PERT=1):**
+
+| archivo | K=1 | K=2 | K=3 | K=4 | softmax |
+|---|---|---|---|---|---|
+| 40 | 0,787 | 0,9375 | 0,936 | 0,9375 | 0,933 |
+| 3.280 | 0,772 | **0,932** | 0,884 | 0,808 | 0,086 |
+
+**La hipótesis de que K=3 recupera el costo en archivo corto es FALSA**: con 40 entradas, todo K ≥ 2
+da lo mismo (0,93-0,94). El −0,04 no está en la lectura, está en lo que el modelo aprendió
+entrenando con top-2; el siguiente paso es un currículo (`--topk-desde`) o mirar qué cambió en
+`arch.qr`/`kw` contra rp3. Con 3.280 se reproduce la firma del 10-sep sobre un modelo entrenado
+con top-2: máximo en K=2, K=1 peor, y con softmax completo se cae igual (0,086): la dilución es de
+la lectura, no del entrenamiento.
