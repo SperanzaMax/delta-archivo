@@ -1,0 +1,238 @@
+<title>Tres preguntas al archivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F5F4EF; --surface:#FFFFFF; --surface-2:#EEEDE6;
+  --ink:#1E2320; --ink-2:#4A524D; --ink-3:#7A827D;
+  --line:#DCDAD1; --line-2:#C7C4B8;
+  --hecho:#2E7D44; --hecho-bg:#E4F1E7;
+  --curso:#B5651D; --curso-bg:#F7EBDD;
+  --pend:#7A827D; --pend-bg:#ECEBE5;
+  --acento:#2F5F8F;
+  --sombra:0 1px 2px rgba(30,35,32,.06), 0 8px 24px rgba(30,35,32,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12161A; --surface:#1A2026; --surface-2:#222A31;
+    --ink:#E4E8E5; --ink-2:#AEB6B1; --ink-3:#7F8884;
+    --line:#2C353C; --line-2:#3A454D;
+    --hecho:#5DB37A; --hecho-bg:#1C2E23;
+    --curso:#D48A45; --curso-bg:#332619;
+    --pend:#8B948F; --pend-bg:#242B30;
+    --acento:#7FB0E0;
+    --sombra:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12161A; --surface:#1A2026; --surface-2:#222A31;
+  --ink:#E4E8E5; --ink-2:#AEB6B1; --ink-3:#7F8884;
+  --line:#2C353C; --line-2:#3A454D;
+  --hecho:#5DB37A; --hecho-bg:#1C2E23;
+  --curso:#D48A45; --curso-bg:#332619;
+  --pend:#8B948F; --pend-bg:#242B30;
+  --acento:#7FB0E0;
+  --sombra:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:15.5px; line-height:1.55; -webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px; margin:0 auto; padding-inline:20px; padding-block:0 64px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif; margin:0; text-wrap:balance}
+h1{font-size:clamp(1.9rem,4.6vw,2.8rem); font-weight:600; letter-spacing:-.02em; line-height:1.08}
+h2{font-size:clamp(1.25rem,2.6vw,1.55rem); font-weight:600; letter-spacing:-.01em}
+h3{font-size:1rem; font-weight:600}
+p{margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+header{border-bottom:1px solid var(--line); background:var(--surface); padding-block:clamp(32px,6vw,56px) clamp(24px,4vw,40px); margin-bottom:40px}
+header .wrap{padding-block:0; display:flex; flex-direction:column; gap:16px}
+.lead{font-family:Fraunces,Georgia,serif; font-size:clamp(1.05rem,2.2vw,1.3rem); color:var(--ink-2); max-width:52ch; line-height:1.45}
+.resumen{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:3px; overflow:hidden; margin-top:8px}
+.resumen div{background:var(--surface); padding:12px 14px; display:flex; flex-direction:column; gap:2px}
+.resumen .k{font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.resumen .v{font-family:"IBM Plex Mono",monospace; font-size:1.25rem; font-variant-numeric:tabular-nums}
+.resumen .v.h{color:var(--hecho)} .resumen .v.c{color:var(--curso)} .resumen .v.p{color:var(--pend)}
+
+.etapa{margin-bottom:44px; display:flex; flex-direction:column; gap:16px}
+.cab{display:flex; flex-direction:column; gap:8px}
+.pregunta{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--acento); border-radius:3px;
+  padding:14px 18px; font-family:Fraunces,Georgia,serif; font-size:1.02rem; color:var(--ink-2); line-height:1.5}
+.pregunta b{color:var(--ink); font-weight:600}
+.estado{display:inline-flex; align-items:center; gap:7px; font-family:"IBM Plex Mono",monospace; font-size:.7rem;
+  letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:2px; align-self:flex-start}
+.estado.h{background:var(--hecho-bg); color:var(--hecho)} .estado.c{background:var(--curso-bg); color:var(--curso)} .estado.p{background:var(--pend-bg); color:var(--pend)}
+
+.tareas{background:var(--surface); border:1px solid var(--line); border-radius:3px; box-shadow:var(--sombra); overflow:hidden}
+.tarea{display:grid; grid-template-columns:28px minmax(0,1.1fr) minmax(0,1.6fr); gap:0 16px; padding:14px 18px; border-top:1px solid var(--line); align-items:start}
+.tarea:first-child{border-top:0}
+.tarea .m{font-family:"IBM Plex Mono",monospace; font-size:1rem; line-height:1.4; text-align:center}
+.tarea.h .m{color:var(--hecho)} .tarea.c .m{color:var(--curso)} .tarea.p .m{color:var(--pend)}
+.tarea .t{display:flex; flex-direction:column; gap:3px}
+.tarea .t b{font-weight:600; color:var(--ink)}
+.tarea .t small{font-size:.78rem; color:var(--ink-3); font-family:"IBM Plex Mono",monospace}
+.tarea .r{display:flex; flex-direction:column; gap:4px; font-size:.9rem; color:var(--ink-2)}
+.tarea .r .num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink); font-size:.95rem}
+.tarea .r .num.h{color:var(--hecho)} .tarea .r .num.c{color:var(--curso)}
+.tarea.p .r{color:var(--ink-3)}
+.cabtab{display:grid; grid-template-columns:28px minmax(0,1.1fr) minmax(0,1.6fr); gap:0 16px; padding:9px 18px; background:var(--surface-2);
+  font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.leyenda{display:flex; flex-wrap:wrap; gap:8px 20px; font-size:.78rem; color:var(--ink-2); font-family:"IBM Plex Mono",monospace}
+.leyenda span{display:inline-flex; gap:6px; align-items:center}
+.leyenda i{font-style:normal; font-weight:600}
+.leyenda .h i{color:var(--hecho)} .leyenda .c i{color:var(--curso)} .leyenda .p i{color:var(--pend)}
+footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; color:var(--ink-3)}
+@media (max-width:640px){
+  .tarea,.cabtab{grid-template-columns:24px minmax(0,1fr); gap:4px 12px}
+  .tarea .r{grid-column:2}
+  .cabtab span:last-child{display:none}
+}
+</style>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">delta-archivo · tablero · 11 de septiembre de 2026</p>
+    <h1>Tres preguntas al archivo</h1>
+    <p class="lead">Tres ideas de Maxi sobre cómo cambiaría un modelo de frontera si llevara el archivo
+      adentro. Cada una es una etapa: qué está probado, qué se está midiendo ahora y qué falta.</p>
+    <div class="resumen">
+      <div><span class="k">tareas hechas</span><span class="v h">11</span></div>
+      <div><span class="k">en curso</span><span class="v c">2</span></div>
+      <div><span class="k">por hacer</span><span class="v p">8</span></div>
+      <div><span class="k">el número del día</span><span class="v h">0,93 vs 0,08</span></div>
+    </div>
+    <div class="leyenda">
+      <span class="h"><i>✓</i> hecha, con resultado</span>
+      <span class="c"><i>●</i> corriendo o a medio medir</span>
+      <span class="p"><i>○</i> por hacer</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="etapa">
+    <div class="cab">
+      <p class="eyebrow">etapa 1</p>
+      <h2>Corte el 1 de enero, y de ahí en adelante sólo el archivo</h2>
+      <p class="pregunta">«¿Qué pasaría si ese modelo de frontera fuera con nuestro archivo y es entrenado y el
+        corte sería el día 1 de enero, después sólo tendría que ir recibiendo la actualización de los
+        próximos días para que esté al día y <b>no ser reentrenado todos los días</b>?»</p>
+      <span class="estado c">● la mitad probada, la otra mitad en curso</span>
+    </div>
+    <div class="tareas">
+      <div class="cabtab"><span></span><span>tarea</span><span>resultado y qué significa</span></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>El archivo crece sin tocar un peso</b><small>banco de dilución · 5 y 11-sep</small></div>
+        <div class="r"><span class="num h">3.280 → 30.000 entradas · 0 parámetros cambiados</span>
+          <span>Agregar entradas al archivo no reentrena nada. Es la condición para que «actualizar» sea escribir y no entrenar.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>El modelo congelado escribe todo con la misma «letra»</b><small>controles de la firma · 11-sep</small></div>
+        <div class="r"><span class="num h">0,99 con pesos viejos → 0,02 con pesos actuales, con y sin pertenencia</span>
+          <span>Se descubrió que un archivo escrito por versiones anteriores del modelo le enseña a fechar por la firma de los pesos. En despliegue el modelo está congelado y esa señal no existe: es el banco limpio, y es donde se mide todo lo demás.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Aprende a preferir lo vigente y descartar lo viejo</b><small>tt3 contra rp3 · 11-sep</small></div>
+        <div class="r"><span class="num h">0,93 / 0,94 / 0,94 con 3.280 entradas viejas reales · el denso 0,10 / 0,11 / 0,02 / 0,10</span>
+          <span>Entrenado con 161 entradas viejas y lectura top-2, contesta bien con miles de entradas de otras conversaciones sobre lo mismo. Hace falta el bit de pertenencia (sin él, 0,20): un sistema real sabe qué es de la conversación en curso.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Hasta dónde generaliza</b><small>P1 · 11-sep</small></div>
+        <div class="r"><span class="num h">0,86 / 0,87 / 0,86 con 30.000 · el denso 0,00</span>
+          <span>186 veces más entradas que las que vio entrenando, y la caída es lenta. Lo que decide es que la propia salga entre las dos mejores, y eso no depende de cuántas haya.</span></div></div>
+      <div class="tarea c"><span class="m">●</span>
+        <div class="t"><b>¿Puede razonar con lo que está en el archivo?</b><small>hechos encadenados · kc3/kd3 corriendo</small></div>
+        <div class="r"><span class="num c">«¿cuánto mide el director de barrio?» exige leer dos veces</span>
+          <span>Predicción escrita antes: con lectura en un solo bloque no puede (la consulta se forma sobre el texto y el nombre leído no está en el texto); con lectura en dos bloques, sí. La primera versión de la tarea tenía un atajo y se cerró antes de seguir.</span></div></div>
+      <div class="tarea c"><span class="m">●</span>
+        <div class="t"><b>Escalar el entrenamiento</b><small>tw3_s0 · 520 entradas viejas por paso</small></div>
+        <div class="r"><span class="num c">0,909 con archivo largo al paso 500 · 7,5 s/paso</span>
+          <span>Más entradas viejas en el entrenamiento, con gradiente (la versión sin gradiente diverge, medido). Al cerrar se mide contra 3.280, 10.000 y 30.000.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>Un índice para leer más de 30.000</b></div>
+        <div class="r"><span>La lectura es lineal en N. Para una memoria de años hace falta leer sólo las candidatas (búsqueda aproximada). No está implementado.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>Corregir o borrar un hecho sin reentrenar</b></div>
+        <div class="r"><span>Es una propiedad que los pesos no tienen y el archivo sí; falta medir que borrar una entrada borra la respuesta y no otra cosa.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>Un archivo de «días», con versiones que se acumulan</b></div>
+        <div class="r"><span>Hoy el banco pone lo viejo en turnos anteriores; falta una secuencia temporal larga donde el mismo hecho cambie muchas veces y la pregunta pida la versión de una fecha.</span></div></div>
+    </div>
+  </section>
+
+  <section class="etapa">
+    <div class="cab">
+      <p class="eyebrow">etapa 2</p>
+      <h2>El idioma en los pesos, el conocimiento en el archivo</h2>
+      <p class="pregunta">«Si un modelo de frontera se lo entrena con el corpus de poder hablar en inglés, español y
+        30 idiomas más, y después le pasamos como entrenamiento <b>el resto de todo el conocimiento del
+        mundo</b>, y día a día o cada mes se lo actualiza con lo nuevo nada más.»</p>
+      <span class="estado c">● el paso previo está medido; el escalón, por hacer</span>
+    </div>
+    <div class="tareas">
+      <div class="cabtab"><span></span><span>tarea</span><span>resultado y qué significa</span></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Un corpus para enseñar la forma del idioma</b><small>TinyStories en castellano · Apache 2.0</small></div>
+        <div class="r"><span class="num h">5,4 M cuentos · BPE de 4.096: 165 tokens por cuento, el 96 % entra en 256</span>
+          <span>Es el régimen donde modelos de 1 a 30 M de parámetros producen texto coherente. El corpus da la forma; los hechos siguen en el archivo.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Cuánto cuesta el tronco con texto real</b><small>piloto en T4 · 11-sep</small></div>
+        <div class="r"><span class="num h">T=256 · 0,31 s/paso · 5,8 GiB · un shard ≈ 10 min por época</span>
+          <span>Entra en la máquina que usamos. Con 6 capas hace falta partir el lote en dos.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Qué pasa si además se reentrena el modelo</b><small>la trampa de la firma · 11-sep</small></div>
+        <div class="r"><span class="num h">medido: el modelo aprende la «letra» de los pesos viejos</span>
+          <span>Si se reentrena cada mes, hay que reescribir el archivo entero con los pesos nuevos (un forward por entrada, barato) y nunca entrenar con ese desfase presente. Reentrenar en pesos tiene además el olvido catastrófico, que el archivo esquiva.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>El escalón 3: entrenar con el corpus y hechos en castellano</b><small>prereg propio</small></div>
+        <div class="r"><span>Next-token sobre los cuentos para la forma, más episodios de hechos en lenguaje natural para la memoria. Vocabulario abierto, respuesta de varios tokens: ahí la alucinación que importa tiene casos reales.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>¿Se razona igual sobre hechos del archivo que sobre hechos en los pesos?</b></div>
+        <div class="r"><span>Nadie lo sabe. Los hechos encadenados de la etapa 1 son el primer paso. Lo realista es un diseño mixto: pesos con el conocimiento general hasta el corte, archivo para lo posterior y lo personal.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>Simular la actualización mensual</b></div>
+        <div class="r"><span>Reentrenar el modelo, reescribir el archivo con los pesos nuevos y medir que no se pierda nada de lo archivado ni de lo que sabía. Es el experimento que responde la pregunta tal como está hecha.</span></div></div>
+    </div>
+  </section>
+
+  <section class="etapa">
+    <div class="cab">
+      <p class="eyebrow">etapa 3</p>
+      <h2>RAG contra archivo: tokens, velocidad y calidad</h2>
+      <p class="pregunta">«El uso del RAG vs nuestro archivo, <b>¿quién consume menos tokens para la misma acción
+        y qué diferencia en velocidad hay entre uno y otro?</b>»</p>
+      <span class="estado c">● costo y calidad medidos en el modelo chico; falta el brazo RAG en igualdad</span>
+    </div>
+    <div class="tareas">
+      <div class="cabtab"><span></span><span>tarea</span><span>resultado y qué significa</span></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Tokens</b><small>por construcción</small></div>
+        <div class="r"><span class="num h">RAG: 1.500-2.000 tokens por pregunta · archivo: 0</span>
+          <span>Un RAG pega los fragmentos recuperados como texto y el modelo los relee entero, por todas las capas, en cada pregunta. Cada hecho del archivo es un vector: no ocupa la ventana ni se factura.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>La curva de costo de leer el archivo</b><small>P3 · T4 · 11-sep</small></div>
+        <div class="r"><span class="num h">1.000 entradas = la pregunta sola (0,27 ms) · 3.280 = 4,4× menos que 40 enunciados en el prompt (1,18 ms)</span>
+          <span>Lineal en N; cruza al prompt de 368 tokens en ~30.000 entradas. Leer sólo las dos mejores no ahorra tiempo tal como está; el ahorro a escala necesita un índice.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>La receta del RAG dentro del modelo</b><small>E-I1 · 12-ago</small></div>
+        <div class="r"><span class="num h">inyección tardía + top-k duro: 0,0167 · temprana: 1,0000</span>
+          <span>Lo que entra al final, como el prompt, no deja cómputo detrás para reparar lo que la búsqueda trajo mal. El archivo entra en el primer bloque.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Calidad cuando las entradas se contradicen</b><small>tt3 contra rp3 · 11-sep</small></div>
+        <div class="r"><span class="num h">archivo con top-2: 0,93 · lectura por promedio, como un RAG: 0,08</span>
+          <span>El RAG recupera por parecido y el modelo elige a ciegas entre versiones; el archivo sabe cuál rige.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>El brazo RAG de verdad, en igualdad</b><small>PREREG_RAG_PROMPT.md · borrador</small></div>
+        <div class="r"><span>Mismo modelo, mismos datos: los enunciados como texto en el prompt (T ≈ 370) contra el archivo, y la variante con recuperación externa de las dos entradas más parecidas. Se mide exactitud, tokens por consulta y tiempo.</span></div></div>
+      <div class="tarea p"><span class="m">○</span>
+        <div class="t"><b>Los números en un modelo grande</b></div>
+        <div class="r"><span>Hoy es aritmética: para 80.000 M de parámetros, 2×10¹⁴ operaciones el RAG contra 3×10¹⁰ el archivo, miles de veces menos. Falta medirlo en un modelo de ese tamaño.</span></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Fuentes: <span class="mono">PREREG_TOPK_ENTRENADO.md</span> §1-§11, <span class="mono">PLAN_PRUEBAS_20260911_TARDE.md</span>,
+      <span class="mono">PREREG_ENCADENADOS.md</span>, <span class="mono">PREREG_RAG_PROMPT.md</span>, <span class="mono">piloto_lectura_20260911.json</span>,
+      <span class="mono">controles_20260911/</span>. Los números son del micro-LM de laboratorio (866.675 parámetros, 242 palabras); lo que dicen de un modelo grande es extrapolación, marcada como tal.</p>
+  </footer>
+</div>
