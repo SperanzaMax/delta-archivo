@@ -59,6 +59,15 @@ _DONDE = "pre"
 # dejar de usar como pista. Con `_PERT = False` (el default) no se pasa nada y el modelo da los
 # numeros de siempre, bit a bit.
 _PERT = False
+# SESIONES EXTRA SIN GRADIENTE (2026-09-11, PREREG_TOPK_ENTRENADO §8). Las sesiones extra de
+# `--ses-extra` se escriben con los pesos ACTUALES —eso es lo que las hace honestas: el control
+# del 11-sep mostro que un pool escrito con pesos anteriores le ensenia al modelo a fechar las
+# entradas por la firma de los pesos, no a usar el sello— pero pasan por el tronco CON gradiente,
+# y eso es lo que las hace caras (backward por 40 sesiones; el 5-sep hizo falta micro-batch 8 para
+# 26). Con esto, las 4 sesiones del episodio se escriben con gradiente y las extra bajo
+# `stop_gradient`: mismas entradas, mismos pesos, sin backward por ellas. Es la version barata de
+# «lo archivado en conversaciones anteriores ya esta escrito y no se reentrena».
+_SES_EXTRA_SIN_GRAD = False
 FORMAS_Q = ("directa",)      # 2026-09-02, PREREG_CRUCE_FORMAS. Default = el idioma de siempre.
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
@@ -347,8 +356,18 @@ def con_relleno(archivo, turnos, mask, ra, rt):
     return archivo, turnos, mask
 
 
+def escribir_partido(params, ses, cortes):
+    """`M.escribir`, con las sesiones extra (las que siguen a las 4 del episodio) sin gradiente
+    cuando `--ses-extra-sin-grad`. Con el flag apagado es exactamente `M.escribir`."""
+    if _SES_EXTRA_SIN_GRAD and ses.shape[1] > 4:
+        propias = M.escribir(params, ses[:, :4], cortes[:, :4])
+        extra = jax.lax.stop_gradient(M.escribir(params, ses[:, 4:], cortes[:, 4:]))
+        return jnp.concatenate([propias, extra], axis=1)
+    return M.escribir(params, ses, cortes)
+
+
 def logits_de(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None, captura=None):
-    archivo = M.escribir(params, ses, cortes)
+    archivo = escribir_partido(params, ses, cortes)
     archivo, turnos, mask = con_relleno(archivo, turnos, mask, ra, rt)
     lg = M.responder(params, archivo, turnos, cons, mask, donde=_DONDE, pertenece=pert_de(mask),
                      captura=captura)
@@ -485,7 +504,7 @@ def _recompensa(lg, tgt, q, s=None):
 # Las dos decisiones —«¿esta?» y «¿que valor?»— dejan de competir por la misma masa de probabilidad.
 
 def _partes(params, ses, cortes, turnos, mask, cons, pos, ra=None, rt=None, captura=None):
-    archivo = M.escribir(params, ses, cortes)
+    archivo = escribir_partido(params, ses, cortes)
     archivo, turnos, mask = con_relleno(archivo, turnos, mask, ra, rt)
     lg, a = M.responder_con_abst(params, archivo, turnos, cons, mask, donde=_DONDE, abst=_ABST,
                                  pertenece=pert_de(mask), captura=captura)
@@ -770,6 +789,11 @@ def main():
                          "y relleno incluidos). 0 lo apaga.")
     ap.add_argument("--fotos-salida", default="",
                     help="JSON de las fotos; por defecto <ckpt>_fotos.json o fotos_<semilla>.json")
+    ap.add_argument("--ses-extra-sin-grad", action="store_true",
+                    help="ARCHIVO LARGO FRESCO Y BARATO (2026-09-11, prereg del top-k §8). Las "
+                         "sesiones de --ses-extra se escriben con los pesos actuales pero sin "
+                         "gradiente (stop_gradient): mismo archivo que --ses-extra, sin el backward "
+                         "por ellas. Ver `_SES_EXTRA_SIN_GRAD`.")
     ap.add_argument("--kernel-q", type=int, default=3, choices=(3, 5, 7, 9),
                     help="kernel de `convq`, la conv que forma la query en `--donde lat2` "
                          "(INFORME_QUERY_CIEGA_20260901.md). Con 3 la ENTIDAD entra en la ventana "
@@ -870,7 +894,7 @@ def main():
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
     global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
-    global _PERT
+    global _PERT, _SES_EXTRA_SIN_GRAD
     global FORMAS_Q
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
     _REC_RANK = a.rec_rank
@@ -889,6 +913,7 @@ def main():
     _DONDE = a.donde
     _ABST = a.abst
     _PERT = a.pert
+    _SES_EXTRA_SIN_GRAD = a.ses_extra_sin_grad
     M.SELLO = a.sello          # antes de init_params, como M.KQ: decide como se indexa `ord`
     if a.pert and a.sello == "abs":
         print("AVISO: --pert con --sello abs. Es una combinacion valida (aisla el aporte del bit), "
@@ -1086,7 +1111,7 @@ def main():
         # `topk`, `topk_desde` y el relleno (2026-09-11): misma familia y mismos tres casos que
         # `ses_extra`. Cambiar como se lee el archivo a mitad de corrida es otra tarea sin avisar.
         for k, d in (("topk", 0), ("topk_desde", 0), ("relleno", 0), ("relleno_dist", "real"),
-                     ("relleno_turnos", "solapado")):
+                     ("relleno_turnos", "solapado"), ("ses_extra_sin_grad", False)):
             _v = ck["config"].get(k)
             if _v is None and "sembrado_de" not in ck:
                 _v = d

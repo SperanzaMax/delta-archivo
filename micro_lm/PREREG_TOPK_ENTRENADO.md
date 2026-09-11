@@ -170,3 +170,38 @@ escribe con los mismos pesos, así que esa señal no existe: la métrica interna
    (p. ej. 400 entradas), y la generalización a 3.240 se mide en el banco con pool fresco. Antes,
    una medida barata que decide si hace falta: `rp3_s0` (6-sep, sello relativo + pertenencia,
    entrenado con 161 entradas frescas con gradiente) sobre el mismo banco.
+
+## 9. EL RELLENO FRESCO SÍ ENSEÑA, y la campaña que sigue (10:15, antes de correrla)
+
+**`rp3_s0` (6-sep: sello relativo + pertenencia, entrenado 2.000 pasos con 161 entradas viejas
+escritas con los pesos actuales, con gradiente) en el banco de pool FRESCO, real + viejo, PERT=1**
+(`controles_20260911/rp3_s0_pool_fresco_pert1.log`):
+
+    archivo    40  →  0,9688
+    archivo   400  →  0,8867      (kq3 sin ese entrenamiento: 0,0586)
+    archivo 3.280  →  0,1016      (kq3: 0,0059)
+
+O sea: entrenar con entradas viejas **frescas** enseña de verdad a descartarlas (0,06 → 0,89 con
+400, y el banco no comparte nada con el entrenamiento), y lo que falta para 3.240 es **escala**,
+no mecanismo. Por eso el relleno del pool se abandona y se vuelve a `--ses-extra`, que escribe
+las entradas viejas con los pesos actuales en cada paso, con un agregado que lo hace barato:
+`--ses-extra-sin-grad` (las sesiones extra pasan por el tronco bajo `stop_gradient`; verificado:
+gradiente 0,0 por ellas y valores escritos idénticos).
+
+**Campaña `tf3`/`df3`, congelada:** sembrado de `kq3_sX`, `--sello rel --pert --kernel-q 5 --donde
+lat2 --abst cabeza --p-nose 0.4`, **`--ses-extra 36 --ses-extra-sin-grad`** (400 entradas viejas
+frescas por paso), 8.000 pasos, `--cada 500`, `--fotos 25`.
+
+    tf3_sX   --topk 2          (la principal)
+    df3_sX   softmax completo  (el control)
+
+Se lanzan `s0` de las dos primero, para medir s/paso y memoria con 40 sesiones por paso; `s1` y `s2`
+después. **Hipótesis, leídas sobre el banco de pool fresco (real, viejo, PERT=1) al paso 8.000:**
+
+- **H1'** `tf3` ≥ 0,90 con archivo 400 (donde `rp3` llegó a 0,89 con 161 de entrenamiento) en 2 de 3.
+- **H2'** con archivo 3.280, `tf3` supera a `df3` por ≥ 0,10 en la media: es donde la selección
+  debería pagar, porque ahí la lectura densa diluye (5-sep) y la top-2 no.
+- **H3'** la generalización: `tf3` con 3.280 ≥ 0,50 (entrenado con 400). Si queda por debajo, el
+  siguiente paso es más sesiones extra, no otro mecanismo.
+- **H4'** detector: `nose ≥ 0,20` en el paso 2.500 en la métrica interna (que acá SÍ es fresca).
+La métrica interna (`evaluar` con `n_ses_extra=36`) se reporta, pero no decide.

@@ -1,0 +1,12 @@
+
+==============================================================================
+[distractor=real turnos=viejo] /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/rp3_s0.pkl  ·  kernel_q=5 · sello=rel · topk=0 · donde=lat2 · nivel=3 · ses_extra=26 · pert=True · paso 2000 · V=242
+  pool de distractores: (4096, 128) en 49.3s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.9688   0.9102    0.9722    0.1067
+     360      400     0.8867   0.2305    0.4871    1.7322
+    3240     3280     0.1016   0.0508    0.2408    3.2008  <- bajo el piso trivial
+
+guardado en dilucion.json
+exit=0
