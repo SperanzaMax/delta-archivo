@@ -258,11 +258,14 @@ PY
 # Presupuesto de polling. Medido en la T4 de hoy: ~0,46 s/paso (el 13-ago era 0,22 — la T4 que toca
 # no siempre rinde igual), o sea ~8 min cada 1000 pasos. Se calcula con el doble de margen: si el
 # polling corta antes que el entrenamiento, el tramo se pierde aunque la VM lo haya terminado.
-MIN=$(( TRAMO / 1000 * 10 + 20 ))
-echo "== polling cada 2 min (presupuesto ~${MIN} min)"
+MIN=$(( TRAMO / 1000 * ${MIN_POR_MIL:-10} + 20 ))
+# 2026-09-11: el tope es 3x el presupuesto y se sale en cuanto VIVO= False. Con el relleno de 3.240
+# entradas el paso es mas lento que los 0,9 s/paso que el presupuesto suponia, y agotar el polling
+# con el proceso VIVO deja la VM entrenando sola y al rotador abriendo OTRA en la cuenta siguiente.
+echo "== polling cada 2 min (presupuesto ~${MIN} min, tope $((MIN * 3)))"
 LISTO=0
 TICK=0
-for _ in $(seq 1 $(( MIN / 2 ))); do
+for _ in $(seq 1 $(( MIN * 3 / 2 ))); do
   sleep 120
   TICK=$((TICK + 1))
   OUT="$(timeout -k 30 240 "${CL[@]}" exec -s "$SESION" --timeout 180 -f "$TMP/ver.py" 2>&1 || true)"
@@ -278,11 +281,15 @@ for _ in $(seq 1 $(( MIN / 2 ))); do
       mv "$TMP/ck_p.pkl" "$CK"
       echo "   [checkpoint parcial guardado: paso $(grep -o '"paso": [0-9]*' "$JS" 2>/dev/null | tail -1 | grep -o '[0-9]*')]"
     fi
-    # la pelicula baja con el mismo ritmo que el checkpoint: lo que se pierde si cae la VM es un
-    # intervalo, no la corrida
+    # la pelicula baja con el mismo ritmo que el checkpoint, y AUNQUE el checkpoint no exista
+    # todavia (el primero se escribe recien en el paso `cada`; las fotos, desde el paso FOTOS):
+    # lo que se pierde si cae la VM es un intervalo, no la corrida
     if [ "$FOTOS" != "0" ]; then
-      timeout -k 30 300 "${CL[@]}" download -s "$SESION" /content/ck_fotos.json "$TMP/fotos_p.json" >/dev/null 2>&1 \
-        && [ -s "$TMP/fotos_p.json" ] && mv "$TMP/fotos_p.json" "$FOTOS_JS"
+      if timeout -k 30 300 "${CL[@]}" download -s "$SESION" /content/ck_fotos.json "$TMP/fotos_p.json" >/dev/null 2>&1 \
+         && [ -s "$TMP/fotos_p.json" ]; then
+        mv "$TMP/fotos_p.json" "$FOTOS_JS"
+        echo "   [pelicula parcial: $(grep -o '"paso":[0-9]*' "$FOTOS_JS" | tail -1 | grep -o '[0-9]*') pasos]"
+      fi
     fi
   fi
   { printf '%s\n' "$OUT" | grep '^@@JSON@@ ' || true; } | while read -r _ nombre resto; do

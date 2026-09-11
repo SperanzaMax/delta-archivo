@@ -84,3 +84,18 @@ en las tres distribuciones y los dos modos de turnos.
   continúa entre tramos.
 - Lo que NO está verificado y se mide en la primera unidad: el s/paso en T4 con 3.240 entradas en
   la lectura. Si supera 0,9 s/paso el tramo baja a 1.000 pasos para que el polling no corte.
+
+## 6. Enmiendas DESPUÉS del lanzamiento (09:05, escritas a las 08:20 hora local)
+
+- **E-1 · el detector de H4 se lee en el paso 3.000, no en el 2.500.** La campaña corre con
+  `--cada 1000` (evaluaciones en 1.000, 2.000, 3.000…), y el 2.500 del detector del 8-sep venía de
+  corridas con `--cada 500`. Se toma la evaluación de 3.000 con el mismo umbral `nose ≥ 0,20`, y se
+  declara el sesgo: a 3.000 pasos es MÁS fácil superar el umbral, así que un «no colapsa» acá es
+  menos exigente que el del 8-sep. Si una unidad colapsa en 3.000, colapsó.
+- **E-2 · ritmo medido: 0,62-0,64 s/paso** (500 pasos en 311-320 s con compilación y pool). El tramo
+  de 2.000 entra en el presupuesto. `tramo_abst.sh` subió el tope de polling a 3x y baja la
+  película aunque no haya checkpoint todavía; reemplazado por `mv` atómico, las seis instancias en
+  vuelo siguen con el inode anterior.
+- **E-3 · tp3_s0 y dp3_s0 se relanzaron a las 09:20** desde cero como rotadores de una unidad
+  (los dos rotadores secuenciales de la primera tanda se habrían pisado con los de la segunda).
+  Costó ~20 min de T4 y nada de datos: no había checkpoint todavía.
