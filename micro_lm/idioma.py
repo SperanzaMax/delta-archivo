@@ -342,20 +342,37 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
     if p_compuesta > 0 and rng.random() < p_compuesta:
         personales = [(i, r, e, vs) for i, (r, e, vs) in enumerate(vals_por_hecho) if r in PERSONALES]
         if personales:
-            i_p, rel_p, ent_p, vs_p = personales[int(rng.integers(0, len(personales)))]
-            nombre = vs_p[-1]                                   # el vigente: la compuesta es sobre lo que rige
+            # v2 (19:30, tras ver el ATAJO de la v1: con UN solo hecho de persona por episodio la
+            # compuesta se resolvia sin encadenar, «la altura del unico nombre que tiene altura», y
+            # el brazo de un bloque dio 1,000 en el paso 1.000). Ahora TODOS los nombres vigentes de
+            # los hechos personales reciben un hecho con la misma relacion `rel2` —salvo uno, si la
+            # pregunta va a ser NOSE—, asi que para contestar hay que saber QUIEN es el director de
+            # barrio. Con un solo hecho personal en el episodio se agregan nombres ajenos como
+            # distractores hasta tener tres.
             rel2 = str(rng.choice(RELS_PERSONA))
-            if rng.random() < 0.5:
-                # el segundo hecho SI se dice: en la sesion del primero (nivel < 4) o en una posterior
+            k_p = int(rng.integers(0, len(personales)))
+            i_p, rel_p, ent_p, vs_p = personales[k_p]
+            nombres = [vs[-1] for _, _, _, vs in personales]
+            usados = set(nombres)
+            while len(nombres) < 3:
+                extra = str(rng.choice([n for n in NOMBRES if n not in usados]))
+                nombres.append(extra); usados.add(extra)
+            es_nose = rng.random() < 0.5
+            respuesta = None
+            for nombre in nombres:
+                if es_nose and nombre == vs_p[-1]:
+                    continue                                    # el preguntado se queda sin su hecho
                 num = str(rng.choice(POOL_NUM))
                 s_p = 0 if nivel < 4 else int(rng.integers(0, max(1, n_sesiones - 1)))
                 sesiones[s_p].append(rng.choice(formas(rel2, nombre, num, nivel)))
                 origen[s_p].append(len(vals_por_hecho))
                 vals_por_hecho.append((rel2, nombre, [num]))
-                compuesta = (pregunta_compuesta(rel2, rel_p, ent_p), num, "compuesta")
-            else:
-                # el segundo hecho NO se dice: la respuesta correcta es NOSE (falta un salto)
+                if nombre == vs_p[-1]:
+                    respuesta = num
+            if es_nose:
                 compuesta = (pregunta_compuesta(rel2, rel_p, ent_p), "NOSE", "nose_comp")
+            else:
+                compuesta = (pregunta_compuesta(rel2, rel_p, ent_p), respuesta, "compuesta")
 
     consultas = []
     formas_usadas = []

@@ -14,9 +14,9 @@ uno_rot() {  # familia bloques unidad cuentas...
     setsid nohup ./rotar_abst3.sh "$u" 26000 2000 1000 "$@" > "$SAL/rotador_${fam}3_s${u##*:}.log" 2>&1 < /dev/null &
   echo "rotador ${fam}3_s${u##*:} pid $! cuentas $*"; sleep 3
 }
-uno_rot ec 0   3:0 K C
-uno_rot ec 0   3:1 L D
-uno_rot ec 0   3:2 N I
-uno_rot ed 0,2 3:0 F J
-uno_rot ed 0,2 3:1 H M
-uno_rot ed 0,2 3:2 A G
+uno_rot kc 0   3:0 K C
+uno_rot kc 0   3:1 L D
+uno_rot kc 0   3:2 N I
+uno_rot kd 0,2 3:0 F J
+uno_rot kd 0,2 3:1 H M
+uno_rot kd 0,2 3:2 A G

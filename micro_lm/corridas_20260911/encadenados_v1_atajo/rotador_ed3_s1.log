@@ -1,0 +1,40 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_ed3_s1.log (rotador 3074006)
+== rotador2 · familia 'ed' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello abs · pert 0 · topk 0/0 · relleno 0 (real,solapado) · fotos 100 · unidades 3:1 · cuentas: H M
+-- vuelta 1 · cuenta H · faltan: 3:1 · 18:44:07
+   >> OTORGADA en H (T4): [tr2_h_1844] gpu-t4-s-kkb-usw1b2-3q6ykv8c51qlx | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en H (desde el paso 20000)
+== tramo · cuenta H · sesion tr2_h_1844 · ed3_s1 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2
+[colab] Uploaded '/tmp/tmp.dJRdZYCceF/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ed3_s1.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2409
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= False ULTIMO= ABORTA: el checkpoint se entreno con mezcla=dinamica y se pidio mezcla=fija. Es otra politica de muestreo, no la misma corrida. 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ed3_s1.pkl (10M)
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1844)
+   tramo de 3:1 cerrado en el paso 20000 de 26000
+   tr2_h_1844 parada; pendientes ahora: 3:1
+-- vuelta 1 · cuenta M · faltan: 3:1 · 18:47:14
+   >> OTORGADA en M (T4): [tr2_m_1847] gpu-t4-s-kkb-use1c1-1o5n93t12y6ne | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en M (desde el paso 20000)
+== tramo · cuenta M · sesion tr2_m_1847 · ed3_s1 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2
+[colab] Uploaded '/tmp/tmp.uXHPGCv9MI/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ed3_s1.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1377
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= False ULTIMO= ABORTA: el checkpoint se entreno con mezcla=dinamica y se pidio mezcla=fija. Es otra politica de muestreo, no la misma corrida. 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ed3_s1.pkl (10M)
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_m_1847)
+   tramo de 3:1 cerrado en el paso 20000 de 26000
+   tr2_m_1847 parada; pendientes ahora: 3:1
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+Terminado

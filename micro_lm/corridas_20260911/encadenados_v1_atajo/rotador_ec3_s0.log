@@ -1,0 +1,23 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_ec3_s0.log (rotador 3071845)
+== rotador2 · familia 'ec' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello abs · pert 0 · topk 0/0 · relleno 0 (real,solapado) · fotos 100 · unidades 3:0 · cuentas: K C
+-- vuelta 1 · cuenta K · faltan: 3:0 · 18:43:53
+   >> OTORGADA en K (T4): [tr2_k_1843] gpu-t4-s-kkb-usw4a0-2e41b4v8z092m | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en K (desde el paso 0)
+== tramo · cuenta K · sesion tr2_k_1843 · ec3_s0 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0
+[colab] Uploaded '/tmp/tmp.xb8LtgyZVu/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck_fotos.json
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 4481
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= W0911 21:44:55.260642    4504 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= paso    500  loss 4.4512  acc 0.1562  (246s) 
+VIVO= True ULTIMO= paso    500  loss 4.4512  acc 0.1562  (246s) 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 1000 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.4829 · anterior 0.1510 · abstencion 0.0137 · truncados 0.0000 · compuesta 1.0000 · nose_comp 0.0729 · nose 0.0233 (ent 0.0125/rel 0.0227) · falsa_abst 0.0063 
+VIVO= True ULTIMO= ── eval: vigente 0.4829 · anterior 0.1510 · abstencion 0.0137 · truncados 0.0000 · compuesta 1.0000 · nose_comp 0.0729 · nose 0.0233 (ent 0.0125/rel 0.0227) · falsa_abst 0.0063 
+VIVO= True ULTIMO= paso   1500  loss 2.6015  acc 0.4062  (721s) 
+VIVO= True ULTIMO= paso   1500  loss 2.6015  acc 0.4062  (721s) 
+Terminado

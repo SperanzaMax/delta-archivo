@@ -71,3 +71,24 @@ colapso `nose ≥ 0,20` en el paso 3.000 (evaluación cada 1.000). Se reporta la
 - Con `p_compuesta = 1` aparecen los tipos 4 y 5; la pregunta compuesta entra en `T_Q = 12`
   (10 tokens); ejemplo real: «cual es la altura del guardia de fabrica ? → 69» con «fabrica tiene
   como guardia a nadia … la altura que tiene nadia es 69».
+
+## 5. ENMIENDA E-1 (19:35) · la v1 de la tarea tenía un ATAJO, medido, y se cerró antes de seguir
+
+La campaña `ec3`/`ed3` se lanzó a las 18:55 con la tarea del §1. En el paso 1.000 el brazo de UN
+bloque (`ec3`, H0 predecía ≤ 0,50) daba `compuesta` **1,000 / 1,000 / 0,873** con `vigente` en
+0,39-0,48 y `nose_comp` 0,07-0,13. Demasiado y demasiado pronto: con un solo hecho de persona por
+episodio, «la altura del director de barrio» se contesta leyendo *la única entrada de altura cuyo
+sujeto es un nombre*, sin saber quién es el director. No es encadenar. (Además `ed3` abortó por un
+checkpoint viejo con ese prefijo; `hd3` también existe.)
+
+**v2 de la tarea:** todos los nombres vigentes de los hechos personales del episodio reciben un hecho
+con la misma relación (`altura` o `clave`), y si hay menos de tres se agregan nombres ajenos como
+distractores; en las `nose_comp`, el preguntado es el único que se queda sin su hecho. Ahora la
+compuesta exige la versión vigente del nombre Y la lectura de su hecho entre tres candidatos.
+Ejemplo real del generador: «quien posee tienda es zoe no, celia … celia tiene la clave en 64 · gema
+tiene la clave en 29 · la clave de diego es 0» → «cual es la clave del dueño de tienda ?» → 64.
+Truncamiento medido 0,5 % (nivel 3, una sesión; la compuerta corta en 1 %). Con `p_compuesta = 0`
+sigue siendo bit a bit el generador de siempre.
+
+Las hipótesis del §2 quedan iguales. Los brazos pasan a `kc3` (un bloque) y `kd3` (bloques 0,2),
+mismo diseño. Lo del §1 y la v1 se archivan en `corridas_20260911/encadenados_v1_atajo/`.
