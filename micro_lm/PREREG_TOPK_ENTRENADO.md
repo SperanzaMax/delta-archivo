@@ -205,3 +205,36 @@ después. **Hipótesis, leídas sobre el banco de pool fresco (real, viejo, PERT
   siguiente paso es más sesiones extra, no otro mecanismo.
 - **H4'** detector: `nose ≥ 0,20` en el paso 2.500 en la métrica interna (que acá SÍ es fresca).
 La métrica interna (`evaluar` con `n_ses_extra=36`) se reporta, pero no decide.
+
+## 10. EL DIAGNÓSTICO: era el `stop_gradient`, y la campaña que sí cierra (12:45, antes de correrla)
+
+`tf3`/`df3` (400 entradas viejas frescas, `--ses-extra-sin-grad`) **divergió**: `cruzada_corto`
+0,97 → 0,01 entre los pasos 500 y 1.000 en las seis unidades. Diagnóstico con cuatro variantes
+sembradas de `kq3_s0`, `ses_extra 12`, 600 pasos, `corridas_20260911/x?3_s0.json`:
+
+| | sin gradiente por las viejas | con gradiente |
+|---|---|---|
+| cabeza · p_nose 0,4 | `xa` 0,54 → 0,05 → 0,52 (corto 0,90 → 0,12 → 0,70) | `xb` 0,76 → **1,000** (corto 0,996) |
+| token · p_nose 0,2 | `xc` 0,77 → 0,52 → 0,66 (corto 0,97 → 0,67 → 0,83) | `xd` 0,85 → **1,000** (corto 0,997) |
+
+**Con gradiente por las entradas viejas aprende y se queda; sin él, oscila y con 400 entradas se
+cae.** La interfaz de abstención no importa. Lectura mecanicista, a confirmar: las claves de lo
+viejo y de lo propio salen del mismo `kw` sobre representaciones del mismo tronco; si el tronco no
+recibe gradiente por lo viejo, la única forma de alejar lo viejo de la consulta es mover `kw`, que
+mueve también lo propio: un tira y afloja sin salida. `--ses-extra-sin-grad` queda en el código
+como opción **medida y desaconsejada**.
+
+**La campaña que cierra la pregunta, y es la más barata:** el brazo denso con 161 entradas viejas
+frescas con gradiente **ya existe y está publicado**: `rp3_s0-2` (6-sep, sembrado de `kq3_sX`,
+`--sello rel --pert --ses-extra 26 --p-nose 0.2 --micro-batch 8 --batch-eval 8`, abst token,
+horizonte 6.000, 2.000 pasos). Se corre el gemelo con `--topk 2` y nada más:
+
+    tt3_sX  = rp3_sX + --topk 2          semillas 0 1 2, --fotos 8 (250 cuadros)
+    rq3_s0  = rp3_s0 exacto + --fotos 8  (réplica del denso, para la película)
+
+**Hipótesis, sobre el banco `dilucion.py` real + viejo + PERT=1, pool fresco, 256 muestras:**
+- **H1''** `tt3` con 400 ≥ 0,85 en 2 de 3 (rp3_s0 dio 0,8867).
+- **H2''** con 3.280, `tt3` supera a `rp3` en la media por ≥ 0,10 (rp3_s0: 0,1016). Es donde la
+  dilución del softmax pega y la top-2 no, y es la única hipótesis que separa los brazos.
+- **H3''** con 40, `tt3` no queda más de 0,03 por debajo de `rp3` (0,9688).
+- **H4''** `rq3_s0` reproduce `rp3_s0` en la métrica interna (±0,03 al paso 2.000) y en el banco.
