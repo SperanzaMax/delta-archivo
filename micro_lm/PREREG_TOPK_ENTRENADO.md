@@ -128,3 +128,9 @@ Las hipótesis H1-H3 se leen igual sobre `ts3`/`ds3` al paso 8.000. **Lo que cam
 ya no es «desde cero con el top-k en el ADN» sino «un modelo que sabe leer un archivo corto
 aprende a leer uno largo con top-k». El desde-cero queda como pregunta abierta con su propio
 hallazgo: en frío no arranca en 3.000 pasos con ninguna de las dos lecturas.
+- **E-5 (09:40) · el primer intento del plan B murió de OOM en la GPU** al arrancar: las VMs
+  reusadas todavía corrían el `entrenar.py` de la corrida en frío (matar el tramo en la PC no
+  mata el proceso remoto) y JAX preasigna el 75 % de la memoria. Sin keep-alive, las seis
+  sesiones se desasignaron después. Se relanza con el rotador normal (un rotador por unidad,
+  `lanzar_planb_0911.sh segundo`), con los checkpoints sembrados restaurados y sin cuadros
+  heredados. Nada de lo medido cambia.

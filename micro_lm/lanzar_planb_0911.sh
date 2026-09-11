@@ -13,9 +13,30 @@ uno() {  # familia topk unidad cuenta sesion
     > "$SAL/fija_${1}3_s${3##*:}.log" 2>&1 < /dev/null &
   echo "$1 $3 en $4/$5 pid $!"; sleep 2
 }
+if [ "${1:-}" = "primero" ]; then
 uno ts 2 3:0 G tr2_g_0830
 uno ts 2 3:1 C tr2_c_0829
 uno ts 2 3:2 D tr2_d_0828
 uno ds 0 3:0 E tr2_e_0830
 uno ds 0 3:1 F tr2_f_0828
 uno ds 0 3:2 J tr2_j_0828
+fi
+
+# --- 09:35 · SEGUNDO INTENTO. El primero murio de OOM en la GPU: los `entrenar.py` de la corrida
+# en frio seguian corriendo en las VMs reusadas (matar el tramo en la PC no mata el proceso
+# remoto) y JAX preasigna el 75 % de la memoria. Despues, sin keep-alive, las seis sesiones se
+# desasignaron solas. Se vuelve a pedir GPU con el rotador normal, un rotador por unidad.
+if [ "${1:-}" = "segundo" ]; then
+  uno_rot() {  # familia topk unidad cuentas...
+    local fam="$1" k="$2" u="$3"; shift 3
+    env "${COMUN[@]}" PREFIJO="$fam" TOPK="$k" LOG_ROTADOR="$SAL/rotador_${fam}3_s${u##*:}.log" \
+      setsid nohup ./rotar_abst3.sh "$u" 8000 2000 500 "$@" > "$SAL/rotador_${fam}3_s${u##*:}.log" 2>&1 < /dev/null &
+    echo "rotador ${fam}3_s${u##*:} pid $! cuentas $*"; sleep 3
+  }
+  uno_rot ts 2 3:0 H G
+  uno_rot ts 2 3:1 K C
+  uno_rot ts 2 3:2 L D
+  uno_rot ds 0 3:0 M E
+  uno_rot ds 0 3:1 N F
+  uno_rot ds 0 3:2 I J
+fi
