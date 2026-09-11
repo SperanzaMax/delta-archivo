@@ -50,3 +50,34 @@ tiempo (se calcula sobre las N); el ahorro real necesita índice, que no está i
 ## Orden de hoy
 
 P1 y P2 en una T4 (minutos), P3 en otra (minutos), P4 se lanza y corre solo (~3 h). P5 mañana.
+
+## RESULTADOS (18:40, con los datos a la vista)
+
+**P1 · generaliza hasta 30.000.** Banco real + viejo + PERT=1, pool fresco de 32.768, 256 muestras
+(`controles_20260911/banco_fresco_pert1_P1escala_*.json`):
+
+| lectura | unidad | 3.280 | 10.040 | 30.040 |
+|---|---|---|---|---|
+| top-2 | `tt3_s0` | 0,9336 | 0,9336 | 0,8555 |
+| top-2 | `tt3_s1` | 0,9336 | 0,8750 | 0,8711 |
+| top-2 | `tt3_s2` | 0,9453 | 0,8867 | 0,8594 |
+| softmax | `rq3_s0` | 0,1094 | 0,0234 | 0,0000 |
+
+Predicción cumplida y superada (pedía ≥ 0,80 con 10.000 y ≥ 0,60 con 30.000): entrenado con 161
+entradas viejas, el top-2 sigue en **0,86 con 30.000**, o sea 186 veces más entradas que las que
+vio entrenando; el denso está en cero. La caída de 0,93 a 0,86 entre 3.280 y 30.000 es lenta, y lo
+que decide es que la propia salga entre las dos mejores: el sello y la pertenencia no dependen de N.
+
+**P2 · el costo en archivo corto es real, chico y no es de una sola semilla.** 2.048 muestras, X = 0:
+top-2 0,916 / 0,912 / 0,981 (media 0,936); softmax 0,966 / 0,964 / 0,964 / 0,996 (media 0,973).
+Diferencia **−0,037**, dentro de lo predicho (−0,02 a −0,05); dos de tres semillas en 0,91, la
+tercera en 0,98. Hipótesis para el prereg siguiente: con archivo corto el top-2 deja afuera la
+tercera entrada cuando las dos mejores empatan (versiones), y un K=3 en archivo corto o un currículo
+de K lo recuperaría. Se mide barriendo K en inferencia sobre `tt3` (barato) antes de reentrenar.
+
+**P3 · la lectura es lineal en N** (`piloto_lectura_20260911.json`): 1.000 entradas = la pregunta
+sola (0,27 ms); 3.280 = 4,4× menos que 40 enunciados como texto; cruza al texto de 368 tokens en
+~30.000. El top-2 con máscara no ahorra; el ahorro a escala necesita índice. 100.000 no cabe
+replicado por lote en la T4 (limitación del piloto, no del mecanismo).
+
+**P4** (`tw3_s0`, 52 sesiones viejas con gradiente) en vuelo.
