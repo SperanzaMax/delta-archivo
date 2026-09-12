@@ -372,3 +372,35 @@ en frío ni saturado. Lo que sigue (no congelado): pesos PROPIOS para la segunda
 o subir `p_compuesta`, y medir si con eso arranca desde `kc3_s2`.
 
 Y sigue abierto `nose_comp` (0,00-0,15 en todas): nadie dice «no sé» en la compuesta.
+
+## 14. ENMIENDA E-7 (12-sep, 21:10) · pesos propios para la segunda lectura, y el diagnóstico de `nose_comp`
+
+**Código.** `modelo.responder`/`responder_con_abst`: la `lectura` recibe el bloque y, si el módulo
+trae `qr2`/`wo2`, la lectura que no es la primera los usa (claves y valores siguen compartidos:
+son del archivo). `sembrar.py --lectura-propia` los agrega como COPIA de `qr`/`wo`, así el sembrado
+arranca bit a bit igual al compartido (verificado: `ng3_s2` recién sembrado evaluado en 0,2 =
+`kc3_s2` en 0,2, 0,5561 exacto) y el gradiente decide si los separa (smoke local de 4 pasos:
+se mueven 2,3e-5). `tronco` mira la firma de `lectura`, así los instrumentos viejos de un
+argumento siguen andando.
+
+**E-7 (congelada antes de correr).** `ng3_s2, s3, s4`: sembradas de **`kc3_s2`** (la base
+saturada, 0 de 7 con pesos compartidos), `--lectura-propia`, bloques 0,2, mismos flags que la v4,
+8.000 pasos. Control: `nd3_s2-s6` (misma base, compartidos, 0,10-0,40). **Predicción:** si lo que
+frena en la base saturada es que las dos lecturas se pelean por `qr/wo`, ≥ 2 de 3 arrancan
+(`compuesta` ≥ 0,60). Si 0 de 3, no es la competencia de pesos sino la falta de gradiente, y el
+camino es la base con plasticidad (o subir `p_compuesta`).
+
+**Diagnóstico de `nose_comp` (medido, 16 lotes, mismos datos para los tres).** La cabeza «¿no sé?»
+separa perfecto en las simples y NADA en las compuestas:
+
+    unidad   AUC nose_comp vs compuesta   AUC nose_rel vs vigente   AUC nose_ent vs vigente
+    nd3_s1   0,588                        1,000                     0,992
+    nf3_s6   0,556                        1,000                     0,989
+    nc3_s2   0,559                        1,000                     0,992
+
+Y el logit medio es el mismo en las dos (−0,6 y −0,5): la cabeza no tiene un rasgo que diga
+«el nombre no tiene hecho». No es un problema de umbral, es que la señal no existe en `h` al
+final del tronco. En las simples la señal es que la lectura no encuentra nada que matchee (y el
+logit sube a 11); en la compuesta la segunda lectura reparte entre los dos candidatos que quedan
+y nada marca la ausencia del tercero. Candidato para la próxima: el slot nulo (`--abst slot`) en
+la segunda lectura, que da un lugar explícito a «nada matchea». No se corre hoy.

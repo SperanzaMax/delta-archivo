@@ -307,9 +307,18 @@ def tronco(params, x, lectura=None, bloque=0, donde="pre"):
     # el archivo devolvio en el token anterior; la del bloque 2 se forma sobre `h`, que ya lleva la
     # primera lectura propagada por los mixers de los bloques 0 y 1.
     bloques = (bloque,) if isinstance(bloque, int) else tuple(bloque)
+    # PESOS PROPIOS PARA LA SEGUNDA LECTURA (2026-09-12, PREREG_ENCADENADOS §13/§14). La lectura
+    # necesita saber EN QUE BLOQUE esta para elegir `qr2`/`wo2` en vez de `qr`/`wo`. Las `lectura`
+    # de los instrumentos viejos son de un solo argumento y no deben romperse: se mira la firma una
+    # vez (en Python, fuera del grafo) y solo a las que aceptan el bloque se les pasa.
+    import inspect
+    _con_bloque = lectura is not None and len(inspect.signature(lectura).parameters) >= 2
+    _lectura = lectura
     h = params["emb"][x]
     for i, blk in enumerate(params["blocks"]):
         bloque = i if i in bloques else -1        # el bloque actual «es» el de lectura si esta en la tupla
+        if _con_bloque:
+            lectura = (lambda x, _i=i: _lectura(x, _i))
         if lectura is not None and i == bloque and donde == "pre":
             h = h + lectura(ln(blk["ln1"], h))
         elif lectura is not None and i == bloque and donde == "lat":
@@ -454,13 +463,18 @@ def responder(params, archivo, turnos, consulta, mask_arch, bloque=0, donde="pre
     av = archivo @ a["vw"]
     penal = jnp.where(mask_arch, 0.0, -1e9)[:, None, :]          # entradas vacias no compiten
 
-    def lectura(h):
-        q = h @ a["qr"]
+    prim = bloque if isinstance(bloque, int) else tuple(bloque)[0]
+
+    def lectura(h, i=0):
+        # `qr2`/`wo2` existen solo si el checkpoint fue sembrado con `--lectura-propia`: la lectura
+        # que no es la primera usa los suyos. Sin ellos, bit a bit lo de siempre.
+        propia = (i != prim) and ("qr2" in a)
+        q = h @ (a["qr2"] if propia else a["qr"])
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
         p = atencion_archivo(sim)
         if captura is not None:
             captura["p"] = p
-        return jnp.einsum("btn,bnd->btd", p, av) @ a["wo"]
+        return jnp.einsum("btn,bnd->btd", p, av) @ (a["wo2"] if propia else a["wo"])
 
     h = tronco(params, consulta, lectura, bloque, donde)
     return ln(params["ln_f"], h) @ params["head"]["w"] + params["head"]["b"]
@@ -511,16 +525,18 @@ def responder_con_abst(params, archivo, turnos, consulta, mask_arch, bloque=0, d
         penal = jnp.concatenate([penal, jnp.zeros((B, 1, 1))], axis=-1)
 
     masa_nulo = {}
+    prim = bloque if isinstance(bloque, int) else tuple(bloque)[0]
 
-    def lectura(h):
-        q = h @ a_p["qr"]
+    def lectura(h, i=0):
+        propia = (i != prim) and ("qr2" in a_p)   # ver `responder`: pesos propios de la 2.ª lectura
+        q = h @ (a_p["qr2"] if propia else a_p["qr"])
         sim = jnp.einsum("btd,bnd->btn", q, ak) / jnp.sqrt(h.shape[-1]) + penal
         p = atencion_archivo(sim)
         if captura is not None:
             captura["p"] = p                     # ver `responder`: la distribucion que se USO
         if usa_slot:
             masa_nulo["p"] = p[..., -1]          # (B, T) — la masa que se fue a «nada»
-        return jnp.einsum("btn,bnd->btd", p, av) @ a_p["wo"]
+        return jnp.einsum("btn,bnd->btd", p, av) @ (a_p["wo2"] if propia else a_p["wo"])
 
     h = tronco(params, consulta, lectura, bloque, donde)
     hn = ln(params["ln_f"], h)

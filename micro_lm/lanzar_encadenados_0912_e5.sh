@@ -18,6 +18,13 @@ uno_rot() {  # familia donde unidad cuentas...
 # --- 15:55 · relanzar lo pendiente. Las 12 vueltas se agotaron sin T4 a media tarde; nd3_s4 y nd3_s6
 # cerraron (8000), nd3_s5 quedo en 6000, nd3_s3 en 2000, y ne3 NUNCA corrio: la guarda de `donde` en
 # entrenar.py resucitaba `pre` sobre el checkpoint sembrado (arreglado, con smoke local).
+# --- 21:15 · E-7 (§14): pesos propios para la segunda lectura, sembradas de kc3_s2 (la base saturada).
+if [ "${1:-}" = "e7" ]; then
+  uno_rot ng lat2 3:2 N F G
+  uno_rot ng lat2 3:3 C L D
+  uno_rot ng lat2 3:4 M K A
+  exit 0
+fi
 # --- 17:35 · E-6 (§12): cuatro sembradas de kc3_s1 (la base de la unica que arranco), otra semilla de datos.
 if [ "${1:-}" = "e6" ]; then
   uno_rot nf lat2 3:3 F N

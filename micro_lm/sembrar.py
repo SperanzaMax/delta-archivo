@@ -63,6 +63,10 @@ def main():
                     help="12-sep (E-5): bifurcar la posicion/forma de la query de lectura (p.ej. lat2 -> "
                          "attn). Se borra `donde` de la config para que la guarda no aborte, y queda "
                          "declarado en `sembrado_de`.")
+    ap.add_argument("--lectura-propia", action="store_true",
+                    help="12-sep (§14): agrega qr2/wo2 al modulo del archivo, COPIA de qr/wo, para que la "
+                         "segunda lectura tenga pesos propios. Arranca identico al compartido; el gradiente "
+                         "decide si los separa. Queda en config['lectura_propia'].")
     a = ap.parse_args()
 
     with open(a.origen, "rb") as f:
@@ -92,6 +96,12 @@ def main():
         borradas["semilla"] = cfg.get("semilla"); cfg["semilla"] = a.semilla
     if a.donde is not None:
         borradas["donde"] = cfg.pop("donde", None)
+    if a.lectura_propia:
+        import numpy as np
+        arch = dict(params["arch"])
+        arch["qr2"] = np.array(arch["qr"]).copy(); arch["wo2"] = np.array(arch["wo"]).copy()
+        params["arch"] = arch; cfg["lectura_propia"] = True
+        print("  qr2/wo2 agregados como copia de qr/wo: la segunda lectura tiene pesos propios")
     cfg["horizonte"] = a.horizonte
     cfg["pasos"] = a.horizonte
     nuevo = {"params": params, "config": cfg, "paso": 0,
