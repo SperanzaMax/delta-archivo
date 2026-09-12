@@ -189,6 +189,6 @@ def medir(ruta):
 if __name__ == "__main__":
     rutas = sys.argv[1:] or [os.path.join(AQUI, "ckpts", "kc3_s1.pkl")]
     out = [medir(r) for r in rutas]
-    nombre = os.path.join(AQUI, "corridas_20260911", os.environ.get("SALIDA", "encadenados_intervencion.json"))
+    nombre = os.path.join(AQUI, "corridas_" + time.strftime("%Y%m%d"), os.environ.get("SALIDA", "encadenados_intervencion.json"))
     json.dump(out, open(nombre, "w"), indent=1)
     print("\nguardado en", nombre)

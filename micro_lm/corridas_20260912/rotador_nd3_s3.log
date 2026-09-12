@@ -35,3 +35,57 @@ VIVO= False ULTIMO= listo: {'paso': 2000, 'truncados': 0.0, 'p_nose': 0.4, 'mezc
 -- vuelta 1 · cuenta F · faltan: 3:3 · 11:05:42
    503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
 -- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- N la esta usando otro proceso, se saltea
+-- vuelta 2 · cuenta F · faltan: 3:3 · 11:15:49
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta N · faltan: 3:3 · 11:25:55
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta F · faltan: 3:3 · 11:26:01
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 4 · cuenta N · faltan: 3:3 · 11:36:07
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta F · faltan: 3:3 · 11:36:13
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 5 · cuenta N · faltan: 3:3 · 11:46:20
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta F · faltan: 3:3 · 11:46:26
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 6 · cuenta N · faltan: 3:3 · 11:56:32
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta F · faltan: 3:3 · 11:56:38
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta N · faltan: 3:3 · 12:06:44
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta F · faltan: 3:3 · 12:06:50
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta N · faltan: 3:3 · 12:16:56
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta F · faltan: 3:3 · 12:17:02
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 9 · cuenta N · faltan: 3:3 · 12:27:08
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 · cuenta F · faltan: 3:3 · 12:27:14
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 10 · cuenta N · faltan: 3:3 · 12:37:20
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 · cuenta F · faltan: 3:3 · 12:37:26
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 11 · cuenta N · faltan: 3:3 · 12:47:33
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 · cuenta F · faltan: 3:3 · 12:47:39
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 12 · cuenta N · faltan: 3:3 · 12:57:44
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 12 · cuenta F · faltan: 3:3 · 12:57:50
+   503 en F (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 12 recorrida entera sin T4 en ninguna; descanso 10 min

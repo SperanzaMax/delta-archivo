@@ -93,15 +93,15 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
 
 <header>
   <div class="wrap">
-    <p class="eyebrow">delta-archivo · tablero · 11 de septiembre de 2026</p>
+    <p class="eyebrow">delta-archivo · tablero · 12 de septiembre de 2026</p>
     <h1>Tres preguntas al archivo</h1>
     <p class="lead">Tres ideas de Maxi sobre cómo cambiaría un modelo de frontera si llevara el archivo
       adentro. Cada una es una etapa: qué está probado, qué se está midiendo ahora y qué falta.</p>
     <div class="resumen">
-      <div><span class="k">tareas hechas</span><span class="v h">11</span></div>
+      <div><span class="k">tareas hechas</span><span class="v h">13</span></div>
       <div><span class="k">en curso</span><span class="v c">2</span></div>
       <div><span class="k">por hacer</span><span class="v p">8</span></div>
-      <div><span class="k">el número del día</span><span class="v h">0,93 vs 0,08</span></div>
+      <div><span class="k">el número del día</span><span class="v h">0,76 vs 0,24</span></div>
     </div>
     <div class="leyenda">
       <span class="h"><i>✓</i> hecha, con resultado</span>
@@ -120,7 +120,7 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
       <p class="pregunta">«¿Qué pasaría si ese modelo de frontera fuera con nuestro archivo y es entrenado y el
         corte sería el día 1 de enero, después sólo tendría que ir recibiendo la actualización de los
         próximos días para que esté al día y <b>no ser reentrenado todos los días</b>?»</p>
-      <span class="estado c">● la mitad probada, la otra mitad en curso</span>
+      <span class="estado c">● lo básico probado; el razonamiento con el archivo, a medias</span>
     </div>
     <div class="tareas">
       <div class="cabtab"><span></span><span>tarea</span><span>resultado y qué significa</span></div>
@@ -140,14 +140,22 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
         <div class="t"><b>Hasta dónde generaliza</b><small>P1 · 11-sep</small></div>
         <div class="r"><span class="num h">0,86 / 0,87 / 0,86 con 30.000 · el denso 0,00</span>
           <span>186 veces más entradas que las que vio entrenando, y la caída es lenta. Lo que decide es que la propia salga entre las dos mejores, y eso no depende de cuántas haya.</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>¿Puede razonar con lo que está en el archivo? (1) Sí, y lo hace al escribir</b><small>hechos encadenados · kc3 + intervención · 12-sep</small></div>
+        <div class="r"><span class="num h">«¿cuánto mide el director de barrio?» → 0,93 / 0,88 con una sola lectura</span>
+          <span>La predicción decía que con una lectura no podía, y pudo. La intervención muestra por qué: el modelo escribe cada entrada con la conversación entera en la cabeza, así que «la altura de yamil» ya lleva adentro que yamil es el director. Movida a otra conversación, o dicha antes, cae a 0,13-0,22 (azar). <b>El archivo guarda frases con su contexto, no hechos sueltos.</b></span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>(2) Y al leer, si lee dos veces, aunque no siempre arranca</b><small>nc3 contra nd3 · 12-sep</small></div>
+        <div class="r"><span class="num h">una lectura: 0,24 / 0,31 (azar entre 3) · dos lecturas: 0,76 y 0,31</span>
+          <span>Con el camino de escritura cortado (el hecho en otra conversación, en orden barajado), leer una vez no alcanza. Leyendo también en el tercer bloque, una de dos semillas encadena: la segunda lectura pone 0,61 de su atención en la entrada correcta (uniforme, 0,33, en las que no). Costó tres versiones de la tarea: dos tenían atajos (el orden de escritura y el conteo) que se detectaron y cerraron.</span></div></div>
       <div class="tarea c"><span class="m">●</span>
-        <div class="t"><b>¿Puede razonar con lo que está en el archivo?</b><small>hechos encadenados · kc3/kd3 corriendo</small></div>
-        <div class="r"><span class="num c">«¿cuánto mide el director de barrio?» exige leer dos veces</span>
-          <span>Predicción escrita antes: con lectura en un solo bloque no puede (la consulta se forma sobre el texto y el nombre leído no está en el texto); con lectura en dos bloques, sí. La primera versión de la tarea tenía un atajo y se cerró antes de seguir.</span></div></div>
+        <div class="t"><b>¿Cuántas veces arranca la segunda lectura, y la query global ayuda?</b><small>nd3_s3-s6 y ne3 (attn) corriendo</small></div>
+        <div class="r"><span class="num c">6 unidades en Colab, 8.000 pasos · primer tramo: 0,09-0,41</span>
+          <span>Cuatro copias con otro orden de datos miden la tasa de arranque (predicho: 2-4 de 6). Dos con atención completa miden si la ventana de la conv es lo que frena. Abierto además: nadie aprendió a decir «no sé» en la pregunta de dos saltos (0,00-0,04).</span></div></div>
       <div class="tarea c"><span class="m">●</span>
-        <div class="t"><b>Escalar el entrenamiento</b><small>tw3_s0 · 520 entradas viejas por paso</small></div>
-        <div class="r"><span class="num c">0,909 con archivo largo al paso 500 · 7,5 s/paso</span>
-          <span>Más entradas viejas en el entrenamiento, con gradiente (la versión sin gradiente diverge, medido). Al cerrar se mide contra 3.280, 10.000 y 30.000.</span></div></div>
+        <div class="t"><b>Escalar el entrenamiento</b><small>tw3_s0 · 520 entradas viejas por paso · 12-sep</small></div>
+        <div class="r"><span class="num c">0,967 con archivo largo al cerrar (2.000 pasos) · en archivo corto 0,874</span>
+          <span>Más entradas viejas en el entrenamiento, con gradiente (la versión sin gradiente diverge, medido). El doble de entradas que tt3 no rompe nada, pero el costo en archivo corto sube (−0,09 contra −0,04). El banco contra 3.280, 10.000 y 30.000 está corriendo.</span></div></div>
       <div class="tarea p"><span class="m">○</span>
         <div class="t"><b>Un índice para leer más de 30.000</b></div>
         <div class="r"><span>La lectura es lineal en N. Para una memoria de años hace falta leer sólo las candidatas (búsqueda aproximada). No está implementado.</span></div></div>
@@ -188,7 +196,7 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
         <div class="r"><span>Next-token sobre los cuentos para la forma, más episodios de hechos en lenguaje natural para la memoria. Vocabulario abierto, respuesta de varios tokens: ahí la alucinación que importa tiene casos reales.</span></div></div>
       <div class="tarea p"><span class="m">○</span>
         <div class="t"><b>¿Se razona igual sobre hechos del archivo que sobre hechos en los pesos?</b></div>
-        <div class="r"><span>Nadie lo sabe. Los hechos encadenados de la etapa 1 son el primer paso. Lo realista es un diseño mixto: pesos con el conocimiento general hasta el corte, archivo para lo posterior y lo personal.</span></div></div>
+        <div class="r"><span>Nadie lo sabe. Los hechos encadenados de la etapa 1 ya dan el primer paso: dos saltos se pueden, por dos caminos. Lo realista es un diseño mixto: pesos con el conocimiento general hasta el corte, archivo para lo posterior y lo personal.</span></div></div>
       <div class="tarea p"><span class="m">○</span>
         <div class="t"><b>Simular la actualización mensual</b></div>
         <div class="r"><span>Reentrenar el modelo, reescribir el archivo con los pesos nuevos y medir que no se pierda nada de lo archivado ni de lo que sabía. Es el experimento que responde la pregunta tal como está hecha.</span></div></div>
@@ -232,7 +240,7 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
 
   <footer>
     <p>Fuentes: <span class="mono">PREREG_TOPK_ENTRENADO.md</span> §1-§11, <span class="mono">PLAN_PRUEBAS_20260911_TARDE.md</span>,
-      <span class="mono">PREREG_ENCADENADOS.md</span>, <span class="mono">PREREG_RAG_PROMPT.md</span>, <span class="mono">piloto_lectura_20260911.json</span>,
+      <span class="mono">PREREG_ENCADENADOS.md</span> §6-§10 (enmiendas E-2 a E-5), <span class="mono">PREREG_RAG_PROMPT.md</span>, <span class="mono">piloto_lectura_20260911.json</span>,
       <span class="mono">controles_20260911/</span>. Los números son del micro-LM de laboratorio (866.675 parámetros, 242 palabras); lo que dicen de un modelo grande es extrapolación, marcada como tal.</p>
   </footer>
 </div>

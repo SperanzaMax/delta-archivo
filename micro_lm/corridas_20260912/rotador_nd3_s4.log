@@ -39,3 +39,95 @@ VIVO= False ULTIMO= listo: {'paso': 2000, 'truncados': 0.0, 'p_nose': 0.4, 'mezc
    -> tramo 3:4 en G (desde el paso 2000)
 == tramo · cuenta G · sesion tr2_g_1114 · nd3_s4 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
 [colab] Uploaded '/tmp/tmp.nfffEHHTtB/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (13M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1877
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= W0912 14:15:24.918328    1900 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 14:15:24.918328    1900 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= ── eval: vigente 0.9563 · anterior 0.9613 · abstencion 0.3750 · truncados 0.0000 · compuesta 0.3854 · nose_comp 0.0938 · nose 0.7998 (ent 0.8531/rel 0.9273) · falsa_abst 0.0647 
+   [checkpoint parcial guardado: paso 2500]
+   [pelicula parcial: 2900 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9563 · anterior 0.9613 · abstencion 0.3750 · truncados 0.0000 · compuesta 0.3854 · nose_comp 0.0938 · nose 0.7998 (ent 0.8531/rel 0.9273) · falsa_abst 0.0647 
+VIVO= True ULTIMO= ── eval: vigente 0.9582 · anterior 0.9750 · abstencion 0.4043 · truncados 0.0000 · compuesta 0.2292 · nose_comp 0.4521 · nose 0.8520 (ent 0.8657/rel 0.9493) · falsa_abst 0.0760 
+VIVO= True ULTIMO= ── eval: vigente 0.9582 · anterior 0.9750 · abstencion 0.4043 · truncados 0.0000 · compuesta 0.2292 · nose_comp 0.4521 · nose 0.8520 (ent 0.8657/rel 0.9493) · falsa_abst 0.0760 
+VIVO= True ULTIMO= ── eval: vigente 0.9916 · anterior 1.0000 · abstencion 0.3516 · truncados 0.0000 · compuesta 0.3646 · nose_comp 0.0625 · nose 0.8142 (ent 0.8870/rel 0.9409) · falsa_abst 0.0098 
+   [checkpoint parcial guardado: paso 3500]
+   [pelicula parcial: 3900 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9916 · anterior 1.0000 · abstencion 0.3516 · truncados 0.0000 · compuesta 0.3646 · nose_comp 0.0625 · nose 0.8142 (ent 0.8870/rel 0.9409) · falsa_abst 0.0098 
+VIVO= False ULTIMO= listo: {'paso': 4000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.973428230441231, 'anterior': 0.96875, 'nose': 0.8037604320962641, 'nose_ent': 0.8383609854198089, 'nose_rel': 0.9660790598290598, 'falsa_abst': 0.03098055841958281, 'abstencion': 0.357421875, 'compuesta': 0.3489583333333333, 'nose_comp': 0.04583333333333334, 'topk': 0, 'cruzada_largo': {'vigente': 0.19420953123726736, 'anterior': 0.6361111111111111, 'nose': 0.8316958202827768, 'nose_ent': 0.8531095130359836, 'nose_rel': 0.8889745670995671, 'falsa_abst': 0.5238930057054532, 'abstencion': 0.6484375, 'compuesta': 0.1201388888888889, 'nose_comp': 0.5833333333333333}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4.pkl (13M)
+   pelicula en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4_fotos.json (40 cuadros)
+   ultimo paso registrado: "paso": 4000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_g_1114)
+   tramo de 3:4 cerrado en el paso 4000 de 8000
+   tr2_g_1114 parada; pendientes ahora: 3:4
+-- vuelta 2 · cuenta J · faltan: 3:4 · 11:33:51
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta G · faltan: 3:4 · 11:43:58
+   >> OTORGADA en G (T4): [tr2_g_1143] gpu-t4-s-kkb-usw1b2-1mfrfkyaj0pt5 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:4 en G (desde el paso 4000)
+== tramo · cuenta G · sesion tr2_g_1143 · nd3_s4 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
+[colab] Uploaded '/tmp/tmp.jkzRWP6M9V/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (13M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 652
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= W0912 14:44:50.451355     680 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 14:44:50.451355     680 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= ── eval: vigente 0.9763 · anterior 1.0000 · abstencion 0.3496 · truncados 0.0000 · compuesta 0.3021 · nose_comp 0.0000 · nose 0.8078 (ent 0.8982/rel 0.9308) · falsa_abst 0.0142 
+   [checkpoint parcial guardado: paso 4500]
+   [pelicula parcial: 4900 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9763 · anterior 1.0000 · abstencion 0.3496 · truncados 0.0000 · compuesta 0.3021 · nose_comp 0.0000 · nose 0.8078 (ent 0.8982/rel 0.9308) · falsa_abst 0.0142 
+VIVO= True ULTIMO= ── eval: vigente 0.9961 · anterior 1.0000 · abstencion 0.3613 · truncados 0.0000 · compuesta 0.3333 · nose_comp 0.1042 · nose 0.8402 (ent 0.8901/rel 0.9861) · falsa_abst 0.0102 
+VIVO= True ULTIMO= ── eval: vigente 0.9961 · anterior 1.0000 · abstencion 0.3613 · truncados 0.0000 · compuesta 0.3333 · nose_comp 0.1042 · nose 0.8402 (ent 0.8901/rel 0.9861) · falsa_abst 0.0102 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3535 · truncados 0.0000 · compuesta 0.2969 · nose_comp 0.0312 · nose 0.8291 (ent 0.9070/rel 0.9618) · falsa_abst 0.0032 
+   [checkpoint parcial guardado: paso 5500]
+   [pelicula parcial: 6000 pasos]
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3535 · truncados 0.0000 · compuesta 0.2969 · nose_comp 0.0312 · nose 0.8291 (ent 0.9070/rel 0.9618) · falsa_abst 0.0032 
+VIVO= False ULTIMO= listo: {'paso': 6000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 1.0, 'anterior': 1.0, 'nose': 0.824954347150749, 'nose_ent': 0.8951420311714429, 'nose_rel': 0.9771825396825398, 'falsa_abst': 0.0, 'abstencion': 0.349609375, 'compuesta': 0.328125, 'nose_comp': 0.0, 'topk': 0, 'cruzada_largo': {'vigente': 0.08974279635074238, 'anterior': 0.47916666666666663, 'nose': 0.8250247739378174, 'nose_ent': 0.9164298732313438, 'nose_rel': 0.98125, 'falsa_abst': 0.6083446140354865, 'abstencion': 0.6953125, 'compuesta': 0.20907738095238093, 'nose_comp': 0.0}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4.pkl (13M)
+   pelicula en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4_fotos.json (60 cuadros)
+   ultimo paso registrado: "paso": 6000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_g_1143)
+   tramo de 3:4 cerrado en el paso 6000 de 8000
+   tr2_g_1143 parada; pendientes ahora: 3:4
+-- vuelta 3 · cuenta J · faltan: 3:4 · 12:03:17
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 4 · cuenta G · faltan: 3:4 · 12:13:23
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta J · faltan: 3:4 · 12:13:29
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 5 · cuenta G · faltan: 3:4 · 12:23:35
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta J · faltan: 3:4 · 12:23:41
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 6 · cuenta G · faltan: 3:4 · 12:33:47
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta J · faltan: 3:4 · 12:33:53
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta G · faltan: 3:4 · 12:43:59
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta J · faltan: 3:4 · 12:44:05
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta G · faltan: 3:4 · 12:54:11
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta J · faltan: 3:4 · 12:54:17
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
