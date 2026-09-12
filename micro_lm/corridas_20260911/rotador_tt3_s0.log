@@ -1,0 +1,62 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_tt3_s0.log (rotador 719269)
+== rotador2 · familia 'tt' · p_nose 0.2 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 2/0 · relleno 0 (real,solapado) · fotos 8 · unidades 3:0 · cuentas: A E
+-- vuelta 1 · cuenta A · faltan: 3:0 · 14:47:54
+   >> OTORGADA en A (T4): [tr2_a_1447] gpu-t4-s-kkb-usw4b0-12ajqm0ckvij6 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en A (desde el paso 1250)
+== tramo · cuenta A · sesion tr2_a_1447 · tt3_s0 · +2000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 26 · sello rel · pert 1 · micro 8 · b_eval 8 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0
+[colab] Uploaded '/tmp/tmp.ueJnF6OFLN/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tt3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tt3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3675
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1360 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1472 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1584 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1704 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9744 · anterior 0.9694 · abstencion 0.2109 · truncados 0.0000 · nose 0.9308 (ent 0.8362/rel 0.9651) · falsa_abst 0.0206 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+   [checkpoint parcial guardado: paso 1750]
+   [pelicula parcial: 1816 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+   [checkpoint parcial guardado: paso 1750]
+   [pelicula parcial: 1936 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= True ULTIMO= ── eval: vigente 0.9842 · anterior 1.0000 · abstencion 0.1953 · truncados 0.0000 · nose 0.8695 (ent 0.7902/rel 0.9186) · falsa_abst 0.0115 
+VIVO= False ULTIMO= listo: {'paso': 2000, 'truncados': 0.0, 'p_nose': 0.2, 'mezcla_usada': {'vigente': 0.52, 'anterior': 0.27999999999999997, 'nose': 0.2}, 'mezcla_promedio': {'vigente': 0.52, 'anterior': 0.2799999999999999, 'nose': 0.2}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.2, 'vigente': 0.9823660714285714, 'anterior': 1.0, 'nose': 0.9386792452830188, 'nose_ent': 0.8563218390804599, 'nose_rel': 0.9767441860465116, 'falsa_abst': 0.015531994047619048, 'abstencion': 0.20703125, 'topk': 2, 'cruzada_corto': {'vigente': 0.910573193644542, 'anterior': 0.8331755050505051, 'nose': 0.6454545454545455, 'nose_ent': 0.6136217948717948, 'nose_rel': 0.7262581168831168, 'falsa_abst': 0.07178961869791964, 'abstencion': 0.185546875}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tt3_s0.pkl (10M)
+   pelicula en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tt3_s0_fotos.json (281 cuadros)
+   ultimo paso registrado: "paso": 2000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_a_1447)
+   tramo de 3:0 cerrado en el paso 2000 de 2000
+   tr2_a_1447 parada; pendientes ahora: 
+== todo completo

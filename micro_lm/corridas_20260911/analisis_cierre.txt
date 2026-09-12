@@ -1,0 +1,24 @@
+unidad    paso  K largo vig    ant   nose  falsa corto vig corto nose
+ts3_s0    8000  2    1.0000  1.000  1.000  0.000    0.5787      0.389
+ts3_s1    2000  2    0.9686  0.979  0.996  0.013    0.9409      0.226
+ts3_s2    2000  2    0.9647  0.957  0.913  0.018    0.8030      0.524
+ds3_s0    8000  0    1.0000  1.000  1.000  0.000    0.9656      0.273
+ds3_s1    2000  0    1.0000  1.000  1.000  0.000    0.9746      0.176
+ds3_s2    2000  0    1.0000  0.939  0.996  0.000    0.9921      0.028
+
+OJO: no todas llegaron al 8.000; lo de abajo es PARCIAL
+
+H1  ts3 vigente largo al final: [1.0, 0.9686371994909259, 0.9647063389068395]  ->  CUMPLE (>= 0,90 en >= 2 de 3)
+H2  media ts3 0.9778 - media ds3 1.0000 = -0.0222  ->  NO cumple: EMPATE, lo que enseño fue el archivo largo y no la seleccion
+H3  archivo corto: ts3 0.7742 contra ds3 0.9774 (-0.2032)  ->  NO cumple: el top-k cuesta en archivo corto
+H4  ts3_s0 nose en 2500: 0.9714459733814573  ->  sano
+H4  ts3_s1 nose en 2500: sin evaluacion  ->  ?
+H4  ts3_s2 nose en 2500: sin evaluacion  ->  ?
+
+PELICULA (ultimo cuadro): masa en la correcta / en lo propio / en lo viejo · prediccion
+  ts3_s0   paso  8000 K2 correcta 0.908 propio 0.908 viejo 0.092 pred 35 ok · 320 cuadros
+  ts3_s1   paso  2000 K2 correcta 0.738 propio 0.738 viejo 0.262 pred 35 ok · 80 cuadros
+  ts3_s2   paso  2000 K2 correcta 0.917 propio 0.917 viejo 0.083 pred 35 ok · 80 cuadros
+  ds3_s0   paso  8000 K0 correcta 0.624 propio 0.640 viejo 0.360 pred 35 ok · 320 cuadros
+  ds3_s1   paso  2000 K0 correcta 0.717 propio 0.746 viejo 0.254 pred 35 ok · 80 cuadros
+  ds3_s2   paso  2000 K0 correcta 0.783 propio 0.784 viejo 0.216 pred 35 ok · 80 cuadros

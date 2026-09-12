@@ -1,0 +1,129 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_tf3_s2.log (rotador 1678181)
+== rotador2 · familia 'tf' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 2/0 · relleno 0 (real,solapado) · fotos 25 · unidades 3:2 · cuentas: F J
+-- vuelta 1 · cuenta F · faltan: 3:2 · 09:53:19
+   >> OTORGADA en F (T4): [tr2_f_0953] gpu-t4-s-kkb-usw4a1-lqk1gfhax9vj | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en F (desde el paso 0)
+== tramo · cuenta F · sesion tr2_f_0953 · tf3_s2 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 36 · sello rel · pert 1 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 25 · ses-extra-sin-grad 1
+[colab] Uploaded '/tmp/tmp.FXUmxWylkQ/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tf3_s2.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 907
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 200 pasos]
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 400 pasos]
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:54:08.864930     931 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 625 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 825 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.3934 · anterior 0.2693 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= paso   1000  loss 6.0570  acc 0.0312  (2318s) 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 1050 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1250 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1475 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0137 · anterior 0.0179 · abstencion 0.0469 · truncados 0.0000 · nose 0.0775 (ent 0.1046/rel 0.0494) · falsa_abst 0.0239 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_f_0953)
+   tramo de 3:2 cerrado en el paso 1000 de 8000
+   tr2_f_0953 parada; pendientes ahora: 3:2
+-- vuelta 1 · cuenta J · faltan: 3:2 · 10:53:30
+   >> OTORGADA en J (T4): [tr2_j_1053] gpu-t4-s-kkb-ass1c1-j6y4y2pm2zmn | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en J (desde el paso 1000)
+== tramo · cuenta J · sesion tr2_j_1053 · tf3_s2 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 36 · sello rel · pert 1 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 25 · ses-extra-sin-grad 1
+[colab] Uploaded '/tmp/tmp.Zf7XUpdLtK/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tf3_s2.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tf3_s2_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1859
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1200 pasos]
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1425 pasos]
+VIVO= True ULTIMO= W0911 13:55:03.858930    1883 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= paso   1500  loss 5.7402  acc 0.0156  (1152s) 
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1650 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1875 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0081 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= paso   2000  loss 5.9045  acc 0.0000  (2316s) 
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 2000]
+   [pelicula parcial: 2100 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 2000]
+   [pelicula parcial: 2350 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0095 · anterior 0.0000 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.0121 · anterior 0.0179 · abstencion 0.0000 · truncados 0.0000 · nose 0.0000 (ent 0.0000/rel 0.0000) · falsa_abst 0.0000 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_j_1053)
+   tramo de 3:2 cerrado en el paso 2500 de 8000
+   tr2_j_1053 parada; pendientes ahora: 3:2
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta F · faltan: 3:2 · 12:05:41
+   >> OTORGADA en F (T4): [tr2_f_1205] gpu-t4-s-kkb-ass1c2-2413ook5gictp | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:2 en F (desde el paso 2500)
+== tramo · cuenta F · sesion tr2_f_1205 · tf3_s2 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 36 · sello rel · pert 1 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 25 · ses-extra-sin-grad 1
+[colab] Uploaded '/tmp/tmp.xqqXCIagPQ/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tf3_s2.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tf3_s2_fotos.json' to '/content/ck_fotos.json'
+Terminado
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3361

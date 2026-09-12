@@ -1,0 +1,36 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_xb3_s0.log (rotador 3202969)
+== rotador2 · familia 'xb' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 0/0 · relleno 0 (real,solapado) · fotos 0 · unidades 3:0 · cuentas: L D
+-- vuelta 1 · cuenta L · faltan: 3:0 · 12:07:53
+   >> OTORGADA en L (T4): [tr2_l_1207] gpu-t4-s-kkb-euw4c0-2q7alijrzc6z4 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en L (desde el paso 0)
+== tramo · cuenta L · sesion tr2_l_1207 · xb3_s0 · +600 de 600 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 12 · sello rel · pert 1 · micro 8 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 0 · ses-extra-sin-grad 0
+[colab] Uploaded '/tmp/tmp.Y65plaD9Z2/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/xb3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 653
+== polling cada 2 min (presupuesto ~20 min, tope 60)
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 600 (0 evaluaciones ya hechas) 
+VIVO= True ULTIMO= REANUDA desde /content/ck.pkl: paso 0 de 600 (0 evaluaciones ya hechas) 
+VIVO= True ULTIMO= ── eval: vigente 0.7585 · anterior 0.8006 · abstencion 0.3633 · truncados 0.0000 · nose 0.7638 (ent 0.7318/rel 0.7932) · falsa_abst 0.1038 
+   [checkpoint parcial guardado: paso 100]
+VIVO= True ULTIMO= ── eval: vigente 0.7585 · anterior 0.8006 · abstencion 0.3633 · truncados 0.0000 · nose 0.7638 (ent 0.7318/rel 0.7932) · falsa_abst 0.1038 
+VIVO= True ULTIMO= ── eval: vigente 0.8311 · anterior 0.9821 · abstencion 0.3555 · truncados 0.0000 · nose 0.8003 (ent 0.7641/rel 0.8274) · falsa_abst 0.0643 
+VIVO= True ULTIMO= ── eval: vigente 0.9153 · anterior 1.0000 · abstencion 0.3770 · truncados 0.0000 · nose 0.8927 (ent 0.8749/rel 0.8732) · falsa_abst 0.0391 
+VIVO= True ULTIMO= ── eval: vigente 0.9153 · anterior 1.0000 · abstencion 0.3770 · truncados 0.0000 · nose 0.8927 (ent 0.8749/rel 0.8732) · falsa_abst 0.0391 
+   [checkpoint parcial guardado: paso 300]
+VIVO= True ULTIMO= ── eval: vigente 0.9725 · anterior 1.0000 · abstencion 0.4023 · truncados 0.0000 · nose 0.9923 (ent 0.9812/rel 1.0000) · falsa_abst 0.0189 
+VIVO= True ULTIMO= ── eval: vigente 0.9725 · anterior 1.0000 · abstencion 0.4023 · truncados 0.0000 · nose 0.9923 (ent 0.9812/rel 1.0000) · falsa_abst 0.0189 
+VIVO= True ULTIMO= ── eval: vigente 0.9963 · anterior 1.0000 · abstencion 0.3906 · truncados 0.0000 · nose 0.9871 (ent 0.9688/rel 1.0000) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 0.9963 · anterior 1.0000 · abstencion 0.3906 · truncados 0.0000 · nose 0.9871 (ent 0.9688/rel 1.0000) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 500]
+VIVO= False ULTIMO= listo: {'paso': 600, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 1.0, 'anterior': 1.0, 'nose': 0.980109126984127, 'nose_ent': 0.953125, 'nose_rel': 1.0, 'falsa_abst': 0.0, 'abstencion': 0.388671875, 'topk': 0, 'cruzada_corto': {'vigente': 0.99609375, 'anterior': 0.874797077922078, 'nose': 0.6953890614216701, 'nose_ent': 0.6977439227439228, 'nose_rel': 0.6889880952380952, 'falsa_abst': 0.0, 'abstencion': 0.2734375}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/xb3_s0.pkl (10M)
+   ultimo paso registrado: "paso": 600
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_1207)
+   tramo de 3:0 cerrado en el paso 600 de 600
+   tr2_l_1207 parada; pendientes ahora: 
+== todo completo

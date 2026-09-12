@@ -1,0 +1,14 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_tp.log (rotador 519034)
+== rotador2 · familia 'tp' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 2/0 · relleno 3240 (real,viejo) · fotos 100 · unidades 3:0,3:1,3:2 · cuentas: H K L G C D
+-- vuelta 1 · cuenta H · faltan: 3:0 3:1 3:2 · 08:04:30
+   >> OTORGADA en H (T4): [tr2_h_0804] gpu-t4-s-kkb-ass1c1-1z6kpsq6zkxwb | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en H (desde el paso 0)
+== tramo · cuenta H · sesion tr2_h_0804 · tp3_s0 · +2000 de 26000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello rel · pert 1 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 3240 (real, viejo, cada 1000) · fotos 100
+[colab] Uploaded '/tmp/tmp.XycEgtWAU2/micro.tgz' to '/content/micro.tgz'
+== sin checkpoint local: se limpia /content/ck.pkl por si quedo de otra unidad
+no habia ck_fotos.json
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1212
+== polling cada 2 min (presupuesto ~40 min)
+VIVO= True ULTIMO= W0911 11:05:37.589572    1234 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 

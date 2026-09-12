@@ -1,0 +1,265 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_tw3_s0.log (rotador 2789374)
+== rotador2 · familia 'tw' · p_nose 0.2 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 2/0 · relleno 0 (real,solapado) · fotos 8 · unidades 3:0 · cuentas: E G
+-- vuelta 1 · cuenta E · faltan: 3:0 · 18:15:45
+   >> OTORGADA en E (T4): [tr2_e_1815] gpu-t4-s-kkb-usw1b0-2xu7t4fiuc2uk | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en E (desde el paso 0)
+== tramo · cuenta E · sesion tr2_e_1815 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0
+[colab] Uploaded '/tmp/tmp.igyG5IMlOL/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 5196
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 56 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 120 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 184 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 248 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 304 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 368 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 432 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.4554 · anterior 0.8125 · abstencion 0.2461 · truncados 0.0000 · nose 0.3242 (ent 0.3293/rel 0.2576) · falsa_abst 0.2310 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_e_1815)
+   tramo de 3:0 cerrado en el paso 250 de 2000
+   tr2_e_1815 parada; pendientes ahora: 3:0
+-- vuelta 1 · cuenta G · faltan: 3:0 · 19:17:15
+   >> OTORGADA en G (T4): [tr2_g_1917] gpu-t4-s-kkb-usw4a1-1q8yt380e6rkp | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en G (desde el paso 250)
+== tramo · cuenta G · sesion tr2_g_1917 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0
+[colab] Uploaded '/tmp/tmp.daxx52DppF/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3409
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 304 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 368 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 432 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 250]
+   [pelicula parcial: 496 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 560 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 624 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 688 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9094 · anterior 0.9911 · abstencion 0.2070 · truncados 0.0000 · nose 0.8125 (ent 0.7927/rel 0.8636) · falsa_abst 0.0755 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_g_1917)
+   tramo de 3:0 cerrado en el paso 500 de 2000
+   tr2_g_1917 parada; pendientes ahora: 3:0
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta E · faltan: 3:0 · 20:29:00
+   >> OTORGADA en E (T4): [tr2_e_2029] gpu-t4-s-kkb-usw4a1-1zik1t0jncz6h | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en E (desde el paso 500)
+== tramo · cuenta E · sesion tr2_e_2029 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0
+[colab] Uploaded '/tmp/tmp.0hrOrBFtzH/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2904
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 560 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 624 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 680 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 744 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 808 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 864 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 928 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9882 · anterior 0.9732 · abstencion 0.1406 · truncados 0.0000 · nose 0.7734 (ent 0.6829/rel 0.8939) · falsa_abst 0.0079 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_e_2029)
+   tramo de 3:0 cerrado en el paso 750 de 2000
+   tr2_e_2029 parada; pendientes ahora: 3:0
+-- vuelta 2 · cuenta G · faltan: 3:0 · 21:30:20
+   >> OTORGADA en G (T4): [tr2_g_2130] gpu-t4-s-kkb-usw4a2-29z5ofjbq6ox8 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en G (desde el paso 750)
+== tramo · cuenta G · sesion tr2_g_2130 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0
+[colab] Uploaded '/tmp/tmp.QRdTnJa1up/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2000
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 808 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 864 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 928 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 750]
+   [pelicula parcial: 992 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1048 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1112 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1176 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9643 · abstencion 0.1602 · truncados 0.0000 · nose 0.7969 (ent 0.6951/rel 0.9242) · falsa_abst 0.0230 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_g_2130)
+   tramo de 3:0 cerrado en el paso 1000 de 2000
+   tr2_g_2130 parada; pendientes ahora: 3:0
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta E · faltan: 3:0 · 22:41:03
+   >> OTORGADA en E (T4): [tr2_e_2241] gpu-t4-s-kkb-usw4a1-zzt6m44b5edh | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en E (desde el paso 1000)
+== tramo · cuenta E · sesion tr2_e_2241 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0
+[colab] Uploaded '/tmp/tmp.CokF8hQuuJ/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1112
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1056 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1120 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+Terminado

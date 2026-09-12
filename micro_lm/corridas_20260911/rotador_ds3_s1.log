@@ -1,0 +1,49 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/rotador_ds3_s1.log (rotador 1116148)
+== rotador2 · familia 'ds' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 0/0 · relleno 3240 (real,viejo) · fotos 25 · unidades 3:1 · cuentas: N F
+-- vuelta 1 · cuenta N · faltan: 3:1 · 09:01:21
+   >> OTORGADA en N (T4): [tr2_n_0901] gpu-t4-s-kkb-usw1b1-33j4csr03sjat | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en N (desde el paso 0)
+== tramo · cuenta N · sesion tr2_n_0901 · ds3_s1 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello rel · pert 1 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 3240 (real, viejo, cada 1000) · fotos 25
+[colab] Uploaded '/tmp/tmp.IjibfbV2CO/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (3,4M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ds3_s1.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2629
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= W0911 12:02:24.984427    2653 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0911 12:02:24.984427    2653 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 0.9583 · abstencion 0.4375 · truncados 0.0000 · nose 0.9955 (ent 1.0000/rel 0.9931) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 750 pasos]
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 0.9583 · abstencion 0.4375 · truncados 0.0000 · nose 0.9955 (ent 1.0000/rel 0.9931) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 0.9583 · abstencion 0.4375 · truncados 0.0000 · nose 0.9955 (ent 1.0000/rel 0.9931) · falsa_abst 0.0000 
+VIVO= True ULTIMO= [paso 1001: pool de relleno (4096, 128) (real) en 10.9s] 
+VIVO= True ULTIMO= [paso 1001: pool de relleno (4096, 128) (real) en 10.9s] 
+   [checkpoint parcial guardado: paso 1000]
+   [pelicula parcial: 1550 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9838 · anterior 1.0000 · abstencion 0.4414 · truncados 0.0000 · nose 0.9958 (ent 0.9917/rel 1.0000) · falsa_abst 0.0071 
+VIVO= True ULTIMO= ── eval: vigente 0.9838 · anterior 1.0000 · abstencion 0.4414 · truncados 0.0000 · nose 0.9958 (ent 0.9917/rel 1.0000) · falsa_abst 0.0071 
+VIVO= True ULTIMO= ── eval: vigente 0.9838 · anterior 1.0000 · abstencion 0.4414 · truncados 0.0000 · nose 0.9958 (ent 0.9917/rel 1.0000) · falsa_abst 0.0071 
+VIVO= False ULTIMO= listo: {'paso': 2000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 1.0, 'anterior': 1.0, 'nose': 1.0, 'nose_ent': 1.0, 'nose_rel': 1.0, 'falsa_abst': 0.0, 'abstencion': 0.439453125, 'topk': 0, 'archivo_corto': {'vigente': 0.9745670995670996, 'anterior': 0.8263888888888888, 'nose': 0.17604897225369248}, 'cruzada_largo': {'vigente': 0.5415067862139363, 'anterior': 0.596875, 'nose': 0.6458507910023483, 'nose_ent': 0.5973857981114172, 'nose_rel': 0.6606039793539793, 'falsa_abst': 0.15034330181389005, 'abstencion': 0.359375}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ds3_s1.pkl (10M)
+   pelicula en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ds3_s1_fotos.json (80 cuadros)
+   ultimo paso registrado: "paso": 2000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_n_0901)
+   tramo de 3:1 cerrado en el paso 2000 de 8000
+   tr2_n_0901 parada; pendientes ahora: 3:1
+-- vuelta 1 · cuenta F · faltan: 3:1 · 09:25:05
+   >> OTORGADA en F (T4): [tr2_f_0925] gpu-t4-s-kkb-ass1c0-2w27002lkhf3q | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en F (desde el paso 2000)
+== tramo · cuenta F · sesion tr2_f_0925 · ds3_s1 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello rel · pert 1 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 3240 (real, viejo, cada 1000) · fotos 25
+[colab] Uploaded '/tmp/tmp.n5o3CI9BBL/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ds3_s1.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ds3_s1_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2700
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+Terminado
