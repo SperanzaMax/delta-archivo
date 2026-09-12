@@ -6,7 +6,7 @@
 :root{
   --ground:#1B2230; --surface:#222B3A; --line:#33405150; --ink:#E6E9EE; --ink-2:#AAB3C0; --ink-3:#76808F;
   --pos:#C6614A; --neg:#5F7FB0; --entrada:#6FA86B; --tronco:#7E9FCB; --archivo:#D0913F; --lit:#F2C46B;
-  --nodo-bg:#1B2230;
+  --nodo-bg:#1B2230; --vuelta:#7FC48A;
 }
 :root[data-theme="light"]{ --ground:#1B2230; }
 *{box-sizing:border-box}
@@ -46,14 +46,16 @@ figcaption{color:var(--ink-2);font-size:.9rem;max-width:80ch}
 
   <figure>
     <div class="controles" id="toks" role="group" aria-label="palabra de la pregunta"><span>pregunta</span></div>
-    <div class="lienzo"><canvas id="c" width="1240" height="720" role="img" aria-label="A la izquierda, seis filas de neuronas unidas por pesos fijos: entrada, cuatro bloques y cabeza. A la derecha, ocho frases archivadas como círculos. Desde el bloque 0 y el bloque 2 salen lecturas hacia el archivo; en el signo de pregunta, el bloque 0 reparte su lectura entre las tres frases de altura y el bloque 2 se concentra en la de emma."></canvas></div>
+    <div class="lienzo"><canvas id="c" width="1240" height="760" role="img" aria-label="A la izquierda, seis filas de neuronas unidas por pesos fijos: entrada, cuatro bloques y cabeza. A la derecha, ocho frases archivadas como círculos. Desde el bloque 0 y el bloque 2 salen lecturas hacia el archivo; en el signo de pregunta, el bloque 0 reparte su lectura entre las tres frases de altura y el bloque 2 se concentra en la de emma."></canvas></div>
     <div class="leyenda">
       <span><i style="border-color:var(--pos)"></i>peso positivo</span>
       <span><i style="border-color:var(--neg)"></i>peso negativo</span>
       <span><b style="border-color:var(--entrada)"></b>entrada (tokens)</span>
       <span><b style="border-color:var(--tronco)"></b>neuronas del tronco (12 de 128 por bloque)</span>
       <span><b style="border-color:var(--archivo)"></b>frase archivada (1 vector de 128)</span>
-      <span><i style="border-color:var(--lit)"></i>lectura, grosor = cuánto lee</span>
+      <span><i style="border-color:var(--lit)"></i>① la consulta SALE del bloque y ENTRA a la bitácora (grosor = cuánto lee cada frase)</span>
+      <span><i style="border-color:var(--vuelta)"></i>③ lo leído SALE de la bitácora y ENTRA al mismo bloque, en la misma palabra</span>
+      <span><i style="border-color:var(--archivo)"></i>escritura: del bloque 3 a una frase nueva</span>
     </div>
     <figcaption id="cap"></figcaption>
   </figure>
@@ -81,7 +83,7 @@ const col = n => css.getPropertyValue(n).trim();
 const X0 = 70, X1 = 690, NX = 12;
 const filasY = {entrada: 80, b0: 200, b1: 320, b2: 440, b3: 560, cabeza: 670};
 const xs = Array.from({length: NX}, (_, i) => X0 + i * (X1 - X0) / (NX - 1));
-const AX = 900, AY0 = 150, AY1 = 640;
+const AX = 900, AY0 = 185, AY1 = 640;
 const NT = D.tokens_q.length;
 const E = D.entradas, NE = E.length;
 const ays = E.map((_, i) => AY0 + i * (AY1 - AY0) / (NE - 1));
@@ -121,17 +123,29 @@ function dibujar() {
   lineas(filasY.b1, filasY.b2, D.bloques[1]);
   lineas(filasY.b2, filasY.b3, D.bloques[2]);
   lineas(filasY.b3, filasY.cabeza, D.cabeza);
-  // lecturas del token elegido
+  // --- el circuito de la lectura en el token elegido, numerado
   const p0 = D.p0_por_token[tokSel], p2 = D.p2_por_token[tokSel];
   const xq = xs[tokSel];
-  E.forEach((e, i) => {
-    if (p0[i] > 0.04) flecha(xq, filasY.b0, AX - 14, ays[i], col('--lit'), 0.8 + 6 * p0[i], 0.35 + 0.6 * p0[i]);
-    if (p2[i] > 0.04) flecha(xq, filasY.b2, AX - 14, ays[i], col('--lit'), 0.8 + 6 * p2[i], 0.35 + 0.6 * p2[i]);
-  });
+  function puerto(x, y, n, c) { ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.fillStyle = col('--nodo-bg'); ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = c; ctx.stroke(); texto(String(n), x, y + 1, c, 'center', 11); }
+  function lazo(yB, p, n0) {
+    // ① la consulta sale del bloque en la posicion de la palabra y va a la bitacora
+    E.forEach((e, i) => { if (p[i] > 0.04) flecha(xq + 10, yB - 6, AX - 16, ays[i] - 4, col('--lit'), 0.8 + 6 * p[i], 0.3 + 0.6 * p[i]); });
+    // ③ lo leido (las frases con mas peso) vuelve al mismo bloque, misma palabra
+    E.forEach((e, i) => { if (p[i] > 0.15) flecha(AX - 16, ays[i] + 6, xq + 10, yB + 8, col('--vuelta'), 0.8 + 6 * p[i], 0.3 + 0.6 * p[i]); });
+    puerto(xq + 22, yB - 14, n0, col('--lit'));
+    puerto(xq + 22, yB + 16, n0 + 3, col('--vuelta'));
+  }
+  lazo(filasY.b0, p0, 1);
+  lazo(filasY.b2, p2, 5);
+  // puertos de la bitacora: entra la consulta (compara con todas), sale lo leido (top-2)
+  puerto(AX - 30, AY0 - 44, 2, col('--lit'));
+  texto('la consulta se compara con las claves de TODAS las frases', AX - 16, AY0 - 44, col('--lit'), 'left', 11);
+  puerto(AX - 30, AY1 + 44, 3, col('--vuelta'));
+  texto('salen las 2 de mayor peso (sus valores, sumados)', AX - 16, AY1 + 44, col('--vuelta'), 'left', 11);
   // escritura: del bloque 3 al archivo (una flecha fina por entrada)
-  E.forEach((e, i) => flecha(X1 + 8, filasY.b3, AX - 14, ays[i], col('--archivo'), 0.8, 0.3));
+  E.forEach((e, i) => flecha(X1 + 8, filasY.b3, AX - 14, ays[i], col('--archivo'), 0.8, 0.22));
   // filas
-  const et = {entrada: 'entrada · tokens de la pregunta', b0: 'bloque 0 · lee el archivo (query sobre el texto)', b1: 'bloque 1', b2: 'bloque 2 · lee el archivo (query sobre lo ya leído)', b3: 'bloque 3 · escribe: el vector de la última palabra va al archivo', cabeza: 'cabeza · respuesta'};
+  const et = {entrada: 'entrada · tokens de la pregunta', b0: 'bloque 0 · ① sale la consulta (formada sobre el texto) · ④ entra lo leído', b1: 'bloque 1', b2: 'bloque 2 · ⑤ sale la consulta (formada sobre lo ya leído) · ⑧ entra lo leído', b3: 'bloque 3 · escribe: el vector de la última palabra de cada frase va a la bitácora', cabeza: 'cabeza · respuesta'};
   for (const [k, y] of Object.entries(filasY)) {
     const c = k === 'entrada' ? col('--entrada') : col('--tronco');
     for (let i = 0; i < (k === 'entrada' ? NT : NX); i++) {
@@ -144,7 +158,7 @@ function dibujar() {
   D.tokens_q.slice(0, NX).forEach((t, i) => texto(t, xs[i], filasY.entrada + 20, i === tokSel ? col('--lit') : col('--ink-2'), 'center', 11));
   D.salidas.forEach((t, i) => texto(t, xs[i], filasY.cabeza + 20, t === D.respuesta ? col('--lit') : col('--ink-3'), 'center', 11));
   // archivo
-  texto('bitácora · 8 frases archivadas, en el orden en que se dijeron', AX - 14, AY0 - 48, col('--ink-3'), 'left', 11);
+  texto('bitácora · 8 frases archivadas, en el orden en que se dijeron', AX - 14, AY0 - 78, col('--ink-3'), 'left', 11);
   E.forEach((e, i) => {
     const m = Math.max(p0[i], p2[i]);
     nodo(AX, ays[i], e.persona ? col('--archivo') : col('--tronco'), 7 + 5 * m, m > 0.3 ? col('--lit') : null);
@@ -159,7 +173,7 @@ function dibujar() {
   const top0 = E.map((e, i) => [p0[i], e]).sort((a, b) => b[0] - a[0])[0];
   const top2 = E.map((e, i) => [p2[i], e]).sort((a, b) => b[0] - a[0])[0];
   document.getElementById('cap').textContent =
-    `«${D.pregunta}» → ${D.respuesta} (el modelo contestó ${D.prediccion}). En «${tok}», el bloque 0 lee sobre todo «${top0[1].texto}» (${top0[0].toFixed(2)}) y el bloque 2 «${top2[1].texto}» (${top2[0].toFixed(2)}). Pesos: submatrices reales de 12×12 por bloque (proyección efectiva del MLP), del embedding y de la cabeza, normalizadas; se omiten los menores a 0,12.`;
+    `«${D.pregunta}» → ${D.respuesta} (el modelo contestó ${D.prediccion}). En «${tok}»: ① la consulta sale del bloque 0 en esa palabra, ② se compara con todas las frases, ③ vuelve sobre todo «${top0[1].texto}» (${top0[0].toFixed(2)}) y ④ entra al bloque 0 en la misma palabra. ⑤-⑧ lo mismo desde el bloque 2 con una consulta que ya lleva lo leído: vuelve «${top2[1].texto}» (${top2[0].toFixed(2)}). Pesos: submatrices reales de 12×12 por bloque (proyección efectiva del MLP), del embedding y de la cabeza, normalizadas; se omiten los menores a 0,12.`;
 }
 const cont = document.getElementById('toks');
 D.tokens_q.forEach((t, i) => {

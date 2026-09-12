@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap">
 <style>
-:root{--ground:#1B2230;--surface:#222B3A;--ink:#E6E9EE;--ink-2:#AAB3C0;--ink-3:#76808F;--pos:#C6614A;--neg:#5F7FB0;--tronco:#7E9FCB;--archivo:#D0913F;--lit:#F2C46B;--borde:#2F3A4B}
+:root{--vuelta:#7FC48A;--ground:#1B2230;--surface:#222B3A;--ink:#E6E9EE;--ink-2:#AAB3C0;--ink-3:#76808F;--pos:#C6614A;--neg:#5F7FB0;--tronco:#7E9FCB;--archivo:#D0913F;--lit:#F2C46B;--borde:#2F3A4B}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
@@ -16,9 +16,11 @@ p{margin:0}
 .mes{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-2)}
 .mes input{width:220px;accent-color:var(--lit)}
 .mes output{color:var(--lit);min-width:9ch}
-figure{margin:0;display:grid;grid-template-rows:1fr auto;gap:8px;min-height:0}
+figure{margin:0;display:grid;grid-template-rows:1fr auto auto;gap:8px;min-height:0}
 .lienzo{background:#171D29;border:1px solid #2C3646;border-radius:3px;overflow:hidden;min-height:0}
 canvas{display:block;width:100%;height:auto}
+.leyenda{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ink-2)}
+.leyenda i{display:inline-block;width:18px;height:0;border-top:2.5px solid;vertical-align:middle;margin-right:6px}
 figcaption{color:var(--ink-2);font-size:.85rem;max-width:120ch}
 .pie{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
 .card{background:var(--surface);border:1px solid var(--borde);border-radius:3px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
@@ -39,7 +41,8 @@ figcaption{color:var(--ink-2);font-size:.85rem;max-width:120ch}
     <label class="mes">mes <input type="range" id="mes" min="1" max="12" value="12"> <output id="mesv">diciembre</output></label>
   </div>
   <figure>
-    <div class="lienzo"><canvas id="c" width="1400" height="540" role="img" aria-label="A la izquierda, el modelo de frontera como una columna angosta de 80 capas de pesos fijos. A la derecha, la bitácora creciendo mes a mes de enero a diciembre hasta 219.000 frases, con la lectura top-2 desde dos capas y la escritura desde la última. A escala real la bitácora del año es el 2 % de los pesos, mostrado en un recuadro aparte."></canvas></div>
+    <div class="lienzo"><canvas id="c" width="1400" height="600" role="img" aria-label="A la izquierda, el modelo de frontera como una columna angosta de 80 capas de pesos fijos. A la derecha, la bitácora creciendo mes a mes de enero a diciembre hasta 219.000 frases, con la lectura top-2 desde dos capas y la escritura desde la última. A escala real la bitácora del año es el 2 % de los pesos, mostrado en un recuadro aparte."></canvas></div>
+    <div class="leyenda"><span><i style="border-color:var(--lit)"></i>① consulta que SALE del modelo y entra a la bitácora</span><span><i style="border-color:var(--vuelta)"></i>③ lo leído que SALE de la bitácora y entra al modelo</span><span><i style="border-color:var(--archivo)"></i>⑨ escritura de una frase nueva</span></div>
     <figcaption id="cap"></figcaption>
   </figure>
   <div class="pie">
@@ -65,6 +68,7 @@ function dibujar(mes){
   const N=acum(mes), GB=N*KB_ENTRADA/1024/1024, gflop=2*N*ANCHO/1e9;
   // --- el modelo: columna angosta (menos del 10 % del ancho), 80 capas
   const X0=40,Y0=70,MW=110,MH=410;
+  const XR=X0+MW;  // borde derecho del modelo: por ahi salen y entran las consultas
   ctx.save();ctx.beginPath();ctx.rect(X0,Y0,MW,MH);ctx.clip();
   textura.forEach(([a,b,c,s])=>{ctx.strokeStyle=s?col('--pos'):col('--neg');ctx.globalAlpha=0.08+0.3*c;ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(X0+a*MW,Y0+b*MH);ctx.lineTo(X0+((a+0.6*(c-0.5))%1+1)%1*MW,Y0+Math.min(MH,b*MH+MH/CAPAS*(1+4*c)));ctx.stroke()});
   ctx.globalAlpha=1;ctx.restore();
@@ -73,11 +77,11 @@ function dibujar(mes){
   [[L0,col('--lit')],[L2,col('--lit')],[LW,col('--archivo')]].forEach(([l,c])=>{const y=yCapa(l);ctx.strokeStyle=c;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(X0,y);ctx.lineTo(X0+MW,y);ctx.stroke()});
   texto('modelo de frontera',X0,Y0-40,col('--ink'),'left',15,'500'); texto('80 capas · 80.000 M pesos · 160 GB',X0,Y0-20,col('--ink-2'),'left',13);
   texto('congelado el 1 de enero',X0,Y0+MH+18,col('--ink-3'),'left',13);
-  texto('capa 80 · escribe',X0+MW+10,yCapa(LW),col('--archivo'),'left',13);
-  texto('capa 40 · lee (2.ª)',X0+MW+10,yCapa(L2),col('--lit'),'left',13);
-  texto('capa 1 · lee (1.ª)',X0+MW+10,yCapa(L0),col('--lit'),'left',13);
+  texto('capa 80',X0+MW+10,yCapa(LW)-14,col('--archivo'),'left',12);
+  texto('capa 40',X0+MW+10,yCapa(L2)-22,col('--lit'),'left',12);
+  texto('capa 1',X0+MW+10,yCapa(L0)-22,col('--lit'),'left',12);
   // --- la bitacora: linea de tiempo horizontal, 12 meses, area acumulada
-  const BX=420,BY=Y0,BW=880,BH=MH, colW=BW/12;
+  const BX=560,BY=Y0,BW=760,BH=MH, colW=BW/12;
   texto('bitácora · una columna por mes, la altura es cuánto hay archivado',BX,Y0-40,col('--ink'),'left',15,'500');
   texto(`${MESES[mes-1]}: ${N.toLocaleString('es-AR')} frases · ${GB.toFixed(2)} GB · el ${(100*GB/GB_PESOS).toFixed(1)} % de los pesos`,BX,Y0-20,col('--ink-2'),'left',13);
   ctx.strokeStyle='#2C3646';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(BX,BY+BH);ctx.lineTo(BX+BW,BY+BH);ctx.stroke();
@@ -91,15 +95,38 @@ function dibujar(mes){
     texto(MESES[m-1].slice(0,3),x+w/2,BY+BH+18,act?col('--ink-2'):col('--ink-3'),'center',13);
     if(act) texto((acum(m)/1000).toFixed(0)+' mil',x+w/2,y-12,col('--ink-3'),'center',11);
   }
-  // flechas de lectura y escritura hacia la ultima columna activa
-  const xm=BX+(mes-1)*colW+colW/2, ym=BY+BH-BH*acum(mes)/Nmax;
-  flecha(X0+MW+150,yCapa(L0),xm-colW/2-6,ym+ (BY+BH-ym)*0.7,col('--lit'),2.5,0.95);
-  flecha(X0+MW+150,yCapa(L2),xm-colW/2-6,ym+ (BY+BH-ym)*0.4,col('--lit'),2.5,0.95);
-  flecha(X0+MW+150,yCapa(LW),xm-colW/2-6,ym-6,col('--archivo'),2,0.95);
-  texto('lee top-2 entre todas · '+gflop.toFixed(1)+' GFLOP por token = '+(100*gflop/GFLOP_TOKEN).toFixed(1)+' % del forward',X0+MW+150,yCapa(L2)-30,col('--lit'),'left',13);
-  texto('escribe 1 vector por frase · 0 reentrenamiento',X0+MW+150,yCapa(LW)+16,col('--archivo'),'left',13);
+  // --- el circuito de una lectura, numerado en el orden en que pasa
+  const PX=BX-14;                      // puerto de entrada/salida de la bitacora (su borde izquierdo)
+  const yTop=BY+BH-BH*acum(mes)/Nmax;  // techo de lo archivado este mes
+  function puerto(x,y,n,c){ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fillStyle='#171D29';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=c;ctx.stroke();texto(String(n),x,y+1,c,'center',12,'500')}
+  function lazo(yL,n0,etiq){
+    // sale del modelo (consulta) y vuelve al modelo (lo leido), misma capa
+    const yOut=yL-7, yIn=yL+9, yP=yL;
+    flecha(XR+140,yOut,PX-12,yP-8,col('--lit'),2.4,0.95);          // 1: consulta sale
+    puerto(XR+130,yOut,n0,col('--lit'));
+    puerto(PX-2,yP-8,n0+1,col('--lit'));                            // 2: entra a la bitacora
+    puerto(PX-2,yP+12,n0+2,col('--vuelta'));                        // 3: sale lo leido
+    flecha(PX-12,yP+12,XR+140,yIn,col('--vuelta'),2.4,0.95);        // 4: vuelve al modelo
+    puerto(XR+130,yIn,n0+3,col('--vuelta'));
+    texto(etiq,XR+150,yOut-16,col('--lit'),'left',13);
+  }
+  lazo(yCapa(L0),1,'capa 1: la consulta es el token (texto)');
+  lazo(yCapa(L2),5,'capa 40: la consulta es lo que ya leyó');
+  // que pasa dentro de la bitacora: compara con todas, devuelve 2
+  ctx.strokeStyle=col('--lit');ctx.setLineDash([4,4]);ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(PX+4,yCapa(L0)-8);ctx.lineTo(BX+BW,yCapa(L0)-8);ctx.stroke();ctx.setLineDash([]);
+  texto('② y ⑥: la consulta se compara con las claves de TODAS las frases archivadas ('+N.toLocaleString('es-AR')+')',BX+8,yCapa(L0)-24,col('--lit'),'left',12);
+  texto('③ y ⑦: salen las 2 más parecidas (sus valores, sumados por peso) · '+gflop.toFixed(1)+' GFLOP por token',BX+8,yCapa(L0)+30,col('--vuelta'),'left',12);
+  texto('④ y ⑧: entran a la misma capa y siguen por el tronco',XR+150,yCapa(L0)+30,col('--vuelta'),'left',12);
+  // escritura: de la capa 80 a una frase nueva arriba de la ultima columna
+  const xm=BX+(mes-1)*colW+colW/2;
+  flecha(XR+140,yCapa(LW),xm-colW/2-6,yTop-6,col('--archivo'),2,0.95);
+  puerto(XR+130,yCapa(LW),9,col('--archivo'));
+  texto('⑨ capa 80: cada frase nueva sale como 1 vector y se archiva · 0 reentrenamiento',XR+150,yCapa(LW)-18,col('--archivo'),'left',12);
+  // entrada y salida del modelo
+  texto('↓ salida: la respuesta',X0,Y0-6,col('--ink-3'),'left',11);
+  texto('↑ entrada: los tokens de la pregunta',X0,Y0+MH+36,col('--ink-3'),'left',11);
   // recuadro a escala real (bytes)
-  const RX=BX+10,RY=BY+10,RW=300,RH=70;
+  const RX=BX+10,RY=BY+10,RW=260,RH=70;
   ctx.fillStyle='#171D29';ctx.fillRect(RX,RY,RW+16,RH+40);ctx.strokeStyle='#3A4759';ctx.strokeRect(RX,RY,RW+16,RH+40);
   texto('a escala real, en bytes',RX+8,RY+14,col('--ink-3'),'left',12);
   ctx.fillStyle='#2A3446';ctx.fillRect(RX+8,RY+30,RW,22); texto('pesos 160 GB',RX+14,RY+41,col('--ink-2'),'left',12);
