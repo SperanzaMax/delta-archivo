@@ -55,6 +55,14 @@ def main():
                          "contra el pedido, y dejarlo vacio la haria abortar en el primer tramo. "
                          "Declararlo aca obliga a decidir el presupuesto ANTES de sembrar, que es lo "
                          "que la leccion D-1 del 22-ago pedia.")
+    ap.add_argument("--semilla", type=int, default=None,
+                    help="12-sep (E-5): semilla NUEVA para la corrida sembrada (orden de los datos). "
+                         "Los pesos son los mismos; lo que cambia es el lote que ve cada paso. Sirve "
+                         "para medir la tasa de arranque de un mecanismo desde el mismo punto de partida.")
+    ap.add_argument("--donde", default=None,
+                    help="12-sep (E-5): bifurcar la posicion/forma de la query de lectura (p.ej. lat2 -> "
+                         "attn). Se borra `donde` de la config para que la guarda no aborte, y queda "
+                         "declarado en `sembrado_de`.")
     a = ap.parse_args()
 
     with open(a.origen, "rb") as f:
@@ -80,6 +88,10 @@ def main():
         params["arch"] = arch
         print("  `pert` no estaba en los params (checkpoint anterior al 6-sep): se agrega en CERO")
 
+    if a.semilla is not None:
+        borradas["semilla"] = cfg.get("semilla"); cfg["semilla"] = a.semilla
+    if a.donde is not None:
+        borradas["donde"] = cfg.pop("donde", None)
     cfg["horizonte"] = a.horizonte
     cfg["pasos"] = a.horizonte
     nuevo = {"params": params, "config": cfg, "paso": 0,

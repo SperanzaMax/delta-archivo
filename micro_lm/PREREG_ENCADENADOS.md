@@ -281,3 +281,26 @@ segunda lectura con query sobre `h` (§9, `nd3_s1`). El primero es gratis y robu
 arranca en 1 de 2 semillas sembradas y no arranca en frío (3 de 3 en `kd3`). Lo que sigue, por el
 §7: brazo `attn` (query global) como tercera arquitectura, más semillas de `nd`, y medir por qué
 la segunda lectura no arranca (los pesos compartidos `qr/kw/vw/wo` entre las dos lecturas).
+
+## 10. ENMIENDA E-5 (12-sep, 14:05) · tasa de arranque de la segunda lectura, y el brazo `attn`
+
+Congelada antes de correr. Sale del §9: `nd` arranca en 1 de 2, y con dos semillas no se puede
+decir si es «a veces» o «casi nunca». Dos preguntas, dos brazos, todo sembrado de `kc3_s2` (paso
+18.000, la base que mejor sabía la tarea simple) con `sembrar.py --semilla` (mismos pesos, otro
+orden de datos; declarado en `sembrado_de`), 8.000 pasos, `--rel2-sesion 1 --rel2-barajar`, lo
+demás como la v4:
+
+    nd3_s3, nd3_s4, nd3_s5, nd3_s6   lat2, bloques 0,2   (tasa de arranque: con nd3_s1/s2 son 6 de kc3_s*)
+    ne3_s1, ne3_s2                   attn, bloques 0,2   (`sembrar.py --donde attn`: la query de las DOS
+                                                          lecturas es atención causal completa; convq queda sin uso)
+
+**P1 · tasa.** Se reporta cuántas de las 6 `nd` terminan con `compuesta` ≥ 0,60 (el criterio es
+más laxo que el 0,80 del §7 porque `nd3_s1` cerró en 0,76 y la pregunta es si ARRANCA, no si
+llega). Predicción: entre 2 y 4 de 6. Si 0 de 4 nuevas, `nd3_s1` fue suerte y el mecanismo no es
+usable sin más cambios.
+**P2 · `attn`.** Si la query global arranca en 2 de 2 (≥ 0,60), la ventana de la conv es lo que
+frena la segunda lectura (H2 del §2 se invierte). Si arranca igual o peor que `nd`, la ventana no
+es el cuello. Riesgo declarado: cambiar `lat2` → `attn` en un modelo sembrado le cambia también la
+PRIMERA lectura (la query del bloque 0 deja de ser la conv que aprendió), así que `vigente` puede
+caer al principio; si en el paso 8.000 `vigente` < 0,90, el brazo no se compara y hay que correrlo
+desde cero.
