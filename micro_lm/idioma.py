@@ -278,8 +278,14 @@ def pregunta_compuesta(rel2, rel, ent):
 
 def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
              p_nose=0.0, con_meta=False, con_origen=False, formas_q=("directa",),
-             con_formas=False, p_compuesta=0.0):
+             con_formas=False, p_compuesta=0.0, sesion_rel2=None):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
+
+    `sesion_rel2` (2026-09-12, ENMIENDA E-2 de PREREG_ENCADENADOS): en que sesion va el bloque de
+    hechos de altura/clave de los nombres. Con None, el sorteo de siempre (a nivel 3, la sesion 0,
+    la misma que el hecho de persona, y el tronco recurrente lo encadena AL ESCRIBIR). Con un
+    entero, todos van a esa sesion: con 1 a nivel 3 quedan en otra sesion que los hechos de persona,
+    con el estado reseteado, y el unico camino que queda para encadenar es la LECTURA.
 
     `sesiones` es una lista de listas de enunciados (una lista por sesion).
     `consultas` es una lista de (pregunta, respuesta_esperada, tipo).
@@ -363,7 +369,10 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
                 if es_nose and nombre == vs_p[-1]:
                     continue                                    # el preguntado se queda sin su hecho
                 num = str(rng.choice(POOL_NUM))
-                s_p = 0 if nivel < 4 else int(rng.integers(0, max(1, n_sesiones - 1)))
+                if sesion_rel2 is not None:
+                    s_p = int(sesion_rel2)
+                else:
+                    s_p = 0 if nivel < 4 else int(rng.integers(0, max(1, n_sesiones - 1)))
                 sesiones[s_p].append(rng.choice(formas(rel2, nombre, num, nivel)))
                 origen[s_p].append(len(vals_por_hecho))
                 vals_por_hecho.append((rel2, nombre, [num]))

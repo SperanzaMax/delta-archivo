@@ -165,3 +165,42 @@ mismos datos: el brazo de un bloque parte de 0,17-0,22 en esta condición y no t
 subir; lo que suba el de dos bloques por encima es el encadenado al leer. H0' (un bloque, otra
 sesión): `compuesta` ≤ 0,40 al final. H1' (bloques 0,2, sembrado): ≥ 0,80 en 2 de 2, con
 `vigente` a ≤ 0,03 del brazo de un bloque.
+
+## 7. ENMIENDA E-3 (12-sep, 09:20) · v3 congelada: el bloque de altura en OTRA sesión
+
+Escrita con el código listo (`idioma.episodio(sesion_rel2)`, `datos.lote(sesion_rel2)`,
+`entrenar.py --rel2-sesion`, `sembrar.py` con `rel2_sesion` como bifurcación) y **antes de correr**.
+Verificado: con `sesion_rel2=None` el lote es bit a bit el de siempre (16 salidas, semilla 5);
+con `--rel2-sesion 1` el bloque de altura cae en la sesión 2 y `kc3_s2` evaluado así da
+`compuesta` 0,140 (contra 0,969 con el sorteo de siempre), lo mismo que la intervención del §6
+(0,170): el flag reproduce la intervención con el generador.
+
+**Diseño.** Cuatro unidades, sembradas (`sembrar.py --horizonte 8000`) de los dos checkpoints que
+aprendieron, y entrenadas con LOS MISMOS datos (`--rel2-sesion 1`, `--p-compuesta 0.5`, todo lo
+demás como `kc3`): 8.000 pasos, `--cada 500`, fotos 100.
+
+    mc3_s1  de kc3_s1 (paso 14000)   --bloques-lectura 0     (H0')
+    mc3_s2  de kc3_s2 (paso 18000)   --bloques-lectura 0     (H0')
+    md3_s1  de kc3_s1 (paso 14000)   --bloques-lectura 0,2   (H1')
+    md3_s2  de kc3_s2 (paso 18000)   --bloques-lectura 0,2   (H1')
+
+Sembrar los dos brazos del mismo punto es lo que separa «no encadena» de «no entrena» (lo que
+confundió a `kd3`): los cuatro parten sabiendo la tarea simple y el encadenado al escribir, y la
+única diferencia entre `mc` y `md` es si hay una segunda lectura con query formada sobre `h`.
+
+**H0' · un bloque, otra sesión: no puede.** `mc3` termina con `compuesta` ≤ 0,40 en las dos
+(parte de 0,14-0,22 y no tiene por dónde subir: ni la query ve lo leído ni la entrada trae el
+contexto). `nose_comp` puede subir (aprender a callarse es lo que le queda).
+
+**H1' · bloques 0,2, sembrado: sí.** `md3` termina con `compuesta` ≥ 0,80 en las dos, y
+`vigente`/`anterior` a ≤ 0,03 de `mc3`. Si `md3` sube pero se queda entre 0,40 y 0,80, se reporta
+como parcial y el siguiente brazo es `attn` (H2 del §2). Si `md3` no sube de 0,40, el encadenado
+al leer no está disponible para esta arquitectura con esta siembra, y la conclusión del §6 se
+queda sola: el archivo encadena sólo al escribir.
+
+**Control de identidad.** `mc3` con el flag es exactamente lo que ya se midió en el §6, así que su
+paso 0 tiene que dar 0,14-0,22; si arranca más alto, el flag no está cortando el camino de
+escritura y la campaña no vale.
+
+    mc: PREFIJO=mc BLOQUES_LECTURA=0   REL2_SESION=1 P_COMPUESTA=0.5 SEMBRAR=0 HORIZONTE=8000 ./rotar_abst3.sh 3:1,3:2 8000 2000 500
+    md: PREFIJO=md BLOQUES_LECTURA=0,2 (idem)

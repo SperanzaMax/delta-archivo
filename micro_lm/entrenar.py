@@ -73,6 +73,9 @@ _SES_EXTRA_SIN_GRAD = False
 # hecho de persona y su pregunta compuesta. Con 0 y 0, todo es bit a bit lo de antes.
 _BLOQUES = 0
 _P_COMPUESTA = 0.0
+# `_REL2_SESION` (2026-09-12, E-2): sesion fija para el bloque de altura/clave de la compuesta; None
+# es el sorteo de siempre. Ver `idioma.episodio`.
+_REL2_SESION = None
 FORMAS_Q = ("directa",)      # 2026-09-02, PREREG_CRUCE_FORMAS. Default = el idioma de siempre.
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
@@ -102,7 +105,8 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
     for _ in range(n):
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, forma = DAT.lote(
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose,
-            formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra, p_compuesta=_P_COMPUESTA)
+            formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra, p_compuesta=_P_COMPUESTA,
+            sesion_rel2=_REL2_SESION)
         fn = pred_fn or predecir
         ra = rt = None
         if relleno is not None:
@@ -807,6 +811,10 @@ def main():
                     help="HECHOS ENCADENADOS (2026-09-11, PREREG_ENCADENADOS). Probabilidad de que un "
                          "episodio traiga un hecho de persona y la pregunta compuesta «cual es la "
                          "altura del director de barrio ?», que exige leer dos veces. 0 = nunca.")
+    ap.add_argument("--rel2-sesion", type=int, default=-1,
+                    help="sesion fija para el bloque de altura/clave de la compuesta (-1: el sorteo "
+                         "de siempre). Con 1 a nivel 3 el bloque va a OTRA sesion que el hecho de "
+                         "persona y el encadenado al escribir queda cortado (E-2).")
     ap.add_argument("--bloques-lectura", default="0",
                     help="en que bloques se lee el archivo, p.ej. `0` (lo de siempre) o `0,2`: la "
                          "misma lectura en dos bloques, con la query de cada uno. Ver modelo.tronco.")
@@ -910,7 +918,7 @@ def main():
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
     global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
-    global _PERT, _SES_EXTRA_SIN_GRAD, _BLOQUES, _P_COMPUESTA
+    global _PERT, _SES_EXTRA_SIN_GRAD, _BLOQUES, _P_COMPUESTA, _REL2_SESION
     global FORMAS_Q
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
     _REC_RANK = a.rec_rank
@@ -931,6 +939,7 @@ def main():
     _PERT = a.pert
     _SES_EXTRA_SIN_GRAD = a.ses_extra_sin_grad
     _P_COMPUESTA = a.p_compuesta
+    _REL2_SESION = None if a.rel2_sesion < 0 else a.rel2_sesion
     _bl = tuple(int(x) for x in a.bloques_lectura.split(",") if x.strip())
     _BLOQUES = _bl[0] if len(_bl) == 1 else _bl
     if any(b >= a.capas for b in _bl):
@@ -960,7 +969,8 @@ def main():
           + (f" · top-{a.topk} desde el paso {a.topk_desde}" if a.topk else "")
           + (f" · relleno {a.relleno} ({a.relleno_dist}, {a.relleno_turnos})" if a.relleno else "")
           + (f" · bloques de lectura {a.bloques_lectura}" if a.bloques_lectura != "0" else "")
-          + (f" · compuestas {a.p_compuesta}" if a.p_compuesta else ""),
+          + (f" · compuestas {a.p_compuesta}" if a.p_compuesta else "")
+          + (f" · bloque de altura en la sesion {a.rel2_sesion}" if a.rel2_sesion >= 0 else ""),
           flush=True)
     # El hardware va al JSON, no sólo al log. Cuando Colab raciona las T4 hay que aceptar el
     # acelerador que haya, y entonces «en qué corrió esta celda» deja de ser un detalle de
@@ -1135,7 +1145,7 @@ def main():
         # `ses_extra`. Cambiar como se lee el archivo a mitad de corrida es otra tarea sin avisar.
         for k, d in (("topk", 0), ("topk_desde", 0), ("relleno", 0), ("relleno_dist", "real"),
                      ("relleno_turnos", "solapado"), ("ses_extra_sin_grad", False),
-                     ("bloques_lectura", "0"), ("p_compuesta", 0.0)):
+                     ("bloques_lectura", "0"), ("p_compuesta", 0.0), ("rel2_sesion", -1)):
             _v = ck["config"].get(k)
             if _v is None and "sembrado_de" not in ck:
                 _v = d
@@ -1346,7 +1356,8 @@ def main():
             refrescar_pool(s)
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
             rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
-            p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra, p_compuesta=a.p_compuesta)
+            p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra, p_compuesta=a.p_compuesta,
+            sesion_rel2=_REL2_SESION)
         turnos, ra, rt = relleno_de(turnos)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),
