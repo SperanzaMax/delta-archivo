@@ -1,0 +1,119 @@
+<title>Un año con la bitácora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap">
+<style>
+:root{--ground:#1B2230;--surface:#222B3A;--ink:#E6E9EE;--ink-2:#AAB3C0;--ink-3:#76808F;--pos:#C6614A;--neg:#5F7FB0;--tronco:#7E9FCB;--archivo:#D0913F;--lit:#F2C46B;--borde:#2F3A4B}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1500px;margin:0 auto;padding-inline:18px;padding-block:14px 18px;display:grid;grid-template-rows:auto 1fr auto;gap:10px;min-height:100vh}
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:clamp(1.3rem,2.4vw,1.9rem);letter-spacing:-.02em;margin:0;line-height:1.1;text-wrap:balance}
+p{margin:0}
+.cab{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 24px}
+.lead{color:var(--ink-2);max-width:70ch;font-size:.95rem}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.mes{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-2)}
+.mes input{width:220px;accent-color:var(--lit)}
+.mes output{color:var(--lit);min-width:9ch}
+figure{margin:0;display:grid;grid-template-rows:1fr auto;gap:8px;min-height:0}
+.lienzo{background:#171D29;border:1px solid #2C3646;border-radius:3px;overflow:hidden;min-height:0}
+canvas{display:block;width:100%;height:auto;max-height:calc(100vh - 300px);object-fit:contain}
+figcaption{color:var(--ink-2);font-size:.85rem;max-width:120ch}
+.pie{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--borde);border-radius:3px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.card h2{font-family:Fraunces,Georgia,serif;font-size:.98rem;font-weight:600;margin:0}
+.card .n{font-family:"IBM Plex Mono",monospace;font-size:.86rem;color:var(--lit);font-variant-numeric:tabular-nums}
+.card p{color:var(--ink-2);font-size:.82rem}
+.card.abierto .n{color:var(--pos)}
+@media (max-width:640px){canvas{max-height:none}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<div class="wrap">
+  <div class="cab">
+    <div>
+      <p class="eyebrow">delta-archivo · extrapolación a un modelo de frontera · 12-sep-2026</p>
+      <h1>Un año con la bitácora</h1>
+      <p class="lead">Lo mismo que el micro-LM, a escala: un modelo de 80.000 millones de parámetros congelado el 1 de enero, y una bitácora que crece cada día del año sin tocar un peso. Las proporciones son reales (bytes, operaciones por token); lo que es supuesto está marcado.</p>
+    </div>
+    <label class="mes">mes <input type="range" id="mes" min="1" max="12" value="12"> <output id="mesv">diciembre</output></label>
+  </div>
+  <figure>
+    <div class="lienzo"><canvas id="c" width="1600" height="700" role="img" aria-label="A la izquierda, el modelo de frontera como 80 capas de pesos fijos, 160 GB. A la derecha, la bitácora que crece mes a mes hasta 219.000 frases, 3,3 GB, con la lectura top-2 desde dos capas y la escritura desde la última. Un año de bitácora ocupa el 2 % de lo que ocupan los pesos."></canvas></div>
+    <figcaption id="cap"></figcaption>
+  </figure>
+  <div class="pie">
+    <div class="card"><h2>Los pesos, congelados</h2><p class="n">80.000 M · 80 capas · ancho 8.192 · 160 GB</p><p>Supuesto: un denso típico de ese tamaño en fp16. Es el tronco: idioma, razonamiento y CÓMO leer y escribir. Igual el 1 de enero que el 31 de diciembre.</p></div>
+    <div class="card"><h2>La bitácora, un año</h2><p class="n">600 frases/día → 219.000 · 16 KB cada una · 3,3 GB</p><p>Supuesto: 200 mensajes por día, 3 frases archivables cada uno. Cada frase es un vector del ancho del modelo, escrito con la conversación de ese momento adentro (lo medido hoy).</p></div>
+    <div class="card"><h2>Leer, por token</h2><p class="n">2 lecturas × 219.000 × 8.192 = 3,6 GFLOP · el forward: 160 GFLOP</p><p>Leer toda la bitácora del año cuesta el 2,2 % del token. Pegar 40 frases en el prompt como un RAG cuesta 370 tokens enteros: unas 1.000 veces más por consulta.</p></div>
+    <div class="card abierto"><h2>Lo que hoy no está resuelto</h2><p class="n">índice más allá de ~30.000 · sello a un año · arranque de la 2.ª lectura</p><p>Medido hasta 30.000 entradas (0,97). Para 219.000 hace falta leer sólo candidatas; la ventana de recencia del sello es de 64 turnos; y la segunda lectura arranca según la base (5 de 5 contra 0 de 7).</p></div>
+  </div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+const css=getComputedStyle(document.documentElement),col=n=>css.getPropertyValue(n).trim();
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIAS=[31,28,31,30,31,30,31,31,30,31,30,31];
+const FRASES_DIA=600, KB_ENTRADA=16, CAPAS=80, ANCHO=8192, GB_PESOS=160, GFLOP_TOKEN=160;
+// ruido fijo para la textura de pesos (mismo dibujo en cada mes)
+let seed=7; const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff};
+const textura=[]; for(let i=0;i<9000;i++) textura.push([rnd(),rnd(),rnd(),rnd()>0.5]);
+function nodo(x,y,c,r=4){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle='#171D29';ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle=c;ctx.stroke()}
+function texto(t,x,y,c,al='left',sz=12){ctx.fillStyle=c;ctx.font=`${sz}px "IBM Plex Mono", monospace`;ctx.textAlign=al;ctx.textBaseline='middle';ctx.fillText(t,x,y)}
+function flecha(x1,y1,x2,y2,c,lw,alfa){ctx.globalAlpha=alfa;ctx.strokeStyle=c;ctx.lineWidth=lw;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();const a=Math.atan2(y2-y1,x2-x1),s=7+lw;ctx.fillStyle=c;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-s*Math.cos(a-.4),y2-s*Math.sin(a-.4));ctx.lineTo(x2-s*Math.cos(a+.4),y2-s*Math.sin(a+.4));ctx.closePath();ctx.fill();ctx.globalAlpha=1}
+function dibujar(mes){
+  ctx.clearRect(0,0,W,H);
+  const dias=DIAS.slice(0,mes).reduce((a,b)=>a+b,0), N=dias*FRASES_DIA, GB=N*KB_ENTRADA/1024/1024;
+  // --- el modelo: un bloque cuya AREA es proporcional a 160 GB; la bitacora, area proporcional a sus GB
+  const X0=330,Y0=60,MW=560,MH=560;                 // pesos: 620 x 640 = area de referencia (160 GB)
+  const areaRef=MW*MH, areaB=areaRef*GB/GB_PESOS;
+  // textura de pesos: 80 filas de nodos finos con lineas rojas/azules
+  ctx.save(); ctx.beginPath(); ctx.rect(X0,Y0,MW,MH); ctx.clip();
+  textura.forEach(([a,b,c,s])=>{ctx.strokeStyle=s?col('--pos'):col('--neg');ctx.globalAlpha=0.05+0.25*c;ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(X0+a*MW,Y0+b*MH);ctx.lineTo(X0+((a+0.3*(c-0.5))%1+1)%1*MW,Y0+Math.min(MH,b*MH+MH/CAPAS*(1+3*c)));ctx.stroke()});
+  ctx.globalAlpha=1; ctx.restore();
+  for(let l=0;l<CAPAS;l++){const y=Y0+(l+0.5)*MH/CAPAS; ctx.strokeStyle='#2C3646'; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(X0,y); ctx.lineTo(X0+MW,y); ctx.stroke();}
+  ctx.strokeStyle='#3A4759'; ctx.lineWidth=1; ctx.strokeRect(X0,Y0,MW,MH);
+  const yCapa=l=>Y0+MH-(l+0.5)*MH/CAPAS;
+  // capas de lectura y escritura (extrapolacion: temprana y a un tercio, como bloques 0 y 2 de 4)
+  const L0=0, L2=Math.round(CAPAS/2), LW=CAPAS-1;
+  [[L0,'capa 1 · lee, query sobre el texto'],[L2,'capa 40 · lee, query sobre lo ya leído'],[LW,'capa 80 · escribe']].forEach(([l,t],i)=>{
+    const y=yCapa(l); ctx.strokeStyle=i<2?col('--lit'):col('--archivo'); ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(X0,y); ctx.lineTo(X0+MW,y); ctx.stroke();
+    texto(t,X0-8,y,i<2?col('--lit'):col('--archivo'),'right',11);
+  });
+  texto('modelo de frontera · 80 capas · 80.000 M pesos · 160 GB · congelado el 1 de enero',X0,Y0-22,col('--ink-2'),'left',12);
+  texto('↑ salida',X0+MW/2,Y0-8,col('--ink-3'),'center',10); texto('↓ entrada (tokens)',X0+MW/2,Y0+MH+14,col('--ink-3'),'center',10);
+  // --- la bitacora: rectangulo de area proporcional, misma altura que los pesos, ancho = area/alto
+  const BX=X0+MW+330, BH=MH, BW=Math.max(2,areaB/BH), BY=Y0;
+  // relleno: puntos = frases (una muestra), de abajo (enero) a arriba (mes actual)
+  ctx.fillStyle='#1E2A22'; ctx.fillRect(BX,BY,BW,BH);
+  ctx.strokeStyle=col('--archivo'); ctx.lineWidth=1.2; ctx.strokeRect(BX,BY,BW,BH);
+  // linea de tiempo: 12 marcas, la altura llena hasta el mes
+  const hMes=m=>BH*DIAS.slice(0,m).reduce((a,b)=>a+b,0)/365;
+  for(let m=1;m<=12;m++){const y=BY+BH-hMes(m); ctx.strokeStyle=m<=mes?col('--archivo'):'#3A4759'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(BX-6,y); ctx.lineTo(BX+BW+6,y); ctx.stroke(); texto(MESES[m-1].slice(0,3),BX+BW+12,y+8,m<=mes?col('--ink-2'):col('--ink-3'),'left',10);}
+  // entradas: puntos naranjas hasta el mes (muestra)
+  ctx.fillStyle=col('--archivo');
+  const lleno=hMes(mes); seed=99;
+  for(let i=0;i<Math.round(1400*lleno/BH);i++){ctx.globalAlpha=0.35+0.5*rnd(); ctx.fillRect(BX+1+rnd()*(BW-2),BY+BH-rnd()*lleno,1.4,1.4)}
+  ctx.globalAlpha=1;
+  texto(`bitácora · ${N.toLocaleString('es-AR')} frases · ${GB.toFixed(2)} GB · misma escala que los pesos`,BX-40,Y0-22,col('--ink-2'),'left',12);
+  texto(`${(100*GB/GB_PESOS).toFixed(1)} % de los pesos`,BX+BW/2,BY+BH+14,col('--archivo'),'center',11);
+  // detalle ampliado: ultimas 8 frases del dia, como en el micro-LM
+  const DX=BX+BW+110, DY=Y0+40, DH=MH-80;
+  texto('las últimas frases, ampliadas',DX-14,DY-18,col('--ink-3'),'left',10);
+  const ejemplos=['el dueño de sur es emma','la altura que tiene julia es 6','emma mide 12','la altura de beto es 37','hoy la reunión pasó al martes','el precio de banco es 54','no, ahora es 82','quien cuida equipo es julia'];
+  ejemplos.forEach((t,i)=>{const y=DY+DH-i*(DH/(ejemplos.length-1)); nodo(DX,y,col('--archivo'),5); texto(`t${N-ejemplos.length+1+i}`,DX+12,y,col('--ink-3'),'left',9); texto(t,DX+62,y,col('--ink-2'),'left',11);});
+  ctx.strokeStyle='#3A4759'; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(BX+BW,BY+BH-lleno); ctx.lineTo(DX-16,DY-4); ctx.moveTo(BX+BW,BY+BH-lleno+Math.min(lleno,12)); ctx.lineTo(DX-16,DY+DH+8); ctx.stroke(); ctx.setLineDash([]);
+  // flechas: lecturas top-2 desde capa 1 y capa 40 hacia la bitacora, escritura desde la ultima
+  const gflop=2*N*ANCHO/1e9;
+  flecha(X0+MW+4,yCapa(L0),BX-8,BY+BH-lleno*0.55,col('--lit'),2.2,0.9);
+  flecha(X0+MW+4,yCapa(L2),BX-8,BY+BH-lleno*0.45,col('--lit'),2.2,0.9);
+  flecha(X0+MW+4,yCapa(LW),BX-8,BY+BH-lleno-2,col('--archivo'),1.6,0.9);
+  texto('lee top-2 entre todas',X0+MW+18,yCapa(L0)+16,col('--lit'),'left',11);
+  texto(`${gflop.toFixed(2)} GFLOP por token · ${(100*gflop/GFLOP_TOKEN).toFixed(1)} % del forward`,X0+MW+18,yCapa(L2)+16,col('--lit'),'left',11);
+  texto('escribe 1 vector por frase · 0 reentrenamiento',X0+MW+18,yCapa(LW)-14,col('--archivo'),'left',11);
+  document.getElementById('cap').textContent=`${MESES[mes-1]}: ${N.toLocaleString('es-AR')} frases archivadas (${GB.toFixed(2)} GB) contra 160 GB de pesos que no cambiaron desde el 1 de enero. Cada token de cada pregunta lee la bitácora entera dos veces (${gflop.toFixed(2)} GFLOP, ${(100*gflop/GFLOP_TOKEN).toFixed(1)} % del costo del token); cada frase nueva se escribe con un forward que ya se pagó al leerla. Los dos rectángulos están a la misma escala en bytes. Supuestos: 600 frases por día, fp16, un denso de 80 capas y ancho 8.192; las capas de lectura (1 y 40) siguen la proporción de los bloques 0 y 2 del micro-LM.`;
+}
+const sl=document.getElementById('mes'),out=document.getElementById('mesv');
+const act=()=>{out.textContent=MESES[sl.value-1];dibujar(+sl.value)};
+sl.addEventListener('input',act); act();
+</script>
