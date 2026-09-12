@@ -98,8 +98,8 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
     <p class="lead">Tres ideas de Maxi sobre cómo cambiaría un modelo de frontera si llevara el archivo
       adentro. Cada una es una etapa: qué está probado, qué se está midiendo ahora y qué falta.</p>
     <div class="resumen">
-      <div><span class="k">tareas hechas</span><span class="v h">13</span></div>
-      <div><span class="k">en curso</span><span class="v c">2</span></div>
+      <div><span class="k">tareas hechas</span><span class="v h">14</span></div>
+      <div><span class="k">en curso</span><span class="v c">1</span></div>
       <div><span class="k">por hacer</span><span class="v p">8</span></div>
       <div><span class="k">el número del día</span><span class="v h">0,76 vs 0,24</span></div>
     </div>
@@ -149,13 +149,13 @@ footer{border-top:1px solid var(--line); padding-top:18px; font-size:.78rem; col
         <div class="r"><span class="num h">una lectura: 0,24 / 0,31 (azar entre 3) · dos lecturas: 0,76 y 0,31</span>
           <span>Con el camino de escritura cortado (el hecho en otra conversación, en orden barajado), leer una vez no alcanza. Leyendo también en el tercer bloque, una de dos semillas encadena: la segunda lectura pone 0,61 de su atención en la entrada correcta (uniforme, 0,33, en las que no). Costó tres versiones de la tarea: dos tenían atajos (el orden de escritura y el conteo) que se detectaron y cerraron.</span></div></div>
       <div class="tarea c"><span class="m">●</span>
-        <div class="t"><b>¿Cuántas veces arranca la segunda lectura, y la query global ayuda?</b><small>nd3_s3-s6 y ne3 (attn) corriendo</small></div>
-        <div class="r"><span class="num c">6 unidades en Colab, 8.000 pasos · primer tramo: 0,09-0,41</span>
-          <span>Cuatro copias con otro orden de datos miden la tasa de arranque (predicho: 2-4 de 6). Dos con atención completa miden si la ventana de la conv es lo que frena. Abierto además: nadie aprendió a decir «no sé» en la pregunta de dos saltos (0,00-0,04).</span></div></div>
-      <div class="tarea c"><span class="m">●</span>
-        <div class="t"><b>Escalar el entrenamiento</b><small>tw3_s0 · 520 entradas viejas por paso · 12-sep</small></div>
-        <div class="r"><span class="num c">0,967 con archivo largo al cerrar (2.000 pasos) · en archivo corto 0,874</span>
-          <span>Más entradas viejas en el entrenamiento, con gradiente (la versión sin gradiente diverge, medido). El doble de entradas que tt3 no rompe nada, pero el costo en archivo corto sube (−0,09 contra −0,04). El banco contra 3.280, 10.000 y 30.000 está corriendo.</span></div></div>
+        <div class="t"><b>¿Cuántas veces arranca la segunda lectura, y la query global ayuda?</b><small>nd3_s3-s6 y ne3 (attn) · a medio correr</small></div>
+        <div class="r"><span class="num c">cerradas: 1 de 4 arranca (0,76; las otras 0,31-0,40) · 4 unidades relanzadas</span>
+          <span>Cuatro copias con otro orden de datos miden la tasa de arranque (predicho 2-4 de 6; va 1 de 4). Las dos con atención completa no habían corrido por una guarda del código que rechazaba el checkpoint sembrado; arreglada y relanzadas. Colab se quedó sin T4 a media tarde, siguen buscando. Abierto además: nadie aprendió a decir «no sé» en la pregunta de dos saltos (0,00-0,04).</span></div></div>
+      <div class="tarea h"><span class="m">✓</span>
+        <div class="t"><b>Escalar el entrenamiento</b><small>tw3_s0 · 520 entradas viejas por paso · banco fresco · 12-sep</small></div>
+        <div class="r"><span class="num h">0,953 / 0,957 / 0,969 con 3.280 / 10.000 / 30.000 · tt3 (260 por paso): 0,930 / 0,918 / 0,879</span>
+          <span>El doble de entradas viejas en el entrenamiento invierte la curva: en vez de caer con el tamaño del archivo, mejora, y con 30.000 gana por 0,09. Cuesta en archivo corto (0,863 contra 0,930): el modelo se calibra para el tamaño con el que entrena.</span></div></div>
       <div class="tarea p"><span class="m">○</span>
         <div class="t"><b>Un índice para leer más de 30.000</b></div>
         <div class="r"><span>La lectura es lineal en N. Para una memoria de años hace falta leer sólo las candidatas (búsqueda aproximada). No está implementado.</span></div></div>
