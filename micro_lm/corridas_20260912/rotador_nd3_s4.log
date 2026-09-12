@@ -131,3 +131,54 @@ VIVO= False ULTIMO= listo: {'paso': 6000, 'truncados': 0.0, 'p_nose': 0.4, 'mezc
 -- vuelta 8 · cuenta J · faltan: 3:4 · 12:54:17
    503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
 -- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 9 · cuenta G · faltan: 3:4 · 13:04:23
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 · cuenta J · faltan: 3:4 · 13:04:29
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 10 · cuenta G · faltan: 3:4 · 13:14:35
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 · cuenta J · faltan: 3:4 · 13:14:41
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 11 · cuenta G · faltan: 3:4 · 13:24:47
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 · cuenta J · faltan: 3:4 · 13:24:53
+   503 en J (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 12 · cuenta G · faltan: 3:4 · 13:34:59
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 12 · cuenta J · faltan: 3:4 · 13:35:05
+   >> OTORGADA en J (T4): [tr2_j_1335] gpu-t4-s-kkb-ass1a1-jz2u3hyd7viz | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:4 en J (desde el paso 6000)
+== tramo · cuenta J · sesion tr2_j_1335 · nd3_s4 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
+[colab] Uploaded '/tmp/tmp.JwWGaSduYp/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (13M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 4273
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= fotos: cada 100 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= paso   6500  loss 0.5747  acc 0.8438  (250s) 
+VIVO= True ULTIMO= ── eval: vigente 0.9961 · anterior 1.0000 · abstencion 0.3672 · truncados 0.0000 · compuesta 0.4062 · nose_comp 0.0000 · nose 0.8628 (ent 0.9669/rel 0.9861) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 6500]
+   [pelicula parcial: 7000 pasos]
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3613 · truncados 0.0000 · compuesta 0.3542 · nose_comp 0.0000 · nose 0.8474 (ent 0.9476/rel 0.9722) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3613 · truncados 0.0000 · compuesta 0.3542 · nose_comp 0.0000 · nose 0.8474 (ent 0.9476/rel 0.9722) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3672 · truncados 0.0000 · compuesta 0.3802 · nose_comp 0.0000 · nose 0.8625 (ent 0.9712/rel 0.9861) · falsa_abst 0.0000 
+VIVO= True ULTIMO= ── eval: vigente 1.0000 · anterior 1.0000 · abstencion 0.3672 · truncados 0.0000 · compuesta 0.3802 · nose_comp 0.0000 · nose 0.8625 (ent 0.9712/rel 0.9861) · falsa_abst 0.0000 
+   [checkpoint parcial guardado: paso 7500]
+   [pelicula parcial: 8000 pasos]
+VIVO= False ULTIMO= listo: {'paso': 8000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 1.0, 'anterior': 1.0, 'nose': 0.8674722473598035, 'nose_ent': 0.9807692307692308, 'nose_rel': 0.9861111111111112, 'falsa_abst': 0.0, 'abstencion': 0.369140625, 'compuesta': 0.32291666666666663, 'nose_comp': 0.0, 'topk': 0, 'cruzada_largo': {'vigente': 0.06409637353040651, 'anterior': 0.40069444444444446, 'nose': 0.8513935340022296, 'nose_ent': 0.9633413461538461, 'nose_rel': 0.9723214285714286, 'falsa_abst': 0.6491331754932304, 'abstencion': 0.728515625, 'compuesta': 0.16919642857142858, 'nose_comp': 0.041666666666666664}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4.pkl (13M)
+   pelicula en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s4_fotos.json (80 cuadros)
+   ultimo paso registrado: "paso": 8000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_j_1335)
+   tramo de 3:4 cerrado en el paso 8000 de 8000
+   tr2_j_1335 parada; pendientes ahora: 
+-- vuelta 12 recorrida entera sin T4 en ninguna; descanso 10 min
+== fin · pendientes: 

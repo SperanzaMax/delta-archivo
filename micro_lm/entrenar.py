@@ -1110,8 +1110,14 @@ def main():
             sys.exit(f"ABORTA: el checkpoint se entreno con mezcla_piso="
                      f"{ck['config'].get('mezcla_piso', 0.10)} y se pidio {a.mezcla_piso}. "
                      f"Es otra politica de muestreo, no la misma corrida.")
-        if ck["config"].get("donde", "pre") != a.donde:
-            sys.exit(f"ABORTA: el checkpoint se entreno con donde={ck['config'].get('donde', 'pre')} "
+        # 12-sep (E-5): `sembrar.py --donde` BORRA la clave para declarar la bifurcacion (igual que
+        # `sello`/`pert`), y el `.get(..., "pre")` la resucitaba: ne3_s1 aborto tres veces en T4 con
+        # «se entreno con donde=pre». Sin la clave, el default `pre` vale solo para un checkpoint
+        # que NO trae `sembrado_de` (los anteriores al 22-ago); sembrado y sin clave, la bifurcacion
+        # esta declarada y se acepta lo pedido.
+        _donde_ck = ck["config"].get("donde", None if "sembrado_de" in ck else "pre")
+        if _donde_ck is not None and _donde_ck != a.donde:
+            sys.exit(f"ABORTA: el checkpoint se entreno con donde={_donde_ck} "
                      f"y se pidio donde={a.donde}. Es otra arquitectura, no la misma corrida.")
         # `blanco` (2026-08-26, A5): MISMA familia que `donde` y `mezcla`. Sin esta guarda, un tramo
         # al que se le olvida el flag continuaria una corrida con blanco `error` como `ausencia` sin

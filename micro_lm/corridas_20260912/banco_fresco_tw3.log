@@ -2,3 +2,26 @@
 [colab] Uploaded 'ckpts/tw3_s0.pkl' to '/content/tw3_s0.pkl'
 [colab] Uploaded 'ckpts/tt3_s0.pkl' to '/content/tt3_s0.pkl'
 ./banco_fresco_colab.sh: línea 24: colab: orden no encontrada
+
+==============================================================================
+[distractor=real turnos=viejo] ckpts/tw3_s0.pkl  ·  kernel_q=5 · sello=rel · topk=2 · donde=lat2 · nivel=3 · ses_extra=52 · pert=True · paso 2000 · V=242
+  pool de distractores: (4096, 128) en 12.9s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.8633   0.9102    0.9453    0.1534
+    3240     3280     0.9531   0.0117    0.2482    3.2411
+   10000    10040     0.9570   0.0000    0.1559    4.2226
+   30000    30040     0.9688   0.0000    0.0792    5.2957
+
+==============================================================================
+[distractor=real turnos=viejo] ckpts/tt3_s0.pkl  ·  kernel_q=5 · sello=rel · topk=2 · donde=lat2 · nivel=3 · ses_extra=26 · pert=True · paso 2000 · V=242
+  pool de distractores: (4096, 128) en 10.2s
+
+       X  archivo  exactitud    RECUP  masa gan  entropia
+       0       40     0.9297   0.8945    0.9627    0.1261
+    3240     3280     0.9297   0.0156    0.2356    3.4165
+   10000    10040     0.9180   0.0039    0.1398    4.3809
+   30000    30040     0.8789   0.0000    0.0763    5.4243
+
+guardado en dilucion.json
+== json en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/controles_20260912/banco_fresco_pert1_x_1304.json

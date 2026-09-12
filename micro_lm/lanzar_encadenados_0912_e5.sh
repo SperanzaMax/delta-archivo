@@ -6,7 +6,7 @@ set -uo pipefail
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SAL="$AQUI/corridas_$(date +%Y%m%d)"; mkdir -p "$SAL"
 COMUN=(SELLO=abs PERT=0 KERNEL_Q=5 P_NOSE=0.4 ABST=cabeza SEMBRAR=0 P_COMPUESTA=0.5
-       REL2_SESION=1 REL2_BARAJAR=1 BLOQUES_LECTURA=0,2 FOTOS=100 HORIZONTE=8000 VUELTAS=12)
+       REL2_SESION=1 REL2_BARAJAR=1 BLOQUES_LECTURA=0,2 FOTOS=100 HORIZONTE=8000 VUELTAS=${VUELTAS:-12})
 cd "$AQUI"
 uno_rot() {  # familia donde unidad cuentas...
   local fam="$1" dd="$2" u="$3"; shift 3
@@ -15,6 +15,17 @@ uno_rot() {  # familia donde unidad cuentas...
     setsid nohup ./rotar_abst3.sh "$u" 8000 2000 500 "$@" > "$SAL/rotador_${fam}3_s${u##*:}.log" 2>&1 < /dev/null &
   echo "rotador ${fam}3_s${u##*:} pid $! cuentas $*"; sleep 3
 }
+# --- 15:55 · relanzar lo pendiente. Las 12 vueltas se agotaron sin T4 a media tarde; nd3_s4 y nd3_s6
+# cerraron (8000), nd3_s5 quedo en 6000, nd3_s3 en 2000, y ne3 NUNCA corrio: la guarda de `donde` en
+# entrenar.py resucitaba `pre` sobre el checkpoint sembrado (arreglado, con smoke local).
+if [ "${1:-}" = "pendientes" ]; then
+  uno_rot nd lat2 3:3 N F G J
+  uno_rot nd lat2 3:5 C L D I
+  uno_rot ne attn 3:1 M K H A
+  uno_rot ne attn 3:2 A N E J
+  exit 0
+fi
+
 uno_rot nd lat2 3:3 N F
 uno_rot nd lat2 3:4 G J
 uno_rot nd lat2 3:5 C L

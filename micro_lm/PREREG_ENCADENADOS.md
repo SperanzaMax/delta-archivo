@@ -304,3 +304,17 @@ es el cuello. Riesgo declarado: cambiar `lat2` → `attn` en un modelo sembrado 
 PRIMERA lectura (la query del bloque 0 deja de ser la conv que aprendió), así que `vigente` puede
 caer al principio; si en el paso 8.000 `vigente` < 0,90, el brazo no se compara y hay que correrlo
 desde cero.
+
+## 11. E-5, estado a las 16:00 del 12-sep (parcial, la campaña sigue)
+
+Las 12 vueltas del rotador se agotaron sin T4 a media tarde (el pool entero devolvió 503 desde
+~13:30). Cerradas: `nd3_s4` 0,32 y `nd3_s6` 0,40 (8.000 pasos; no arrancan). A medias: `nd3_s5`
+0,26 en 6.000, `nd3_s3` 0,24 en 2.000. **`ne3` no corrió:** la guarda de `donde` de `entrenar.py`
+usaba `.get("donde", "pre")` y resucitaba `pre` sobre el checkpoint sembrado sin la clave —el
+mismo defecto que las guardas de `sello`/`pert` ya tenían tapado— y abortó tres veces en T4.
+Arreglado (sin `sembrado_de` sigue valiendo `pre`; sembrado y sin clave, se acepta lo pedido) y
+verificado con un smoke local de 2 pasos. Las cuatro pendientes se relanzaron con 40 vueltas.
+
+Tasa de arranque de la segunda lectura hasta acá: **1 de 4 cerradas** (`nd3_s1` 0,76; `s2`,
+`s4`, `s6` en 0,31-0,40), contra la predicción de 2-4 de 6. Si `s3` y `s5` tampoco, queda 1 de 6:
+el mecanismo existe pero es raro con esta siembra, y la pregunta pasa a ser qué lo dispara.
