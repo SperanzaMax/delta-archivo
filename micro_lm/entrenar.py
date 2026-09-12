@@ -76,6 +76,7 @@ _P_COMPUESTA = 0.0
 # `_REL2_SESION` (2026-09-12, E-2): sesion fija para el bloque de altura/clave de la compuesta; None
 # es el sorteo de siempre. Ver `idioma.episodio`.
 _REL2_SESION = None
+_REL2_BARAJAR = False      # E-4: el bloque de altura en orden sorteado y siempre de tres
 FORMAS_Q = ("directa",)      # 2026-09-02, PREREG_CRUCE_FORMAS. Default = el idioma de siempre.
 _ABST = "token"
 _BLANCO = "ausencia"      # A5: blanco de la BCE de la cabeza — «ausencia» o «error»
@@ -106,7 +107,7 @@ def evaluar(params, rng, n=8, B=64, nivel=4, p_vieja=0.35, p_nose=0.0, pred_fn=N
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, forma = DAT.lote(
             rng, B, nivel=nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja, p_nose=p_nose,
             formas_q=fq, con_formas=True, n_ses_extra=n_ses_extra, p_compuesta=_P_COMPUESTA,
-            sesion_rel2=_REL2_SESION)
+            sesion_rel2=_REL2_SESION, rel2_barajar=_REL2_BARAJAR)
         fn = pred_fn or predecir
         ra = rt = None
         if relleno is not None:
@@ -815,6 +816,9 @@ def main():
                     help="sesion fija para el bloque de altura/clave de la compuesta (-1: el sorteo "
                          "de siempre). Con 1 a nivel 3 el bloque va a OTRA sesion que el hecho de "
                          "persona y el encadenado al escribir queda cortado (E-2).")
+    ap.add_argument("--rel2-barajar", action="store_true",
+                    help="E-4: el bloque de altura/clave se escribe en orden sorteado y siempre son "
+                         "tres (tambien en las nose_comp). Cierra el atajo del orden y el de contar.")
     ap.add_argument("--bloques-lectura", default="0",
                     help="en que bloques se lee el archivo, p.ej. `0` (lo de siempre) o `0,2`: la "
                          "misma lectura en dos bloques, con la query de cada uno. Ver modelo.tronco.")
@@ -918,7 +922,7 @@ def main():
     # la corrida diria `slot` en el JSON mientras entrena `token`. Es el mismo agujero que taparon
     # las guardas de identidad del checkpoint, y aca lo cazamos antes de gastar una unidad.
     global _DONDE, _ABST, _BLANCO, _PERDIDA_CABEZA, _REC_L, _REC_M, _REC_F, _REC_CE, _REC_RANK
-    global _PERT, _SES_EXTRA_SIN_GRAD, _BLOQUES, _P_COMPUESTA, _REL2_SESION
+    global _PERT, _SES_EXTRA_SIN_GRAD, _BLOQUES, _P_COMPUESTA, _REL2_SESION, _REL2_BARAJAR
     global FORMAS_Q
     _REC_L, _REC_M, _REC_F, _REC_CE = a.rec_l, a.rec_m, a.rec_f, a.rec_ce
     _REC_RANK = a.rec_rank
@@ -940,6 +944,7 @@ def main():
     _SES_EXTRA_SIN_GRAD = a.ses_extra_sin_grad
     _P_COMPUESTA = a.p_compuesta
     _REL2_SESION = None if a.rel2_sesion < 0 else a.rel2_sesion
+    _REL2_BARAJAR = a.rel2_barajar
     _bl = tuple(int(x) for x in a.bloques_lectura.split(",") if x.strip())
     _BLOQUES = _bl[0] if len(_bl) == 1 else _bl
     if any(b >= a.capas for b in _bl):
@@ -970,7 +975,8 @@ def main():
           + (f" · relleno {a.relleno} ({a.relleno_dist}, {a.relleno_turnos})" if a.relleno else "")
           + (f" · bloques de lectura {a.bloques_lectura}" if a.bloques_lectura != "0" else "")
           + (f" · compuestas {a.p_compuesta}" if a.p_compuesta else "")
-          + (f" · bloque de altura en la sesion {a.rel2_sesion}" if a.rel2_sesion >= 0 else ""),
+          + (f" · bloque de altura en la sesion {a.rel2_sesion}" if a.rel2_sesion >= 0 else "")
+          + (" · bloque barajado y de tres" if a.rel2_barajar else ""),
           flush=True)
     # El hardware va al JSON, no sólo al log. Cuando Colab raciona las T4 hay que aceptar el
     # acelerador que haya, y entonces «en qué corrió esta celda» deja de ser un detalle de
@@ -1145,7 +1151,7 @@ def main():
         # `ses_extra`. Cambiar como se lee el archivo a mitad de corrida es otra tarea sin avisar.
         for k, d in (("topk", 0), ("topk_desde", 0), ("relleno", 0), ("relleno_dist", "real"),
                      ("relleno_turnos", "solapado"), ("ses_extra_sin_grad", False),
-                     ("bloques_lectura", "0"), ("p_compuesta", 0.0), ("rel2_sesion", -1)):
+                     ("bloques_lectura", "0"), ("p_compuesta", 0.0), ("rel2_sesion", -1), ("rel2_barajar", False)):
             _v = ck["config"].get(k)
             if _v is None and "sembrado_de" not in ck:
                 _v = d
@@ -1357,7 +1363,7 @@ def main():
         ses, cortes, turnos, mask, cons, pos, tgt, _ = DAT.lote(
             rng, a.batch, nivel=a.nivel, n_hechos=4, n_sesiones=4, p_vieja=p_vieja_tr,
             p_nose=p_nose_tr, formas_q=FORMAS_Q, n_ses_extra=a.ses_extra, p_compuesta=a.p_compuesta,
-            sesion_rel2=_REL2_SESION)
+            sesion_rel2=_REL2_SESION, rel2_barajar=_REL2_BARAJAR)
         turnos, ra, rt = relleno_de(turnos)
         params, state, l, acc = paso(params, state, jnp.array(ses), jnp.array(cortes),
                                      jnp.array(turnos), jnp.array(mask), jnp.array(cons),

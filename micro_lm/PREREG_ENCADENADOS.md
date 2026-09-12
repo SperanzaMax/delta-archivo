@@ -204,3 +204,44 @@ escritura y la campaña no vale.
 
     mc: PREFIJO=mc BLOQUES_LECTURA=0   REL2_SESION=1 P_COMPUESTA=0.5 SEMBRAR=0 HORIZONTE=8000 ./rotar_abst3.sh 3:1,3:2 8000 2000 500
     md: PREFIJO=md BLOQUES_LECTURA=0,2 (idem)
+
+## 8. ENMIENDA E-4 (12-sep, 11:15) · la v3 tenía DOS ATAJOS; se paró a los 2.000 pasos y va la v4
+
+**Lo que pasó.** A los 500-2.000 pasos, `mc3_s2` (UN bloque, bloque de altura en otra sesión) dio
+`compuesta` 0,73 y después 0,95 (`evaluar` sobre `ckpts/mc3_s2.pkl`, paso 2000: 0,948), o sea
+subió de 0,14 a 0,95 en 2.000 pasos con la lectura que, según el §6, no tiene por dónde
+encadenar. Intervención sobre ese checkpoint (`encadenados_intervencion.py`, condición
+`barajada`, 1.012 episodios, `corridas_20260911/intervencion_v3_parcial.json`):
+
+    mc3_s2 (paso 2000, un bloque)   compuesta   p_alt   vigente
+      original (bloque en su orden)   0,893      0,398   0,960
+      barajada (otro orden, turnos por posición nueva)
+                                      0,400      0,303   0,939
+      misma sesión, después           0,893      0,519   0,939
+      invertido                       0,907      0,400   0,918
+    md3_s2 (paso 2000, bloques 0,2)   0,493 / barajada 0,413
+
+Con el orden del bloque barajado cae a 0,40, el azar entre tres. **Atajo 1:** el generador escribe
+los hechos de altura en el MISMO orden que los hechos de persona (`for nombre in nombres`, y
+`nombres` sale de `personales` en orden), así que «el k-ésimo de altura es del k-ésimo de persona»
+se resuelve con el sello de orden, sin saber quién es el director. El brazo de dos bloques ni
+siquiera lo aprendió tan rápido (0,49). **Atajo 2:** en las `nose_comp` el preguntado se queda sin
+hecho y el bloque tiene DOS entradas en vez de tres: `nose_comp` se contesta contando (0,96 en
+todas las unidades desde el primer hito). Los dos estaban también en la v2; en `kc3` no hacía
+falta el primero porque el camino de escritura del §6 alcanzaba, y el §6 no se toca: ahí la
+intervención movía el bloque SIN barajarlo y la compuesta caía igual, o sea `kc3` no usaba el
+orden.
+
+**Y una trampa del instrumento, arreglada:** `partes_p` es `jax.jit` y lee `E._BLOQUES` al trazar;
+con dos checkpoints de distinta arquitectura en la misma corrida el segundo se medía con la traza
+del primero (`mc3_s2` daba `vigente` 0,42 detrás de `md3_s2`). `preparar` hace `jax.clear_caches()`.
+Es la regla de `conf_ckpt`, versión jit.
+
+**v4 (`--rel2-barajar`):** el bloque de altura se escribe en orden sorteado y siempre son tres
+(en las `nose_comp` entra un nombre ajeno más). Verificado: sin el flag, bit a bit lo de antes;
+con el flag, 3 o 4 entradas de altura tanto en `compuesta` como en `nose_comp`. Brazos `nc3`
+(bloque 0) y `nd3` (bloques 0,2), sembrados de `kc3_s1`/`kc3_s2` como en E-3, 8.000 pasos, con
+`--rel2-sesion 1 --rel2-barajar`. Las hipótesis H0'/H1' del §7 quedan iguales, con un umbral
+más: **`nose_comp` ya no vale como métrica de encadenado** salvo que supere 0,80 con `compuesta`
+también alta, porque el piso por contar desapareció y un modelo que dice NOSE a toda compuesta da
+`nose_comp` 1,0 y `compuesta` 0,0.

@@ -35,6 +35,11 @@ N = int(os.environ.get("N", 8)); B = int(os.environ.get("B", 64)); SEM = int(os.
 
 def preparar(cfg):
     """Deja a `entrenar` y `modelo` como estaban en la corrida del checkpoint."""
+    # OJO (12-sep, 10:50): las funciones jit leen `E._BLOQUES` y compania EN EL MOMENTO DE TRAZAR, y
+    # la traza queda cacheada por forma de los argumentos. Sin esto, el segundo checkpoint de una
+    # misma corrida se mide con la arquitectura del primero: mc3_s2 (un bloque) dio vigente 0,42
+    # evaluado despues de md3_s2 (bloques 0,2), contra 0,95 solo. Es la regla de conf_ckpt, version jit.
+    jax.clear_caches()
     I.fijar_version(cfg.get("idioma", 3))
     conf_ckpt.aplicar(cfg, verboso=True)
     E._DONDE = cfg.get("donde", "pre")
@@ -45,7 +50,10 @@ def preparar(cfg):
     bl = tuple(int(x) for x in str(cfg.get("bloques_lectura", "0")).split(",") if x.strip())
     E._BLOQUES = bl[0] if len(bl) == 1 else bl
     E.FORMAS_Q = tuple(x.strip() for x in cfg.get("formas_q", "directa").split(","))
-    E.NOSE = I.STOI["NOSE"]; DAT.PAD = I.STOI["."]     # por si la version del idioma movio el vocabulario
+    E.NOSE = I.STOI["NOSE"]; DAT.PAD = I.STOI["."]
+    r2 = cfg.get("rel2_sesion", -1)
+    E._REL2_SESION = None if r2 is None or r2 < 0 else int(r2)   # E-3: el bloque de altura en otra sesion
+    E._REL2_BARAJAR = bool(cfg.get("rel2_barajar", False))         # E-4     # por si la version del idioma movio el vocabulario
 
 
 @jax.jit
@@ -129,7 +137,8 @@ def medir(ruta):
         ses, cortes, turnos, mask, cons, pos, tgt, tipo, forma = DAT.lote(
             rng, B, nivel=cfg["nivel"], n_hechos=4, n_sesiones=4, p_vieja=cfg["p_vieja"],
             p_nose=cfg["p_nose"], formas_q=E.FORMAS_Q, con_formas=True,
-            n_ses_extra=cfg.get("ses_extra", 0), p_compuesta=E._P_COMPUESTA)
+            n_ses_extra=cfg.get("ses_extra", 0), p_compuesta=E._P_COMPUESTA, sesion_rel2=E._REL2_SESION,
+            rel2_barajar=E._REL2_BARAJAR)
         lg, a, p = partes_p(params, jnp.array(ses), jnp.array(cortes), jnp.array(turnos),
                             jnp.array(mask), jnp.array(cons), jnp.array(pos))
         lg = np.asarray(lg); a = np.asarray(a); p = np.asarray(p)

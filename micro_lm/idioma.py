@@ -278,7 +278,7 @@ def pregunta_compuesta(rel2, rel, ent):
 
 def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_vieja=0.35,
              p_nose=0.0, con_meta=False, con_origen=False, formas_q=("directa",),
-             con_formas=False, p_compuesta=0.0, sesion_rel2=None):
+             con_formas=False, p_compuesta=0.0, sesion_rel2=None, rel2_barajar=False):
     """Un episodio completo. Devuelve (sesiones, consultas) en TEXTO, ya legible.
 
     `sesion_rel2` (2026-09-12, ENMIENDA E-2 de PREREG_ENCADENADOS): en que sesion va el bloque de
@@ -365,6 +365,11 @@ def episodio(rng, nivel=4, n_hechos=4, n_sesiones=5, p_revision=0.5, p_pregunta_
                 nombres.append(extra); usados.add(extra)
             es_nose = rng.random() < 0.5
             respuesta = None
+            if rel2_barajar:
+                if es_nose:                                     # un nombre mas, para que sigan siendo tres
+                    extra = str(rng.choice([n for n in NOMBRES if n not in usados]))
+                    nombres.append(extra); usados.add(extra)
+                nombres = [nombres[i] for i in rng.permutation(len(nombres))]
             for nombre in nombres:
                 if es_nose and nombre == vs_p[-1]:
                     continue                                    # el preguntado se queda sin su hecho

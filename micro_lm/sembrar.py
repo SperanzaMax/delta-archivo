@@ -39,7 +39,7 @@ BIFURCA = ("perdida_cabeza", "blanco", "horizonte", "pasos",
            "rec_l", "rec_m", "rec_f", "rec_ce", "ses_extra", "sello", "pert",
            # 2026-09-11: la lectura top-k y el relleno de archivo largo son bifurcaciones del mismo
            # tipo que `ses_extra`: se siembra desde un checkpoint denso y se cambia como se lee.
-           "topk", "topk_desde", "relleno", "relleno_dist", "relleno_turnos", "ses_extra_sin_grad", "bloques_lectura", "p_compuesta", "rel2_sesion")
+           "topk", "topk_desde", "relleno", "relleno_dist", "relleno_turnos", "ses_extra_sin_grad", "bloques_lectura", "p_compuesta", "rel2_sesion", "rel2_barajar")
 
 
 def main():

@@ -58,7 +58,7 @@ TURNO_BASE = 24
 
 def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, con_meta=False,
          con_origen=False, formas_q=("directa",), con_formas=False, n_ses_extra=0,
-         turno_base=None, p_compuesta=0.0, sesion_rel2=None):
+         turno_base=None, p_compuesta=0.0, sesion_rel2=None, rel2_barajar=False):
     """Devuelve sesiones, cortes, turnos, mask, consulta, target, tipo.
 
     Con `con_meta=True` agrega al final una lista de dicts, uno por muestra, con el hecho que se
@@ -97,7 +97,8 @@ def lote(rng, B, nivel=4, n_hechos=4, n_sesiones=4, p_vieja=0.35, p_nose=0.0, co
         sesiones, consultas, vals, origen, formas_ep = I.episodio(
             rng, nivel=nivel, n_hechos=n_hechos, n_sesiones=n_sesiones, p_pregunta_vieja=p_vieja,
             p_nose=1.0 if p_nose > 0 else 0.0, con_meta=True, con_origen=True,
-            formas_q=formas_q, con_formas=True, p_compuesta=p_compuesta, sesion_rel2=sesion_rel2)
+            formas_q=formas_q, con_formas=True, p_compuesta=p_compuesta, sesion_rel2=sesion_rel2,
+            rel2_barajar=rel2_barajar)
         if not consultas:
             continue
         # La consulta sin respuesta se elige con probabilidad `p_nose` EXACTA, en vez de dejarla

@@ -75,6 +75,7 @@ export SES_EXTRA_SIN_GRAD="${SES_EXTRA_SIN_GRAD:-0}"
 export P_COMPUESTA="${P_COMPUESTA:-0.0}"          # 2026-09-11 · PREREG_ENCADENADOS
 export BLOQUES_LECTURA="${BLOQUES_LECTURA:-0}"
 export REL2_SESION="${REL2_SESION:--1}"          # 2026-09-12 · E-2
+export REL2_BARAJAR="${REL2_BARAJAR:-0}"         # 2026-09-12 · E-4
 
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PY="${PY:-/home/maxi/.venv-ligamento/bin/python}"   # 2026-08-25: lo usa completa() para leer el paso del checkpoint
