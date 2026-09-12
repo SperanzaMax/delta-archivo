@@ -318,3 +318,34 @@ verificado con un smoke local de 2 pasos. Las cuatro pendientes se relanzaron co
 Tasa de arranque de la segunda lectura hasta acá: **1 de 4 cerradas** (`nd3_s1` 0,76; `s2`,
 `s4`, `s6` en 0,31-0,40), contra la predicción de 2-4 de 6. Si `s3` y `s5` tampoco, queda 1 de 6:
 el mecanismo existe pero es raro con esta siembra, y la pregunta pasa a ser qué lo dispara.
+
+## 12. RESULTADO de E-5 (12-sep, 17:30) · 1 de 6, y la query global no ayuda · ENMIENDA E-6
+
+Las seis cerradas en 8.000 (`corridas_20260912/n[de]3_s*.json`):
+
+    unidad   base      donde  compuesta  vigente  anterior
+    nd3_s1   kc3_s1    lat2   0,764      0,981    1,000     (v4)
+    nd3_s2   kc3_s2    lat2   0,307      1,000    1,000     (v4)
+    nd3_s3   kc3_s2    lat2   0,244      1,000    1,000
+    nd3_s4   kc3_s2    lat2   0,323      1,000    1,000
+    nd3_s5   kc3_s2    lat2   0,313      1,000    1,000
+    nd3_s6   kc3_s2    lat2   0,398      1,000    1,000
+    ne3_s1   kc3_s2    attn   0,101      1,000    1,000
+    ne3_s2   kc3_s2    attn   0,373      1,000    1,000
+
+- **P1 FALLÓ:** tasa de arranque 1 de 6 (predije 2-4 de 6). Con `vigente` 1,000 en todas, no es
+  que no entrenen: aprenden la tarea simple perfecto y la segunda lectura queda uniforme.
+- **P2: `attn` no arranca (0 de 2)** con `vigente` 1,000, así que el brazo se compara y la ventana
+  de la conv NO es lo que frena la segunda lectura. H2 del §2 se sostiene por el otro lado.
+- **La explicación alternativa que la tabla deja a la vista:** la única que arrancó es la única
+  sembrada de `kc3_s1` (paso 14.000, `vigente` 0,88, menos convergida); las cinco de `kc3_s2`
+  (18.000, `vigente` 0,99) no. Puede ser la BASE y no la semilla de datos: un modelo que ya resuelve
+  la tarea simple a la perfección no tiene gradiente que lo empuje a usar la segunda lectura
+  (la compuesta es 1 de cada ~4 preguntas con respuesta). Antes de decir «1 de 6» hay que separar
+  base de semilla.
+
+**E-6 (congelada, 17:35):** cuatro unidades más, **todas sembradas de `kc3_s1`** con otra semilla
+de datos: `nf3_s3-s6` (`sembrar.py --semilla`), `lat2`, bloques 0,2, mismos flags, 8.000 pasos.
+Predicción si es la base: ≥ 2 de 4 arrancan (≥ 0,60). Si 0 de 4, `nd3_s1` fue una sola corrida
+con suerte y la tasa es ~1 de 10, y el mecanismo necesita otro diseño (p.ej. pesos propios para la
+segunda lectura, o un currículo con más compuestas).
