@@ -1,0 +1,20 @@
+arquitectura del checkpoint: KQ=5 · SELLO=abs · TOPK=0
+
+== micro_lm/ckpts/kc3_s1.pkl · paso 14000 · kernel_q=5 · sello=abs · topk=0 · donde=lat2 · nivel=3 · ses_extra=0 · pert=False · paso 26000 · bloques 0
+  356 preguntas encadenadas en 92s
+  compuesta 0.9522 (n=230) · nose_comp 0.9683 (n=126)
+  condicion         n  acierto   NOSE   p_alt  p_pers  p_otros
+  misma_antes     174   0.9598  0.006   0.553   0.069    0.226
+  misma_despues     1   1.0000  0.000   0.683   0.161    0.028
+  ?                55   0.9273  0.000 
+arquitectura del checkpoint: KQ=5 · SELLO=abs · TOPK=0
+
+== micro_lm/ckpts/kc3_s2.pkl · paso 18000 · kernel_q=5 · sello=abs · topk=0 · donde=lat2 · nivel=3 · ses_extra=0 · pert=False · paso 26000 · bloques 0
+  356 preguntas encadenadas en 91s
+  compuesta 0.8826 (n=230) · nose_comp 0.9921 (n=126)
+  condicion         n  acierto   NOSE   p_alt  p_pers  p_otros
+  misma_antes     174   0.8966  0.075   0.842   0.005    0.115
+  misma_despues     1   1.0000  0.000   0.925   0.010    0.057
+  ?                55   0.8364  0.145 
+
+guardado en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/encadenados_mecanismo.json

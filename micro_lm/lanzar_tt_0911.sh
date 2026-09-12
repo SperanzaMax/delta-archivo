@@ -35,3 +35,11 @@ if [ "${1:-}" = "p4" ]; then
     setsid nohup ./rotar_abst3.sh 3:0 2000 1000 250 E G > "$SAL/rotador_tw3_s0.log" 2>&1 < /dev/null &
   echo "rotador tw3_s0 pid $! cuentas E G"
 fi
+
+# --- 12-sep 10:xx · tw3_s0 quedo en el paso 1.000 al cierre de las 23:00; SEMBRAR=0 reanuda desde
+# ckpts/tw3_s0.pkl. Cuentas H y K, que anoche no se usaron.
+if [ "${1:-}" = "p4-reanudar" ]; then
+  env "${COMUN[@]}" PREFIJO=tw TOPK=2 SES_EXTRA=52 MICRO_BATCH=4 BATCH_EVAL=4 MIN_POR_MIL=40 LOG_ROTADOR="$SAL/rotador_tw3_s0.log" \
+    setsid nohup ./rotar_abst3.sh 3:0 2000 1000 250 H K L M N I G C D E F J > "$SAL/rotador_tw3_s0.log" 2>&1 < /dev/null &
+  echo "rotador tw3_s0 pid $! cuentas H K L M N I G C D E F J"
+fi

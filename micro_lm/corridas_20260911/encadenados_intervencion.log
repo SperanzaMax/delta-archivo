@@ -1,0 +1,20 @@
+arquitectura del checkpoint: KQ=5 · SELLO=abs · TOPK=0
+
+== micro_lm/ckpts/kc3_s1.pkl · paso 14000 · kernel_q=5 · sello=abs · topk=0 · donde=lat2 · nivel=3 · ses_extra=0 · pert=False · paso 26000 · bloques 0
+  2560 ejemplos x 3 condiciones en 288s
+  condicion    compuesta   NOSE  p_alt p_pers  p_otr | nose_comp  vigente anterior   nose  falsa
+  original        0.9522  0.004  0.546  0.071  0.297 |    0.9683   0.9109   0.2735  0.906  0.012
+  otra_sesion     0.2217  0.365  0.269  0.085  0.538 |    0.9524   0.8878   0.3004  0.913  0.071
+  invertido       0.2087  0.430  0.251  0.086  0.505 |    0.9365   0.8627   0.2691  0.913  0.105
+  (compuestas n=230, clasificadas 225)
+arquitectura del checkpoint: KQ=5 · SELLO=abs · TOPK=0
+
+== micro_lm/ckpts/kc3_s2.pkl · paso 18000 · kernel_q=5 · sello=abs · topk=0 · donde=lat2 · nivel=3 · ses_extra=0 · pert=False · paso 26000 · bloques 0
+  2560 ejemplos x 3 condiciones en 274s
+  condicion    compuesta   NOSE  p_alt p_pers  p_otr | nose_comp  vigente anterior   nose  falsa
+  original        0.8826  0.091  0.847  0.005  0.139 |    0.9921   0.9926   0.9821  0.953  0.018
+  otra_sesion     0.1696  0.400  0.307  0.016  0.641 |    0.9524   0.9657   0.9821  0.955  0.068
+  invertido       0.1261  0.530  0.307  0.015  0.639 |    0.9444   0.9620   0.9507  0.959  0.090
+  (compuestas n=230, clasificadas 225)
+
+guardado en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260911/encadenados_intervencion.json

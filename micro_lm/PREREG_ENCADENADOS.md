@@ -92,3 +92,76 @@ sigue siendo bit a bit el generador de siempre.
 
 Las hipótesis del §2 quedan iguales. Los brazos pasan a `kc3` (un bloque) y `kd3` (bloques 0,2),
 mismo diseño. Lo del §1 y la v1 se archivan en `corridas_20260911/encadenados_v1_atajo/`.
+
+## 6. ENMIENDA E-2 (12-sep, 08:40) · H0 FALLÓ, y la intervención dice por dónde pasó la información
+
+**Lo que dio la campaña v2 (`corridas_20260911/kc3_s*.json`, `kd3_s*.json`; el cierre de las 23:00
+las cortó en 14.000-20.000 pasos de 26.000):**
+
+    unidad   bloques  paso   vigente  anterior  nose   compuesta  nose_comp
+    kc3_s0   0        14000  0,282    0,097     0,482  0,400      1,000      no arrancó (loss ~3)
+    kc3_s1   0        14000  0,884    0,433     0,936  0,933      0,705
+    kc3_s2   0        18000  0,987    1,000     0,959  0,797      1,000      (0,875 en 14.000, 0,844 en 16.000)
+    kd3_s0   0,2      20000  0,258    0,200     0,433  0,393      0,083      no arrancó (loss 2,4-2,9)
+    kd3_s1   0,2      18000  0,289    0,117     0,183  0,331      0,000      no arrancó
+    kd3_s2   0,2      18000  0,353    0,043     0,090  0,447      0,000      no arrancó
+
+- **H0 predecía `compuesta` ≤ 0,50 con `vigente` ≥ 0,95. FALLÓ:** `kc3_s2` da 0,80-0,88 con
+  `vigente` 0,99, y `kc3_s1` 0,93 con `vigente` 0,88. La tercera semilla no aprendió nada (la trampa
+  del frío, ya conocida), no es evidencia de H0.
+- **H1 quedó SIN MEDIR:** las tres semillas con lectura en 0,2 no aprendieron ni las preguntas
+  simples. No es «no encadena», es «no entrena». **H3 cae con ella:** la segunda lectura no cuesta
+  0,03, cuesta la corrida. La hipótesis para eso (a medir aparte): la lectura del bloque 2 comparte
+  `qr`/`kw`/`vw`/`wo` con la del bloque 0 y forma su query sobre `h`, con otra estadística que
+  `emb`; en frío las dos lecturas se pelean por los mismos pesos y ninguna arranca (el «no
+  arranca» pasa de 1 de 3 a 3 de 3).
+
+**Por dónde pasó la información (`encadenados_mecanismo.py`, `encadenados_intervencion.py`;
+resultados en `corridas_20260911/encadenados_intervencion.json`).** El prereg decía: «un resultado
+≥ 0,80 aquí sería evidencia CONTRA cómo entiendo la arquitectura, y habría que buscar por dónde
+pasa la información». La primera pista fue la lectura misma: en el «?» de la compuesta, `p` cae
+sobre la entrada de ALTURA del nombre correcto (0,55 en s1, 0,85 en s2), no sobre la entrada de
+persona (0,07 / 0,005). La entrada de altura ya «sabe» de quién es. Y la segunda, en el código:
+`modelo.escribir` pasa cada sesión entera por el tronco, con el mixer recurrente SIN resetear
+entre enunciados, así que el vector que se archiva para «la altura de yamil es 48» lleva adentro
+lo que la sesión dijo antes, incluido «el director de barrio es yamil». A nivel 3 TODOS los
+enunciados caen en la sesión 0 (`idioma.episodio`: `s = 0 if nivel < 4`) y el bloque de altura
+se agrega al final, así que el hecho de persona SIEMPRE está antes y en la misma sesión.
+
+La intervención, sobre los MISMOS 2.560 episodios por checkpoint, sin tocar un peso, con los
+turnos originales de cada enunciado (el sello no cambia), moviendo sólo dónde se escribe el bloque
+de altura:
+
+    kc3_s1 (paso 14000)     compuesta  NOSE    p_alt  p_pers  p_otros | vigente  anterior
+      original                0,952     0,004   0,546  0,071   0,297   | 0,911    0,274
+      otra sesión (reset)     0,222     0,365   0,269  0,085   0,538   | 0,888    0,300
+      invertido (antes)       0,209     0,430   0,251  0,086   0,505   | 0,863    0,269
+    kc3_s2 (paso 18000)
+      original                0,883     0,091   0,847  0,005   0,139   | 0,993    0,982
+      otra sesión (reset)     0,170     0,400   0,307  0,016   0,641   | 0,966    0,982
+      invertido (antes)       0,126     0,530   0,307  0,015   0,639   | 0,962    0,951
+
+Con la entrada de altura escrita en otra sesión (estado reseteado) o ANTES del hecho de persona
+(la recurrencia es causal), la compuesta cae de 0,95/0,88 a 0,13-0,22: azar entre los tres
+candidatos cuando contesta (0,22/(1−0,365) = 0,35) o «no sé» (37-53 %). Y la lectura se reparte
+pareja entre las tres entradas de altura (0,27-0,31 en la correcta, 0,54-0,64 en las otras dos).
+Las preguntas simples no se mueven (−0,02/−0,03 en `vigente`; `anterior` igual): la intervención
+no rompe el archivo, rompe SÓLO el encadenado.
+
+**Veredicto.** H0 tenía razón sobre la lectura: con un solo bloque, la query no ve lo que el
+archivo acaba de devolver. Falló porque había otro camino que el prereg no consideró: **el
+encadenado se hace al ESCRIBIR.** El archivo no guarda hechos sueltos sino enunciados
+contextualizados por lo que la sesión dijo antes, y la pregunta de dos saltos se contesta con UNA
+lectura porque la entrada ya trae el primer salto adentro. Es un hallazgo sobre qué es una entrada
+del archivo, y vale para el objetivo de fondo (lo que se dice en una conversación queda archivado
+CON su contexto de conversación), pero **no es razonar al leer**, y la pregunta original sigue
+abierta.
+
+**Lo que sigue (v3, a congelar en enmienda E-3 antes de correr):** quitar el camino de escritura
+—el bloque de altura va SIEMPRE en otra sesión que el hecho de persona, también al entrenar— y
+medir ahí un bloque contra bloques 0,2. Como el brazo de dos bloques no arranca en frío, los dos
+brazos se siembran del mismo checkpoint (`kc3_s1`, `kc3_s2`) y se entrenan lo mismo sobre los
+mismos datos: el brazo de un bloque parte de 0,17-0,22 en esta condición y no tiene por dónde
+subir; lo que suba el de dos bloques por encima es el encadenado al leer. H0' (un bloque, otra
+sesión): `compuesta` ≤ 0,40 al final. H1' (bloques 0,2, sembrado): ≥ 0,80 en 2 de 2, con
+`vigente` a ≤ 0,03 del brazo de un bloque.
