@@ -349,3 +349,26 @@ de datos: `nf3_s3-s6` (`sembrar.py --semilla`), `lat2`, bloques 0,2, mismos flag
 Predicción si es la base: ≥ 2 de 4 arrancan (≥ 0,60). Si 0 de 4, `nd3_s1` fue una sola corrida
 con suerte y la tasa es ~1 de 10, y el mecanismo necesita otro diseño (p.ej. pesos propios para la
 segunda lectura, o un currículo con más compuestas).
+
+## 13. RESULTADO de E-6 (12-sep, 20:25) · ERA LA BASE: 5 de 5 desde kc3_s1, 0 de 7 desde kc3_s2
+
+    unidad   base    semilla  paso   compuesta (final / máx)  vigente
+    nd3_s1   kc3_s1  1        8000   0,76 / 0,79              0,981
+    nf3_s3   kc3_s1  3        4000*  0,64 / 0,79              0,970   (*sin T4 para seguir; ya arrancó)
+    nf3_s4   kc3_s1  4        8000   0,69 / 0,85              0,992
+    nf3_s5   kc3_s1  5        8000   0,68 / 0,75              0,988
+    nf3_s6   kc3_s1  6        8000   0,78 / 0,78              0,996
+    ---
+    nd3_s2-s6, ne3_s1-s2   kc3_s2   8000   0,10-0,40           1,000
+
+La predicción de E-6 (≥ 2 de 4) se cumplió de sobra: 4 de 4. **La segunda lectura la aprende un
+modelo que TODAVÍA no resuelve lo simple a la perfección** (kc3_s1: paso 14.000, `vigente` 0,88)
+y no la aprende uno que ya lo resuelve (kc3_s2: 18.000, `vigente` 0,99). La hipótesis mecánica:
+la compuesta es ~1 de cada 4 preguntas con respuesta; cuando la pérdida de lo simple ya es ~0, el
+gradiente que queda es chico y las dos lecturas comparten `qr/kw/vw/wo`, así que moverlos para la
+segunda cuesta en la primera. Con la base menos convergida, el mismo gradiente todavía mueve todo.
+Es la misma familia que «en frío no arranca» (3 de 3 en `kd3`): hay una ventana de plasticidad, ni
+en frío ni saturado. Lo que sigue (no congelado): pesos PROPIOS para la segunda lectura (qr2/wo2),
+o subir `p_compuesta`, y medir si con eso arranca desde `kc3_s2`.
+
+Y sigue abierto `nose_comp` (0,00-0,15 en todas): nadie dice «no sé» en la compuesta.
