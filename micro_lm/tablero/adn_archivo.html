@@ -41,8 +41,126 @@ figcaption{color:var(--ink-2);font-size:.9rem;max-width:80ch}
   <div>
     <p class="eyebrow">delta-archivo · micro-LM · nd3_s1, paso 8.000 · 12-sep-2026</p>
     <h1>El archivo en el ADN</h1>
-    <p class="lead">Una red como la de la imagen, dibujada con los pesos reales del micro-LM, y al lado lo que la imagen no tiene: la bitácora. Las líneas son pesos y no cambian; los círculos de la derecha son frases archivadas y crecen. Tocá una palabra de la pregunta para ver qué lee cada bloque en ese momento.</p>
+    <p class="lead">Primero la estructura completa, pieza por pieza, con el circuito de la consulta. Después, una red como la de la imagen dibujada con los pesos reales del micro-LM, y al lado lo que la imagen no tiene: la bitácora. Las líneas son pesos y no cambian; los círculos de la derecha son frases archivadas y crecen. Tocá una palabra de la pregunta para ver qué lee cada bloque en ese momento.</p>
   </div>
+
+
+  <figure>
+    <p class="eyebrow" style="margin-bottom:6px">la estructura completa · un bloque abierto</p>
+    <div class="lienzo" style="padding:8px">
+    <svg viewBox="0 0 1240 630" role="img" aria-label="La estructura completa del micro-LM: tokens, embedding, cuatro bloques con conv, mixer delta y MLP, cabeza; el módulo de la bitácora con claves, valores, sello de orden y lectura top-2; y el bloque 0 abierto mostrando dónde sale la consulta y dónde entra lo leído." style="max-width:100%;height:auto;font-family:'IBM Plex Mono',monospace">
+      <defs>
+        <marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker>
+      </defs>
+      <g fill="none" stroke="#3A4759" stroke-width="1">
+        <!-- columna del tronco -->
+        <rect x="40" y="540" width="200" height="40" rx="2"/>
+        <rect x="40" y="470" width="200" height="40" rx="2"/>
+        <rect x="40" y="400" width="200" height="40" rx="2"/>
+        <rect x="40" y="330" width="200" height="40" rx="2"/>
+        <rect x="40" y="260" width="200" height="40" rx="2"/>
+        <rect x="40" y="190" width="200" height="40" rx="2"/>
+        <rect x="40" y="120" width="200" height="40" rx="2"/>
+        <rect x="40" y="50" width="200" height="40" rx="2"/>
+        <rect x="40" y="10" width="90" height="26" rx="2"/>
+        <rect x="150" y="10" width="90" height="26" rx="2"/>
+      </g>
+      <g stroke="#7E9FCB" stroke-width="1.6" fill="none" marker-end="url(#fl)">
+        <path d="M140,540 V510"/><path d="M140,470 V440"/><path d="M140,400 V370"/><path d="M140,330 V300"/><path d="M140,260 V230"/><path d="M140,190 V160"/><path d="M140,120 V90"/><path d="M85,50 V36"/><path d="M195,50 V36"/>
+      </g>
+      <g fill="#E6E9EE" font-size="12" text-anchor="middle">
+        <text x="140" y="565">tokens de la pregunta · T = 12</text>
+        <text x="140" y="495">embedding · 242 × 128</text>
+        <text x="140" y="425">bloque 0 · LEE la bitácora</text>
+        <text x="140" y="355">bloque 1</text>
+        <text x="140" y="285">bloque 2 · LEE (query sobre h)</text>
+        <text x="140" y="215">bloque 3 · ESCRIBE</text>
+        <text x="140" y="145">ln_f · 128</text>
+        <text x="140" y="75">cabeza · 128 × 242 → respuesta</text>
+        <text x="85" y="27" fill="#AAB3C0" font-size="11">«12»</text>
+        <text x="195" y="27" fill="#AAB3C0" font-size="11">¿no sé? · 128→1</text>
+      </g>
+      <g fill="#76808F" font-size="10" text-anchor="middle"><text x="140" y="437" fill="#F2C46B">abierto a la derecha →</text><text x="140" y="367">204.160 pesos cada uno</text></g>
+      <!-- flecha de escritura del bloque 3 a la bitacora -->
+      <path d="M240,210 C 420,210 700,60 900,60" stroke="#D0913F" stroke-width="1.8" fill="none" marker-end="url(#fl)"/>
+      <text x="560" y="128" fill="#D0913F" font-size="11" text-anchor="middle">escribe: h[último token] de cada frase → una entrada nueva (128 números) + su turno</text>
+
+      <!-- bloque 0 abierto -->
+      <rect x="300" y="160" width="520" height="440" rx="3" fill="none" stroke="#F2C46B" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <text x="312" y="180" fill="#F2C46B" font-size="12">bloque 0, abierto (los cuatro son iguales; sólo el 0 y el 2 leen)</text>
+      <g fill="none" stroke="#3A4759" stroke-width="1">
+        <rect x="330" y="540" width="200" height="34" rx="2"/>
+        <rect x="330" y="482" width="200" height="34" rx="2"/>
+        <rect x="330" y="424" width="200" height="34" rx="2"/>
+        <rect x="330" y="366" width="200" height="34" rx="2"/>
+        <rect x="330" y="308" width="200" height="34" rx="2"/>
+        <rect x="330" y="250" width="200" height="34" rx="2"/>
+        <rect x="330" y="192" width="200" height="34" rx="2"/>
+        <rect x="590" y="482" width="210" height="34" rx="2" stroke="#F2C46B"/>
+        <rect x="590" y="424" width="210" height="34" rx="2" stroke="#F2C46B"/>
+      </g>
+      <g stroke="#7E9FCB" stroke-width="1.6" fill="none" marker-end="url(#fl)">
+        <path d="M430,540 V516"/><path d="M430,482 V458"/><path d="M430,424 V400"/><path d="M430,366 V342"/><path d="M430,308 V284"/><path d="M430,250 V226"/>
+      </g>
+      <g fill="#E6E9EE" font-size="11.5" text-anchor="middle">
+        <text x="430" y="561">h entra (T × 128)</text>
+        <text x="430" y="503">ln1 · 256</text>
+        <text x="430" y="445">+ lo leído de la bitácora</text>
+        <text x="430" y="387">conv causal k=3 · 384</text>
+        <text x="430" y="329">mixer delta · wq wk wv · β</text>
+        <text x="430" y="271">ln2 · MLP 128→512→128</text>
+        <text x="430" y="213">h sale (T × 128) → bloque 1</text>
+        <text x="695" y="503" fill="#F2C46B">convq k=5 · 640 → q = · qr</text>
+        <text x="695" y="445" fill="#F2C46B">① consulta (T × 128)</text>
+      </g>
+      <text x="560" y="614" fill="#76808F" font-size="10" text-anchor="middle">el mixer delta lleva un estado S de 128×128 que se reescribe token a token: la memoria CORTA, dentro de la frase · 3×16.384 + MLP 131.712 + conv 384 + convq 640</text>
+      <!-- lat2: la query se forma sobre ln1(h), la lectura se suma antes de la conv -->
+      <path d="M530,499 H590" stroke="#F2C46B" stroke-width="1.6" fill="none" marker-end="url(#fl)"/>
+      <path d="M695,482 V458" stroke="#F2C46B" stroke-width="1.6" fill="none" marker-end="url(#fl)"/>
+      <path d="M800,441 H900" stroke="#F2C46B" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+      <path d="M900,330 H 600 C 560,330 560,441 530,441" stroke="#7FC48A" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+      <text x="850" y="430" fill="#F2C46B" font-size="11" text-anchor="middle">② entra</text>
+      <text x="760" y="320" fill="#7FC48A" font-size="11" text-anchor="middle">④ entra al bloque, misma palabra</text>
+
+      <!-- modulo bitacora -->
+      <rect x="900" y="40" width="330" height="560" rx="3" fill="none" stroke="#D0913F" stroke-width="1.2"/>
+      <text x="912" y="30" fill="#D0913F" font-size="12">bitácora · N entradas × 128 · crece, no se entrena</text>
+      <g fill="none" stroke="#3A4759" stroke-width="1">
+        <rect x="912" y="50" width="306" height="90" rx="2" stroke="#D0913F"/>
+        <rect x="912" y="160" width="306" height="56" rx="2"/>
+        <rect x="912" y="232" width="306" height="56" rx="2"/>
+        <rect x="912" y="304" width="306" height="56" rx="2" stroke="#7FC48A"/>
+        <rect x="912" y="392" width="306" height="56" rx="2" stroke="#F2C46B"/>
+        <rect x="912" y="470" width="306" height="56" rx="2"/>
+        <rect x="912" y="542" width="306" height="44" rx="2"/>
+      </g>
+      <g fill="#E6E9EE" font-size="11.5" text-anchor="middle">
+        <text x="1065" y="72">las entradas · una por frase dicha</text>
+        <text x="1065" y="90" fill="#AAB3C0" font-size="10">8 en este episodio · 30.000 en el banco</text>
+        <text x="1065" y="108" fill="#AAB3C0" font-size="10">128 números + turno + bit «de esta conversación»</text>
+        <text x="1065" y="128" fill="#AAB3C0" font-size="10">escritas con la conversación de ese momento adentro</text>
+        <text x="1065" y="182">claves = entrada · kw + ord[turno] + pert</text>
+        <text x="1065" y="200" fill="#AAB3C0" font-size="10">kw 16.384 · sello ord 64×128 · pert 128</text>
+        <text x="1065" y="254">valores = entrada · vw</text>
+        <text x="1065" y="272" fill="#AAB3C0" font-size="10">vw 16.384 · y un slot nulo para «nada»</text>
+        <text x="1065" y="326" fill="#7FC48A">③ sale: Σ peso × valor · wo</text>
+        <text x="1065" y="344" fill="#AAB3C0" font-size="10">wo 16.384 · vuelve un vector por palabra</text>
+        <text x="1065" y="414" fill="#F2C46B">puntaje = consulta · clave / √128</text>
+        <text x="1065" y="432" fill="#AAB3C0" font-size="10.5">contra TODAS las claves · lineal en N</text>
+        <text x="1065" y="492">top-2 (o softmax) → pesos</text>
+        <text x="1065" y="510" fill="#AAB3C0" font-size="10">quedan las 2 de mayor puntaje; el resto pesa 0</text>
+        <text x="1065" y="560" fill="#AAB3C0" font-size="10">pesos del módulo 74.240 · el resto son datos</text>
+        <text x="1065" y="576" fill="#AAB3C0" font-size="10">tronco + cabezas 989.171 · total 1.063.411</text>
+      </g>
+      <g stroke="#7E9FCB" stroke-width="1.4" fill="none" marker-end="url(#fl)">
+        <path d="M1060,140 V160"/><path d="M1060,216 V232"/><path d="M1000,216 V304"/><path d="M1060,448 V470"/><path d="M1060,526 V542"/>
+      </g>
+      <path d="M1060,392 V360" stroke="#F2C46B" stroke-width="1.4" fill="none" marker-end="url(#fl)"/>
+      <path d="M1120,288 V304" stroke="#7E9FCB" stroke-width="1.4" fill="none" marker-end="url(#fl)"/>
+    </svg>
+    </div>
+    <figcaption>Todo lo que tiene el modelo, con el tamaño real de cada pieza (checkpoint <span class="mono">nd3_s1</span>). El tronco se entrena una vez; la bitácora es datos: entradas que se agregan. La consulta ① sale del bloque 0 formada sobre el texto (convq de kernel 5 sobre ln1, proyectada por qr), ② entra a la bitácora y se puntúa contra todas las claves, ③ salen las dos mejores sumadas y proyectadas por wo, y ④ entran al bloque en la misma palabra, antes de la conv y el mixer. El bloque 2 repite el circuito con una consulta formada sobre h, que ya lleva lo leído. Cuentas: cada bloque tiene además wqr/wkr/wvr (49.152) instanciados para el brazo attnp y sin uso en lat2; están en el total.</figcaption>
+  </figure>
 
   <figure>
     <div class="controles" id="toks" role="group" aria-label="palabra de la pregunta"><span>pregunta</span></div>
