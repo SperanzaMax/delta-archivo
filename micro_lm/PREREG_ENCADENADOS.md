@@ -93,7 +93,7 @@ sigue siendo bit a bit el generador de siempre.
 Las hipótesis del §2 quedan iguales. Los brazos pasan a `kc3` (un bloque) y `kd3` (bloques 0,2),
 mismo diseño. Lo del §1 y la v1 se archivan en `corridas_20260911/encadenados_v1_atajo/`.
 
-## 6. ENMIENDA E-2 (12-sep, 08:40) · H0 FALLÓ, y la intervención dice por dónde pasó la información
+## 6. ENMIENDA E-2 (12-sep, 07:55) · H0 FALLÓ, y la intervención dice por dónde pasó la información
 
 **Lo que dio la campaña v2 (`corridas_20260911/kc3_s*.json`, `kd3_s*.json`; el cierre de las 23:00
 las cortó en 14.000-20.000 pasos de 26.000):**
@@ -166,7 +166,7 @@ subir; lo que suba el de dos bloques por encima es el encadenado al leer. H0' (u
 sesión): `compuesta` ≤ 0,40 al final. H1' (bloques 0,2, sembrado): ≥ 0,80 en 2 de 2, con
 `vigente` a ≤ 0,03 del brazo de un bloque.
 
-## 7. ENMIENDA E-3 (12-sep, 09:20) · v3 congelada: el bloque de altura en OTRA sesión
+## 7. ENMIENDA E-3 (12-sep, 08:00) · v3 congelada: el bloque de altura en OTRA sesión
 
 Escrita con el código listo (`idioma.episodio(sesion_rel2)`, `datos.lote(sesion_rel2)`,
 `entrenar.py --rel2-sesion`, `sembrar.py` con `rel2_sesion` como bifurcación) y **antes de correr**.
@@ -205,7 +205,7 @@ escritura y la campaña no vale.
     mc: PREFIJO=mc BLOQUES_LECTURA=0   REL2_SESION=1 P_COMPUESTA=0.5 SEMBRAR=0 HORIZONTE=8000 ./rotar_abst3.sh 3:1,3:2 8000 2000 500
     md: PREFIJO=md BLOQUES_LECTURA=0,2 (idem)
 
-## 8. ENMIENDA E-4 (12-sep, 11:15) · la v3 tenía DOS ATAJOS; se paró a los 2.000 pasos y va la v4
+## 8. ENMIENDA E-4 (12-sep, 08:40) · la v3 tenía DOS ATAJOS; se paró a los 2.000 pasos y va la v4
 
 **Lo que pasó.** A los 500-2.000 pasos, `mc3_s2` (UN bloque, bloque de altura en otra sesión) dio
 `compuesta` 0,73 y después 0,95 (`evaluar` sobre `ckpts/mc3_s2.pkl`, paso 2000: 0,948), o sea
@@ -246,7 +246,7 @@ más: **`nose_comp` ya no vale como métrica de encadenado** salvo que supere 0,
 también alta, porque el piso por contar desapareció y un modelo que dice NOSE a toda compuesta da
 `nose_comp` 1,0 y `compuesta` 0,0.
 
-## 9. RESULTADO de la v4 (12-sep, 13:40) · el encadenado al LEER existe, lo hace la segunda lectura, y arranca en 1 de 2
+## 9. RESULTADO de la v4 (12-sep, 10:40) · el encadenado al LEER existe, lo hace la segunda lectura, y arranca en 1 de 2
 
 `corridas_20260912/n[cd]3_s*.json`, 8.000 pasos, las cuatro cerradas:
 
@@ -282,7 +282,7 @@ arranca en 1 de 2 semillas sembradas y no arranca en frío (3 de 3 en `kd3`). Lo
 §7: brazo `attn` (query global) como tercera arquitectura, más semillas de `nd`, y medir por qué
 la segunda lectura no arranca (los pesos compartidos `qr/kw/vw/wo` entre las dos lecturas).
 
-## 10. ENMIENDA E-5 (12-sep, 14:05) · tasa de arranque de la segunda lectura, y el brazo `attn`
+## 10. ENMIENDA E-5 (12-sep, 10:50) · tasa de arranque de la segunda lectura, y el brazo `attn`
 
 Congelada antes de correr. Sale del §9: `nd` arranca en 1 de 2, y con dos semillas no se puede
 decir si es «a veces» o «casi nunca». Dos preguntas, dos brazos, todo sembrado de `kc3_s2` (paso

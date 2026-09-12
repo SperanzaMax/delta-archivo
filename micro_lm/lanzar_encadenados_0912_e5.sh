@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ENCADENADOS E-5 · PREREG_ENCADENADOS.md §10 · 2026-09-12 14:10
+# ENCADENADOS E-5 · PREREG_ENCADENADOS.md §10 · 2026-09-12 10:55
 #   nd3_s3-s6  lat2, bloques 0,2, sembradas de kc3_s2 con otra semilla (tasa de arranque de la segunda lectura)
 #   ne3_s1-s2  attn, bloques 0,2, sembradas de kc3_s2 (la query global como tercera arquitectura)
 set -uo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 12-sep 11:05 · parar la v3 de encadenados (mc3/md3: atajo del orden, E-4) SIN tocar tw3_s0 (cuenta E)
+# 12-sep 09:15 · parar la v3 de encadenados (mc3/md3: atajo del orden, E-4) SIN tocar tw3_s0
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COLAB=/home/maxi/.venv-colab-cli/bin/colab
 for u in mc3_s1 mc3_s2 md3_s1 md3_s2; do

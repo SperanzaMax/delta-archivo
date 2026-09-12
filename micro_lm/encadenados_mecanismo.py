@@ -35,7 +35,7 @@ N = int(os.environ.get("N", 8)); B = int(os.environ.get("B", 64)); SEM = int(os.
 
 def preparar(cfg):
     """Deja a `entrenar` y `modelo` como estaban en la corrida del checkpoint."""
-    # OJO (12-sep, 10:50): las funciones jit leen `E._BLOQUES` y compania EN EL MOMENTO DE TRAZAR, y
+    # OJO (12-sep, 09:10): las funciones jit leen `E._BLOQUES` y compania EN EL MOMENTO DE TRAZAR, y
     # la traza queda cacheada por forma de los argumentos. Sin esto, el segundo checkpoint de una
     # misma corrida se mide con la arquitectura del primero: mc3_s2 (un bloque) dio vigente 0,42
     # evaluado despues de md3_s2 (bloques 0,2), contra 0,95 solo. Es la regla de conf_ckpt, version jit.

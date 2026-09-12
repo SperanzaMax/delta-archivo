@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CAMPANIA HECHOS ENCADENADOS v4 · PREREG_ENCADENADOS.md §8 (E-4) · 2026-09-12 11:20 · bloque barajado y de tres
+# CAMPANIA HECHOS ENCADENADOS v4 · PREREG_ENCADENADOS.md §8 (E-4) · 2026-09-12 09:25 · bloque barajado y de tres
 #   nc3_sX  lectura en el bloque 0        (H0': con el bloque de altura en otra sesion, no puede)
 #   nd3_sX  lectura en los bloques 0 y 2   (H1': si)
 # Las cuatro sembradas de kc3_s1 / kc3_s2 (`sembrar.py --horizonte 8000`), mismos datos.

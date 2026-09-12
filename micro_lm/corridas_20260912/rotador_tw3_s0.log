@@ -179,3 +179,39 @@ VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BO
    [pelicula parcial: 1752 pasos]
 VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
 VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+   [checkpoint parcial guardado: paso 1750]
+   [pelicula parcial: 1824 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+   [checkpoint parcial guardado: paso 1750]
+   [pelicula parcial: 1880 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_h_1003)
+   tramo de 3:0 cerrado en el paso 1750 de 2000
+   tr2_h_1003 parada; pendientes ahora: 3:0
+-- vuelta 2 · cuenta K · faltan: 3:0 · 11:04:40
+   >> OTORGADA en K (T4): [tr2_k_1104] gpu-t4-s-kkb-usw4a0-1epmvhqeckqjb | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en K (desde el paso 1750)
+== tramo · cuenta K · sesion tr2_k_1104 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0 · rel2-sesion -1 · rel2-barajar 0
+[colab] Uploaded '/tmp/tmp.pFh38b3tZn/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 4767
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1750]
+   [pelicula parcial: 1800 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 

@@ -1,0 +1,59 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260912/rotador_ne3_s1.log (rotador 1948141)
+== rotador2 · familia 'ne' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello abs · pert 0 · topk 0/0 · relleno 0 (real,solapado) · fotos 100 · unidades 3:1 · cuentas: M K
+-- vuelta 1 · cuenta M · faltan: 3:1 · 10:46:30
+   >> OTORGADA en M (T4): [tr2_m_1046] gpu-t4-s-kkb-ass1c2-2bkez0uafuo9m | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en M (desde el paso 0)
+== tramo · cuenta M · sesion tr2_m_1046 · ne3_s1 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde attn · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
+[colab] Uploaded '/tmp/tmp.SwMVZsUXlj/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (4,1M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ne3_s1.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 879
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= False ULTIMO= ABORTA: el checkpoint se entreno con donde=pre y se pidio donde=attn. Es otra arquitectura, no la misma corrida. 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ne3_s1.pkl (4,1M)
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_m_1046)
+   tramo de 3:1 cerrado en el paso 0 de 8000
+   tr2_m_1046 parada; pendientes ahora: 3:1
+-- vuelta 1 · cuenta K · faltan: 3:1 · 10:49:26
+   >> OTORGADA en K (T4): [tr2_k_1049] gpu-t4-s-kkb-usw4a2-nzcai8gitdn2 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en K (desde el paso 0)
+== tramo · cuenta K · sesion tr2_k_1049 · ne3_s1 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde attn · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
+[colab] Uploaded '/tmp/tmp.757RTX3Iyl/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (4,1M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ne3_s1.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 732
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= False ULTIMO= ABORTA: el checkpoint se entreno con donde=pre y se pidio donde=attn. Es otra arquitectura, no la misma corrida. 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ne3_s1.pkl (4,1M)
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_k_1049)
+   tramo de 3:1 cerrado en el paso 0 de 8000
+   tr2_k_1049 parada; pendientes ahora: 3:1
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta M · faltan: 3:1 · 11:02:08
+   >> OTORGADA en M (T4): [tr2_m_1102] gpu-t4-s-kkb-use1c1-1ftz4agttl67e | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:1 en M (desde el paso 0)
+== tramo · cuenta M · sesion tr2_m_1102 · ne3_s1 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde attn · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
+[colab] Uploaded '/tmp/tmp.JAm62EGXek/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (4,1M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ne3_s1.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 3677
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= False ULTIMO= ABORTA: el checkpoint se entreno con donde=pre y se pidio donde=attn. Es otra arquitectura, no la misma corrida. 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/ne3_s1.pkl (4,1M)
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_m_1102)
+   tramo de 3:1 cerrado en el paso 0 de 8000
+   tr2_m_1102 parada; pendientes ahora: 3:1
+-- K la esta usando otro proceso, se saltea
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min

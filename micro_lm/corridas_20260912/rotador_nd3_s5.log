@@ -1,0 +1,37 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260912/rotador_nd3_s5.log (rotador 1947313)
+== rotador2 · familia 'nd' · p_nose 0.4 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello abs · pert 0 · topk 0/0 · relleno 0 (real,solapado) · fotos 100 · unidades 3:5 · cuentas: C L
+-- vuelta 1 · cuenta C · faltan: 3:5 · 10:46:24
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta L · faltan: 3:5 · 10:46:30
+   >> OTORGADA en L (T4): [tr2_l_1046] gpu-t4-s-kkb-usw4a0-34oq4de8a19g7 | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:5 en L (desde el paso 0)
+== tramo · cuenta L · sesion tr2_l_1046 · nd3_s5 · +2000 de 8000 pasos · p_nose 0.4 · abst cabeza · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 0 · sello abs · pert 0 · micro 0 · b_eval 0 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 0 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 100 · ses-extra-sin-grad 0 · compuesta 0.5 · bloques 0,2 · rel2-sesion 1 · rel2-barajar 1
+[colab] Uploaded '/tmp/tmp.j48dnV1blM/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (4,1M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s5.pkl' to '/content/ck.pkl'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2292
+== polling cada 2 min (presupuesto ~40 min, tope 120)
+VIVO= True ULTIMO= fotos: cada 100 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 100 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.8972 · anterior 0.9427 · abstencion 0.2715 · truncados 0.0000 · compuesta 0.4349 · nose_comp 0.0286 · nose 0.7427 (ent 0.7205/rel 0.9234) · falsa_abst 0.0179 
+   [checkpoint parcial guardado: paso 500]
+   [pelicula parcial: 900 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.8972 · anterior 0.9427 · abstencion 0.2715 · truncados 0.0000 · compuesta 0.4349 · nose_comp 0.0286 · nose 0.7427 (ent 0.7205/rel 0.9234) · falsa_abst 0.0179 
+VIVO= True ULTIMO= ── eval: vigente 0.9720 · anterior 0.9219 · abstencion 0.3047 · truncados 0.0000 · compuesta 0.3213 · nose_comp 0.3810 · nose 0.7765 (ent 0.7360/rel 0.8831) · falsa_abst 0.0482 
+VIVO= True ULTIMO= ── eval: vigente 0.9720 · anterior 0.9219 · abstencion 0.3047 · truncados 0.0000 · compuesta 0.3213 · nose_comp 0.3810 · nose 0.7765 (ent 0.7360/rel 0.8831) · falsa_abst 0.0482 
+VIVO= True ULTIMO= ── eval: vigente 0.9764 · anterior 1.0000 · abstencion 0.2871 · truncados 0.0000 · compuesta 0.3082 · nose_comp 0.2286 · nose 0.7740 (ent 0.7229/rel 0.9413) · falsa_abst 0.0236 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1900 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9764 · anterior 1.0000 · abstencion 0.2871 · truncados 0.0000 · compuesta 0.3082 · nose_comp 0.2286 · nose 0.7740 (ent 0.7229/rel 0.9413) · falsa_abst 0.0236 
+VIVO= False ULTIMO= listo: {'paso': 2000, 'truncados': 0.0, 'p_nose': 0.4, 'mezcla_usada': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'mezcla_promedio': {'vigente': 0.39, 'anterior': 0.21, 'nose': 0.4}, 'p_vieja_tr': 0.35, 'p_nose_tr': 0.4, 'vigente': 0.9709429959667152, 'anterior': 0.9791666666666667, 'nose': 0.7453579222815493, 'nose_ent': 0.7365384615384616, 'nose_rel': 0.9151848151848152, 'falsa_abst': 0.014560093275351358, 'abstencion': 0.26953125, 'compuesta': 0.3650297619047619, 'nose_comp': 0.0, 'topk': 0, 'cruzada_largo': {'vigente': 0.2291671522921523, 'anterior': 0.6132440476190477, 'nose': 0.6412499671125197, 'nose_ent': 0.6517045454545454, 'nose_rel': 0.753517316017316, 'falsa_abst': 0.3464292232164393, 'abstencion': 0.46875, 'compuesta': 0.3053571428571429, 'nose_comp': 0.0}} 
+== tramo terminado
+== bajando checkpoint
+   checkpoint en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s5.pkl (13M)
+   pelicula en /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/nd3_s5_fotos.json (20 cuadros)
+   ultimo paso registrado: "paso": 2000
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_l_1046)
+   tramo de 3:5 cerrado en el paso 2000 de 8000
+   tr2_l_1046 parada; pendientes ahora: 3:5
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min

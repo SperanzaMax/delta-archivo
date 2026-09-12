@@ -38,7 +38,7 @@ from encadenados_mecanismo import preparar, partes_p, enunciados_de, es_rel2
 
 N = int(os.environ.get("N", 40)); B = int(os.environ.get("B", 64)); SEM = int(os.environ.get("SEM", 2026))
 CONDS = tuple(os.environ.get("CONDS", "original,otra_sesion,invertido,barajada").split(","))
-# `barajada` (12-sep, 10:30): como `otra_sesion` pero el bloque de altura se escribe en OTRO ORDEN
+# `barajada` (12-sep, 09:05): como `otra_sesion` pero el bloque de altura se escribe en OTRO ORDEN
 # (permutacion fija por episodio) y los turnos se reasignan por la posicion nueva. Existe porque en
 # la v3 (bloque en otra sesion al entrenar) los DOS brazos subieron a 0,5-0,7 en 500-1500 pasos, y
 # hay un atajo posible que no es encadenar: los hechos de altura se escriben en el MISMO ORDEN que
