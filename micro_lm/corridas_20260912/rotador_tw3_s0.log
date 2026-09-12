@@ -1,0 +1,181 @@
+== watchdog2 armado sobre /home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/corridas_20260912/rotador_tw3_s0.log (rotador 144329)
+== rotador2 · familia 'tw' · p_nose 0.2 · mezcla fija · piso 0.10 · p_vieja 0.35 · sello rel · pert 1 · topk 2/0 · relleno 0 (real,solapado) · fotos 8 · unidades 3:0 · cuentas: H K L M N I G C D E F J
+-- vuelta 1 · cuenta H · faltan: 3:0 · 07:50:40
+   503 en H (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta K · faltan: 3:0 · 07:50:49
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta L · faltan: 3:0 · 07:51:00
+   503 en L (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta M · faltan: 3:0 · 07:51:10
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta N · faltan: 3:0 · 07:51:19
+   503 en N (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta I · faltan: 3:0 · 07:51:28
+   503 en I (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta G · faltan: 3:0 · 07:51:37
+   503 en G (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta C · faltan: 3:0 · 07:51:46
+   503 en C (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta D · faltan: 3:0 · 07:51:56
+   503 en D (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 1 · cuenta E · faltan: 3:0 · 07:52:05
+   >> OTORGADA en E (T4): [tr2_e_0752] gpu-t4-s-kkb-usw1b0-2175zx6fe1yev | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en E (desde el paso 1000)
+== tramo · cuenta E · sesion tr2_e_0752 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0
+[colab] Uploaded '/tmp/tmp.1jULQuDZyM/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 2182
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 1056 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 1120 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 1176 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso ]
+   [pelicula parcial: 1240 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1296 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1360 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1424 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9646 · anterior 0.9732 · abstencion 0.1777 · truncados 0.0000 · nose 0.8906 (ent 0.7927/rel 1.0000) · falsa_abst 0.0282 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/tramo_abst.sh: línea 312: break: sólo tiene significado en un ciclo «for», «while» o «until»
+/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/tramo_abst.sh: línea 315: error de sintaxis cerca del elemento inesperado `done'
+/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/tramo_abst.sh: línea 315: `done'
+   tramo de 3:0 cerrado en el paso 1250 de 2000
+   tr2_e_0752 parada; pendientes ahora: 3:0
+-- vuelta 1 · cuenta F · faltan: 3:0 · 08:53:06
+   >> OTORGADA en F (T4): [tr2_f_0853] gpu-t4-s-kkb-usw4a2-3lp3and3ud8hk | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en F (desde el paso 1250)
+== tramo · cuenta F · sesion tr2_f_0853 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0 · rel2-sesion -1 · rel2-barajar 0
+[colab] Uploaded '/tmp/tmp.SUATOVTPxx/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1086
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1304 pasos]
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1368 pasos]
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1424 pasos]
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+   [checkpoint parcial guardado: paso 1250]
+   [pelicula parcial: 1488 pasos]
+VIVO= True ULTIMO= W0912 11:54:03.301661    1110 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems. 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1544 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1608 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1672 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9652 · anterior 0.9821 · abstencion 0.1680 · truncados 0.0000 · nose 0.8281 (ent 0.7683/rel 0.8939) · falsa_abst 0.0289 
+
+!! sesion perdida — el checkpoint de la PC conserva el ultimo tramo bajado
+== fin del tramo (la sesion queda VIVA para el tramo siguiente; pararla con: colab stop -s tr2_f_0853)
+   tramo de 3:0 cerrado en el paso 1500 de 2000
+   tr2_f_0853 parada; pendientes ahora: 3:0
+-- J la esta usando otro proceso, se saltea
+-- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta H · faltan: 3:0 · 10:03:31
+   >> OTORGADA en H (T4): [tr2_h_1003] gpu-t4-s-kkb-ass1c1-1n6tf2jzps9hp | Hardware: T4 | Variant: GPU | Status: IDLE
+   -> tramo 3:0 en H (desde el paso 1500)
+== tramo · cuenta H · sesion tr2_h_1003 · tw3_s0 · +1000 de 2000 pasos · p_nose 0.2 · abst token · donde lat2 · mezcla fija · piso 0.10 · p_vieja 0.35 · blanco ausencia · kq 5 · ses-extra 52 · sello rel · pert 1 · micro 4 · b_eval 4 · formas directa · perdida bce · sembrar 0 · rec L=0.5 M=0.5 F=0.2 CE=1.0 RANK=0.0 · topk 2 desde 0 · relleno 0 (real, solapado, cada 1000) · fotos 8 · ses-extra-sin-grad 0 · compuesta 0.0 · bloques 0 · rel2-sesion -1 · rel2-barajar 0
+[colab] Uploaded '/tmp/tmp.7ptkambfo8/micro.tgz' to '/content/micro.tgz'
+== subiendo checkpoint previo (10M)
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0.pkl' to '/content/ck.pkl'
+[colab] Uploaded '/home/maxi/Disco_de_Guardado/Carpetas_Usuario/Documentos/Nuevo Transformer/delta-archivo/micro_lm/ckpts/tw3_s0_fotos.json' to '/content/ck_fotos.json'
+jax 0.11.1 | [CudaDevice(id=0)]
+compuerta de padding OK
+lanzado pid 1453
+== polling cada 2 min (presupuesto ~60 min, tope 180)
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1560 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1624 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1688 pasos]
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+VIVO= True ULTIMO= fotos: cada 8 pasos -> /content/ck_fotos.json · pregunta: BOS cual es la altura de bosque ? · slots correctos [5] 
+   [checkpoint parcial guardado: paso 1500]
+   [pelicula parcial: 1752 pasos]
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 
+VIVO= True ULTIMO= ── eval: vigente 0.9751 · anterior 1.0000 · abstencion 0.1621 · truncados 0.0000 · nose 0.8594 (ent 0.8537/rel 0.8939) · falsa_abst 0.0171 

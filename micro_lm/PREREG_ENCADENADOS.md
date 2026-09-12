@@ -245,3 +245,39 @@ con el flag, 3 o 4 entradas de altura tanto en `compuesta` como en `nose_comp`. 
 más: **`nose_comp` ya no vale como métrica de encadenado** salvo que supere 0,80 con `compuesta`
 también alta, porque el piso por contar desapareció y un modelo que dice NOSE a toda compuesta da
 `nose_comp` 1,0 y `compuesta` 0,0.
+
+## 9. RESULTADO de la v4 (12-sep, 13:40) · el encadenado al LEER existe, lo hace la segunda lectura, y arranca en 1 de 2
+
+`corridas_20260912/n[cd]3_s*.json`, 8.000 pasos, las cuatro cerradas:
+
+    unidad   bloques  compuesta  nose_comp  vigente  anterior  nose   falsa_abst
+    nc3_s1   0        0,237      0,031      0,995    1,000     0,872  0,003
+    nc3_s2   0        0,312      0,000      1,000    1,000     0,849  0,004
+    nd3_s1   0,2      0,764      0,042      0,981    1,000     0,871  0,024
+    nd3_s2   0,2      0,307      0,021      1,000    1,000     0,833  0,017
+
+Curvas (`compuesta` cada 500): `nc3` oscila entre 0,19 y 0,53 los 8.000 pasos sin tendencia
+(azar entre tres = 0,33); `nd3_s1` sube desde el paso 3.000 (0,53) a 0,75-0,79 entre 4.000 y
+7.000 y cierra en 0,76; `nd3_s2` no despega (0,09-0,37).
+
+- **H0' CUMPLE:** con el camino de escritura cortado y el orden barajado, un bloque no encadena
+  (0,24 / 0,31, ≤ 0,40 en las dos).
+- **H1' PARCIAL:** 1 de 2 llega a 0,76 (≥ 0,80 no), la otra queda en el azar. `vigente` y
+  `anterior` no cuestan nada (≤ 0,02 del brazo de un bloque; H3 vale para la versión sembrada).
+- **Y es la SEGUNDA lectura la que encadena** (`encadenados_mecanismo.py` sobre los checkpoints
+  del 8.000, 118 compuestas, `corridas_20260912/mecanismo_v4.json`): en el «?», la lectura del
+  bloque 2 de `nd3_s1` pone **0,606 en la entrada de altura del nombre correcto y 0,384 en las
+  otras dos**; en `nc3_s1` (un bloque) 0,307 / 0,623 y en `nd3_s2` 0,356 / 0,644, o sea uniforme
+  entre los tres. La query formada sobre `h` en el bloque 2 lleva el nombre que el bloque 0 leyó y
+  selecciona con él. No queda otro camino: el bloque está en otra sesión (no hay contexto de
+  escritura), barajado (no hay orden) y siempre de tres (no hay conteo).
+- **`nose_comp` se cae en todas (0,00-0,04):** sin el piso por contar, el modelo contesta siempre la
+  compuesta aunque el preguntado no tenga hecho. Decir «no sé» acá exige el encadenado Y notar la
+  ausencia entre tres candidatos; en 8.000 pasos ninguna lo aprendió. Queda como métrica abierta.
+
+**Veredicto de la campaña entera (v2 → v4).** El modelo encadena por DOS caminos: al escribir
+(la entrada lleva el contexto de la sesión; §6, y es lo que usaba `kc3`) y al leer, si hay una
+segunda lectura con query sobre `h` (§9, `nd3_s1`). El primero es gratis y robusto; el segundo
+arranca en 1 de 2 semillas sembradas y no arranca en frío (3 de 3 en `kd3`). Lo que sigue, por el
+§7: brazo `attn` (query global) como tercera arquitectura, más semillas de `nd`, y medir por qué
+la segunda lectura no arranca (los pesos compartidos `qr/kw/vw/wo` entre las dos lecturas).
