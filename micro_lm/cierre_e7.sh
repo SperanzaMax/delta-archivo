@@ -21,7 +21,9 @@ UNIDADES_FIN="ng3_s2 ng3_s3 ng3_s4 nf3_s3"
 terminadas(){ for u in $UNIDADES_FIN; do p="$($PY -c "import pickle,sys;print(pickle.load(open(sys.argv[1],'rb')).get('paso') or 0)" "$AQUI/ckpts/$u.pkl" 2>/dev/null || echo 0)"; [ "${p:-0}" -ge 8000 ] || return 1; done; return 0; }
 # la hora tope es de MANIANA: se espera mientras no hayan terminado y (sea hoy todavia, o sea antes del tope)
 DIA0="$(date +%d)"
-while ! terminadas; do
+# AHORA=1 (13-sep 00:30, pedido de Maxi: «si no hay más T4 guardá todo y apagá»): no espera.
+[ "${AHORA:-0}" = "1" ] && echo "== AHORA=1: sin esperar"
+while [ "${AHORA:-0}" != "1" ] && ! terminadas; do
   if [ "$(date +%d)" != "$DIA0" ] && [ ! "$(date +%H:%M)" \< "$HORA" ]; then echo "== tope $HORA alcanzado"; break; fi
   sleep 60
 done
