@@ -68,3 +68,129 @@ VIVO= False ULTIMO= listo: {'paso': 4000, 'truncados': 0.0, 'p_nose': 0.4, 'mezc
    tramo de 3:4 cerrado en el paso 4000 de 8000
    tr2_a_2057 parada; pendientes ahora: 3:4
 -- vuelta 1 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 2 · cuenta M · faltan: 3:4 · 21:26:57
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta K · faltan: 3:4 · 21:27:04
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 · cuenta A · faltan: 3:4 · 21:27:09
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 2 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 3 · cuenta M · faltan: 3:4 · 21:37:16
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta K · faltan: 3:4 · 21:37:22
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 · cuenta A · faltan: 3:4 · 21:37:28
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 3 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 4 · cuenta M · faltan: 3:4 · 21:47:34
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta K · faltan: 3:4 · 21:47:40
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 · cuenta A · faltan: 3:4 · 21:47:46
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 4 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 5 · cuenta M · faltan: 3:4 · 21:57:52
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta K · faltan: 3:4 · 21:57:58
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 · cuenta A · faltan: 3:4 · 21:58:03
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 5 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 6 · cuenta M · faltan: 3:4 · 22:08:10
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta K · faltan: 3:4 · 22:08:16
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 · cuenta A · faltan: 3:4 · 22:08:22
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 6 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 7 · cuenta M · faltan: 3:4 · 22:18:28
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta K · faltan: 3:4 · 22:18:34
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 · cuenta A · faltan: 3:4 · 22:18:40
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 7 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 8 · cuenta M · faltan: 3:4 · 22:28:46
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta K · faltan: 3:4 · 22:28:52
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 · cuenta A · faltan: 3:4 · 22:28:59
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 8 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 9 · cuenta M · faltan: 3:4 · 22:39:05
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 · cuenta K · faltan: 3:4 · 22:39:11
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 · cuenta A · faltan: 3:4 · 22:39:18
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 9 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 10 · cuenta M · faltan: 3:4 · 22:49:24
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 · cuenta K · faltan: 3:4 · 22:49:31
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 · cuenta A · faltan: 3:4 · 22:49:37
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 10 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 11 · cuenta M · faltan: 3:4 · 22:59:43
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 · cuenta K · faltan: 3:4 · 22:59:56
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 · cuenta A · faltan: 3:4 · 23:00:02
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 11 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 12 · cuenta M · faltan: 3:4 · 23:10:08
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 12 · cuenta K · faltan: 3:4 · 23:10:14
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 12 · cuenta A · faltan: 3:4 · 23:10:20
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 12 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 13 · cuenta M · faltan: 3:4 · 23:20:26
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 13 · cuenta K · faltan: 3:4 · 23:20:33
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 13 · cuenta A · faltan: 3:4 · 23:20:39
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 13 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 14 · cuenta M · faltan: 3:4 · 23:30:45
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 14 · cuenta K · faltan: 3:4 · 23:30:51
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 14 · cuenta A · faltan: 3:4 · 23:31:00
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 14 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 15 · cuenta M · faltan: 3:4 · 23:41:06
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 15 · cuenta K · faltan: 3:4 · 23:41:13
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 15 · cuenta A · faltan: 3:4 · 23:41:19
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 15 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 16 · cuenta M · faltan: 3:4 · 23:51:25
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 16 · cuenta K · faltan: 3:4 · 23:51:32
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 16 · cuenta A · faltan: 3:4 · 23:51:38
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 16 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 17 · cuenta M · faltan: 3:4 · 00:01:44
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 17 · cuenta K · faltan: 3:4 · 00:01:50
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 17 · cuenta A · faltan: 3:4 · 00:01:57
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 17 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 18 · cuenta M · faltan: 3:4 · 00:12:03
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 18 · cuenta K · faltan: 3:4 · 00:12:09
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 18 · cuenta A · faltan: 3:4 · 00:12:15
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 18 recorrida entera sin T4 en ninguna; descanso 10 min
+-- vuelta 19 · cuenta M · faltan: 3:4 · 00:22:22
+   503 en M (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 19 · cuenta K · faltan: 3:4 · 00:22:28
+   503 en K (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 19 · cuenta A · faltan: 3:4 · 00:22:34
+   503 en A (ni T4 ni TPU) — SIGUIENTE CUENTA ya (sin esperar)
+-- vuelta 19 recorrida entera sin T4 en ninguna; descanso 10 min
